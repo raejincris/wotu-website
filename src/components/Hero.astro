@@ -7,9 +7,9 @@ import site from '../data/site.yml';
 ---
 <section style="position: relative; min-height: 100vh; padding-top: 100px; padding-left: var(--pad-x); padding-right: var(--pad-x); padding-bottom: 64px; display: flex; flex-direction: column; justify-content: space-between;">
 
-  <div class="hero-meta" style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-top: 24px;">
-    <div>EST · {site.meta.est} — {site.meta.location}</div>
-    <div>SỐ {site.meta.issueNumber}</div>
+  <div class="hero-meta" style="display: flex; justify-content: space-between; gap: 16px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-top: 24px;">
+    <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;">EST · {site.meta.est} — {site.meta.location}</div>
+    <div style="white-space: nowrap;">SỐ {site.meta.issueNumber}</div>
   </div>
 
   <div style="margin-top: 80px; margin-bottom: 64px;">
@@ -29,7 +29,7 @@ import site from '../data/site.yml';
     <div style="font-family: var(--font-sans); font-size: 15px; color: var(--earth); max-width: 380px; line-height: 1.6;">
       {home.hero.intro}
       <div style="margin-top: 24px; display: flex; align-items: center; gap: 12px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink);">
-        <a href="#about" style="border-bottom: 1px solid var(--ink); padding-bottom: 4px;">{home.hero.cta}</a>
+        <a href="#about" style="display: inline-flex; align-items: center; min-height: 44px; padding: 12px 0; border-bottom: 1px solid var(--ink);">{home.hero.cta}</a>
         <span>↓</span>
       </div>
     </div>
@@ -48,4 +48,9 @@ import site from '../data/site.yml';
 
 <style>
   section :global(h1 em) { font-style: italic; color: var(--earth); }
+
+  @media (max-width: 768px) {
+    /* Hero heading wraps to 3+ lines on narrow screens — loosen line-height so they don't touch. */
+    section :global(h1) { line-height: 0.95 !important; }
+  }
 </style>

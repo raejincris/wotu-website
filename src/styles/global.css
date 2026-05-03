@@ -147,6 +147,13 @@ button { font: inherit; }
   to { transform: translateX(-50%); }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  /* Stop the infinite marquee scroll for users who opt out of motion. */
+  [style*="animation: wotu-marquee"] {
+    animation: none !important;
+  }
+}
+
 /* === Mobile fallbacks === */
 @media (max-width: 768px) {
   :root {

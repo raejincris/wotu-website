@@ -40,4 +40,15 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
     .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 32px !important; }
     .footer-bottom { flex-direction: column; gap: 8px; }
   }
+  /* Galaxy S5 / iPhone SE narrow — 4 cột stack hết thành 1 cột */
+  @media (max-width: 480px) {
+    .footer-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+  }
+
+  /* Touch target for footer links */
+  footer a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+  }
 </style>

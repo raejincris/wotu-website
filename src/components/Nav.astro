@@ -18,16 +18,185 @@ const links = navLinks.map((l) => {
 });
 ---
 <nav class="wotu-nav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 20px var(--pad-x); display: flex; justify-content: space-between; align-items: center; mix-blend-mode: difference; color: var(--bone);">
-  <a href={homeAnchor} style="font-family: var(--font-display); font-size: 22px; letter-spacing: 0.22em; color: var(--bone);">
+  <a href={homeAnchor} class="wotu-nav-logo" style="font-family: var(--font-display); font-size: 22px; letter-spacing: 0.22em; color: var(--bone);">
     WOTU<span style="color: var(--accent);">.</span>
   </a>
+
   <div class="wotu-nav-links" style="display: flex; gap: 36px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;">
     {links.map((l) => <a href={l.href}>{l.label}</a>)}
   </div>
+
+  <button
+    type="button"
+    class="wotu-nav-toggle"
+    aria-label="Mở menu"
+    aria-expanded="false"
+    aria-controls="wotu-mobile-drawer"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 </nav>
 
+<div
+  id="wotu-mobile-drawer"
+  class="wotu-mobile-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu điều hướng"
+  hidden
+>
+  <div class="wotu-mobile-drawer__inner">
+    <div class="wotu-mobile-drawer__head">
+      <a href={homeAnchor} style="font-family: var(--font-display); font-size: 22px; letter-spacing: 0.22em; color: var(--bone);">
+        WOTU<span style="color: var(--accent);">.</span>
+      </a>
+      <button type="button" class="wotu-mobile-drawer__close" aria-label="Đóng menu">×</button>
+    </div>
+    <nav class="wotu-mobile-drawer__nav">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+  </div>
+</div>
+
 <style>
+  /* Hamburger button — only visible on mobile */
+  .wotu-nav-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+  }
+  .wotu-nav-toggle span {
+    display: block;
+    height: 1.5px;
+    width: 100%;
+    background: var(--bone);
+    transition: transform 280ms ease, opacity 200ms ease;
+    transform-origin: center;
+  }
+
+  /* Mobile drawer */
+  .wotu-mobile-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: var(--cocoa);
+    color: var(--bone);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    opacity: 0;
+    transition: opacity 240ms ease;
+  }
+  .wotu-mobile-drawer:not([hidden]) {
+    opacity: 1;
+  }
+  .wotu-mobile-drawer__inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px var(--pad-x) var(--pad-x);
+  }
+  .wotu-mobile-drawer__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(245, 240, 232, 0.12);
+  }
+  .wotu-mobile-drawer__close {
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    color: var(--bone);
+    font-size: 32px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .wotu-mobile-drawer__nav {
+    display: flex;
+    flex-direction: column;
+    padding-top: 32px;
+    gap: 4px;
+  }
+  .wotu-mobile-drawer__nav a {
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+    padding: 16px 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 36px;
+    letter-spacing: -0.01em;
+    color: var(--bone);
+    border-bottom: 1px solid rgba(245, 240, 232, 0.08);
+    transition: color 200ms ease;
+  }
+  .wotu-mobile-drawer__nav a:hover,
+  .wotu-mobile-drawer__nav a:focus-visible {
+    color: var(--accent);
+  }
+
   @media (max-width: 768px) {
-    .wotu-nav-links { display: none !important; }
+    .wotu-nav-links {
+      display: none !important;
+    }
+    .wotu-nav-toggle {
+      display: flex;
+    }
+  }
+
+  /* When drawer open: lock body scroll via class on <html> */
+  :global(html.wotu-drawer-open) {
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wotu-mobile-drawer,
+    .wotu-nav-toggle span {
+      transition: none !important;
+    }
   }
 </style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.wotu-nav-toggle');
+  const drawer = document.getElementById('wotu-mobile-drawer') as HTMLElement | null;
+  const closeBtn = drawer?.querySelector<HTMLButtonElement>('.wotu-mobile-drawer__close');
+  const drawerLinks = drawer?.querySelectorAll<HTMLAnchorElement>('a');
+
+  const open = () => {
+    if (!drawer || !toggle) return;
+    drawer.hidden = false;
+    document.documentElement.classList.add('wotu-drawer-open');
+    toggle.setAttribute('aria-expanded', 'true');
+    // Move focus into drawer for keyboard users.
+    requestAnimationFrame(() => closeBtn?.focus());
+  };
+
+  const close = () => {
+    if (!drawer || !toggle) return;
+    drawer.hidden = true;
+    document.documentElement.classList.remove('wotu-drawer-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.focus();
+  };
+
+  toggle?.addEventListener('click', open);
+  closeBtn?.addEventListener('click', close);
+  // Anchor click → close drawer (so mobile users see the section they tapped).
+  drawerLinks?.forEach((a) => a.addEventListener('click', () => close()));
+  // Esc to close.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer && !drawer.hidden) close();
+  });
+</script>

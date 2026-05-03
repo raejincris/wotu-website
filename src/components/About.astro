@@ -15,7 +15,7 @@ const stats = a.stats as Stat[];
       <p style="font-size: 17px; line-height: 1.7; color: var(--ink); max-width: 42ch; margin-bottom: 32px;">
         {a.body}
       </p>
-      <a href="#contact" style="display: inline-flex; align-items: center; gap: 12px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 4px;">{a.ctaLabel} <span>→</span></a>
+      <a href="#contact" style="display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 12px 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink);">{a.ctaLabel} <span>→</span></a>
     </Reveal>
 
     <div class="grid-2col stats-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; padding-top: 24px;">
@@ -31,6 +31,11 @@ const stats = a.stats as Stat[];
 
 <style>
   @media (max-width: 768px) {
-    .stats-grid { padding-top: 0 !important; }
+    .stats-grid {
+      padding-top: 0 !important;
+      /* Override the 32px global fallback for `.grid-2col` — stats only need
+         tight gap when stacking on narrow screens. */
+      gap: 24px !important;
+    }
   }
 </style>
