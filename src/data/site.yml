@@ -27,4 +27,4 @@ forms:
 # Setup: dash.cloudflare.com → Analytics & Logs → Web Analytics → Add a site (manual JS) → copy token.
 # Khi token rỗng: script không inject (dev mode hoặc chưa setup).
 analytics:
-  cfBeaconToken: ""
+  cfBeaconToken: "54a42c6c23c340f0a1b571408d637133"
