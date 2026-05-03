@@ -4,12 +4,11 @@
 
 backend:
   name: github
-  # ⚠️ THAY 2 GIÁ TRỊ DƯỚI ĐÂY khi đã có repo + GitHub OAuth App (xem DEPLOY.md):
-  repo: YOUR_GITHUB_USER/wotu-website
+  repo: raejincris/wotu-website
   branch: main
   # PKCE flow: GitHub OAuth direct trong browser, không cần auth proxy.
   auth_type: pkce
-  app_id: ''  # ← Client ID của GitHub OAuth App tạo ở Phase C của DEPLOY.md
+  app_id: ''  # ← Client ID của GitHub OAuth App tạo ở Phase 3 của DEPLOY.md
 
 # Local dev: chạy `npx @sveltia/cms-proxy-server` rồi truy cập /admin tại localhost.
 local_backend: true
