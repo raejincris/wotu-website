@@ -6,7 +6,7 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://avatars.githubusercontent.com; connect-src 'self' https://api.github.com https://github.com https://unpkg.com https://api.web3forms.com https://cloudflareinsights.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://github.com https://api.web3forms.com;
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://images.unsplash.com https://avatars.githubusercontent.com; connect-src 'self' https://api.github.com https://github.com https://unpkg.com https://api.web3forms.com https://cloudflareinsights.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://github.com https://api.web3forms.com;
 
 # CMS shell — keep noindex header even if someone scrapes
 /admin/*
@@ -16,6 +16,11 @@
 # Static assets — long cache (filenames have content hash via Astro)
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Self-hosted fonts — long cache + CORS for cross-origin font loads
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
 
 # Uploads (CMS-managed images) — short cache so swaps appear quickly
 /uploads/*

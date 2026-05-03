@@ -14,6 +14,8 @@ interface Props {
   alt?: string;
   /** Bias which width to load (sizes attr). Default '(max-width: 768px) 100vw, 50vw'. */
   sizes?: string;
+  /** True for LCP / above-the-fold images — eagerly load + high fetch priority. Default false. */
+  priority?: boolean;
   style?: string;
 }
 
@@ -24,6 +26,7 @@ const {
   photo,
   alt,
   sizes = '(max-width: 768px) 100vw, 50vw',
+  priority = false,
   style = '',
 } = Astro.props;
 
@@ -57,8 +60,9 @@ const wrapStyle = [
     <img
       src={localSrc}
       alt={alt ?? label}
-      loading="lazy"
+      loading={priority ? 'eager' : 'lazy'}
       decoding="async"
+      fetchpriority={priority ? 'high' : 'auto'}
       style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;"
     />
   ) : photo ? (
@@ -67,8 +71,9 @@ const wrapStyle = [
       srcset={imgSrcset(photo, ratioForCrop)}
       sizes={sizes}
       alt={alt ?? label}
-      loading="lazy"
+      loading={priority ? 'eager' : 'lazy'}
       decoding="async"
+      fetchpriority={priority ? 'high' : 'auto'}
       style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;"
     />
   ) : (

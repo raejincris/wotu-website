@@ -1,3 +1,5 @@
+@import './fonts.css';
+
 /* === WOTU global tokens — source of truth ===
    Mirrored from design-system.html + homepage-a.html.
    Edit here, not in the reference HTML files at the project root. */
@@ -131,6 +133,30 @@ button { font: inherit; }
     transform: none !important;
     clip-path: none !important;
   }
+}
+
+/* Skip-to-main link — visible only when focused via keyboard. */
+.skip-to-main {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 200;
+  padding: 12px 20px;
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--r-sm);
+  transform: translateY(-200%);
+  transition: transform 200ms ease;
+}
+.skip-to-main:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* SplitWords helper — each word wrapped in an inline-block clipper */

@@ -33,6 +33,8 @@ columns:
         href: "https://instagram.com/wotu.vn"
       - label: "Behance"
         href: "https://www.behance.net/wotu"
+      - label: "Chính sách bảo mật"
+        href: "/bao-mat"
 
 nav:
   links:

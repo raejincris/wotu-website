@@ -1,0 +1,123 @@
+---
+import site from '../data/site.yml';
+
+interface Props {
+  /** Page type — controls which JSON-LD schema is emitted. */
+  type?: 'website' | 'article' | 'project';
+  /** For article/project: title */
+  title?: string;
+  /** For article/project: description */
+  description?: string;
+  /** For article: ISO date published */
+  datePublished?: string;
+  /** Hero image URL */
+  image?: string;
+  /** Canonical URL of this page */
+  url?: string;
+}
+
+const {
+  type = 'website',
+  title,
+  description,
+  datePublished,
+  image,
+  url,
+} = Astro.props;
+
+const SITE_URL = 'https://www.wotu.vn';
+const ORG_NAME = 'WOTU';
+const ORG_LEGAL_NAME = 'Studio thiết kế & thi công nội thất WOTU';
+const PHONE_INTL = '+84' + site.hotline.replace(/\s|^0/g, '');
+
+// Always emit Organization + LocalBusiness on every page (root-level discovery).
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': `${SITE_URL}/#studio`,
+  name: ORG_NAME,
+  legalName: ORG_LEGAL_NAME,
+  description: site.description,
+  url: SITE_URL,
+  telephone: PHONE_INTL,
+  email: site.email,
+  image: `${SITE_URL}/favicon.svg`,
+  priceRange: '$$',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.line1,
+    addressLocality: 'Quy Nhơn',
+    addressRegion: 'Bình Định',
+    addressCountry: 'VN',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    // Approximate Quy Nhơn coordinates — refine if studio moves.
+    latitude: 13.7820,
+    longitude: 109.2197,
+  },
+  sameAs: [site.social.instagram, site.social.behance].filter(Boolean),
+  founder: {
+    '@type': 'Organization',
+    name: ORG_NAME,
+  },
+  foundingDate: site.meta.est,
+  areaServed: {
+    '@type': 'Country',
+    name: 'Vietnam',
+  },
+  knowsAbout: [
+    'Thiết kế kiến trúc',
+    'Thiết kế nội thất',
+    'Thi công nội thất',
+    'Cải tạo nhà',
+    'Tư vấn vật liệu',
+  ],
+};
+
+const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${SITE_URL}/#website`,
+  url: SITE_URL,
+  name: ORG_NAME,
+  description: site.description,
+  inLanguage: 'vi-VN',
+  publisher: { '@id': `${SITE_URL}/#studio` },
+};
+
+const blogPosting = type === 'article' && title && datePublished
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: title,
+      description,
+      image: image ? [image] : undefined,
+      datePublished,
+      dateModified: datePublished,
+      author: { '@id': `${SITE_URL}/#studio` },
+      publisher: { '@id': `${SITE_URL}/#studio` },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': url,
+      },
+      inLanguage: 'vi-VN',
+    }
+  : null;
+
+const creativeWork = type === 'project' && title
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'CreativeWork',
+      name: title,
+      description,
+      image: image ? [image] : undefined,
+      creator: { '@id': `${SITE_URL}/#studio` },
+      url,
+      inLanguage: 'vi-VN',
+    }
+  : null;
+
+const graph = [localBusiness, website, blogPosting, creativeWork].filter(Boolean);
+---
+<script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} is:inline />

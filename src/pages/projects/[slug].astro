@@ -16,7 +16,7 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const p = entry.data;
 ---
-<BaseLayout title={`${p.name} — WOTU`} description={p.excerpt}>
+<BaseLayout title={`${p.name} — WOTU`} description={p.excerpt} schemaType="project">
   <Nav variant="inner" />
 
   <header style="padding: 140px var(--pad-x) 64px;">

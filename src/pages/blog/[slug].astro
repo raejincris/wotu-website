@@ -16,7 +16,12 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const fmt = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
 ---
-<BaseLayout title={`${entry.data.title} — WOTU`} description={entry.data.excerpt}>
+<BaseLayout
+  title={`${entry.data.title} — WOTU`}
+  description={entry.data.excerpt}
+  schemaType="article"
+  schemaDate={entry.data.date.toISOString()}
+>
   <Nav variant="inner" />
 
   <header style="padding: 140px var(--pad-x) 64px; max-width: 880px; margin: 0 auto;">
