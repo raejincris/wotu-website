@@ -22,3 +22,9 @@ meta:
 forms:
   contactAccessKey: "f5e8cdc8-94cb-4e5d-b892-4303b2bd6272"
   contactSubject: "[WOTU website] Liên hệ mới từ khách hàng"
+
+# Cloudflare Web Analytics (free, no cookies, privacy-first).
+# Setup: dash.cloudflare.com → Analytics & Logs → Web Analytics → Add a site (manual JS) → copy token.
+# Khi token rỗng: script không inject (dev mode hoặc chưa setup).
+analytics:
+  cfBeaconToken: ""

@@ -142,6 +142,12 @@ collections:
             fields:
               - { name: contactAccessKey, label: 'Access Key (UUID)', widget: string }
               - { name: contactSubject, label: 'Tiêu đề email khi nhận submit', widget: string }
+          - name: analytics
+            label: 'Cloudflare Web Analytics'
+            widget: object
+            hint: 'Token lấy ở dash.cloudflare.com → Analytics & Logs → Web Analytics → Add a site → manual setup. Để trống = tắt analytics.'
+            fields:
+              - { name: cfBeaconToken, label: 'Beacon Token', widget: string, required: false }
 
   # ============================================================
   # 4. HOMEPAGE — copy từng section trang chủ
