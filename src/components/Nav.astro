@@ -17,9 +17,9 @@ const links = navLinks.map((l) => {
   return { label: l.label, href: l.route ? l.route : `/#${l.anchor}` };
 });
 ---
-<nav class="wotu-nav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 20px var(--pad-x); display: flex; justify-content: space-between; align-items: center; mix-blend-mode: difference; color: var(--bone);">
-  <a href={homeAnchor} class="wotu-nav-logo" style="font-family: var(--font-display); font-size: 22px; letter-spacing: 0.22em; color: var(--bone);">
-    WOTU<span style="color: var(--accent);">.</span>
+<nav class="wotu-nav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 16px var(--pad-x); display: flex; justify-content: space-between; align-items: center; color: var(--ink);">
+  <a href={homeAnchor} class="wotu-nav-logo" aria-label="WOTU — về trang chủ">
+    <img src="/logo.svg" alt="WOTU" width="118" height="48" />
   </a>
 
   <div class="wotu-nav-links" style="display: flex; gap: 36px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;">
@@ -49,8 +49,8 @@ const links = navLinks.map((l) => {
 >
   <div class="wotu-mobile-drawer__inner">
     <div class="wotu-mobile-drawer__head">
-      <a href={homeAnchor} style="font-family: var(--font-display); font-size: 22px; letter-spacing: 0.22em; color: var(--bone);">
-        WOTU<span style="color: var(--accent);">.</span>
+      <a href={homeAnchor} aria-label="WOTU — về trang chủ" style="display: inline-flex; align-items: center;">
+        <img src="/logo-light.svg" alt="WOTU" width="118" height="48" style="height: 36px; width: auto;" />
       </a>
       <button type="button" class="wotu-mobile-drawer__close" aria-label="Đóng menu">×</button>
     </div>
@@ -61,6 +61,26 @@ const links = navLinks.map((l) => {
 </div>
 
 <style>
+  /* Translucent backdrop so the logo + links stay readable when Nav crosses
+     dark sections (Process, Contact, Footer). */
+  .wotu-nav {
+    background: linear-gradient(to bottom, rgba(245, 240, 232, 0.92), rgba(245, 240, 232, 0.75));
+    backdrop-filter: saturate(140%) blur(8px);
+    -webkit-backdrop-filter: saturate(140%) blur(8px);
+    border-bottom: 1px solid rgba(43, 35, 28, 0.06);
+  }
+
+  .wotu-nav-logo {
+    display: inline-flex;
+    align-items: center;
+    height: 48px;
+  }
+  .wotu-nav-logo img {
+    height: 36px;
+    width: auto;
+    display: block;
+  }
+
   /* Hamburger button — only visible on mobile */
   .wotu-nav-toggle {
     display: none;
@@ -78,7 +98,7 @@ const links = navLinks.map((l) => {
     display: block;
     height: 1.5px;
     width: 100%;
-    background: var(--bone);
+    background: var(--ink);
     transition: transform 280ms ease, opacity 200ms ease;
     transform-origin: center;
   }
