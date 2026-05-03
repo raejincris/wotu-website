@@ -90,13 +90,15 @@ const links = navLinks.map((l) => {
     z-index: 60;
     background: var(--cocoa);
     color: var(--bone);
-    display: flex;
     flex-direction: column;
     overflow-y: auto;
     opacity: 0;
     transition: opacity 240ms ease;
+    /* Override browser [hidden]=display:none default with display:flex when NOT hidden */
+    display: none;
   }
   .wotu-mobile-drawer:not([hidden]) {
+    display: flex;
     opacity: 1;
   }
   .wotu-mobile-drawer__inner {
