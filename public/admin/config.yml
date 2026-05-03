@@ -8,7 +8,7 @@ backend:
   branch: main
   # PKCE flow: GitHub OAuth direct trong browser, không cần auth proxy.
   auth_type: pkce
-  app_id: ''  # ← Client ID của GitHub OAuth App tạo ở Phase 3 của DEPLOY.md
+  app_id: 'Ov23lihC9bviiptuDkaM'
 
 # Local dev: chạy `npx @sveltia/cms-proxy-server` rồi truy cập /admin tại localhost.
 local_backend: true
@@ -18,8 +18,8 @@ media_folder: 'public/uploads'
 public_folder: '/uploads'
 
 # Branding panel admin
-site_url: https://www.wotu.vn
-display_url: https://www.wotu.vn
+site_url: https://wotu-website.raejin-cris.workers.dev
+display_url: https://wotu-website.raejin-cris.workers.dev
 logo_url: /favicon.svg
 
 # I18n disabled — site chỉ tiếng Việt
