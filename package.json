@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.4",
+    "@astrojs/sitemap": "^3.7.2",
     "@playwright/test": "^1.59.1",
     "astro": "^6.2.1"
   },
