@@ -135,6 +135,13 @@ collections:
               - { name: est, label: 'Năm thành lập', widget: string }
               - { name: location, label: 'Địa điểm header', widget: string }
               - { name: issueNumber, label: 'Số ấn (vd 014 / MMXXVI)', widget: string }
+          - name: forms
+            label: 'Form Contact (Web3Forms)'
+            widget: object
+            hint: 'Web3Forms access key + tiêu đề email khi nhận submit. Đổi key tại web3forms.com.'
+            fields:
+              - { name: contactAccessKey, label: 'Access Key (UUID)', widget: string }
+              - { name: contactSubject, label: 'Tiêu đề email khi nhận submit', widget: string }
 
   # ============================================================
   # 4. HOMEPAGE — copy từng section trang chủ

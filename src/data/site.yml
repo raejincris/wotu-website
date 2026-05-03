@@ -16,3 +16,9 @@ meta:
   est: "2018"
   location: "QUY NHƠN"
   issueNumber: "014 / MMXXVI"
+
+# Form Contact backend (Web3Forms — free 250 submit/m).
+# Lấy access key tại https://web3forms.com → submit gửi tới email đã đăng ký.
+forms:
+  contactAccessKey: "f5e8cdc8-94cb-4e5d-b892-4303b2bd6272"
+  contactSubject: "[WOTU website] Liên hệ mới từ khách hàng"
