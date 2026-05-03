@@ -6,9 +6,10 @@ backend:
   name: github
   repo: raejincris/wotu-website
   branch: main
-  # PKCE flow: GitHub OAuth direct trong browser, không cần auth proxy.
-  auth_type: pkce
-  app_id: 'Ov23lihC9bviiptuDkaM'
+  # OAuth bridge: Sveltia CMS Auth Worker giữ Client Secret server-side.
+  # GitHub không hỗ trợ PKCE flow public, nên cần proxy.
+  base_url: https://wotu-cms-auth.raejin-cris.workers.dev
+  auth_endpoint: auth
 
 # Local dev: chạy `npx @sveltia/cms-proxy-server` rồi truy cập /admin tại localhost.
 local_backend: true

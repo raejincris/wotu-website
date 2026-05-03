@@ -1,0 +1,12 @@
+{
+  "name": "wotu-cms-auth",
+  "version": "1.0.0",
+  "description": "OAuth bridge cho Sveltia CMS — Cloudflare Worker.",
+  "main": "src/index.js",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  }
+}
