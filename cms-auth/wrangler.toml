@@ -3,9 +3,8 @@ main = "src/index.js"
 compatibility_date = "2026-01-01"
 
 # Allowed domains: chỉ cho admin của site WOTU dùng auth proxy này.
-# Sửa list nếu thêm domain (vd custom domain wotu.vn sau khi point DNS).
 [vars]
-ALLOWED_DOMAINS = "wotu-website.raejin-cris.workers.dev,www.wotu.vn,wotu.vn"
+ALLOWED_DOMAINS = "www.wotu.vn,wotu.vn,wotu-website.raejin-cris.workers.dev"
 
 # Secrets (KHÔNG để trong file này, set qua dashboard / CLI):
 #   GITHUB_CLIENT_ID
