@@ -18,6 +18,7 @@
     "astro": "^6.2.1"
   },
   "devDependencies": {
-    "@rollup/plugin-yaml": "^4.1.2"
+    "@rollup/plugin-yaml": "^4.1.2",
+    "lighthouse": "^13.2.0"
   }
 }

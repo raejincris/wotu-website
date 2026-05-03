@@ -53,25 +53,29 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
           <input type="text" name="botcheck" tabindex="-1" autocomplete="off" />
         </div>
 
-        {fields.map((f) => (
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <label style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--clay);">
-              {f.label}
-              {f.name !== 'phone' && <span style="color: var(--accent); margin-left: 4px;">*</span>}
-            </label>
-            {f.type === 'textarea' ? (
-              <textarea name={f.name} rows={2} placeholder={f.placeholder} required style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(245,240,232,0.25); padding: 12px 0; font-family: var(--font-display); font-size: 22px; color: var(--bone); outline: none; resize: none;"></textarea>
-            ) : (
-              <input
-                name={f.name}
-                type={f.type}
-                placeholder={f.placeholder}
-                required={f.name !== 'phone'}
-                style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(245,240,232,0.25); padding: 12px 0; font-family: var(--font-display); font-size: 22px; color: var(--bone); outline: none;"
-              />
-            )}
-          </div>
-        ))}
+        {fields.map((f) => {
+          const fieldId = `wotu-contact-${f.name}`;
+          return (
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label for={fieldId} style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--clay);">
+                {f.label}
+                {f.name !== 'phone' && <span style="color: var(--accent); margin-left: 4px;">*</span>}
+              </label>
+              {f.type === 'textarea' ? (
+                <textarea id={fieldId} name={f.name} rows={2} placeholder={f.placeholder} required style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(245,240,232,0.25); padding: 12px 0; font-family: var(--font-display); font-size: 22px; color: var(--bone); outline: none; resize: none;"></textarea>
+              ) : (
+                <input
+                  id={fieldId}
+                  name={f.name}
+                  type={f.type}
+                  placeholder={f.placeholder}
+                  required={f.name !== 'phone'}
+                  style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(245,240,232,0.25); padding: 12px 0; font-family: var(--font-display); font-size: 22px; color: var(--bone); outline: none;"
+                />
+              )}
+            </div>
+          );
+        })}
 
         <button type="submit" id="wotu-contact-submit" style="margin-top: 16px; padding: 18px 32px; min-height: 48px; font-family: var(--font-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; border: 1px solid var(--bone); background: var(--bone); color: var(--ink); cursor: pointer; align-self: start; transition: opacity 200ms;">
           {c.submitLabel}
