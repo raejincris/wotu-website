@@ -1,0 +1,54 @@
+---
+import ProjectItem from './ProjectItem.astro';
+import home from '../data/home.yml';
+
+interface Project {
+  slug: string;
+  name: string;
+  id: string;
+  loc: string;
+  cat: string;
+  tone: 'warm' | 'deep' | 'light' | 'dark';
+  ratio: string;
+  photo?: string;
+  photoAlt?: string;
+}
+
+interface Props {
+  projects: Project[];
+  withHeader?: boolean;
+}
+
+const { projects, withHeader = true } = Astro.props;
+const [p0, p1, p2, p3] = projects;
+const ph = home.projects;
+---
+<section id="projects" style="padding: var(--pad-section) var(--pad-x);">
+  {withHeader && (
+    <div class="projects-header" style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 80px;">
+      <div>
+        <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">{ph.number} · {ph.label}</div>
+        <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 6vw, 96px); line-height: 0.95; letter-spacing: -0.02em; color: var(--bark);" set:html={ph.heading.replace(/<em>/g, '<em style="font-style: italic; color: var(--earth);">')}></h2>
+      </div>
+      <a href="/projects" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 4px; white-space: nowrap;">{ph.ctaLabel}</a>
+    </div>
+  )}
+
+  <div class="grid-asym" style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 96px;">
+    <div style="display: flex; flex-direction: column; gap: 96px;">
+      {p0 && <ProjectItem p={p0} large delay={0} />}
+      {p2 && <ProjectItem p={p2} delay={200} />}
+    </div>
+    <div class="proj-right" style="display: flex; flex-direction: column; gap: 96px; margin-top: 120px;">
+      {p1 && <ProjectItem p={p1} delay={100} />}
+      {p3 && <ProjectItem p={p3} large delay={300} />}
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 768px) {
+    .proj-right { margin-top: 0 !important; }
+    .projects-header { flex-direction: column; align-items: flex-start !important; gap: 24px; }
+  }
+</style>

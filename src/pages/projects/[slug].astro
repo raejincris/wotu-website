@@ -1,0 +1,81 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import Reveal from '../../components/Reveal.astro';
+
+export async function getStaticPaths() {
+  const all = await getCollection('projects');
+  return all.map((p) => ({ params: { slug: p.id }, props: { entry: p } }));
+}
+
+interface Props { entry: CollectionEntry<'projects'>; }
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const p = entry.data;
+---
+<BaseLayout title={`${p.name} — WOTU`} description={p.excerpt}>
+  <Nav variant="inner" />
+
+  <header style="padding: 140px var(--pad-x) 64px;">
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">
+      DỰ ÁN {p.id} · {p.cat}
+    </div>
+    <h1 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(56px, 9vw, 140px); line-height: 0.92; letter-spacing: -0.025em; color: var(--bark); max-width: 16ch;">
+      {p.name}
+    </h1>
+    <div style="margin-top: 32px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em; color: var(--earth); text-transform: uppercase;">
+      {p.loc}
+    </div>
+  </header>
+
+  <Reveal variant="reveal-img" delay={150} style="padding: 0 var(--pad-x);">
+    <Placeholder
+      label={`${p.cat.toUpperCase()} · ${p.id}`}
+      ratio="16/9"
+      tone={p.tone}
+      photo={p.photoDetail ?? p.photo}
+      alt={p.photoAlt ?? p.name}
+      sizes="100vw"
+    />
+  </Reveal>
+
+  <article class="project-body" style="padding: var(--pad-section) var(--pad-x);">
+    <div class="project-meta-grid" style="display: grid; grid-template-columns: 240px 1fr; gap: var(--gap); align-items: start; max-width: 1280px; margin: 0 auto;">
+      <aside style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; color: var(--earth); text-transform: uppercase; line-height: 1.8;">
+        <div style="border-top: 1px solid var(--ink); padding-top: 16px; margin-bottom: 24px;">
+          <div style="color: var(--taupe); font-size: 9px; margin-bottom: 4px;">Hạng mục</div>
+          <div style="color: var(--ink);">{p.cat}</div>
+        </div>
+        <div style="border-top: 1px solid var(--line); padding-top: 16px; margin-bottom: 24px;">
+          <div style="color: var(--taupe); font-size: 9px; margin-bottom: 4px;">Địa điểm</div>
+          <div style="color: var(--ink);">{p.loc}</div>
+        </div>
+        {p.year && (
+          <div style="border-top: 1px solid var(--line); padding-top: 16px;">
+            <div style="color: var(--taupe); font-size: 9px; margin-bottom: 4px;">Hoàn thành</div>
+            <div style="color: var(--ink);">{p.year}</div>
+          </div>
+        )}
+      </aside>
+      <div style="font-family: var(--font-sans); font-size: 17px; line-height: 1.75; color: var(--ink); max-width: 64ch;">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  <section style="padding: 0 var(--pad-x) var(--pad-section);">
+    <a href="/projects" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 4px;">← Tất cả dự án</a>
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .project-body :global(p) { margin-bottom: 1.4em; }
+  @media (max-width: 768px) {
+    .project-meta-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  }
+</style>

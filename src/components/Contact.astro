@@ -1,0 +1,62 @@
+---
+import Reveal from './Reveal.astro';
+import SplitWords from './SplitWords.astro';
+import home from '../data/home.yml';
+import site from '../data/site.yml';
+
+const c = home.contact;
+
+interface Field {
+  label: string;
+  name: string;
+  type: string;
+  placeholder?: string;
+}
+const fields = c.fields as Field[];
+
+const onSubmit = `event.preventDefault(); alert(${JSON.stringify(c.successMessage)});`;
+---
+<section id="contact" style="padding: var(--pad-section) var(--pad-x); background: var(--cocoa); color: var(--bone);">
+  <div class="grid-2col" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--gap); align-items: start;">
+    <Reveal variant="reveal" delay={0}>
+      <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--clay); text-transform: uppercase; margin-bottom: 24px;">{c.number} · {c.label}</div>
+      <SplitWords
+        tag="h2"
+        base={100}
+        step={90}
+        text={c.heading}
+        style="font-family: var(--font-display); font-weight: 400; font-size: clamp(56px, 8vw, 140px); line-height: 0.9; letter-spacing: -0.025em; color: var(--bone);"
+      />
+      <div style="margin-top: 64px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 480px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; color: var(--clay); text-transform: uppercase;">
+        <div>
+          <div style="color: var(--earth); margin-bottom: 8px;">Studio</div>
+          <div>{site.address.line1},<br/>{site.address.city}</div>
+        </div>
+        <div>
+          <div style="color: var(--earth); margin-bottom: 8px;">Liên lạc</div>
+          <div>{site.hotline}<br/>{site.email}</div>
+        </div>
+      </div>
+    </Reveal>
+
+    <Reveal variant="reveal" delay={400} style="padding-top: 32px;">
+      <form style="display: flex; flex-direction: column; gap: 32px;" onsubmit={onSubmit}>
+        {fields.map((f) => (
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--clay);">{f.label}</label>
+            {f.type === 'textarea' ? (
+              <textarea name={f.name} rows={2} placeholder={f.placeholder} style="background: transparent; border: none; border-bottom: 1px solid rgba(245,240,232,0.25); padding: 12px 0; font-family: var(--font-display); font-size: 22px; color: var(--bone); outline: none; resize: none;"></textarea>
+            ) : (
+              <input name={f.name} type={f.type} placeholder={f.placeholder} style="background: transparent; border: none; border-bottom: 1px solid rgba(245,240,232,0.25); padding: 12px 0; font-family: var(--font-display); font-size: 22px; color: var(--bone); outline: none;" />
+            )}
+          </div>
+        ))}
+        <button type="submit" style="margin-top: 16px; padding: 18px 32px; font-family: var(--font-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; border: 1px solid var(--bone); background: var(--bone); color: var(--ink); cursor: pointer; align-self: start;">{c.submitLabel}</button>
+      </form>
+    </Reveal>
+  </div>
+</section>
+
+<style>
+  section :global(h2 em) { font-style: italic; color: var(--accent); }
+</style>

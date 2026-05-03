@@ -1,0 +1,78 @@
+---
+// Editor-time tweaks panel (parity with homepage-a.html). Only shows when a
+// parent frame posts {type: '__activate_edit_mode'} via window.postMessage —
+// invisible by default in production.
+---
+<div id="wotu-tweaks" style="display: none; position: fixed; bottom: 24px; right: 24px; z-index: 100; background: var(--bone); border: 1px solid var(--ink); padding: 20px; width: 280px; font-family: var(--font-sans); box-shadow: 0 16px 40px rgba(26,20,16,0.18);">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink);">Tweaks</div>
+    <button id="wotu-tweaks-close" style="background: none; border: none; cursor: pointer; font-family: var(--font-mono); font-size: 14px; color: var(--earth);">×</button>
+  </div>
+  <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); margin-bottom: 8px;">Spacing density</div>
+  <div id="wotu-tweaks-density" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px;">
+    <button data-density="compact" style="padding: 8px 4px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer;">compact</button>
+    <button data-density="comfy" style="padding: 8px 4px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--ink); background: var(--ink); color: var(--bone); cursor: pointer;">comfy</button>
+    <button data-density="spacious" style="padding: 8px 4px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer;">spacious</button>
+  </div>
+</div>
+
+<script>
+  import { setDensity, getDensity, type Density } from '../lib/density';
+
+  // Preserved external tooling sentinels — DO NOT remove or rename.
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "density": "comfy"
+  }/*EDITMODE-END*/;
+
+  const panel = document.getElementById('wotu-tweaks');
+  const densityWrap = document.getElementById('wotu-tweaks-density');
+  const closeBtn = document.getElementById('wotu-tweaks-close');
+  if (!panel || !densityWrap || !closeBtn) {
+    // no-op
+  } else {
+    const refresh = () => {
+      const current = getDensity();
+      densityWrap.querySelectorAll<HTMLButtonElement>('button[data-density]').forEach((btn) => {
+        const v = btn.dataset.density as Density;
+        const active = v === current;
+        btn.style.border = `1px solid ${active ? 'var(--ink)' : 'var(--line)'}`;
+        btn.style.background = active ? 'var(--ink)' : 'transparent';
+        btn.style.color = active ? 'var(--bone)' : 'var(--ink)';
+      });
+    };
+    refresh();
+
+    densityWrap.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('button[data-density]') as HTMLButtonElement | null;
+      if (!btn) return;
+      const v = btn.dataset.density as Density;
+      setDensity(v);
+      refresh();
+      window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { density: v } }, '*');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      panel.style.display = 'none';
+      window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+    });
+
+    window.addEventListener('message', (e: MessageEvent) => {
+      // Origin allowlist — extend when the editor tool's origin is known.
+      // While the listener is benign today (only toggles display), keeping the
+      // shape strict guards against future expansion of the message protocol.
+      if (e.source !== window.parent) return;
+      const d = e.data;
+      if (!d || typeof d !== 'object' || typeof d.type !== 'string') return;
+      if (d.type === '__activate_edit_mode') panel.style.display = 'block';
+      else if (d.type === '__deactivate_edit_mode') panel.style.display = 'none';
+    });
+
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+    // Apply default if no stored value yet
+    if (!localStorage.getItem('wotu-density')) {
+      setDensity(TWEAK_DEFAULTS.density as Density);
+      refresh();
+    }
+  }
+</script>

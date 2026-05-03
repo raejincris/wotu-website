@@ -1,0 +1,71 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import Reveal from '../../components/Reveal.astro';
+
+export async function getStaticPaths() {
+  const all = await getCollection('blog');
+  return all.map((p) => ({ params: { slug: p.id }, props: { entry: p } }));
+}
+
+interface Props { entry: CollectionEntry<'blog'>; }
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const fmt = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+---
+<BaseLayout title={`${entry.data.title} — WOTU`} description={entry.data.excerpt}>
+  <Nav variant="inner" />
+
+  <header style="padding: 140px var(--pad-x) 64px; max-width: 880px; margin: 0 auto;">
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">
+      {fmt.format(entry.data.date)} · Nhật ký
+    </div>
+    <h1 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 7vw, 112px); line-height: 0.95; letter-spacing: -0.02em; color: var(--bark);">
+      {entry.data.title}
+    </h1>
+    {entry.data.excerpt && (
+      <p style="margin-top: 32px; font-size: 22px; line-height: 1.5; color: var(--earth); max-width: 56ch; font-weight: 300;">
+        {entry.data.excerpt}
+      </p>
+    )}
+  </header>
+
+  <Reveal variant="reveal-img" delay={150} style="padding: 0 var(--pad-x); max-width: 1280px; margin: 0 auto;">
+    <Placeholder
+      label={entry.data.title.toUpperCase()}
+      ratio="16/9"
+      tone={entry.data.tone}
+      photo={entry.data.photo}
+      alt={entry.data.photoAlt ?? entry.data.title}
+      sizes="(max-width: 1280px) 100vw, 1280px"
+    />
+  </Reveal>
+
+  <article class="blog-body" style="padding: var(--pad-section) var(--pad-x);">
+    <div style="max-width: 64ch; margin: 0 auto; font-family: var(--font-sans); font-size: 17px; line-height: 1.8; color: var(--ink);">
+      <Content />
+    </div>
+  </article>
+
+  <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 64ch; margin: 0 auto;">
+    <a href="/blog" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 4px;">← Tất cả ghi chép</a>
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .blog-body :global(p) { margin-bottom: 1.4em; }
+  .blog-body :global(h2) {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(28px, 3vw, 40px);
+    line-height: 1.1;
+    margin: 1.6em 0 0.6em;
+    color: var(--bark);
+  }
+  .blog-body :global(em) { color: var(--earth); }
+</style>

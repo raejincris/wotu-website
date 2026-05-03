@@ -1,0 +1,44 @@
+---
+import Reveal from './Reveal.astro';
+import Placeholder from './Placeholder.astro';
+
+interface Project {
+  slug: string;
+  name: string;
+  id: string;
+  loc: string;
+  cat: string;
+  tone: 'warm' | 'deep' | 'light' | 'dark';
+  ratio: string;
+  photo?: string;
+  photoAlt?: string;
+}
+
+interface Props {
+  p: Project;
+  large?: boolean;
+  delay?: number;
+}
+
+const { p, large = false, delay = 0 } = Astro.props;
+const titleSize = large ? 44 : 32;
+---
+<Reveal variant="reveal" delay={delay} as="a" href={`/projects/${p.slug}`} style="display: block; cursor: pointer;">
+  <Reveal variant="reveal-img" delay={delay + 100}>
+    <Placeholder
+      label={`${p.cat.toUpperCase()} · ${p.id}`}
+      ratio={p.ratio}
+      tone={p.tone}
+      photo={p.photo}
+      alt={p.photoAlt ?? `${p.name} — ${p.cat}`}
+      sizes="(max-width: 768px) 100vw, 50vw"
+    />
+  </Reveal>
+  <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: baseline; padding-top: 16px; border-top: 1px solid var(--line);">
+    <div>
+      <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; color: var(--taupe); text-transform: uppercase; margin-bottom: 6px;">DỰ ÁN {p.id} · {p.cat}</div>
+      <h3 style={`font-family: var(--font-display); font-weight: 400; font-size: ${titleSize}px; line-height: 1; letter-spacing: -0.01em; color: var(--bark);`}>{p.name}</h3>
+    </div>
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--earth);">{p.loc}</div>
+  </div>
+</Reveal>

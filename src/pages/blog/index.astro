@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import Reveal from '../../components/Reveal.astro';
+
+const all = await getCollection('blog');
+const posts = all.sort((a, b) => +b.data.date - +a.data.date);
+
+const fmt = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+---
+<BaseLayout title="Nhật ký — WOTU" description="Ghi chép về vật liệu, ánh sáng và những thứ không gấp.">
+  <Nav variant="inner" />
+
+  <header style="padding: 160px var(--pad-x) 80px;">
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">
+      /Nhật ký · ghi chép studio
+    </div>
+    <h1 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(56px, 9vw, 140px); line-height: 0.92; letter-spacing: -0.025em; color: var(--bark); max-width: 16ch;">
+      Những thứ <em style="font-style: italic; color: var(--earth);">không vội</em>.
+    </h1>
+  </header>
+
+  <section style="padding: 0 var(--pad-x) var(--pad-section);">
+    {posts.map((post, i) => (
+      <Reveal variant="reveal" delay={i * 80} as="a" href={`/blog/${post.id}`} class="blog-row" style="display: grid; grid-template-columns: 160px 1.5fr 1fr; gap: 48px; padding: 48px 0; border-top: 1px solid var(--line); align-items: baseline; cursor: pointer;">
+        <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; color: var(--earth); text-transform: uppercase;">
+          {fmt.format(post.data.date)}
+        </div>
+        <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 3.4vw, 48px); line-height: 1.05; letter-spacing: -0.015em; color: var(--bark);">
+          {post.data.title}
+        </h2>
+        <p style="font-size: 14px; line-height: 1.65; color: var(--earth); max-width: 44ch;">
+          {post.data.excerpt}
+        </p>
+      </Reveal>
+    ))}
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  @media (max-width: 768px) {
+    .blog-row { grid-template-columns: 1fr !important; gap: 12px !important; }
+  }
+</style>

@@ -1,0 +1,82 @@
+---
+import { img, imgSrcset } from '../lib/unsplash';
+
+type Tone = 'warm' | 'deep' | 'light' | 'dark';
+type Ratio = '4/5' | '3/4' | '16/9' | '1/1' | '4/3' | '5/4';
+
+interface Props {
+  label: string;
+  ratio?: Ratio | string;
+  tone?: Tone;
+  /** Unsplash photo ID (e.g. "1567016376408-0226e4d0c1ea"). When set, renders a real image. */
+  photo?: string;
+  /** Accessible alt text. Required when `photo` is set. */
+  alt?: string;
+  /** Bias which width to load (sizes attr). Default '(max-width: 768px) 100vw, 50vw'. */
+  sizes?: string;
+  style?: string;
+}
+
+const {
+  label,
+  ratio = '4/3',
+  tone = 'warm',
+  photo,
+  alt,
+  sizes = '(max-width: 768px) 100vw, 50vw',
+  style = '',
+} = Astro.props;
+
+const tones: Record<Tone, { a: string; b: string }> = {
+  warm: { a: '#D9CDB6', b: '#C9B89C' },
+  deep: { a: '#9A8770', b: '#7A6A55' },
+  light: { a: '#EAE2D2', b: '#DCCFB7' },
+  dark: { a: '#4A3F32', b: '#2B231C' },
+};
+const t = tones[tone];
+
+const ratioForCrop = (['4/5', '3/4', '16/9', '1/1', '4/3', '5/4'].includes(ratio) ? ratio : undefined) as Ratio | undefined;
+
+// `photo` accepts EITHER an Unsplash ID (e.g. "1567016376408-0226e4d0c1ea") OR
+// a local upload path managed by the CMS (e.g. "/uploads/projects/abc.jpg").
+const isLocal = !!photo && (photo.startsWith('/') || photo.startsWith('http'));
+const localSrc = isLocal ? photo : null;
+
+const wrapStyle = [
+  `aspect-ratio: ${ratio}`,
+  'width: 100%',
+  'position: relative',
+  'overflow: hidden',
+  // Keep stripe gradient as background — visible while the real image loads.
+  `background: repeating-linear-gradient(135deg, ${t.a} 0 18px, ${t.b} 18px 36px)`,
+  style,
+].filter(Boolean).join('; ');
+---
+<div style={wrapStyle}>
+  {photo && localSrc ? (
+    <img
+      src={localSrc}
+      alt={alt ?? label}
+      loading="lazy"
+      decoding="async"
+      style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;"
+    />
+  ) : photo ? (
+    <img
+      src={img(photo, 1600, ratioForCrop)}
+      srcset={imgSrcset(photo, ratioForCrop)}
+      sizes={sizes}
+      alt={alt ?? label}
+      loading="lazy"
+      decoding="async"
+      style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;"
+    />
+  ) : (
+    <>
+      <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(245,240,232,0.25) 0%, rgba(26,20,16,0.25) 100%);"></div>
+      <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--bone); text-transform: uppercase; text-shadow: 0 1px 2px rgba(0,0,0,0.3); text-align: center; padding: 8px;">
+        {label}
+      </div>
+    </>
+  )}
+</div>

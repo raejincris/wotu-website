@@ -1,0 +1,53 @@
+---
+import Reveal from './Reveal.astro';
+import Placeholder from './Placeholder.astro';
+import home from '../data/home.yml';
+
+const s = home.services;
+
+interface ServiceItem {
+  num: string;
+  title: string;
+  em: string;
+  desc: string;
+  tags: string[];
+  photoId: string;
+  photoAlt?: string;
+}
+---
+<section id="services" style="padding: var(--pad-section) var(--pad-x); background: var(--linen);">
+  <Reveal variant="reveal" delay={0} style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 80px; padding-bottom: 24px; border-bottom: 1px solid var(--ink);">
+    <div>
+      <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">{s.number} · {s.label}</div>
+      <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 6vw, 96px); line-height: 0.95; letter-spacing: -0.02em; color: var(--bark);" set:html={s.heading.replace(/<em>/g, '<em style="font-style: italic; color: var(--earth);">')}></h2>
+    </div>
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--earth);">{s.meta}</div>
+  </Reveal>
+
+  <div style="display: flex; flex-direction: column;">
+    {(s.items as ServiceItem[]).map((item, i) => (
+      <Reveal variant="reveal" delay={i * 120} class="grid-services-row" style="display: grid; grid-template-columns: 100px 1fr 1.4fr 320px; gap: 48px; padding: 56px 0; border-top: 1px solid var(--line); align-items: start;">
+        <div style="font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.1em; color: var(--taupe); padding-top: 14px;">{item.num}</div>
+        <h3 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(36px, 4vw, 64px); line-height: 1; letter-spacing: -0.015em; color: var(--bark);">
+          {item.title}<br/><em style="font-style: italic; color: var(--earth);">{item.em}</em>
+        </h3>
+        <div>
+          <p style="font-size: 16px; line-height: 1.7; color: var(--ink); margin-bottom: 24px;">{item.desc}</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            {item.tags.map((t) => (
+              <span style="padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--earth);">{t}</span>
+            ))}
+          </div>
+        </div>
+        <Placeholder
+          label={`SVC ${item.num} · DETAIL`}
+          ratio="4/5"
+          tone={i % 2 ? 'deep' : 'warm'}
+          photo={item.photoId}
+          alt={item.photoAlt}
+          sizes="(max-width: 768px) 100vw, 320px"
+        />
+      </Reveal>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,29 @@
+---
+type Variant = 'reveal' | 'reveal-fade' | 'reveal-mask' | 'reveal-rise' | 'reveal-img';
+
+interface Props {
+  variant?: Variant;
+  delay?: number;
+  as?: keyof HTMLElementTagNameMap;
+  class?: string;
+  style?: string;
+  href?: string;
+}
+
+const {
+  variant = 'reveal',
+  delay = 0,
+  as = 'div',
+  class: className = '',
+  style = '',
+  href,
+  ...rest
+} = Astro.props;
+
+const Tag = as;
+const finalStyle = `--rev-delay: ${delay}ms;${style ? ' ' + style : ''}`;
+const cls = `${variant}${className ? ' ' + className : ''}`;
+---
+<Tag class={cls} data-reveal style={finalStyle} href={href} {...rest}>
+  <slot />
+</Tag>

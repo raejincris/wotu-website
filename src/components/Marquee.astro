@@ -1,0 +1,16 @@
+---
+import home from '../data/home.yml';
+
+const items = home.marquee.items as string[];
+const looped = [...items, ...items, ...items, ...items];
+---
+<div style="border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 20px 0; overflow: hidden; position: relative;">
+  <div style="display: flex; gap: 64px; white-space: nowrap; animation: wotu-marquee 38s linear infinite; font-family: var(--font-display); font-size: 36px; font-weight: 400; color: var(--ink); width: max-content;">
+    {looped.map((it) => (
+      <span style="display: inline-flex; align-items: center; gap: 64px;">
+        <em style="font-style: italic; color: var(--earth);">{it}</em>
+        <span style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></span>
+      </span>
+    ))}
+  </div>
+</div>

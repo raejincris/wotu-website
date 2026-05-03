@@ -1,0 +1,290 @@
+# Sveltia CMS config — schema cho website wotu.vn
+# Khi user save → CMS commit thẳng lên branch `main` của GitHub repo →
+# platform deploy auto-rebuild trong 1-2 phút → site live.
+
+backend:
+  name: github
+  # ⚠️ THAY 2 GIÁ TRỊ DƯỚI ĐÂY khi đã có repo + GitHub OAuth App (xem DEPLOY.md):
+  repo: YOUR_GITHUB_USER/wotu-website
+  branch: main
+  # PKCE flow: GitHub OAuth direct trong browser, không cần auth proxy.
+  auth_type: pkce
+  app_id: ''  # ← Client ID của GitHub OAuth App tạo ở Phase C của DEPLOY.md
+
+# Local dev: chạy `npx @sveltia/cms-proxy-server` rồi truy cập /admin tại localhost.
+local_backend: true
+
+# Tất cả ảnh upload qua CMS lưu ở public/uploads/ và commit vào git.
+media_folder: 'public/uploads'
+public_folder: '/uploads'
+
+# Branding panel admin
+site_url: https://www.wotu.vn
+display_url: https://www.wotu.vn
+logo_url: /favicon.svg
+
+# I18n disabled — site chỉ tiếng Việt
+i18n: false
+
+collections:
+  # ============================================================
+  # 1. PROJECTS — case study dự án
+  # ============================================================
+  - name: projects
+    label: 'Dự án'
+    label_singular: 'Dự án'
+    folder: 'src/content/projects'
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    extension: md
+    format: yaml-frontmatter
+    media_folder: '/public/uploads/projects'
+    public_folder: '/uploads/projects'
+    summary: '{{name}} · {{loc}}'
+    sortable_fields: ['order', 'year', 'name']
+    fields:
+      - { name: name, label: 'Tên dự án', widget: string, hint: 'VD: Nhà giữa đồi thông' }
+      - { name: id, label: 'Mã số', widget: string, hint: '3 chữ số, VD: 014' }
+      - { name: loc, label: 'Địa điểm', widget: string, hint: 'VD: Đà Lạt · 2025' }
+      - name: cat
+        label: 'Hạng mục'
+        widget: select
+        options: ['Nhà ở', 'Căn hộ', 'F&B', 'Cải tạo', 'Showroom', 'Văn phòng', 'Khác']
+      - { name: year, label: 'Năm hoàn thành', widget: number, value_type: int, min: 2018, max: 2035, required: false }
+      - name: tone
+        label: 'Tông màu placeholder (khi chưa có ảnh)'
+        widget: select
+        options: ['warm', 'deep', 'light', 'dark']
+        default: 'warm'
+      - name: ratio
+        label: 'Tỉ lệ ảnh card'
+        widget: select
+        options: ['4/5', '3/4', '16/9', '1/1']
+        default: '4/5'
+      - { name: order, label: 'Thứ tự hiển thị', widget: number, value_type: int, default: 0, hint: 'Số nhỏ hơn hiển thị trước' }
+      - { name: excerpt, label: 'Tóm tắt 1 dòng', widget: text, required: false }
+      - name: photo
+        label: 'Ảnh bìa (card)'
+        widget: image
+        required: false
+        hint: 'Upload ảnh dự án. Để trống nếu muốn dùng Unsplash ID phía dưới.'
+      - { name: photoDetail, label: 'Ảnh hero trang chi tiết', widget: image, required: false, hint: 'Ảnh ngang 16:9 cho trang chi tiết' }
+      - { name: photoAlt, label: 'Mô tả ảnh (alt text, SEO)', widget: string, required: false }
+      - { name: body, label: 'Nội dung dự án', widget: markdown, hint: 'Câu chuyện về dự án, vật liệu, ánh sáng...' }
+
+  # ============================================================
+  # 2. BLOG (Nhật ký) — bài viết studio
+  # ============================================================
+  - name: blog
+    label: 'Nhật ký'
+    label_singular: 'Bài viết'
+    folder: 'src/content/blog'
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    extension: md
+    format: yaml-frontmatter
+    media_folder: '/public/uploads/blog'
+    public_folder: '/uploads/blog'
+    summary: '{{title}} — {{date | date(\"DD/MM/YYYY\")}}'
+    sortable_fields: ['date', 'title']
+    fields:
+      - { name: title, label: 'Tiêu đề', widget: string }
+      - { name: date, label: 'Ngày xuất bản', widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false }
+      - { name: excerpt, label: 'Tóm tắt 1 dòng', widget: text, required: false }
+      - name: tone
+        label: 'Tông màu placeholder'
+        widget: select
+        options: ['warm', 'deep', 'light', 'dark']
+        default: 'warm'
+      - { name: photo, label: 'Ảnh bìa', widget: image, required: false }
+      - { name: photoAlt, label: 'Mô tả ảnh (alt text)', widget: string, required: false }
+      - { name: body, label: 'Nội dung bài', widget: markdown }
+
+  # ============================================================
+  # 3. SITE — thông tin chung (địa chỉ, hotline, social)
+  # ============================================================
+  - name: site
+    label: 'Thông tin Studio'
+    files:
+      - name: site
+        label: 'Thông tin chung'
+        file: 'src/data/site.yml'
+        fields:
+          - { name: tagline, label: 'Tagline', widget: string }
+          - { name: description, label: 'Mô tả SEO', widget: text }
+          - name: address
+            label: 'Địa chỉ'
+            widget: object
+            fields:
+              - { name: line1, label: 'Đường', widget: string }
+              - { name: city, label: 'Thành phố', widget: string }
+          - { name: hotline, label: 'Hotline', widget: string }
+          - { name: email, label: 'Email', widget: string }
+          - name: social
+            label: 'Mạng xã hội'
+            widget: object
+            fields:
+              - { name: instagram, label: 'Instagram URL', widget: string }
+              - { name: behance, label: 'Behance URL', widget: string }
+          - name: meta
+            label: 'Meta'
+            widget: object
+            fields:
+              - { name: est, label: 'Năm thành lập', widget: string }
+              - { name: location, label: 'Địa điểm header', widget: string }
+              - { name: issueNumber, label: 'Số ấn (vd 014 / MMXXVI)', widget: string }
+
+  # ============================================================
+  # 4. HOMEPAGE — copy từng section trang chủ
+  # ============================================================
+  - name: home
+    label: 'Trang chủ'
+    files:
+      - name: home
+        label: 'Nội dung trang chủ'
+        file: 'src/data/home.yml'
+        fields:
+          - name: hero
+            label: 'Hero (đầu trang)'
+            widget: object
+            fields:
+              - { name: eyebrow, label: 'Eyebrow (chữ nhỏ trên tiêu đề)', widget: string }
+              - { name: title, label: 'Tiêu đề lớn (HTML cho phép em, br/)', widget: text, hint: 'Có thể dùng <em>chữ nghiêng</em> và <br/> để xuống dòng' }
+              - { name: intro, label: 'Đoạn intro', widget: text }
+              - { name: cta, label: 'Nút CTA', widget: string }
+              - { name: heroImage, label: 'Unsplash ID hero (legacy, có thể bỏ qua)', widget: string, required: false }
+              - { name: heroAlt, label: 'Mô tả ảnh hero', widget: string, required: false }
+          - name: marquee
+            label: 'Dòng chữ chạy'
+            widget: object
+            fields:
+              - { name: items, label: 'Các từ', widget: list, field: { name: item, widget: string } }
+          - name: philosophy
+            label: 'Triết lý'
+            widget: object
+            fields:
+              - { name: number, label: 'Số section (vd /01)', widget: string }
+              - { name: label, label: 'Nhãn', widget: string }
+              - { name: heading, label: 'Tiêu đề (cho phép em, em.accent)', widget: text }
+              - { name: paragraphs, label: '2 đoạn văn', widget: list, field: { name: para, widget: text } }
+          - name: services
+            label: 'Dịch vụ'
+            widget: object
+            fields:
+              - { name: number, label: 'Số section', widget: string }
+              - { name: label, label: 'Nhãn', widget: string }
+              - { name: heading, label: 'Tiêu đề', widget: string }
+              - { name: meta, label: 'Meta phải', widget: string }
+              - name: items
+                label: 'Các dịch vụ'
+                widget: list
+                fields:
+                  - { name: num, label: 'Số (/01,/02,/03)', widget: string }
+                  - { name: title, label: 'Tên', widget: string }
+                  - { name: em, label: 'Phụ đề (italic)', widget: string }
+                  - { name: desc, label: 'Mô tả', widget: text }
+                  - { name: tags, label: 'Tags', widget: list, field: { name: tag, widget: string } }
+                  - { name: photoId, label: 'Unsplash ID ảnh', widget: string, required: false }
+                  - { name: photoAlt, label: 'Mô tả ảnh', widget: string, required: false }
+          - name: projects
+            label: 'Dự án (block trên trang chủ)'
+            widget: object
+            fields:
+              - { name: number, label: 'Số section', widget: string }
+              - { name: label, label: 'Nhãn', widget: string }
+              - { name: heading, label: 'Tiêu đề', widget: string }
+              - { name: ctaLabel, label: 'Nút "Xem tất cả"', widget: string }
+          - name: process
+            label: 'Quy trình'
+            widget: object
+            fields:
+              - { name: number, label: 'Số section', widget: string }
+              - { name: label, label: 'Nhãn', widget: string }
+              - { name: heading, label: 'Tiêu đề', widget: text }
+              - { name: intro, label: 'Đoạn giới thiệu', widget: text }
+              - name: steps
+                label: '5 bước quy trình'
+                widget: list
+                fields:
+                  - { name: n, label: 'Số (01-05)', widget: string }
+                  - { name: t, label: 'Tên bước', widget: string }
+                  - { name: d, label: 'Mô tả bước', widget: text }
+          - name: about
+            label: 'Studio (about)'
+            widget: object
+            fields:
+              - { name: number, label: 'Số section', widget: string }
+              - { name: label, label: 'Nhãn', widget: string }
+              - { name: heading, label: 'Tiêu đề', widget: text }
+              - { name: body, label: 'Đoạn văn', widget: text }
+              - { name: ctaLabel, label: 'Nút CTA', widget: string }
+              - name: stats
+                label: 'Số liệu'
+                widget: list
+                fields:
+                  - { name: n, label: 'Con số', widget: string }
+                  - { name: l, label: 'Nhãn', widget: string }
+          - name: quote
+            label: 'Lời khách'
+            widget: object
+            fields:
+              - { name: number, label: 'Số section', widget: string }
+              - { name: label, label: 'Nhãn', widget: string }
+              - { name: text, label: 'Nội dung trích dẫn', widget: text }
+              - { name: author, label: 'Tác giả trích dẫn', widget: string }
+              - { name: year, label: 'Năm', widget: string }
+          - name: contact
+            label: 'Form liên hệ'
+            widget: object
+            fields:
+              - { name: number, label: 'Số section', widget: string }
+              - { name: label, label: 'Nhãn', widget: string }
+              - { name: heading, label: 'Tiêu đề lớn', widget: text }
+              - { name: successMessage, label: 'Thông báo gửi thành công', widget: text }
+              - { name: submitLabel, label: 'Nhãn nút submit', widget: string }
+              - name: fields
+                label: 'Các ô input'
+                widget: list
+                fields:
+                  - { name: label, label: 'Nhãn', widget: string }
+                  - { name: name, label: 'name (kỹ thuật)', widget: string }
+                  - { name: type, label: 'Loại', widget: select, options: ['text', 'email', 'tel', 'textarea'] }
+                  - { name: placeholder, label: 'Placeholder', widget: string, required: false }
+
+  # ============================================================
+  # 5. FOOTER + NAV
+  # ============================================================
+  - name: footer
+    label: 'Footer & Menu'
+    files:
+      - name: footer
+        label: 'Footer & Menu trên cùng'
+        file: 'src/data/footer.yml'
+        fields:
+          - { name: tagline, label: 'Tagline footer (cho phép br/)', widget: text }
+          - { name: copyright, label: 'Dòng copyright', widget: string }
+          - { name: signature, label: 'Chữ ký phải', widget: string }
+          - name: columns
+            label: '3 cột footer'
+            widget: list
+            fields:
+              - { name: title, label: 'Tiêu đề cột', widget: string }
+              - name: links
+                label: 'Links'
+                widget: list
+                fields:
+                  - { name: label, label: 'Nhãn', widget: string }
+                  - { name: href, label: 'Đường dẫn', widget: string }
+          - name: nav
+            label: 'Menu trên cùng'
+            widget: object
+            fields:
+              - name: links
+                label: 'Các link'
+                widget: list
+                fields:
+                  - { name: label, label: 'Nhãn', widget: string }
+                  - { name: anchor, label: 'Anchor (vd services)', widget: string, required: false }
+                  - { name: route, label: 'Route (vd /blog)', widget: string, required: false }

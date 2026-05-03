@@ -1,0 +1,33 @@
+---
+import Reveal from './Reveal.astro';
+import SplitWords from './SplitWords.astro';
+import home from '../data/home.yml';
+
+const p = home.philosophy;
+---
+<section style="padding: var(--pad-section) var(--pad-x);">
+  <div class="grid-2col" style="display: grid; grid-template-columns: 240px 1fr; gap: var(--gap); align-items: start;">
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--taupe); text-transform: uppercase; padding-top: 14px;">
+      {p.number} · {p.label}
+    </div>
+    <div>
+      <SplitWords
+        tag="h2"
+        base={0}
+        step={50}
+        text={p.heading}
+        style="font-family: var(--font-display); font-weight: 300; font-size: clamp(40px, 5vw, 84px); line-height: 1.05; letter-spacing: -0.015em; color: var(--bark); max-width: 16ch;"
+      />
+      <Reveal variant="reveal" delay={400} class="grid-2col" style="margin-top: 64px; display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap);">
+        {p.paragraphs.map((para: string, i: number) => (
+          <p style={`font-size: 16px; line-height: 1.7; color: ${i === 0 ? 'var(--ink)' : 'var(--earth)'}; max-width: 44ch;`}>{para}</p>
+        ))}
+      </Reveal>
+    </div>
+  </div>
+</section>
+
+<style>
+  section :global(h2 em) { font-style: italic; color: var(--earth); }
+  section :global(h2 em.accent) { color: var(--accent); }
+</style>

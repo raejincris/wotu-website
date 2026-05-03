@@ -1,0 +1,22 @@
+# Cloudflare Pages headers — applied to every response from the deployed site.
+# Edit-then-commit: changes go live with the next deploy.
+
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://avatars.githubusercontent.com; connect-src 'self' https://api.github.com https://github.com https://unpkg.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://github.com;
+
+# CMS shell — keep noindex header even if someone scrapes
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Static assets — long cache (filenames have content hash via Astro)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Uploads (CMS-managed images) — short cache so swaps appear quickly
+/uploads/*
+  Cache-Control: public, max-age=3600, must-revalidate

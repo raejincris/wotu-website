@@ -1,0 +1,43 @@
+---
+import footer from '../data/footer.yml';
+
+interface Link { label: string; href: string; }
+interface Column { title: string; links: Link[]; }
+const cols = footer.columns as Column[];
+
+const isExternal = (href: string) => /^https?:\/\//.test(href);
+---
+<footer style="background: var(--cocoa); color: var(--clay); padding: 64px var(--pad-x) 32px; border-top: 1px solid rgba(245,240,232,0.1);">
+  <div class="footer-grid" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 64px; border-bottom: 1px solid rgba(245,240,232,0.1);">
+    <div>
+      <div style="font-family: var(--font-display); font-size: 32px; letter-spacing: 0.22em; color: var(--bone);">WOTU<span style="color: var(--accent);">.</span></div>
+      <p style="margin-top: 16px; font-size: 13px; color: var(--clay); max-width: 32ch; line-height: 1.6;" set:html={footer.tagline}></p>
+    </div>
+    {cols.map((c) => (
+      <div>
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--earth); margin-bottom: 16px;">{c.title}</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          {c.links.map((x) => (
+            <a
+              href={x.href}
+              style="font-size: 14px; color: var(--bone);"
+              target={isExternal(x.href) ? '_blank' : undefined}
+              rel={isExternal(x.href) ? 'noopener noreferrer' : undefined}
+            >{x.label}</a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+  <div class="footer-bottom" style="padding-top: 24px; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; color: var(--earth); text-transform: uppercase;">
+    <div>{footer.copyright}</div>
+    <div>{footer.signature}</div>
+  </div>
+</footer>
+
+<style>
+  @media (max-width: 768px) {
+    .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 32px !important; }
+    .footer-bottom { flex-direction: column; gap: 8px; }
+  }
+</style>

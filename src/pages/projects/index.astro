@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import ProjectItem from '../../components/ProjectItem.astro';
+
+const all = await getCollection('projects');
+const projects = all
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((p) => ({
+    slug: p.id,
+    name: p.data.name,
+    id: p.data.id,
+    loc: p.data.loc,
+    cat: p.data.cat,
+    tone: p.data.tone,
+    ratio: p.data.ratio,
+    photo: p.data.photo,
+    photoAlt: p.data.photoAlt,
+  }));
+---
+<BaseLayout title="Dự án — WOTU" description="Tuyển tập các công trình WOTU đã thực hiện từ 2018 đến nay.">
+  <Nav variant="inner" />
+
+  <header style="padding: 160px var(--pad-x) 80px;">
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">
+      /Tuyển tập · 2018 → 2026
+    </div>
+    <h1 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(56px, 9vw, 140px); line-height: 0.92; letter-spacing: -0.025em; color: var(--bark); max-width: 14ch;">
+      Những <em style="font-style: italic; color: var(--earth);">nơi</em> chốn<br/>chúng tôi đã ghé qua.
+    </h1>
+  </header>
+
+  <section style="padding: 0 var(--pad-x) var(--pad-section);">
+    <div class="grid-asym" style="display: grid; grid-template-columns: 1fr 1fr; gap: 96px;">
+      {projects.map((p, i) => (
+        <div style={i % 2 === 1 ? 'margin-top: 80px;' : ''}>
+          <ProjectItem p={p} large={i % 3 === 0} delay={i * 80} />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  @media (max-width: 768px) {
+    section > div > div { margin-top: 0 !important; }
+    section > div { gap: 64px !important; }
+  }
+</style>
