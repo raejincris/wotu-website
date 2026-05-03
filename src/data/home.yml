@@ -1,124 +1,128 @@
 hero:
-  eyebrow: "Studio · Thiết kế & Thi công nội thất"
-  title: "Một <em>khoảng</em><br/>lặng,<br/>giữa đời <em>vội</em>."
-  intro: "WOTU thiết kế và thi công những không gian sống nơi ánh sáng, vật liệu và sự tĩnh lặng có chỗ riêng — để trở về thật sự là trở về."
-  cta: "Khám phá studio"
-  heroImage: "1768836180164-070b4c1a8f94"
-  heroAlt: "Phòng ăn ấm áp trong ánh sáng tự nhiên"
-
+  eyebrow: Studio · Thiết kế & Thi công nội thất
+  title: Một <em>khoảng</em><br/>lặng,<br/>giữa đời <em>vội</em>.
+  intro: WOTU thiết kế và thi công những không gian sống nơi ánh sáng, vật liệu và sự tĩnh lặng có chỗ riêng — để trở về thật sự là trở về.
+  cta: Khám phá studio
+  heroImage: 1768836180164-070b4c1a8f94
+  heroAlt: Phòng ăn ấm áp trong ánh sáng tự nhiên
 marquee:
   items:
-    - "Thiết kế kiến trúc"
-    - "Nội thất"
-    - "Thi công trọn gói"
-    - "Cải tạo"
-    - "Tư vấn vật liệu"
-    - "Stylings"
-
+    - Thiết kế kiến trúc
+    - Nội thất
+    - Thi công trọn gói
+    - Cải tạo
+    - Tư vấn vật liệu
+    - Stylings
 philosophy:
-  number: "/01"
-  label: "Triết lý"
-  heading: 'Chúng tôi không thiết kế để được <em>nhìn ngắm</em> — chúng tôi thiết kế để được <em class="accent">sống trong</em>.'
+  number: /01
+  label: Triết lý
+  heading: Chúng tôi không thiết kế để được <em>nhìn ngắm</em> — chúng tôi thiết kế để được <em class="accent">sống trong</em>.
   paragraphs:
-    - "Mỗi dự án bắt đầu bằng việc lắng nghe — không gian, gia chủ, ánh sáng buổi sớm và tiếng ồn bên ngoài cửa sổ. Từ đó, hình hài của ngôi nhà mới hiện ra một cách tự nhiên, không cần phải gắng sức."
-    - "Vật liệu được lựa chọn vì nó già đẹp theo thời gian. Chi tiết được giữ lại vì nó cần thiết. Khoảng trống được dành chỗ vì đó là nơi ánh sáng đi qua và để lại một câu chuyện."
-
+    - Mỗi dự án bắt đầu bằng việc lắng nghe — không gian, gia chủ, ánh sáng buổi sớm và tiếng ồn bên ngoài cửa sổ. Từ đó, hình hài của ngôi nhà mới hiện ra một cách tự nhiên, không cần phải gắng sức.
+    - Vật liệu được lựa chọn vì nó già đẹp theo thời gian. Chi tiết được giữ lại vì nó cần thiết. Khoảng trống được dành chỗ vì đó là nơi ánh sáng đi qua và để lại một câu chuyện.
 services:
-  number: "/02"
-  label: "Dịch vụ"
-  heading: "Ba <em>chương</em>."
-  meta: "03 services · 2026"
+  number: /02
+  label: Dịch vụ
+  heading: Ba <em>chương</em>.
+  meta: 03 services · 2026
   items:
-    - num: "/01"
-      title: "Thiết kế"
-      em: "kiến trúc & nội thất"
-      desc: "Từ ý niệm đến bản vẽ kỹ thuật. Quy hoạch không gian dựa trên ánh sáng tự nhiên, công năng thực tế và nhịp sống của gia chủ."
-      tags: ["Concept", "Bản vẽ kỹ thuật", "3D Visual", "Vật liệu"]
-      photoId: "1693664681816-f7f8422758f0"
-      photoAlt: "Phòng tối giản với cửa kéo Nhật, ánh sáng tự nhiên"
-    - num: "/02"
-      title: "Xây dựng"
-      em: "& cải tạo"
-      desc: "Đội thi công tại chỗ, quản lý chất lượng vật liệu và tiến độ minh bạch theo tuần. Cam kết bảo hành kết cấu trọn đời."
-      tags: ["Phần thô", "Cải tạo", "Quản lý dự án", "Giám sát"]
-      photoId: "1772442364436-6ee6e42302a2"
-      photoAlt: "Ánh nắng đổ trên sàn gỗ và tủ"
-    - num: "/03"
-      title: "Thi công"
-      em: "nội thất hoàn thiện"
-      desc: "Đồ gỗ đặt riêng tại xưởng nội bộ, ánh sáng, vải vóc và stylings. Chìa khoá trao tay — bạn chỉ cần mở cửa và bước vào."
-      tags: ["Đồ gỗ riêng", "Ánh sáng", "Stylings", "Vải vóc"]
-      photoId: "1768152858627-517b5e495830"
-      photoAlt: "Tường nâu ấm với cửa sổ hẹp"
-
+    - num: /01
+      title: Thiết kế
+      em: kiến trúc & nội thất
+      desc: Từ ý niệm đến bản vẽ kỹ thuật. Quy hoạch không gian dựa trên ánh sáng tự nhiên, công năng thực tế và nhịp sống của gia chủ.
+      tags:
+        - Concept
+        - Bản vẽ kỹ thuật
+        - 3D Visual
+        - Vật liệu
+      photoId: 1693664681816-f7f8422758f0
+      photoAlt: Phòng tối giản với cửa kéo Nhật, ánh sáng tự nhiên
+    - num: /02
+      title: Xây dựng
+      em: '& cải tạo'
+      desc: Đội thi công tại chỗ, quản lý chất lượng vật liệu và tiến độ minh bạch theo tuần. Cam kết bảo hành kết cấu trọn đời.
+      tags:
+        - Phần thô
+        - Cải tạo
+        - Quản lý dự án
+        - Giám sát
+      photoId: 1772442364436-6ee6e42302a2
+      photoAlt: Ánh nắng đổ trên sàn gỗ và tủ
+    - num: /03
+      title: Thi công
+      em: nội thất hoàn thiện
+      desc: Đồ gỗ đặt riêng tại xưởng nội bộ, ánh sáng, vải vóc và stylings. Chìa khoá trao tay — bạn chỉ cần mở cửa và bước vào.
+      tags:
+        - Đồ gỗ riêng
+        - Ánh sáng
+        - Stylings
+        - Vải vóc
+      photoId: 1768152858627-517b5e495830
+      photoAlt: Tường nâu ấm với cửa sổ hẹp
 projects:
-  number: "/03"
-  label: "Selected works"
-  heading: "Những <em>nơi</em> chốn."
-  ctaLabel: "Toàn bộ dự án →"
-
+  number: /03
+  label: Selected works
+  heading: Những <em>nơi</em> chốn.
+  ctaLabel: Toàn bộ dự án →
 process:
-  number: "/04"
-  label: "Quy trình"
-  heading: "Năm <em>chương</em>,<br/>một câu chuyện."
-  intro: "Trung bình một dự án nhà ở tại WOTU kéo dài 6–9 tháng. Chúng tôi không vội — vì những thứ bền lâu thì cần thời gian."
+  number: /04
+  label: Quy trình
+  heading: Năm <em>chương</em>,<br/>một câu chuyện.
+  intro: Trung bình một dự án nhà ở tại WOTU kéo dài 6–9 tháng. Chúng tôi không vội — vì những thứ bền lâu thì cần thời gian.
   steps:
-    - n: "01"
-      t: "Lắng nghe"
-      d: "Gặp gỡ, đọc hiện trạng, hiểu nhịp sống và ngân sách. Không vẽ trước khi hiểu."
-    - n: "02"
-      t: "Định hình"
-      d: "Concept design, layout, mood vật liệu. 3 phương án để cùng chọn lựa."
-    - n: "03"
-      t: "Bản vẽ"
-      d: "Bản vẽ kỹ thuật, chi tiết hoàn thiện. Bóc tách khối lượng và bảng giá minh bạch."
-    - n: "04"
-      t: "Thi công"
-      d: "Phần thô, M&E, hoàn thiện. Báo cáo tiến độ ảnh và video hằng tuần."
-    - n: "05"
-      t: "Trao chìa khoá"
-      d: "Stylings, đồ gỗ riêng, ánh sáng. Bạn mở cửa, bước vào, và ở."
-
+    - n: '01'
+      t: Lắng nghe
+      d: Gặp gỡ, đọc hiện trạng, hiểu nhịp sống và ngân sách. Không vẽ trước khi hiểu.
+    - n: '02'
+      t: Định hình
+      d: Concept design, layout, mood vật liệu. 3 phương án để cùng chọn lựa.
+    - n: '03'
+      t: Bản vẽ
+      d: Bản vẽ kỹ thuật, chi tiết hoàn thiện. Bóc tách khối lượng và bảng giá minh bạch.
+    - n: '04'
+      t: Thi công
+      d: Phần thô, M&E, hoàn thiện. Báo cáo tiến độ ảnh và video hằng tuần.
+    - n: '05'
+      t: Trao chìa khoá
+      d: Stylings, đồ gỗ riêng, ánh sáng. Bạn mở cửa, bước vào, và ở.
 about:
-  number: "/05"
-  label: "Studio"
-  heading: "Một studio<br/>nhỏ, <em>kỹ tính</em>."
-  body: "WOTU là studio thiết kế và thi công nội thất, đặt cơ sở tại Quy Nhơn từ 2018. Chúng tôi nhận có giới hạn — để mỗi dự án đều được dõi theo bằng đôi mắt của chính những người đã vẽ ra chúng."
-  ctaLabel: "Về chúng tôi"
+  number: /05
+  label: Studio
+  heading: Một studio<br/>nhỏ, <em>kỹ tính</em>.
+  body: WOTU là studio thiết kế và thi công nội thất, đặt cơ sở tại Quy Nhơn từ 2018. Chúng tôi nhận có giới hạn — để mỗi dự án đều được dõi theo bằng đôi mắt của chính những người đã vẽ ra chúng.
+  ctaLabel: Về chúng tôi
   stats:
-    - n: "042"
-      l: "Dự án hoàn thiện · 2018–2025"
-    - n: "07"
-      l: "Tỉnh thành đã đồng hành"
-    - n: "12"
-      l: "Năm kinh nghiệm tổng"
-    - n: "100%"
-      l: "Bảo hành kết cấu trọn đời"
-
+    - n: '042'
+      l: Dự án hoàn thiện · 2018–2025
+    - n: '07'
+      l: Tỉnh thành đã đồng hành
+    - n: '12'
+      l: Năm kinh nghiệm tổng
+    - n: 100%
+      l: Bảo hành kết cấu trọn đời
 quote:
-  number: "/06"
-  label: "Lời kể của khách"
-  text: "WOTU không bán cho tôi một thiết kế. Họ ngồi xuống, hỏi tôi về buổi sáng yêu thích — và rồi sáu tháng sau, họ trao lại tôi đúng buổi sáng ấy, dưới một mái nhà."
-  author: "NGUYỄN ANH M. — gia chủ dự án 014, Đà Lạt"
-  year: "2025"
-
+  number: /06
+  label: Lời kể của khách
+  text: WOTU không bán cho tôi một thiết kế. Họ ngồi xuống, hỏi tôi về buổi sáng yêu thích — và rồi sáu tháng sau, họ trao lại tôi đúng buổi sáng ấy, dưới một mái nhà.
+  author: NGUYỄN ANH M. — gia chủ dự án 014, Quy Nhon.
+  year: '2025'
 contact:
-  number: "/07"
-  label: "Bắt đầu"
-  heading: "Kể cho<br/>chúng tôi về<br/><em>không gian</em><br/>của bạn."
-  successMessage: "Cảm ơn bạn — chúng tôi sẽ liên hệ trong 24h."
+  number: /07
+  label: Bắt đầu
+  heading: Kể cho<br/>chúng tôi về<br/><em>không gian</em><br/>của bạn.
+  successMessage: Cảm ơn bạn — chúng tôi sẽ liên hệ trong 24h.
+  submitLabel: Gửi yêu cầu
   fields:
-    - label: "Họ và tên"
-      name: "name"
-      type: "text"
-    - label: "Email"
-      name: "email"
-      type: "email"
-    - label: "Số điện thoại"
-      name: "phone"
-      type: "tel"
-    - label: "Mô tả dự án"
-      name: "message"
-      type: "textarea"
-      placeholder: "Một căn nhà nhỏ ở Bảo Lộc, 120m²…"
-  submitLabel: "Gửi yêu cầu"
+    - label: Họ và tên
+      name: name
+      type: text
+    - label: Email
+      name: email
+      type: email
+    - label: Số điện thoại
+      name: phone
+      type: tel
+    - label: Mô tả dự án
+      name: message
+      type: textarea
+      placeholder: Một căn nhà nhỏ ở Bảo Lộc, 120m²…
