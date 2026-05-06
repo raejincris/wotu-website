@@ -1,4 +1,6 @@
-@import './fonts.css';
+/* fonts.css self-hosted disabled — Cormorant Garamond VN woff2 uses GSUB/GPOS
+   decomposition that breaks on Windows Chromium inside inline-block context.
+   Google Fonts CDN serves correct precomposed rendering. */
 
 /* === WOTU global tokens — source of truth ===
    Mirrored from design-system.html + homepage-a.html.
