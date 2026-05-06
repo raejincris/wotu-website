@@ -11,7 +11,7 @@
   --sand:     #DCCFB7;
   --clay:     #C9B89C;
   --taupe:    #9A8770;
-  --earth:    #c2272d;  /* WOTU brand red — đồng bộ màu logo. */
+  --earth:    #6B5C45;  /* Darkened from #7A6A55 to pass WCAG AA on bone/linen (≥4.5:1). */
   --bark:     #4A3F32;
   --ink:      #2B231C;
   --cocoa:    #1A1410;
