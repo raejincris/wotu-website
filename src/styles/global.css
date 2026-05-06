@@ -161,16 +161,17 @@ button { font: inherit; }
   outline-offset: 2px;
 }
 
-/* SplitWords helper — each word wrapped in an inline-block clipper.
-   padding-top gives room for Vietnamese diacritics (ổ, ũ, ầ…) that extend
-   above the em-box; negative margin-top cancels the added space so line
-   spacing is unchanged. */
+/* SplitWords helper — each word wrapped as inline-block for stagger reveal.
+   clip-path replaces overflow:hidden so Vietnamese diacritics (ổ, ũ, ầ…)
+   that extend outside the em-box are NOT clipped. The clip-path is set to
+   allow space above (for above-base marks) while still hiding the
+   translateY(60px) reveal animation below. */
 .sw-word {
   display: inline-block;
-  overflow: hidden;
   vertical-align: bottom;
-  padding-top: 0.25em;
-  margin-top: -0.25em;
+  /* Extra top clearance for diacritics above cap-height */
+  padding-top: 0.3em;
+  margin-top: -0.3em;
 }
 .sw-word > .reveal-rise { display: inline-block; }
 
