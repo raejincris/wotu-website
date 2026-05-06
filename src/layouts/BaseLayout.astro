@@ -35,7 +35,7 @@ const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://images.unsplash.com https://avatars.githubusercontent.com; connect-src 'self' https://api.web3forms.com https://api.github.com https://github.com https://unpkg.com https://cloudflareinsights.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://github.com https://api.web3forms.com;" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://avatars.githubusercontent.com; connect-src 'self' https://api.web3forms.com https://api.github.com https://github.com https://unpkg.com https://cloudflareinsights.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://github.com https://api.web3forms.com;" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -69,13 +69,14 @@ const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
       url={canonicalURL}
     />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://images.unsplash.com" />
 
-    <!-- Preload critical fonts (Vietnamese subset) — only the variants used above the fold. -->
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-garamond-vn-400.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-vn-400.woff2" crossorigin />
-
-    {/* Fonts now self-hosted in /fonts/ — see src/styles/fonts.css */}
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <a href="#main" class="skip-to-main">Bỏ qua điều hướng — đến nội dung chính</a>

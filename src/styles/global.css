@@ -1,4 +1,6 @@
-@import './fonts.css';
+/* fonts.css (self-hosted) disabled — fontsource VN subsets lack precomposed Vietnamese
+   glyphs (U+1EA0-1EFF), causing combining marks to float. Google Fonts provides
+   correct precomposed glyphs. Restore self-hosted when a proper source is found. */
 
 /* === WOTU global tokens — source of truth ===
    Mirrored from design-system.html + homepage-a.html.
