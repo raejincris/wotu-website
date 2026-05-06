@@ -159,11 +159,16 @@ button { font: inherit; }
   outline-offset: 2px;
 }
 
-/* SplitWords helper — each word wrapped in an inline-block clipper */
+/* SplitWords helper — each word wrapped in an inline-block clipper.
+   padding-top gives room for Vietnamese diacritics (ổ, ũ, ầ…) that extend
+   above the em-box; negative margin-top cancels the added space so line
+   spacing is unchanged. */
 .sw-word {
   display: inline-block;
   overflow: hidden;
   vertical-align: bottom;
+  padding-top: 0.25em;
+  margin-top: -0.25em;
 }
 .sw-word > .reveal-rise { display: inline-block; }
 

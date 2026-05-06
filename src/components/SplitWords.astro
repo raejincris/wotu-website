@@ -108,6 +108,12 @@ const Tag = tag;
   {tokens.map((t) => {
     if (t.kind === 'space') return t.value;
     if (t.kind === 'html') {
+      // <br/> must NOT be wrapped in an inline-block span — doing so contains the
+      // line-break inside the block and prevents it from breaking the parent line.
+      // Output bare <br> elements; other HTML tags (em, span) still get the stagger wrapper.
+      if (/^<br[\s/]*>/i.test(t.value.trim())) {
+        return <br />;
+      }
       const delay = base + wi * step;
       wi += 1;
       return (
