@@ -16,7 +16,7 @@ const p = home.philosophy;
         base={0}
         step={50}
         text={p.heading}
-        style="font-family: var(--font-display); font-weight: 300; font-size: clamp(40px, 5vw, 84px); line-height: 1.05; letter-spacing: -0.015em; color: var(--bark); max-width: 16ch;"
+        style="font-family: var(--font-display); font-weight: 300; font-size: clamp(40px, 5vw, 84px); line-height: 1.05; color: var(--bark); max-width: 16ch;"
       />
       <Reveal variant="reveal" delay={400} class="grid-2col" style="margin-top: 64px; display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap);">
         {p.paragraphs.map((para: string, i: number) => (

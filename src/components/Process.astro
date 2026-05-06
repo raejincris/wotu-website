@@ -11,7 +11,7 @@ const steps = pr.steps as Step[];
   <div class="process-head grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); align-items: end; padding-bottom: 64px; border-bottom: 1px solid rgba(245,240,232,0.15); margin-bottom: 64px;">
     <div>
       <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--clay); text-transform: uppercase; margin-bottom: 16px;">{pr.number} · {pr.label}</div>
-      <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 6vw, 96px); line-height: 1.0; letter-spacing: -0.02em; color: var(--bone);" set:html={pr.heading.replace(/<em>/g, '<em style="font-style: italic; color: var(--accent);">')}></h2>
+      <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 6vw, 96px); line-height: 1.0; color: var(--bone);" set:html={pr.heading.replace(/<em>/g, '<em style="font-style: italic; color: var(--accent);">')}></h2>
     </div>
     <p style="font-size: 18px; line-height: 1.65; color: var(--clay); max-width: 44ch; justify-self: end;">
       {pr.intro}
@@ -21,7 +21,7 @@ const steps = pr.steps as Step[];
   {steps.map((s, i) => (
     <Reveal variant="reveal" delay={i * 100} class="process-row" style="display: grid; grid-template-columns: 120px 1.2fr 2fr 100px; gap: 48px; padding: 40px 0; border-top: 1px solid rgba(245,240,232,0.12); align-items: baseline;">
       <div style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; color: var(--clay);">{s.n}</div>
-      <h3 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 3vw, 44px); line-height: 1; color: var(--bone); letter-spacing: -0.01em;">{s.t}</h3>
+      <h3 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 3vw, 44px); line-height: 1; color: var(--bone);">{s.t}</h3>
       <p style="font-size: 15px; line-height: 1.7; color: var(--clay); max-width: 52ch;">{s.d}</p>
       <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; color: var(--earth); text-transform: uppercase; text-align: right;">
         {i < steps.length - 1 ? '→' : '✓'}

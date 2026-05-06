@@ -28,7 +28,7 @@ const fmt = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit',
     <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">
       {fmt.format(entry.data.date)} · Nhật ký
     </div>
-    <h1 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 7vw, 112px); line-height: 1.0; letter-spacing: -0.02em; color: var(--bark);">
+    <h1 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 7vw, 112px); line-height: 1.0; color: var(--bark);">
       {entry.data.title}
     </h1>
     {entry.data.excerpt && (
