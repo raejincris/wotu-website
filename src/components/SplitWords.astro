@@ -117,7 +117,7 @@ const Tag = tag;
       const delay = base + wi * step;
       wi += 1;
       return (
-        <span class="reveal-rise" data-reveal style={`--rev-delay: ${delay}ms; display: inline-block;`} set:html={t.value} />
+        <span class="reveal-rise" data-reveal style={`--rev-delay: ${delay}ms; display: inline-block; padding-top: 0.25em; margin-top: -0.25em;`} set:html={t.value} />
       );
     }
     const delay = base + wi * step;

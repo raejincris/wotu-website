@@ -19,7 +19,7 @@ interface ServiceItem {
   <Reveal variant="reveal" delay={0} style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 80px; padding-bottom: 24px; border-bottom: 1px solid var(--ink);">
     <div>
       <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">{s.number} · {s.label}</div>
-      <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 6vw, 96px); line-height: 0.95; letter-spacing: -0.02em; color: var(--bark);" set:html={s.heading.replace(/<em>/g, '<em style="font-style: italic; color: var(--earth);">')}></h2>
+      <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 6vw, 96px); line-height: 1.0; letter-spacing: -0.02em; color: var(--bark);" set:html={s.heading.replace(/<em>/g, '<em style="font-style: italic; color: var(--earth);">')}></h2>
     </div>
     <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--earth);">{s.meta}</div>
   </Reveal>

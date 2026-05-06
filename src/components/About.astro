@@ -11,7 +11,7 @@ const stats = a.stats as Stat[];
   <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); align-items: start;">
     <Reveal variant="reveal" delay={0}>
       <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">{a.number} · {a.label}</div>
-      <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 6vw, 88px); line-height: 0.95; letter-spacing: -0.02em; color: var(--bark); margin-bottom: 32px;" set:html={a.heading.replace(/<em>/g, '<em style="font-style: italic; color: var(--earth);">')}></h2>
+      <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 6vw, 88px); line-height: 1.0; letter-spacing: -0.02em; color: var(--bark); margin-bottom: 32px;" set:html={a.heading.replace(/<em>/g, '<em style="font-style: italic; color: var(--earth);">')}></h2>
       <p style="font-size: 17px; line-height: 1.7; color: var(--ink); max-width: 42ch; margin-bottom: 32px;">
         {a.body}
       </p>
