@@ -44,6 +44,8 @@ const accessKey = site.forms?.contactAccessKey ?? '';
         <input type="hidden" name="subject" value="[WOTU shop] Yêu cầu báo giá giỏ hàng" />
         <input type="hidden" name="from_name" value="WOTU Shop · Cart" />
         <input type="hidden" name="cart" id="cart-payload" value="" />
+        <!-- Web3Forms honeypot — bot tự fill field tên `botcheck` → submission rejected. -->
+        <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; opacity: 0;" aria-hidden="true" />
         <label class="cart-field">
           <span>Tên của bạn</span>
           <input type="text" name="name" required placeholder="Nguyễn Văn A" />

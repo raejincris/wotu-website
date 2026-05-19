@@ -163,7 +163,7 @@ const filters = {
     <div class="container tb-inner">
       <div class="tb-chips">
         <span style="font-size: 12px; color: var(--shop-ink-soft); font-weight: 600; letter-spacing: .04em;">Lọc đang dùng:</span>
-        <a href="#" style="font-size: 12px; color: var(--shop-accent); font-weight: 600;">Xoá tất cả</a>
+        <a href="#" style="font-size: 12px; color: var(--shop-accent); font-weight: 600;" rel="nofollow" aria-disabled="true">Xoá tất cả</a>
       </div>
       <div class="tb-controls">
         <span style="color: var(--shop-ink-soft);"><b style="color: var(--shop-ink); font-weight: 600;">42</b> kết quả</span>
@@ -192,7 +192,7 @@ const filters = {
     <aside class="filters">
       <div class="filters-head">
         <h3>Bộ lọc</h3>
-        <a href="#">Xoá tất cả</a>
+        <a href="#" rel="nofollow" aria-disabled="true">Xoá tất cả</a>
       </div>
 
       <!-- "Danh mục" duplicate với cat tiles trên cùng (cat-tiles section).
@@ -263,7 +263,7 @@ const filters = {
       </details>
 
       <div style="padding-top: 20px;">
-        <a class="shop-btn shop-btn-primary" href="#" style="width: 100%; justify-content: center;">Áp dụng (42)</a>
+        <a class="shop-btn shop-btn-primary" href="#" style="width: 100%; justify-content: center;" rel="nofollow" aria-disabled="true">Áp dụng (42)</a>
       </div>
     </aside>
 
@@ -341,7 +341,7 @@ const filters = {
           </div>
           <div class="actions">
             <a class="shop-btn shop-btn-primary" style="padding: 14px 22px; font-size: 14px;" href="/#contact">Đặt KTS tư vấn <span class="arr">→</span></a>
-            <a class="shop-btn shop-btn-outline" style="padding: 14px 22px; font-size: 14px;" href="#">Chat Zalo</a>
+            <a class="shop-btn shop-btn-outline" style="padding: 14px 22px; font-size: 14px;" href="https://zalo.me/0933774708" target="_blank" rel="noopener noreferrer">Chat Zalo</a>
           </div>
         </div>
 
@@ -383,19 +383,19 @@ const filters = {
       <div class="pager">
         <div class="info">Hiển thị <b style="color: var(--shop-ink);">1–18</b> trong tổng <b style="color: var(--shop-ink);">42</b> sản phẩm</div>
         <nav class="pager-nums">
-          <a href="#" aria-label="Trước">
+          <a href="#" aria-label="Trước" rel="nofollow" aria-disabled="true">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
           </a>
-          <a href="#" class="active">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
+          <a href="#" class="active" rel="nofollow" aria-disabled="true">1</a>
+          <a href="#" rel="nofollow" aria-disabled="true">2</a>
+          <a href="#" rel="nofollow" aria-disabled="true">3</a>
           <span class="dots">…</span>
-          <a href="#">7</a>
-          <a href="#" aria-label="Sau">
+          <a href="#" rel="nofollow" aria-disabled="true">7</a>
+          <a href="#" aria-label="Sau" rel="nofollow" aria-disabled="true">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </a>
         </nav>
-        <a class="shop-btn shop-btn-outline" href="#">Tải thêm 18 sản phẩm</a>
+        <a class="shop-btn shop-btn-outline" href="#" rel="nofollow" aria-disabled="true">Tải thêm 18 sản phẩm</a>
       </div>
     </div>
   </main>
@@ -691,9 +691,15 @@ const filters = {
     return Number(s.replace(/[^\d]/g, '')) || 0;
   }
 
+  // Escape user-controlled strings trước khi đưa vào innerHTML. Cat/room/tag key
+  // có thể đến từ ?cat= ?room= query param (user-controlled) — nếu label fallback
+  // dùng raw key (CAT_LABELS[k] ?? k), HTML payload có thể inject vào chip.
+  function escapeHtml(s: string): string {
+    return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  }
+
   function renderChips(): void {
     if (!chipsBox) return;
-    // Find existing chips wrapper sentinel — preserve "Lọc đang dùng:" label + "Xoá tất cả" link
     chipsBox.querySelectorAll<HTMLElement>('.chip').forEach((c) => c.remove());
     const label = chipsBox.querySelector('span');
     const clearLink = chipsBox.querySelector('a');
@@ -724,7 +730,7 @@ const filters = {
     items.forEach((it) => {
       const chip = document.createElement('span');
       chip.className = 'chip active';
-      chip.innerHTML = `${it.label} <button class="x" type="button" aria-label="Bỏ">×</button>`;
+      chip.innerHTML = `${escapeHtml(it.label)} <button class="x" type="button" aria-label="Bỏ">×</button>`;
       chip.querySelector<HTMLButtonElement>('.x')?.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();

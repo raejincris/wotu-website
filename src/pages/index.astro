@@ -151,11 +151,11 @@ const bestsellers: Bestseller[] = [
 ];
 
 const inspo = [
-  { tall: true, label: 'Căn hộ 2PN · Vinhomes Quy Nhơn', placeholder: 'Phòng khách lớn · combo Tổ Ấm' },
-  { label: 'Phòng ngủ · An Yên', placeholder: 'Phòng ngủ An Yên' },
-  { label: 'Bếp + phòng ăn · Sum Vầy', placeholder: 'Phòng ăn Sum Vầy' },
-  { label: 'Góc làm việc · Tập Trung', placeholder: 'Bàn làm việc Tập Trung' },
-  { label: 'Phòng bé · Vườn Cổ Tích', placeholder: 'Phòng trẻ em Vườn Cổ Tích' },
+  { tall: true, label: 'Căn hộ 2PN · Vinhomes Quy Nhơn', placeholder: 'Phòng khách lớn · combo Tổ Ấm', href: '/combo/to-am/' },
+  { label: 'Phòng ngủ · An Yên', placeholder: 'Phòng ngủ An Yên', href: '/san-pham/?room=phong-ngu' },
+  { label: 'Bếp + phòng ăn · Sum Vầy', placeholder: 'Phòng ăn Sum Vầy', href: '/san-pham/?room=phong-an' },
+  { label: 'Góc làm việc · Tập Trung', placeholder: 'Bàn làm việc Tập Trung', href: '/san-pham/?room=lam-viec' },
+  { label: 'Phòng bé · Vườn Cổ Tích', placeholder: 'Phòng trẻ em Vườn Cổ Tích', href: '/san-pham/?room=tre-em' },
 ];
 
 const reviews = [
@@ -355,7 +355,7 @@ const reviews = [
 
       <div class="inspo-grid shop-reveal-stagger">
         {inspo.map((i) => (
-          <a class={`inspo-card${i.tall ? ' tall' : ''}`} href="#">
+          <a class={`inspo-card${i.tall ? ' tall' : ''}`} href={i.href}>
             <div class="shop-ph dark"><span class="shop-ph-label">{i.placeholder}</span></div>
             <div class="label">
               <span>{i.label}</span>
@@ -463,6 +463,7 @@ const reviews = [
         <input type="hidden" name="access_key" value={site.forms.contactAccessKey} />
         <input type="hidden" name="subject" value="[WOTU shop] Đặt tư vấn combo" />
         <input type="hidden" name="from_name" value="WOTU Shop website" />
+        <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; opacity: 0;" aria-hidden="true" />
         <input type="tel" name="phone" placeholder="Số điện thoại của bạn" required />
         <button type="submit">Gọi tôi <span class="arr">→</span></button>
       </form>
