@@ -1,9 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
-import ProjectItem from '../../components/ProjectItem.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+import ProjectItem from '../../../components/ProjectItem.astro';
 
 const all = await getCollection('projects');
 const projects = all
@@ -21,7 +21,7 @@ const projects = all
   }));
 ---
 <BaseLayout title="Dự án — WOTU" description="Tuyển tập các công trình WOTU đã thực hiện từ 2018 đến nay.">
-  <Nav variant="inner" />
+  <Nav variant="inner" homeRoute="/studio/" />
 
   <header style="padding: 160px var(--pad-x) 80px;">
     <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">

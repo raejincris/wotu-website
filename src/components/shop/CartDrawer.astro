@@ -1,0 +1,370 @@
+---
+/* Cart drawer — slide từ phải. Trigger qua Nav cart button.
+ * Subscribe vào shop-store; render lại khi cart đổi.
+ * "Checkout": inline form gửi qua Web3Forms với cart summary làm payload — không
+ * có cổng thanh toán; concept WOTU là "đặt tư vấn → studio gọi xác nhận". */
+import site from '../../data/site.yml';
+const accessKey = site.forms?.contactAccessKey ?? '';
+---
+<aside
+  id="wotu-cart-drawer"
+  class="cart-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Giỏ hàng của bạn"
+  aria-hidden="true"
+  hidden
+>
+  <div class="cart-backdrop" data-close></div>
+
+  <div class="cart-panel">
+    <header class="cart-head">
+      <h2>Giỏ hàng</h2>
+      <button type="button" class="cart-close" data-close aria-label="Đóng giỏ hàng">×</button>
+    </header>
+
+    <div class="cart-body" id="cart-body">
+      <!-- Filled by JS -->
+    </div>
+
+    <footer class="cart-foot" id="cart-foot" hidden>
+      <div class="cart-sub">
+        <span>Tạm tính</span>
+        <strong id="cart-total">0đ</strong>
+      </div>
+      <p class="cart-note">Phí giao + lắp đặt miễn phí trong Quy Nhơn &amp; vùng lân cận. Ngoài khu vực — chúng tôi báo thêm khi xác nhận.</p>
+
+      <form
+        class="cart-form"
+        id="cart-form"
+        action="https://api.web3forms.com/submit"
+        method="POST"
+      >
+        <input type="hidden" name="access_key" value={accessKey} />
+        <input type="hidden" name="subject" value="[WOTU shop] Yêu cầu báo giá giỏ hàng" />
+        <input type="hidden" name="from_name" value="WOTU Shop · Cart" />
+        <input type="hidden" name="cart" id="cart-payload" value="" />
+        <label class="cart-field">
+          <span>Tên của bạn</span>
+          <input type="text" name="name" required placeholder="Nguyễn Văn A" />
+        </label>
+        <label class="cart-field">
+          <span>Số điện thoại</span>
+          <input type="tel" name="phone" required pattern="[0-9 ]{9,12}" placeholder="0933 774 708" />
+        </label>
+        <label class="cart-field">
+          <span>Ghi chú (tuỳ chọn)</span>
+          <textarea name="note" rows="2" placeholder="Phòng khách 25m², tông gỗ ấm..."></textarea>
+        </label>
+        <button type="submit" class="shop-btn shop-btn-primary cart-submit">
+          Gửi yêu cầu báo giá <span class="arr">→</span>
+        </button>
+        <p class="cart-form-hint">Chúng tôi gọi lại trong 15 phút (giờ hành chính). Đơn vẫn lưu trong giỏ đến khi bạn xoá.</p>
+      </form>
+
+      <button type="button" class="cart-clear" id="cart-clear">Xoá toàn bộ giỏ</button>
+    </footer>
+  </div>
+</aside>
+
+<style>
+  .cart-drawer {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; justify-content: flex-end;
+    pointer-events: none;
+  }
+  .cart-drawer:not([hidden]) { pointer-events: auto; }
+
+  .cart-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(20, 16, 12, 0.45);
+    opacity: 0; transition: opacity .25s ease;
+  }
+  .cart-drawer:not([hidden]) .cart-backdrop { opacity: 1; }
+
+  .cart-panel {
+    position: relative;
+    width: min(420px, 100vw);
+    height: 100%;
+    background: var(--shop-bg);
+    color: var(--shop-ink);
+    display: flex; flex-direction: column;
+    box-shadow: -24px 0 60px -20px rgba(20,16,12,.3);
+    transform: translateX(100%);
+    transition: transform .3s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .cart-drawer:not([hidden]) .cart-panel { transform: none; }
+
+  .cart-head {
+    padding: 20px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--shop-line);
+  }
+  .cart-head h2 {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: 28px; margin: 0; line-height: 1; letter-spacing: -.01em;
+  }
+  .cart-close {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--shop-bg-soft); border: 0; cursor: pointer;
+    font-size: 24px; color: var(--shop-ink-soft);
+    display: grid; place-items: center;
+    line-height: 1;
+  }
+  .cart-close:hover { background: var(--shop-warm-soft); color: var(--shop-ink); }
+
+  .cart-body {
+    flex: 1; overflow-y: auto;
+    padding: 18px 24px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .cart-empty {
+    text-align: center; padding: 60px 0; color: var(--shop-ink-soft);
+  }
+  .cart-empty svg { color: var(--shop-line); margin-bottom: 18px; }
+  .cart-empty h3 { font-family: var(--shop-serif); font-size: 26px; margin: 0 0 8px; color: var(--shop-ink); font-weight: 400; }
+  .cart-empty p { margin: 0; font-size: 14px; max-width: 28ch; margin-inline: auto; }
+
+  .cart-item {
+    display: grid; grid-template-columns: 64px 1fr auto; gap: 14px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid color-mix(in oklab, var(--shop-line) 60%, transparent);
+  }
+  .cart-item:last-child { border-bottom: 0; }
+  .cart-item-img {
+    width: 64px; height: 64px; border-radius: 10px;
+    background: var(--shop-warm-soft);
+    display: grid; place-items: center;
+    font-family: ui-monospace, monospace; font-size: 10px;
+    color: var(--shop-ink-soft);
+    overflow: hidden;
+  }
+  .cart-item-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .cart-item-name { font-family: var(--shop-serif); font-size: 17px; line-height: 1.15; margin: 0; font-weight: 400; }
+  .cart-item-variant { font-size: 11px; color: var(--shop-ink-soft); letter-spacing: .04em; }
+  .cart-item-price { font-size: 13px; color: var(--shop-ink); font-weight: 600; }
+  .cart-item-qty {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--shop-bg-soft); border-radius: 999px; padding: 4px 6px;
+    font-size: 13px;
+  }
+  .cart-item-qty button {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--shop-bg-card); border: 0; cursor: pointer;
+    color: var(--shop-ink); font: inherit;
+    display: grid; place-items: center;
+  }
+  .cart-item-qty button:hover { background: var(--shop-warm-soft); }
+  .cart-item-qty span { min-width: 18px; text-align: center; font-weight: 600; }
+  .cart-item-actions {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+  }
+  .cart-item-remove {
+    background: none; border: 0; cursor: pointer;
+    color: var(--shop-ink-soft); font-size: 12px;
+    text-decoration: underline; padding: 0;
+  }
+  .cart-item-remove:hover { color: var(--shop-accent-deep); }
+
+  .cart-foot {
+    padding: 18px 24px 24px;
+    border-top: 1px solid var(--shop-line);
+    background: var(--shop-bg-soft);
+  }
+  .cart-sub {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 14px; color: var(--shop-ink-soft);
+    margin-bottom: 12px;
+  }
+  .cart-sub strong {
+    font-family: var(--shop-serif); font-size: 26px;
+    color: var(--shop-ink); font-weight: 400; letter-spacing: -.01em;
+  }
+  .cart-note { font-size: 12px; color: var(--shop-ink-soft); line-height: 1.5; margin: 0 0 14px; }
+  .cart-form { display: flex; flex-direction: column; gap: 10px; }
+  .cart-field { display: flex; flex-direction: column; gap: 4px; }
+  .cart-field > span {
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--shop-ink-soft); font-weight: 600;
+  }
+  .cart-field input,
+  .cart-field textarea {
+    padding: 10px 14px; border-radius: 10px;
+    border: 1px solid var(--shop-line); background: var(--shop-bg-card);
+    font: 14px/1.4 var(--shop-sans); color: var(--shop-ink);
+    outline: 0; resize: vertical;
+    transition: border-color .2s;
+  }
+  .cart-field input:focus,
+  .cart-field textarea:focus { border-color: var(--shop-ink); }
+  .cart-submit { justify-content: center; margin-top: 4px; }
+  .cart-submit:disabled { opacity: .6; cursor: wait; }
+  .cart-form-hint { font-size: 11px; color: var(--shop-ink-soft); text-align: center; margin: 6px 0 0; }
+  .cart-form.submitted .cart-submit { background: var(--shop-accent-2); }
+  .cart-form.submitted .cart-form-hint { color: var(--shop-accent-2); font-weight: 600; }
+
+  .cart-clear {
+    background: none; border: 0; cursor: pointer;
+    color: var(--shop-ink-soft); font-size: 12px;
+    padding: 12px 8px 0; align-self: center; margin: 8px auto 0;
+  }
+  .cart-clear:hover { color: var(--shop-accent-deep); text-decoration: underline; }
+
+  :global(html.wotu-cart-open) { overflow: hidden; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cart-panel, .cart-backdrop { transition: none; }
+  }
+</style>
+
+<script>
+  import {
+    getCart,
+    getCartTotal,
+    updateQty,
+    removeFromCart,
+    clearCart,
+    onChange,
+    formatPrice,
+  } from '../../lib/shop-store';
+
+  const drawer = document.getElementById('wotu-cart-drawer') as HTMLElement | null;
+  const body = document.getElementById('cart-body');
+  const foot = document.getElementById('cart-foot');
+  const total = document.getElementById('cart-total');
+  const clearBtn = document.getElementById('cart-clear');
+
+  function render(): void {
+    if (!drawer || !body || !foot || !total) return;
+    const items = getCart();
+    if (items.length === 0) {
+      body.innerHTML = `
+        <div class="cart-empty">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <h3>Giỏ hàng trống</h3>
+          <p>Thêm sản phẩm hoặc combo để xem giỏ ở đây.</p>
+        </div>
+      `;
+      foot.hidden = true;
+      return;
+    }
+    foot.hidden = false;
+    total.textContent = formatPrice(getCartTotal());
+    body.innerHTML = items
+      .map(
+        (it) => `
+          <div class="cart-item" data-id="${it.id}" data-variant="${it.variant ?? ''}">
+            <div class="cart-item-img">${it.img ? `<img src="${it.img}" alt="" style="width:100%;height:100%;object-fit:cover;" />` : 'WOTU'}</div>
+            <div class="cart-item-info">
+              <p class="cart-item-name">${escapeHtml(it.name)}</p>
+              ${it.variant ? `<span class="cart-item-variant">${escapeHtml(it.variant)}</span>` : ''}
+              <span class="cart-item-price">${formatPrice(it.price)} × ${it.qty}</span>
+            </div>
+            <div class="cart-item-actions">
+              <div class="cart-item-qty">
+                <button type="button" data-action="dec" aria-label="Giảm">−</button>
+                <span>${it.qty}</span>
+                <button type="button" data-action="inc" aria-label="Tăng">+</button>
+              </div>
+              <button type="button" class="cart-item-remove" data-action="remove">Xoá</button>
+            </div>
+          </div>
+        `,
+      )
+      .join('');
+
+    body.querySelectorAll<HTMLElement>('.cart-item').forEach((row) => {
+      const id = row.dataset.id ?? '';
+      const variant = row.dataset.variant || undefined;
+      const item = items.find((i) => i.id === id && (i.variant ?? '') === (variant ?? ''));
+      if (!item) return;
+      row.querySelector<HTMLButtonElement>('[data-action="inc"]')?.addEventListener('click', () => updateQty(id, item.qty + 1, variant));
+      row.querySelector<HTMLButtonElement>('[data-action="dec"]')?.addEventListener('click', () => updateQty(id, item.qty - 1, variant));
+      row.querySelector<HTMLButtonElement>('[data-action="remove"]')?.addEventListener('click', () => removeFromCart(id, variant));
+    });
+  }
+
+  function escapeHtml(s: string): string {
+    return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  }
+
+  function open(): void {
+    if (!drawer) return;
+    drawer.hidden = false;
+    drawer.setAttribute('aria-hidden', 'false');
+    document.documentElement.classList.add('wotu-cart-open');
+    drawer.querySelector<HTMLButtonElement>('.cart-close')?.focus();
+  }
+
+  function close(): void {
+    if (!drawer) return;
+    drawer.hidden = true;
+    drawer.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('wotu-cart-open');
+  }
+
+  drawer?.querySelectorAll<HTMLElement>('[data-close]').forEach((el) =>
+    el.addEventListener('click', close),
+  );
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer && !drawer.hidden) close();
+  });
+  clearBtn?.addEventListener('click', () => {
+    if (confirm('Xoá toàn bộ giỏ hàng?')) clearCart();
+  });
+
+  // ===== Submit form (Web3Forms with cart payload) =====
+  const form = document.getElementById('cart-form') as HTMLFormElement | null;
+  const payloadField = document.getElementById('cart-payload') as HTMLInputElement | null;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!payloadField) return;
+    const items = getCart();
+    const total = getCartTotal();
+    // Serialize giỏ thành text dễ đọc trong email
+    const summary = [
+      '=== GIỎ HÀNG ===',
+      ...items.map(
+        (it, i) =>
+          `${i + 1}. ${it.name}${it.variant ? ` (${it.variant})` : ''} × ${it.qty} = ${formatPrice(it.price * it.qty)}`,
+      ),
+      '',
+      `TỔNG: ${formatPrice(total)}`,
+    ].join('\n');
+    payloadField.value = summary;
+
+    const submitBtn = form.querySelector<HTMLButtonElement>('.cart-submit');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Đang gửi…';
+    }
+    try {
+      const fd = new FormData(form);
+      const res = await fetch(form.action, { method: 'POST', body: fd });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      form.classList.add('submitted');
+      const hint = form.querySelector('.cart-form-hint');
+      if (hint) hint.textContent = '✓ Đã nhận yêu cầu — chúng tôi gọi trong 15 phút.';
+      if (submitBtn) submitBtn.innerHTML = 'Đã gửi ✓';
+      form.querySelectorAll<HTMLInputElement>('input[type="text"], input[type="tel"], textarea').forEach(
+        (el) => (el.value = ''),
+      );
+      // Clear cart sau submit thành công để tránh gửi trùng
+      setTimeout(() => clearCart(), 1500);
+    } catch (err) {
+      console.error('Cart submit failed:', err);
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Lỗi gửi — thử lại';
+      }
+    }
+  });
+
+  // Expose open hook for Nav button
+  (window as unknown as { __wotuOpenCart?: () => void }).__wotuOpenCart = open;
+
+  render();
+  onChange(render);
+</script>

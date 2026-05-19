@@ -1,10 +1,10 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
-import Placeholder from '../../components/Placeholder.astro';
-import Reveal from '../../components/Reveal.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+import Placeholder from '../../../components/Placeholder.astro';
+import Reveal from '../../../components/Reveal.astro';
 
 export async function getStaticPaths() {
   const all = await getCollection('blog');
@@ -22,7 +22,7 @@ const fmt = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit',
   schemaType="article"
   schemaDate={entry.data.date.toISOString()}
 >
-  <Nav variant="inner" />
+  <Nav variant="inner" homeRoute="/studio/" />
 
   <header style="padding: 140px var(--pad-x) 64px; max-width: 880px; margin: 0 auto;">
     <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">
@@ -56,7 +56,7 @@ const fmt = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit',
   </article>
 
   <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 64ch; margin: 0 auto;">
-    <a href="/blog" style="display: inline-flex; align-items: center; min-height: 44px; padding: 12px 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink);">← Tất cả ghi chép</a>
+    <a href="/studio/blog" style="display: inline-flex; align-items: center; min-height: 44px; padding: 12px 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink);">← Tất cả ghi chép</a>
   </section>
 
   <Footer />

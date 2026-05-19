@@ -1,0 +1,1065 @@
+---
+import ShopLayout from '../../layouts/ShopLayout.astro';
+import Nav from '../../components/shop/Nav.astro';
+import Footer from '../../components/shop/Footer.astro';
+---
+<ShopLayout
+  title="Combo Tổ Ấm — Phòng khách trọn bộ — WOTU"
+  description="Combo Tổ Ấm — phòng khách trọn 4 món: sofa văng 3 chỗ, bàn trà gỗ sồi, kệ TV 1m8, thảm dệt tay. Tiết kiệm 10 triệu so mua lẻ. Bảo hành 5 năm. Giao và lắp tận Quy Nhơn."
+>
+  <Nav active="Combo nội thất" />
+
+  {/* ===== BREADCRUMB ===== */}
+  <div class="container crumb">
+    <div class="crumb-list">
+      <a href="/">Trang chủ</a>
+      <span class="sep">/</span>
+      <a href="/#combos">Combo nội thất</a>
+      <span class="sep">/</span>
+      <a href="#">Phòng khách</a>
+      <span class="sep">/</span>
+      <span class="here">Combo Tổ Ấm — Phòng khách 4 món</span>
+    </div>
+  </div>
+
+  {/* ===== PRODUCT HERO ===== */}
+  <section class="shop-reveal ph-hero container">
+    <div class="ph-grid">
+      <div class="gallery">
+        <div class="thumbs" id="thumbs">
+          <button class="thumb active" data-i="0"><div class="shop-ph"><span class="shop-ph-label">Tổng thể</span></div></button>
+          <button class="thumb" data-i="1"><div class="shop-ph sage"><span class="shop-ph-label">Sofa</span></div></button>
+          <button class="thumb" data-i="2"><div class="shop-ph"><span class="shop-ph-label">Bàn trà</span></div></button>
+          <button class="thumb" data-i="3"><div class="shop-ph sage"><span class="shop-ph-label">Kệ TV</span></div></button>
+          <button class="thumb" data-i="4"><div class="shop-ph"><span class="shop-ph-label">Thảm</span></div></button>
+        </div>
+        <div class="main-image" id="mainImg">
+          <div class="shop-ph"><span class="shop-ph-label">Combo Tổ Ấm — phòng khách trọn bộ · 1600×2000</span></div>
+          <div class="gallery-tag">
+            <span class="tag accent">−35% · Tháng 5</span>
+            <span class="tag">★ Bestseller phòng khách</span>
+          </div>
+          <div class="gallery-controls">
+            <span class="gallery-count">01 / 05</span>
+            <button class="gallery-zoom" aria-label="Phóng to" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><line x1="21" y1="3" x2="14" y2="10" /><line x1="3" y1="21" x2="10" y2="14" /></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="info">
+        <div class="cat-row">
+          <a class="cat-link" href="/#combos">Combo phòng khách</a>
+          <span class="review-row">
+            <span class="stars">★★★★★</span>
+            <span>4.9 · 312 đánh giá</span>
+          </span>
+          <span class="review-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" /></svg>
+            <span style="color: var(--green); font-weight: 600;">Còn hàng · giao 48h</span>
+          </span>
+        </div>
+
+        <h1>Combo <em>Tổ Ấm</em><br />Phòng khách 4 món</h1>
+        <p class="lede">
+          Bộ phòng khách trọn vẹn theo phong cách Japandi ấm áp — sofa văng vải bố mềm, bàn trà gỗ sồi tự nhiên, kệ TV 1m8 và thảm dệt tay. Mua trọn combo tiết kiệm 10 triệu so với mua lẻ.
+        </p>
+
+        <div class="price-row">
+          <div>
+            <span class="price-now">18.900.000đ</span>
+            <span class="price-hint">trả góp 0% — chỉ từ <b>1.575.000đ</b> / tháng</span>
+          </div>
+          <span class="price-was">28.900.000đ</span>
+          <span class="price-save">− 35%</span>
+        </div>
+
+        <div class="pickers">
+          <div class="picker">
+            <div class="label"><b>Tông màu</b><span class="v">Nâu đất ấm</span></div>
+            <div class="swatches" id="colors">
+              <button class="swatch" data-active="true" aria-label="Nâu đất ấm" type="button"><span style="background: linear-gradient(135deg, #C97B5E, #A35E45)"></span></button>
+              <button class="swatch" aria-label="Be sữa" type="button"><span style="background: linear-gradient(135deg, #E8D4B6, #C9A77E)"></span></button>
+              <button class="swatch" aria-label="Xám rêu" type="button"><span style="background: linear-gradient(135deg, #8FA796, #5F7B6A)"></span></button>
+              <button class="swatch" aria-label="Xanh than" type="button"><span style="background: linear-gradient(135deg, #3C4A5E, #25303D)"></span></button>
+              <button class="swatch" aria-label="Trắng kem" type="button"><span style="background: linear-gradient(135deg, #F4ECDD, #D9CDB6)"></span></button>
+            </div>
+          </div>
+
+          <div class="picker">
+            <div class="label"><b>Kích thước phòng</b><span class="v">Sofa văng 3 chỗ · phù hợp 16–22m²</span></div>
+            <div class="size-row" id="sizes">
+              <button class="size-btn" type="button"><b>S</b><small>2 chỗ · 12m²</small></button>
+              <button class="size-btn" data-active="true" type="button"><b>M</b><small>3 chỗ · 16–22m²</small></button>
+              <button class="size-btn" type="button"><b>L</b><small>chữ L · 25m²+</small></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="qty-and-cart">
+          <div class="qty">
+            <button id="qDec" aria-label="Giảm" type="button">−</button>
+            <span class="v" id="qV">1</span>
+            <button id="qInc" aria-label="Tăng" type="button">+</button>
+          </div>
+          <a class="btn btn-primary btn-lg" href="/#contact" id="addCart">Thêm vào giỏ · 18.900.000đ</a>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn btn-accent btn-lg" href="/#contact">Mua ngay <span class="arr">→</span></a>
+          <a class="btn btn-outline btn-lg" href="/#contact">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z" /></svg>
+            Tư vấn 1:1
+          </a>
+        </div>
+
+        <div class="key-features">
+          <div class="feat">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" /></svg>
+            <div><b>Bảo hành 5 năm</b><span>Khung gỗ &amp; cấu trúc</span></div>
+          </div>
+          <div class="feat">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="1" y="5" width="14" height="13" rx="1" /><polygon points="15 8 19 8 22 11 22 18 15 18" /><circle cx="6" cy="20" r="2" /><circle cx="18" cy="20" r="2" /></svg>
+            <div><b>Miễn phí giao &amp; lắp</b><span>Quy Nhơn &amp; vùng lân cận</span></div>
+          </div>
+          <div class="feat">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12a9 9 0 1 0 9-9" /><path d="M3 4v5h5" /></svg>
+            <div><b>Đổi trả 30 ngày</b><span>Miễn phí, kể cả đã lắp</span></div>
+          </div>
+          <div class="feat">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 3h6l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v6a2 2 0 0 1-2 2A18 18 0 0 1 2 5a2 2 0 0 1 2-2Z" /></svg>
+            <div><b>Hotline 0933 774 708</b><span>8h–21h mỗi ngày</span></div>
+          </div>
+        </div>
+
+        <div class="info-note">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></svg>
+          <div>
+            <b>Mới: dựng 3D miễn phí</b> — gửi mặt bằng phòng khách, KTS Wotu dựng phòng 3D với combo này trong 24 giờ, miễn phí.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== READING NAV ===== */}
+  <nav class="read-nav">
+    <div class="container">
+      <ul>
+        <li><a href="#items" class="active">Combo gồm</a></li>
+        <li><a href="#desc">Mô tả chi tiết</a></li>
+        <li><a href="#specs">Thông số</a></li>
+        <li><a href="#dim">Kích thước</a></li>
+        <li><a href="#reviews">Đánh giá · 312</a></li>
+        <li><a href="#faq">Câu hỏi</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  {/* ===== ITEMS INCLUDED ===== */}
+  <section class="shop-reveal block container" id="items">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Combo gồm 4 món</span>
+        <h2>Mua trọn bộ — <em>tiết kiệm 10 triệu</em>.</h2>
+      </div>
+      <div class="right">Mỗi món đều có thể mua lẻ, nhưng combo đồng bộ chất liệu &amp; tỉ lệ — được KTS Wotu tinh chỉnh.</div>
+    </div>
+
+    <div class="items-grid">
+      <a class="item-card" href="/san-pham/sofa-may/" style="text-decoration: none;">
+        <div class="item-img">
+          <div class="shop-ph"><span class="shop-ph-label">Sofa văng Mây</span></div>
+          <span class="item-no">1</span>
+        </div>
+        <div class="item-body">
+          <div class="item-meta">Sofa · 3 chỗ ngồi · vải bố</div>
+          <h4>Sofa văng "Mây"</h4>
+          <div class="item-row">
+            <span style="color: var(--ink-soft); text-decoration: line-through;">6.900.000đ</span>
+            <span class="qty-tag">×1</span>
+          </div>
+        </div>
+      </a>
+
+      <article class="item-card">
+        <div class="item-img">
+          <div class="shop-ph sage"><span class="shop-ph-label">Bàn trà</span></div>
+          <span class="item-no">2</span>
+        </div>
+        <div class="item-body">
+          <div class="item-meta">Bàn trà · gỗ sồi tự nhiên</div>
+          <h4>Bàn trà "Nắng Mai"</h4>
+          <div class="item-row">
+            <span style="color: var(--ink-soft); text-decoration: line-through;">3.800.000đ</span>
+            <span class="qty-tag">×1</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="item-card">
+        <div class="item-img">
+          <div class="shop-ph"><span class="shop-ph-label">Kệ TV</span></div>
+          <span class="item-no">3</span>
+        </div>
+        <div class="item-body">
+          <div class="item-meta">Kệ TV · 1m8 · 3 ngăn kéo</div>
+          <h4>Kệ TV "Hạ"</h4>
+          <div class="item-row">
+            <span style="color: var(--ink-soft); text-decoration: line-through;">5.400.000đ</span>
+            <span class="qty-tag">×1</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="item-card">
+        <div class="item-img">
+          <div class="shop-ph sage"><span class="shop-ph-label">Thảm</span></div>
+          <span class="item-no">4</span>
+        </div>
+        <div class="item-body">
+          <div class="item-meta">Thảm dệt tay · 1.6 × 2.3m</div>
+          <h4>Thảm "Tổ Ấm"</h4>
+          <div class="item-row">
+            <span style="color: var(--ink-soft); text-decoration: line-through;">2.800.000đ</span>
+            <span class="qty-tag">×1</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="bundle-total">
+      <div>
+        <div class="bt-eyebrow">Tổng giá mua lẻ</div>
+        <div class="bt-strike">18.900.000đ</div>
+      </div>
+      <div class="bt-arrow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+      </div>
+      <div>
+        <div class="bt-eyebrow combo">Giá combo</div>
+        <div class="bt-now">18.900.000đ</div>
+      </div>
+      <div class="bt-arrow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+      </div>
+      <div>
+        <div class="bt-eyebrow save">Tiết kiệm</div>
+        <div class="bt-save">10.000.000đ</div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== DESCRIPTION 1 ===== */}
+  <section class="shop-reveal block container" id="desc">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Vì sao là Tổ Ấm</span>
+        <h2>Phòng khách — <em>nơi tổ ấm bắt đầu</em>.</h2>
+      </div>
+      <div class="right">Từng món được chọn theo nguyên tắc Japandi — gỗ thật, đường nét gọn gàng, tông màu trầm ấm không kén nhà.</div>
+    </div>
+
+    <div class="desc-grid">
+      <div class="desc-img"><div class="shop-ph"><span class="shop-ph-label">Chi tiết tay sofa &amp; gỗ sồi</span></div></div>
+      <div class="desc-body">
+        <span class="eyebrow">01 · Chất liệu</span>
+        <h3>Gỗ sồi tự nhiên, vải bố nhập khẩu</h3>
+        <p>
+          Khung sofa &amp; bàn trà làm từ <strong>gỗ sồi (oak) tự nhiên</strong>, sấy kỹ tránh cong vênh trong khí hậu Việt Nam. Vải bọc là vải bố linen Hàn Quốc — bền, mát tay, không bám bụi.
+        </p>
+        <ul class="desc-list">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>Gỗ sồi sấy 2 lần · độ ẩm &lt; 12%</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>Vải bố linen nhập khẩu Hàn Quốc</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>Mút D40 cao cấp · không xẹp sau 5 năm</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>Sơn PU gốc nước · an toàn cho trẻ em</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== DESCRIPTION 2 ===== */}
+  <section class="shop-reveal block container">
+    <div class="desc-grid flip">
+      <div class="desc-img"><div class="shop-ph sage"><span class="shop-ph-label">Phòng khách tổng thể</span></div></div>
+      <div class="desc-body">
+        <span class="eyebrow">02 · Tỉ lệ phòng</span>
+        <h3>Đo bằng mét, ngắm bằng mắt KTS</h3>
+        <p>
+          Sofa cao 80cm — vừa tầm ngồi cho người Việt 1m55–1m75. Bàn trà thấp hơn mép sofa 6cm — đúng nguyên tắc nhân trắc học. Kệ TV dài 1m8, đặt vừa khít TV 55"–65" để lại 18cm hai bên cho loa hoặc cây cảnh nhỏ.
+        </p>
+        <ul class="desc-list">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>Phù hợp phòng 16–22m² · trần &gt; 2.6m</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>Sofa cao 80cm · ghế ngồi 42cm</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>Bàn trà cao 36cm · phù hợp tầm rót trà</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>Kệ TV 1m8 — phù hợp TV 55"–65"</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== SPECS ===== */}
+  <section class="shop-reveal block container" id="specs">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Thông số kỹ thuật</span>
+        <h2>Bóc tách <em>từng centimet</em>.</h2>
+      </div>
+      <div class="right">Tất cả số đo, chất liệu và chứng nhận đều minh bạch — bạn không phải đoán.</div>
+    </div>
+
+    <div class="specs-grid">
+      <div>
+        <h4 class="spec-title">Sofa văng "Mây"</h4>
+        <div class="spec-row"><span class="k">Kích thước (D × R × C)</span><span class="v">210 × 92 × 80 cm</span></div>
+        <div class="spec-row"><span class="k">Khung</span><span class="v">Gỗ sồi tự nhiên</span></div>
+        <div class="spec-row"><span class="k">Vải bọc</span><span class="v">Vải bố linen Hàn Quốc</span></div>
+        <div class="spec-row"><span class="k">Đệm</span><span class="v">Mút D40 · 14cm</span></div>
+        <div class="spec-row"><span class="k">Trọng lượng</span><span class="v">52 kg</span></div>
+        <div class="spec-row"><span class="k">Tải trọng</span><span class="v">320 kg</span></div>
+      </div>
+
+      <div>
+        <h4 class="spec-title">Bàn trà "Nắng Mai"</h4>
+        <div class="spec-row"><span class="k">Kích thước (D × R × C)</span><span class="v">110 × 60 × 36 cm</span></div>
+        <div class="spec-row"><span class="k">Mặt bàn</span><span class="v">Gỗ sồi nguyên tấm 25mm</span></div>
+        <div class="spec-row"><span class="k">Chân</span><span class="v">Gỗ sồi · ghép mộng</span></div>
+        <div class="spec-row"><span class="k">Hoàn thiện</span><span class="v">Sơn PU gốc nước</span></div>
+        <div class="spec-row"><span class="k">Trọng lượng</span><span class="v">22 kg</span></div>
+        <div class="spec-row"><span class="k">Tải trọng mặt bàn</span><span class="v">80 kg</span></div>
+      </div>
+
+      <div>
+        <h4 class="spec-title">Kệ TV "Hạ"</h4>
+        <div class="spec-row"><span class="k">Kích thước (D × R × C)</span><span class="v">180 × 40 × 45 cm</span></div>
+        <div class="spec-row"><span class="k">Khung</span><span class="v">Gỗ sồi tự nhiên</span></div>
+        <div class="spec-row"><span class="k">Ngăn kéo</span><span class="v">3 ngăn · ray giảm chấn</span></div>
+        <div class="spec-row"><span class="k">Hỗ trợ TV</span><span class="v">55"–65" (~40 kg)</span></div>
+        <div class="spec-row"><span class="k">Trọng lượng</span><span class="v">38 kg</span></div>
+        <div class="spec-row"><span class="k">Tải trọng mặt kệ</span><span class="v">60 kg</span></div>
+      </div>
+
+      <div>
+        <h4 class="spec-title">Thảm "Tổ Ấm"</h4>
+        <div class="spec-row"><span class="k">Kích thước</span><span class="v">160 × 230 cm</span></div>
+        <div class="spec-row"><span class="k">Chất liệu</span><span class="v">100% bông + len New Zealand</span></div>
+        <div class="spec-row"><span class="k">Kỹ thuật</span><span class="v">Dệt tay · 8mm pile</span></div>
+        <div class="spec-row"><span class="k">Vệ sinh</span><span class="v">Giặt khô hoặc hút bụi</span></div>
+        <div class="spec-row"><span class="k">Chứng nhận</span><span class="v">OEKO-TEX Standard 100</span></div>
+        <div class="spec-row"><span class="k">Trọng lượng</span><span class="v">7 kg</span></div>
+      </div>
+    </div>
+
+    <div class="specs-cta">
+      <a class="btn btn-outline" href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
+        Tải bản PDF kỹ thuật
+      </a>
+      <a class="btn btn-ghost" href="/#contact" style="padding: 14px 0;">Hỏi KTS về thông số <span class="arr">→</span></a>
+    </div>
+  </section>
+
+  {/* ===== DIMENSIONS ===== */}
+  <section class="shop-reveal block container" id="dim">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Sơ đồ &amp; kích thước</span>
+        <h2>Bố trí trên <em>16–22m²</em>.</h2>
+      </div>
+      <div class="right">Sơ đồ phòng khách điển hình cho căn hộ 2PN — bạn có thể tải bản vẽ DWG để in.</div>
+    </div>
+
+    <div class="dim-wrap">
+      <div class="dim-grid">
+        <svg class="dim-svg" viewBox="0 0 540 340" preserveAspectRatio="xMidYMid meet">
+          <rect class="room" x="40" y="40" width="460" height="260" rx="2" />
+
+          <rect class="obj" x="120" y="200" width="210" height="60" rx="6" />
+          <text x="225" y="234" text-anchor="middle">SOFA · 210×92</text>
+
+          <rect class="obj-2" x="170" y="130" width="110" height="55" rx="6" />
+          <text x="225" y="162" text-anchor="middle">BÀN TRÀ</text>
+
+          <rect class="obj" x="140" y="60" width="180" height="36" rx="4" />
+          <text x="230" y="83" text-anchor="middle">KỆ TV · 180×40</text>
+
+          <rect class="obj-2" x="110" y="115" width="230" height="155" rx="6" fill="none" stroke-dasharray="4 3" opacity=".75" />
+          <text x="225" y="270" text-anchor="middle" class="label">thảm 160 × 230</text>
+
+          <line class="dim-line" x1="40" y1="22" x2="500" y2="22" />
+          <line class="dim-line" x1="40" y1="18" x2="40" y2="26" />
+          <line class="dim-line" x1="500" y1="18" x2="500" y2="26" />
+          <text x="270" y="16" text-anchor="middle">4.6 m</text>
+          <line class="dim-line" x1="22" y1="40" x2="22" y2="300" />
+          <line class="dim-line" x1="18" y1="40" x2="26" y2="40" />
+          <line class="dim-line" x1="18" y1="300" x2="26" y2="300" />
+          <text x="14" y="170" text-anchor="middle" transform="rotate(-90 14 170)">3.8 m</text>
+
+          <text x="430" y="170" text-anchor="middle" class="label">phòng khách</text>
+          <text x="430" y="186" text-anchor="middle" class="label">~17.5 m²</text>
+        </svg>
+
+        <div class="dim-legend">
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--warm-soft); border: 1px solid var(--accent-deep);"></span>
+            <div><b>Khung gỗ sồi</b><br /><span style="color: var(--ink-soft); font-size: 12px;">Sofa &amp; kệ TV</span></div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--accent-2-soft); border: 1px solid var(--accent-2);"></span>
+            <div><b>Bàn trà &amp; thảm</b><br /><span style="color: var(--ink-soft); font-size: 12px;">Đặt giữa, làm tâm phòng</span></div>
+          </div>
+          <div class="legend-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.5"><path d="M3 12h18" /></svg>
+            <div><b>Lối đi tối thiểu</b><br /><span style="color: var(--ink-soft); font-size: 12px;">75 cm giữa sofa và bàn</span></div>
+          </div>
+          <a class="btn btn-outline" href="#" style="margin-top: 14px;">Tải sơ đồ DWG / PDF</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== REVIEWS ===== */}
+  <section class="shop-reveal block container" id="reviews">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Đánh giá khách hàng</span>
+        <h2><em>4.9 / 5</em> · 312 đánh giá thật.</h2>
+      </div>
+      <div class="right">Tổng hợp đánh giá xác thực từ khách đã mua, có ảnh chụp tại nhà.</div>
+    </div>
+
+    <div class="rev-grid">
+      <aside class="rev-summary">
+        <div class="rev-score">4.9<sub>/5</sub></div>
+        <div class="stars" style="font-size: 22px; margin-top: 4px;">★★★★★</div>
+        <div style="font-size: 13px; color: var(--ink-soft); margin-top: 4px;">trên 312 đánh giá xác thực</div>
+        <div class="rev-bars">
+          <div class="rev-bar"><span>5★</span><div class="bar-track"><div class="bar-fill" style="width: 92%;"></div></div><span style="text-align:right;">288</span></div>
+          <div class="rev-bar"><span>4★</span><div class="bar-track"><div class="bar-fill" style="width: 6%;"></div></div><span style="text-align:right;">19</span></div>
+          <div class="rev-bar"><span>3★</span><div class="bar-track"><div class="bar-fill" style="width: 1%;"></div></div><span style="text-align:right;">3</span></div>
+          <div class="rev-bar"><span>2★</span><div class="bar-track"><div class="bar-fill" style="width: 0.5%;"></div></div><span style="text-align:right;">1</span></div>
+          <div class="rev-bar"><span>1★</span><div class="bar-track"><div class="bar-fill" style="width: 0.5%;"></div></div><span style="text-align:right;">1</span></div>
+        </div>
+        <a class="btn btn-outline" href="#" style="width: 100%; justify-content: center; margin-top: 22px;">Viết đánh giá</a>
+      </aside>
+
+      <div class="review-list">
+        <article class="review-item">
+          <div class="review-head">
+            <div class="review-author">
+              <div class="avatar">N</div>
+              <div>
+                <div class="name">Nguyễn Hà My</div>
+                <div class="when">Nhơn Bình · Quy Nhơn · Mua 02/05/2026</div>
+              </div>
+            </div>
+            <span class="stars">★★★★★</span>
+          </div>
+          <div class="review-body">
+            Đặt nguyên combo Tổ Ấm, đội Wotu giao và lắp trong buổi sáng. Cuối ngày là đã ngồi xem TV với gia đình. Quá tiện cho người mới về nhà mới. Sofa ngồi êm, không có mùi hắc.
+          </div>
+          <div class="review-photos">
+            <div class="review-photo"><div class="shop-ph"><span class="shop-ph-label">ảnh KH</span></div></div>
+            <div class="review-photo"><div class="shop-ph sage"><span class="shop-ph-label">ảnh KH</span></div></div>
+            <div class="review-photo"><div class="shop-ph"><span class="shop-ph-label">ảnh KH</span></div></div>
+          </div>
+          <div class="review-meta">
+            <span>Tông màu: <b style="color: var(--ink);">Nâu đất ấm</b></span>
+            <span>Kích thước: <b style="color: var(--ink);">M · 3 chỗ</b></span>
+            <span>👍 Có ích · 42</span>
+          </div>
+        </article>
+
+        <article class="review-item">
+          <div class="review-head">
+            <div class="review-author">
+              <div class="avatar">T</div>
+              <div>
+                <div class="name">Trần Quốc Trung</div>
+                <div class="when">Tuy Phước · Bình Định · Mua 18/04/2026</div>
+              </div>
+            </div>
+            <span class="stars">★★★★★</span>
+          </div>
+          <div class="review-body">
+            Mình so sánh 4 thương hiệu trước khi chốt Wotu. Gỗ thật, đường ráp gọn, không có mùi sơn công nghiệp. Bàn trà nguyên tấm gỗ — vân đẹp, không phải gỗ ghép.
+          </div>
+          <div class="review-meta">
+            <span>Tông màu: <b style="color: var(--ink);">Xám rêu</b></span>
+            <span>Kích thước: <b style="color: var(--ink);">L · chữ L</b></span>
+            <span>👍 Có ích · 28</span>
+          </div>
+        </article>
+
+        <article class="review-item">
+          <div class="review-head">
+            <div class="review-author">
+              <div class="avatar">L</div>
+              <div>
+                <div class="name">Lê Phương Linh</div>
+                <div class="when">Hoài Nhơn · Bình Định · Mua 28/03/2026</div>
+              </div>
+            </div>
+            <span class="stars">★★★★★</span>
+          </div>
+          <div class="review-body">
+            Mình là dân thiết kế nên kỹ tính. Wotu tư vấn xong còn dựng 3D phòng cho xem trước — hợp tông căn hộ của mình bất ngờ. Sau 2 tháng dùng, sofa vẫn nguyên form.
+          </div>
+          <div class="review-meta">
+            <span>Tông màu: <b style="color: var(--ink);">Be sữa</b></span>
+            <span>Kích thước: <b style="color: var(--ink);">M · 3 chỗ</b></span>
+            <span>👍 Có ích · 35</span>
+          </div>
+        </article>
+
+        <div style="text-align: center;">
+          <a class="btn btn-outline" href="#">Xem tất cả 312 đánh giá <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== FAQ ===== */}
+  <section class="shop-reveal block container" id="faq">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Câu hỏi thường gặp</span>
+        <h2>Trước khi mua, <em>bạn thường hỏi</em>.</h2>
+      </div>
+      <div class="right">Không thấy câu trả lời bạn cần? Gọi 0933 774 708 hoặc chat Zalo — KTS trực 8h–21h.</div>
+    </div>
+
+    <div class="faq">
+      <details open>
+        <summary>Tôi đang ở chung cư 2PN, phòng khách 18m² — combo này có hợp không?</summary>
+        <div class="ans">
+          Cực kỳ phù hợp. Combo Tổ Ấm size M được thiết kế chuẩn cho phòng khách 16–22m². Sofa 3 chỗ dài 2.1m vừa khít tường thông thường (3.4–3.8m). Nếu phòng nhỏ hơn 16m², chọn size S. Để chắc, hãy gửi mặt bằng cho KTS Wotu — chúng tôi dựng 3D miễn phí trong 24h.
+        </div>
+      </details>
+      <details>
+        <summary>Thời gian giao hàng và lắp đặt mất bao lâu?</summary>
+        <div class="ans">
+          Trong nội thành Quy Nhơn và vùng lân cận Bình Định: <strong>48 giờ</strong> kể từ khi xác nhận đơn. Đội kỹ thuật của Wotu (không qua bên thứ ba) lắp đặt trong 2–3 giờ tại nhà bạn, kê dọn sạch và mang bao bì đi. Giao tỉnh xa: 5–7 ngày, có tính phí vận chuyển.
+        </div>
+      </details>
+      <details>
+        <summary>Nếu sau khi lắp tôi không ưng, có đổi trả được không?</summary>
+        <div class="ans">
+          Có. Wotu áp dụng chính sách <strong>đổi trả miễn phí 30 ngày</strong> kể cả combo đã lắp đặt. Chỉ cần sản phẩm chưa hư hỏng nặng, đội Wotu sẽ tháo, mang đi và hoàn lại 100% giá trị (trừ chi phí giao tỉnh, nếu có).
+        </div>
+      </details>
+      <details>
+        <summary>Bảo hành 5 năm bao gồm những gì?</summary>
+        <div class="ans">
+          Bảo hành áp dụng cho <strong>khung gỗ và cấu trúc chính</strong>: cong vênh, mục mọt, gãy mộng, hư ray ngăn kéo. Vải bọc và đệm có chế độ <strong>2 năm</strong>. Trong thời gian bảo hành, Wotu hỗ trợ sửa hoặc thay miễn phí tại nhà.
+        </div>
+      </details>
+      <details>
+        <summary>Có hỗ trợ trả góp 0% không?</summary>
+        <div class="ans">
+          Có. Wotu liên kết với Home Credit và Shinhan Bank cho gói trả góp <strong>6 / 12 / 18 / 24 tháng — lãi suất 0%</strong>. Hồ sơ chỉ cần CCCD. Combo Tổ Ấm trả góp 12 tháng = 1.575.000đ/tháng.
+        </div>
+      </details>
+      <details>
+        <summary>Tôi muốn đổi 1 món trong combo, được không?</summary>
+        <div class="ans">
+          Được. Bạn có thể thay sofa size S/M/L, hoặc đổi tông màu khác, hoặc bỏ thảm để tự chọn. Liên hệ KTS Wotu để được điều chỉnh combo theo nhu cầu — giá sẽ được tính lại tương ứng.
+        </div>
+      </details>
+    </div>
+  </section>
+
+  {/* ===== RELATED ===== */}
+  <section class="shop-reveal block container related-block">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Có thể bạn thích</span>
+        <h2>Combo cùng <em>tông cảm hứng</em>.</h2>
+      </div>
+      <div class="right">Khách hàng mua combo Tổ Ấm thường mua thêm những combo này — đồng bộ chất liệu &amp; tông màu.</div>
+    </div>
+
+    <div class="rel-grid">
+      <a class="rel-card" href="#">
+        <div class="rel-img"><div class="shop-ph sage"><span class="shop-ph-label">Combo phòng ngủ An Yên</span></div></div>
+        <div class="rel-body">
+          <span class="rel-cat">Phòng ngủ master</span>
+          <h4>Combo <em>An Yên</em></h4>
+          <div style="font-size: 13px; color: var(--ink-soft);">Giường 1m8 · tủ áo · bàn trang điểm</div>
+          <div class="rel-foot">
+            <div class="rel-price"><s>32.500.000đ</s>22.500.000đ</div>
+            <span style="font-size: 12px; color: var(--accent); font-weight: 700;">−31%</span>
+          </div>
+        </div>
+      </a>
+      <a class="rel-card" href="#">
+        <div class="rel-img"><div class="shop-ph"><span class="shop-ph-label">Combo phòng ăn Sum Vầy</span></div></div>
+        <div class="rel-body">
+          <span class="rel-cat">Phòng ăn · 6 chỗ</span>
+          <h4>Combo <em>Sum Vầy</em></h4>
+          <div style="font-size: 13px; color: var(--ink-soft);">Bàn ăn 1m6 · 6 ghế · tủ chén</div>
+          <div class="rel-foot">
+            <div class="rel-price"><s>18.500.000đ</s>12.800.000đ</div>
+            <span style="font-size: 12px; color: var(--accent); font-weight: 700;">−31%</span>
+          </div>
+        </div>
+      </a>
+      <a class="rel-card" href="#">
+        <div class="rel-img"><div class="shop-ph sage"><span class="shop-ph-label">Combo làm việc Tập Trung</span></div></div>
+        <div class="rel-body">
+          <span class="rel-cat">Phòng làm việc tại nhà</span>
+          <h4>Combo <em>Tập Trung</em></h4>
+          <div style="font-size: 13px; color: var(--ink-soft);">Bàn 1m4 · ghế công thái · kệ sách</div>
+          <div class="rel-foot">
+            <div class="rel-price"><s>12.900.000đ</s>8.900.000đ</div>
+            <span style="font-size: 12px; color: var(--accent); font-weight: 700;">−31%</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <Footer />
+
+  {/* ===== STICKY CART BAR ===== */}
+  <div class="sticky-bar" id="stickyBar">
+    <span class="sb-title">Combo Tổ Ấm</span>
+    <span class="sb-price"><s>28.900.000đ</s>18.900.000đ</span>
+    <a class="btn btn-accent" href="/#contact">Mua ngay <span class="arr">→</span></a>
+  </div>
+</ShopLayout>
+
+<style>
+  /* Alias để tái dùng CSS từ design HTML */
+  :where(main) {
+    --bg: var(--shop-bg);
+    --bg-soft: var(--shop-bg-soft);
+    --bg-card: var(--shop-bg-card);
+    --ink: var(--shop-ink);
+    --ink-soft: var(--shop-ink-soft);
+    --ink-mid: #8E8478;
+    --line: var(--shop-line);
+    --accent: var(--shop-accent);
+    --accent-deep: var(--shop-accent-deep);
+    --accent-2: var(--shop-accent-2);
+    --accent-2-soft: var(--shop-accent-2-soft);
+    --warm-soft: var(--shop-warm-soft);
+    --yellow: var(--shop-yellow);
+    --green: #6B8E7A;
+    --serif: var(--shop-serif);
+    --sans: var(--shop-sans);
+    --radius: var(--shop-radius);
+    --radius-sm: var(--shop-radius-sm);
+    --radius-lg: var(--shop-radius-lg);
+    --radius-xl: var(--shop-radius-xl);
+    --maxw: var(--shop-maxw);
+  }
+
+  /* helpers */
+  .serif { font-family: var(--serif); }
+  .eyebrow {
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink-soft); font-weight: 600; display: inline-flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; opacity: .6; }
+
+  /* ===== LOCAL BUTTONS (scoped) ===== */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 22px; border-radius: 999px; font-weight: 600; font-size: 14px; transition: transform .2s, background .2s, color .2s, box-shadow .2s; }
+  .btn-primary { background: var(--ink); color: var(--bg); }
+  .btn-primary:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 14px 30px -12px color-mix(in oklab, var(--accent) 50%, transparent); }
+  .btn-outline { border: 1px solid var(--ink); color: var(--ink); }
+  .btn-outline:hover { background: var(--ink); color: var(--bg); }
+  .btn-accent { background: var(--accent); color: var(--bg); }
+  .btn-accent:hover { background: var(--accent-deep); }
+  .btn-ghost { color: var(--ink); }
+  .btn-ghost:hover { color: var(--accent); }
+  .btn-lg { padding: 18px 28px; font-size: 15px; }
+  .btn .arr { transition: transform .2s; }
+  .btn:hover .arr { transform: translateX(4px); }
+
+  /* ===== BREADCRUMB ===== */
+  .crumb { padding: 22px 0 6px; }
+  .crumb-list { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--ink-soft); align-items: center; }
+  .crumb-list a:hover { color: var(--accent); }
+  .crumb-list .sep { opacity: .5; }
+  .crumb-list .here { color: var(--ink); font-weight: 600; }
+
+  /* ===== PRODUCT HERO ===== */
+  .ph-hero { padding: 18px 0 60px; }
+  .ph-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; align-items: flex-start; }
+
+  /* gallery */
+  .gallery { display: grid; grid-template-columns: 96px 1fr; gap: 14px; }
+  .thumbs { display: flex; flex-direction: column; gap: 10px; }
+  .thumb {
+    aspect-ratio: 1/1; border-radius: 12px; overflow: hidden; cursor: pointer;
+    border: 2px solid transparent; background: var(--bg-soft); position: relative;
+    transition: border-color .2s, transform .2s;
+    padding: 0;
+  }
+  .thumb.active { border-color: var(--ink); }
+  .thumb:hover { transform: translateY(-1px); }
+  .thumb .shop-ph { position: absolute; inset: 0; }
+  .main-image {
+    position: relative; aspect-ratio: 4/5; border-radius: var(--radius-xl);
+    overflow: hidden; background: var(--bg-soft);
+  }
+  .main-image .shop-ph { position: absolute; inset: 0; }
+  .gallery-tag { position: absolute; top: 22px; left: 22px; display: flex; flex-direction: column; gap: 8px; }
+  .tag {
+    background: var(--bg-card); padding: 6px 12px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; color: var(--ink); display: inline-flex; align-items: center; gap: 6px; width: fit-content;
+  }
+  .tag.accent { background: var(--accent); color: white; }
+  .tag.dark { background: var(--ink); color: var(--bg); }
+  .gallery-controls {
+    position: absolute; bottom: 22px; left: 22px; right: 22px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .gallery-count { background: color-mix(in oklab, var(--bg-card) 80%, transparent); backdrop-filter: blur(8px); padding: 8px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .gallery-zoom {
+    width: 42px; height: 42px; border-radius: 50%; background: var(--bg-card);
+    display: grid; place-items: center; box-shadow: 0 8px 20px -8px rgba(0,0,0,.18);
+  }
+
+  /* product info */
+  .info { display: flex; flex-direction: column; gap: 22px; position: sticky; top: 124px; }
+  .cat-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .cat-link { font-size: 12px; letter-spacing: .18em; color: var(--accent); text-transform: uppercase; font-weight: 700; }
+  .review-row { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-soft); }
+  .stars { display: inline-flex; gap: 1px; color: var(--accent); }
+  .info h1 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(40px, 5vw, 64px); line-height: 1; letter-spacing: -.015em; margin: 0;
+  }
+  .info h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 16px; color: var(--ink-soft); margin: 0; line-height: 1.55; }
+
+  .price-row { display: flex; align-items: baseline; gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .price-now { font-family: var(--serif); font-size: 42px; color: var(--ink); line-height: 1; }
+  .price-was { font-size: 18px; color: var(--ink-soft); text-decoration: line-through; }
+  .price-save { background: var(--warm-soft); color: var(--accent-deep); padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .price-hint { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+
+  .pickers { display: flex; flex-direction: column; gap: 18px; }
+  .picker .label { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; margin-bottom: 10px; }
+  .picker .label b { font-weight: 600; color: var(--ink); }
+  .picker .label .v { color: var(--ink-soft); }
+  .swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+  .swatch {
+    width: 46px; height: 46px; border-radius: 14px; border: 2px solid transparent;
+    cursor: pointer; padding: 3px; background: var(--bg-card); transition: border-color .2s, transform .2s;
+  }
+  .swatch span { display: block; width: 100%; height: 100%; border-radius: 9px; }
+  .swatch[data-active="true"] { border-color: var(--ink); }
+  .swatch:hover { transform: translateY(-1px); }
+  .size-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .size-btn {
+    padding: 12px 18px; border-radius: 12px; background: var(--bg-card);
+    border: 1px solid var(--line); font-size: 13px; font-weight: 600; color: var(--ink);
+    transition: all .15s;
+  }
+  .size-btn[data-active="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .size-btn small { display: block; font-size: 10px; color: var(--ink-soft); font-weight: 500; margin-top: 2px; }
+  .size-btn[data-active="true"] small { color: color-mix(in oklab, var(--bg) 70%, transparent); }
+
+  .qty-and-cart { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: stretch; }
+  .qty {
+    display: inline-flex; align-items: center; border: 1px solid var(--line);
+    border-radius: 999px; padding: 0 6px; background: var(--bg-card);
+  }
+  .qty button { width: 36px; height: 36px; border-radius: 50%; font-size: 16px; color: var(--ink); display: grid; place-items: center; }
+  .qty button:hover { background: var(--warm-soft); }
+  .qty .v { min-width: 28px; text-align: center; font-weight: 600; }
+
+  .cta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .key-features { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 18px; background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); }
+  .feat { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .feat svg { color: var(--accent); flex: none; }
+  .feat b { font-weight: 600; }
+  .feat span { color: var(--ink-soft); display: block; font-size: 11px; }
+
+  .info-note {
+    background: color-mix(in oklab, var(--accent-2) 14%, var(--bg));
+    border: 1px solid var(--accent-2-soft); padding: 14px 16px; border-radius: 14px;
+    font-size: 13px; color: var(--ink); display: flex; gap: 12px; align-items: flex-start;
+  }
+  .info-note svg { color: var(--accent-2); flex: none; margin-top: 2px; }
+
+  /* ===== READING NAV ===== */
+  .read-nav { position: sticky; top: 102px; z-index: 40; background: var(--bg); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 60px; }
+  .read-nav ul { list-style: none; padding: 0; margin: 0; display: flex; gap: 6px; overflow-x: auto; }
+  .read-nav a { display: inline-block; padding: 16px 18px; font-size: 13px; font-weight: 600; color: var(--ink-soft); border-bottom: 2px solid transparent; white-space: nowrap; }
+  .read-nav a:hover { color: var(--ink); }
+  .read-nav a.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+  /* ===== SECTIONS ===== */
+  section.block { padding: 50px 0; scroll-margin-top: 140px; }
+  .block-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 36px; }
+  .block-head h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(32px, 4.4vw, 52px); line-height: 1; letter-spacing: -.01em; margin: 12px 0 0; max-width: 700px; }
+  .block-head h2 em { font-style: italic; color: var(--accent); }
+  .block-head .right { color: var(--ink-soft); max-width: 380px; font-size: 14px; }
+
+  /* ===== INCLUDED ITEMS ===== */
+  .items-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .item-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 14px; display: flex; flex-direction: column; gap: 12px; transition: transform .2s; }
+  .item-card:hover { transform: translateY(-2px); }
+  .item-img { aspect-ratio: 1/1; border-radius: 12px; overflow: hidden; background: var(--bg-soft); position: relative; }
+  .item-img .shop-ph { position: absolute; inset: 0; }
+  .item-no { position: absolute; top: 10px; left: 10px; background: var(--ink); color: var(--bg); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-family: var(--serif); z-index: 2; }
+  .item-body { padding: 0 6px 6px; }
+  .item-body h4 { font-family: var(--serif); font-size: 22px; margin: 0 0 6px; line-height: 1.05; font-weight: 400; }
+  .item-meta { font-size: 12px; color: var(--ink-soft); }
+  .item-row { display: flex; justify-content: space-between; margin-top: 8px; align-items: center; font-size: 14px; }
+  .item-row .qty-tag { background: var(--warm-soft); color: var(--accent-deep); padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+
+  /* ===== BUNDLE TOTAL ===== */
+  .bundle-total {
+    display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    margin-top: 32px; padding: 22px 28px; background: var(--bg-card);
+    border: 1px solid var(--line); border-radius: var(--radius);
+  }
+  .bt-eyebrow { font-size: 12px; color: var(--ink-soft); letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
+  .bt-eyebrow.combo { color: var(--accent-deep); font-weight: 700; }
+  .bt-eyebrow.save { color: var(--green); font-weight: 700; }
+  .bt-strike { font-family: var(--serif); font-size: 26px; color: var(--ink-soft); text-decoration: line-through; }
+  .bt-now { font-family: var(--serif); font-size: 36px; color: var(--ink); }
+  .bt-save { font-family: var(--serif); font-size: 36px; color: var(--green); }
+  .bt-arrow { text-align: center; padding: 0 14px; }
+
+  /* ===== DESCRIPTION ===== */
+  .desc-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 50px; align-items: center; }
+  .desc-img { aspect-ratio: 4/5; border-radius: var(--radius-xl); background: var(--bg-soft); position: relative; overflow: hidden; }
+  .desc-img .shop-ph { position: absolute; inset: 0; }
+  .desc-body h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.05; margin: 14px 0 14px; }
+  .desc-body p { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin: 0 0 16px; max-width: 540px; }
+  .desc-body p strong { color: var(--ink); font-weight: 600; }
+  .desc-list { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-direction: column; gap: 12px; max-width: 540px; }
+  .desc-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--ink); }
+  .desc-list li svg { color: var(--accent); flex: none; margin-top: 3px; }
+
+  .desc-grid.flip { grid-template-columns: 1.1fr 1fr; }
+  .desc-grid.flip .desc-img { order: 2; }
+
+  /* ===== SPECS ===== */
+  .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 56px; }
+  .spec-title { font-family: var(--serif); font-size: 22px; margin: 0 0 6px; font-weight: 400; }
+  .spec-row { display: flex; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--line); font-size: 14px; gap: 14px; }
+  .spec-row .k { color: var(--ink-soft); }
+  .spec-row .v { color: var(--ink); font-weight: 600; text-align: right; }
+  .specs-cta { margin-top: 28px; display: flex; gap: 14px; align-items: center; }
+
+  /* ===== DIMENSIONS DIAGRAM ===== */
+  .dim-wrap { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 36px; }
+  .dim-grid { display: grid; grid-template-columns: 1fr 280px; gap: 40px; align-items: center; }
+  .dim-svg { width: 100%; height: auto; }
+  .dim-svg .room { fill: var(--bg-soft); stroke: var(--ink); stroke-width: 1.5; }
+  .dim-svg .obj { fill: var(--warm-soft); stroke: var(--accent-deep); stroke-width: 1.2; }
+  .dim-svg .obj-2 { fill: var(--accent-2-soft); stroke: var(--accent-2); stroke-width: 1.2; }
+  .dim-svg .dim-line { stroke: var(--ink); stroke-width: 0.6; fill: none; }
+  .dim-svg text { font-family: var(--sans); font-size: 11px; fill: var(--ink); font-weight: 600; }
+  .dim-svg .label { font-family: var(--serif); font-size: 13px; font-style: italic; fill: var(--ink-soft); font-weight: 400; }
+  .dim-legend { display: flex; flex-direction: column; gap: 14px; }
+  .legend-item { display: flex; gap: 12px; align-items: flex-start; font-size: 13px; }
+  .legend-dot { width: 18px; height: 18px; border-radius: 5px; flex: none; margin-top: 2px; }
+
+  /* ===== REVIEWS BLOCK ===== */
+  .rev-grid { display: grid; grid-template-columns: 280px 1fr; gap: 50px; align-items: flex-start; }
+  .rev-summary { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 28px; }
+  .rev-score { font-family: var(--serif); font-size: 72px; line-height: 1; color: var(--ink); }
+  .rev-score sub { font-size: 24px; color: var(--ink-soft); }
+  .rev-bars { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+  .rev-bar { display: grid; grid-template-columns: 30px 1fr 30px; gap: 10px; align-items: center; font-size: 12px; color: var(--ink-soft); }
+  .bar-track { height: 6px; background: var(--bg-soft); border-radius: 999px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--accent); border-radius: 999px; }
+  .review-list { display: flex; flex-direction: column; gap: 18px; }
+  .review-item { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .review-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+  .review-author { display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--warm-soft); color: var(--accent); display: grid; place-items: center; font-family: var(--serif); font-size: 18px; }
+  .review-author .name { font-weight: 600; font-size: 14px; }
+  .review-author .when { font-size: 12px; color: var(--ink-soft); }
+  .review-body { font-size: 15px; color: var(--ink); line-height: 1.55; }
+  .review-meta { font-size: 12px; color: var(--ink-soft); display: flex; gap: 14px; padding-top: 12px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+  .review-photos { display: flex; gap: 8px; margin-top: 4px; }
+  .review-photo { width: 64px; height: 64px; border-radius: 8px; background: var(--bg-soft); position: relative; overflow: hidden; }
+  .review-photo .shop-ph { position: absolute; inset: 0; }
+
+  /* ===== FAQ ===== */
+  .faq { display: flex; flex-direction: column; gap: 10px; max-width: 880px; }
+  .faq details { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); padding: 0; }
+  .faq summary { padding: 22px 24px; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; font-family: var(--serif); font-size: 22px; color: var(--ink); align-items: center; list-style: none; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: var(--warm-soft); color: var(--accent); font-size: 18px; font-weight: 300; transition: transform .25s, background .2s; }
+  .faq details[open] summary::after { content: "−"; background: var(--ink); color: var(--bg); }
+  .faq .ans { padding: 0 24px 24px; color: var(--ink-soft); font-size: 14px; line-height: 1.6; }
+
+  /* ===== RELATED ===== */
+  .related-block {
+    background: var(--bg-soft);
+    border-radius: var(--radius-xl);
+    padding: 60px 56px;
+    margin-bottom: 60px;
+  }
+  .rel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .rel-card { background: var(--bg-card); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid color-mix(in oklab, var(--line) 50%, transparent); display: flex; flex-direction: column; transition: transform .25s, box-shadow .25s; }
+  .rel-card:hover { transform: translateY(-4px); box-shadow: 0 22px 44px -22px rgba(58,42,30,.18); }
+  .rel-img { aspect-ratio: 4/3; background: var(--warm-soft); position: relative; overflow: hidden; }
+  .rel-img .shop-ph { position: absolute; inset: 0; }
+  .rel-body { padding: 22px; }
+  .rel-cat { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; }
+  .rel-body h4 { font-family: var(--serif); font-size: 24px; margin: 6px 0 8px; line-height: 1.1; font-weight: 400; }
+  .rel-body h4 em { font-style: italic; color: var(--accent); }
+  .rel-foot { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--line); margin-top: 12px; }
+  .rel-price { font-family: var(--serif); font-size: 22px; }
+  .rel-price s { font-size: 13px; color: var(--ink-soft); margin-right: 8px; font-family: var(--sans); }
+
+  /* ===== STICKY CART BAR ===== */
+  .sticky-bar {
+    position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 120%);
+    background: var(--ink); color: var(--bg); border-radius: 999px;
+    padding: 12px 12px 12px 26px; display: flex; align-items: center; gap: 20px;
+    box-shadow: 0 24px 50px -16px rgba(0,0,0,.4);
+    transition: transform .35s ease; z-index: 70; max-width: 92vw;
+  }
+  .sticky-bar.in { transform: translate(-50%, 0); }
+  .sticky-bar .sb-title { font-family: var(--serif); font-size: 18px; }
+  .sticky-bar .sb-price { font-weight: 700; }
+  .sticky-bar .sb-price s { font-weight: 400; opacity: .55; margin-right: 6px; font-size: 13px; }
+  .sticky-bar .btn { padding: 12px 20px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1100px) {
+    .ph-grid { grid-template-columns: 1fr; }
+    .info { position: static; }
+    .desc-grid, .desc-grid.flip { grid-template-columns: 1fr; }
+    .desc-grid.flip .desc-img { order: 0; }
+    .rev-grid { grid-template-columns: 1fr; }
+    .items-grid { grid-template-columns: repeat(2, 1fr); }
+    .specs-grid { grid-template-columns: 1fr; gap: 0; }
+    .dim-grid { grid-template-columns: 1fr; }
+    .rel-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 680px) {
+    .gallery { grid-template-columns: 1fr; }
+    .thumbs { flex-direction: row; overflow-x: auto; }
+    .thumb { flex: none; width: 80px; }
+    .items-grid, .rel-grid { grid-template-columns: 1fr; }
+    .cta-row { grid-template-columns: 1fr; }
+    .key-features { grid-template-columns: 1fr; }
+    .related-block { padding: 40px 22px; }
+  }
+</style>
+
+<script>
+  // ===== Thumb gallery =====
+  document.querySelectorAll('.thumb').forEach((t) => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.thumb').forEach((x) => x.classList.remove('active'));
+      t.classList.add('active');
+      const n = Number((t as HTMLElement).dataset.i) + 1;
+      const countEl = document.querySelector('.gallery-count');
+      if (countEl) countEl.textContent = String(n).padStart(2, '0') + ' / 05';
+    });
+  });
+
+  // ===== Color swatches =====
+  const colorSwatches = document.querySelectorAll('#colors .swatch');
+  colorSwatches.forEach((s) => {
+    s.addEventListener('click', () => {
+      colorSwatches.forEach((x) => ((x as HTMLElement).dataset.active = 'false'));
+      (s as HTMLElement).dataset.active = 'true';
+      const label = s.getAttribute('aria-label') ?? '';
+      const labelEl = s.closest('.picker')?.querySelector('.label .v');
+      if (labelEl) labelEl.textContent = label;
+    });
+  });
+
+  // ===== Size picker =====
+  const sizeBtns = document.querySelectorAll('#sizes .size-btn');
+  sizeBtns.forEach((s) => {
+    s.addEventListener('click', () => {
+      sizeBtns.forEach((x) => ((x as HTMLElement).dataset.active = 'false'));
+      (s as HTMLElement).dataset.active = 'true';
+      const small = s.querySelector('small');
+      const v = small ? small.textContent ?? '' : '';
+      const labelEl = s.closest('.picker')?.querySelector('.label .v');
+      if (labelEl) labelEl.textContent = 'Sofa văng · ' + v;
+    });
+  });
+
+  // ===== Quantity =====
+  let qty = 1;
+  const qV = document.getElementById('qV');
+  const addCart = document.getElementById('addCart');
+  function fmt(n: number) {
+    return n.toLocaleString('vi-VN') + 'đ';
+  }
+  function updateQty() {
+    if (qV) qV.textContent = String(qty);
+    if (addCart && addCart.firstChild) addCart.firstChild.textContent = `Thêm vào giỏ · ${fmt(18900000 * qty)}`;
+  }
+  const qInc = document.getElementById('qInc');
+  const qDec = document.getElementById('qDec');
+  if (qInc) qInc.onclick = () => { qty++; updateQty(); };
+  if (qDec) qDec.onclick = () => { if (qty > 1) { qty--; updateQty(); } };
+
+  // ===== Hook "Thêm vào giỏ" to shop-store =====
+  if (addCart) {
+    addCart.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const mod = await import('../../lib/shop-store');
+      mod.addToCart(
+        {
+          id: 'combo-to-am',
+          name: 'Combo Tổ Ấm — Phòng khách',
+          price: 18_900_000,
+        },
+        qty,
+      );
+      mod.toast(`✓ Đã thêm Combo Tổ Ấm (×${qty}) vào giỏ`);
+    });
+  }
+
+  // ===== Reading nav active state + sticky bar =====
+  const sectionIds = ['items', 'desc', 'specs', 'dim', 'reviews', 'faq'];
+  const sections = sectionIds
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => el !== null);
+  const readLinks = document.querySelectorAll('.read-nav a');
+  const stickyBar = document.getElementById('stickyBar');
+  const hero = document.querySelector('.ph-hero');
+
+  function onScroll() {
+    const y = window.scrollY + 200;
+    let active = sections[0];
+    for (const s of sections) if (s.offsetTop <= y) active = s;
+    if (active) {
+      readLinks.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === '#' + active.id));
+    }
+    if (hero && stickyBar) {
+      const r = hero.getBoundingClientRect();
+      stickyBar.classList.toggle('in', r.bottom < 100);
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Smooth scroll for read-nav
+  readLinks.forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href');
+      if (id && id.startsWith('#')) {
+        const el = document.querySelector(id);
+        if (el) {
+          e.preventDefault();
+          window.scrollTo({ top: (el as HTMLElement).offsetTop - 140, behavior: 'smooth' });
+        }
+      }
+    });
+  });
+</script>
+</content>
+</invoke>

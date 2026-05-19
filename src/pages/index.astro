@@ -1,46 +1,893 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Nav from '../components/Nav.astro';
-import Hero from '../components/Hero.astro';
-import Marquee from '../components/Marquee.astro';
-import Philosophy from '../components/Philosophy.astro';
-import Services from '../components/Services.astro';
-import ProjectsGrid from '../components/ProjectsGrid.astro';
-import Process from '../components/Process.astro';
-import About from '../components/About.astro';
-import Quote from '../components/Quote.astro';
-import Contact from '../components/Contact.astro';
-import Footer from '../components/Footer.astro';
-import TweaksPanel from '../components/TweaksPanel.astro';
+import ShopLayout from '../layouts/ShopLayout.astro';
+import Nav from '../components/shop/Nav.astro';
+import Footer from '../components/shop/Footer.astro';
+import Marquee from '../components/shop/Marquee.astro';
+import site from '../data/site.yml';
 
-const all = await getCollection('projects');
-const projects = all
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 4)
-  .map((p) => ({
-    slug: p.id,
-    name: p.data.name,
-    id: p.data.id,
-    loc: p.data.loc,
-    cat: p.data.cat,
-    tone: p.data.tone,
-    ratio: p.data.ratio,
-    photo: p.data.photo,
-    photoAlt: p.data.photoAlt,
-  }));
+const phone = site.hotline;
+const email = site.email;
+
+interface Combo {
+  feature?: boolean;
+  id: string;
+  room: 'studio' | 'phong-khach' | 'phong-ngu' | 'phong-an' | 'lam-viec' | 'tre-em';
+  cat: string;
+  name: string;
+  nameEm: string;
+  nameTail?: string;
+  desc: string;
+  priceOld: string;
+  priceNew: string;
+  price: number;
+  priceNote: string;
+  badge?: string;
+  badgeClass?: 'sage' | 'terra';
+  badgeStyle?: string;
+  placeholder: string;
+  tone: '' | 'sage';
+  href: string;
+}
+
+const combos: Combo[] = [
+  {
+    feature: true,
+    id: 'combo-an-cu',
+    room: 'studio',
+    cat: 'Combo căn hộ · 30m²',
+    name: 'Combo Studio',
+    nameEm: 'An Cư',
+    nameTail: ' 30m²',
+    desc: 'Trọn bộ 11 món cho căn hộ studio: sofa giường, bàn trà, kệ TV, giường 1m6, tủ áo 4 cánh, bàn ăn 4 ghế, bàn làm việc, kệ bếp, đèn trang trí, thảm và rèm cửa.',
+    priceOld: '59.900.000đ',
+    priceNew: '45.000.000đ',
+    price: 45_000_000,
+    priceNote: '· trả góp 0% — 12 tháng',
+    badge: '★ Bestseller',
+    badgeStyle: 'background: var(--shop-bg); color: var(--shop-ink);',
+    placeholder: 'Combo Căn hộ studio 30m² — full nội thất',
+    tone: '',
+    href: '/combo/to-am/',
+  },
+  {
+    id: 'combo-to-am',
+    room: 'phong-khach',
+    cat: 'Phòng khách',
+    name: 'Combo',
+    nameEm: 'Tổ Ấm',
+    desc: 'Sofa văng 3 chỗ · bàn trà gỗ sồi · kệ TV 1m8 · thảm dệt tay.',
+    priceOld: '28.900.000đ',
+    priceNew: '18.900.000đ',
+    price: 18_900_000,
+    priceNote: '· tiết kiệm 10 triệu',
+    badge: 'Hot',
+    badgeClass: 'terra',
+    placeholder: 'Combo phòng khách Tổ Ấm',
+    tone: '',
+    href: '/combo/to-am/',
+  },
+  {
+    id: 'combo-an-yen',
+    room: 'phong-ngu',
+    cat: 'Phòng ngủ master',
+    name: 'Combo',
+    nameEm: 'An Yên',
+    desc: 'Giường 1m8 · tủ áo 4 cánh · bàn trang điểm · 2 tab đầu giường.',
+    priceOld: '32.500.000đ',
+    priceNew: '22.500.000đ',
+    price: 22_500_000,
+    priceNote: '· tiết kiệm 10 triệu',
+    badge: 'Mới',
+    badgeClass: 'sage',
+    placeholder: 'Combo phòng ngủ An Yên',
+    tone: 'sage',
+    href: '/san-pham/?room=phong-ngu',
+  },
+  {
+    id: 'combo-sum-vay',
+    room: 'phong-an',
+    cat: 'Phòng ăn · 6 chỗ',
+    name: 'Combo',
+    nameEm: 'Sum Vầy',
+    desc: 'Bàn ăn gỗ sồi 1m6 · 6 ghế bọc nệm · tủ chén 3 cánh.',
+    priceOld: '18.500.000đ',
+    priceNew: '12.800.000đ',
+    price: 12_800_000,
+    priceNote: '· tặng bộ chén Bát Tràng',
+    placeholder: 'Combo phòng ăn Sum Vầy',
+    tone: '',
+    href: '/san-pham/?room=phong-an',
+  },
+  {
+    id: 'combo-tap-trung',
+    room: 'lam-viec',
+    cat: 'Phòng làm việc tại nhà',
+    name: 'Combo',
+    nameEm: 'Tập Trung',
+    desc: 'Bàn làm việc 1m4 · ghế công thái học · kệ sách 5 tầng · đèn LED.',
+    priceOld: '12.900.000đ',
+    priceNew: '8.900.000đ',
+    price: 8_900_000,
+    priceNote: '· tặng đệm lưng',
+    placeholder: 'Combo bàn làm việc Tập Trung',
+    tone: 'sage',
+    href: '/san-pham/?room=lam-viec',
+  },
+  {
+    id: 'combo-vuon-co-tich',
+    room: 'tre-em',
+    cat: 'Phòng trẻ em · 4–10 tuổi',
+    name: 'Combo',
+    nameEm: 'Vườn Cổ Tích',
+    desc: 'Giường tầng gỗ thông · bàn học · kệ đồ chơi · ghế nhỏ.',
+    priceOld: '19.900.000đ',
+    priceNew: '14.500.000đ',
+    price: 14_500_000,
+    priceNote: '· sơn không độc hại',
+    badge: '−28%',
+    badgeClass: 'terra',
+    placeholder: 'Combo phòng trẻ em Vườn Cổ Tích',
+    tone: '',
+    href: '/san-pham/?room=tre-em',
+  },
+];
+
+interface Bestseller {
+  id: string;
+  meta: string;
+  name: string;
+  price: string;
+  priceNum: number;
+  stars: string;
+  placeholder: string;
+  tone: '' | 'sage';
+  href: string;
+}
+const bestsellers: Bestseller[] = [
+  { id: 'p-sofa-may-3', meta: 'Sofa · 3 chỗ ngồi', name: 'Sofa văng "Mây"', price: '6.900.000đ', priceNum: 6_900_000, stars: '★★★★★', placeholder: 'Sofa văng Mây', tone: '', href: '/san-pham/sofa-may/' },
+  { id: 'p-ban-doan-vien', meta: 'Bàn ăn · gỗ sồi tự nhiên', name: 'Bàn ăn "Đoàn Viên"', price: '4.500.000đ', priceNum: 4_500_000, stars: '★★★★★', placeholder: 'Bàn ăn Đoàn Viên', tone: 'sage', href: '/san-pham/?cat=ban' },
+  { id: 'p-giuong-trang-non', meta: 'Giường · 1m6', name: 'Giường "Trăng Non"', price: '5.900.000đ', priceNum: 5_900_000, stars: '★★★★★', placeholder: 'Giường ngủ Trăng Non', tone: '', href: '/san-pham/?cat=giuong' },
+  { id: 'p-tu-moc', meta: 'Tủ quần áo · 4 cánh', name: 'Tủ áo "Mộc"', price: '7.200.000đ', priceNum: 7_200_000, stars: '★★★★☆', placeholder: 'Tủ quần áo Mộc', tone: 'sage', href: '/san-pham/?cat=tu' },
+];
+
+const inspo = [
+  { tall: true, label: 'Căn hộ 2PN · Vinhomes Quy Nhơn', placeholder: 'Phòng khách lớn · combo Tổ Ấm' },
+  { label: 'Phòng ngủ · An Yên', placeholder: 'Phòng ngủ An Yên' },
+  { label: 'Bếp + phòng ăn · Sum Vầy', placeholder: 'Phòng ăn Sum Vầy' },
+  { label: 'Góc làm việc · Tập Trung', placeholder: 'Bàn làm việc Tập Trung' },
+  { label: 'Phòng bé · Vườn Cổ Tích', placeholder: 'Phòng trẻ em Vườn Cổ Tích' },
+];
+
+const reviews = [
+  { quote: 'Đặt nguyên combo Tổ Ấm, đội WOTU giao và lắp trong buổi sáng. Cuối ngày là đã ngồi xem TV với gia đình. Quá tiện cho người mới về nhà mới.', name: 'Nguyễn Hà My', role: 'Nhơn Bình · Quy Nhơn', initial: 'N' },
+  { quote: 'Gỗ thật, đường ráp gọn, không có mùi sơn công nghiệp như mấy chỗ rẻ. Trẻ con nhà mình ngủ trong combo Vườn Cổ Tích từ tháng đầu vẫn ổn.', name: 'Trần Quốc Trung', role: 'Trần Phú · Quy Nhơn', initial: 'T' },
+  { quote: 'Mình là dân thiết kế nên khá kỹ tính. WOTU tư vấn xong còn dựng 3D phòng cho xem trước. Combo An Yên hợp tông căn hộ của mình bất ngờ.', name: 'Lê Phương Linh', role: 'Tuy Phước · Bình Định', initial: 'L' },
+];
 ---
-<BaseLayout>
-  <Nav variant="home" />
-  <Hero />
+<ShopLayout>
+  <Nav />
+
+  <!-- ====== HERO ====== -->
+  <header class="hero shop-reveal">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-eyebrow-row">
+          <span class="pill"><span class="dot"></span> Ưu đãi tháng 5 · giảm đến 35%</span>
+          <span class="eyebrow">Bộ sưu tập 2026</span>
+        </div>
+        <h1>
+          Trọn bộ <em>nội thất</em><br>
+          cho <span class="stroke">tổ ấm</span> Việt
+        </h1>
+        <p class="hero-sub">
+          WOTU tuyển chọn từng gói combo phòng khách, phòng ngủ, phòng ăn — sẵn sàng dọn vào ở chỉ trong 7 ngày. Vật liệu gỗ tự nhiên, bảo hành 5 năm, giao và lắp đặt tận nơi.
+        </p>
+        <div class="hero-actions">
+          <a class="shop-btn shop-btn-primary" href="#combos">Xem combo nổi bật <span class="arr">→</span></a>
+          <a class="shop-btn shop-btn-ghost" href="#inspo">Khám phá phòng mẫu</a>
+        </div>
+        <div class="hero-meta">
+          <div>
+            <div class="meta-num">12<sup>+</sup></div>
+            <div class="meta-label">Năm kinh nghiệm</div>
+          </div>
+          <div>
+            <div class="meta-num">8.500<sup>+</sup></div>
+            <div class="meta-label">Tổ ấm Việt tin chọn</div>
+          </div>
+          <div>
+            <div class="meta-num">5<sup>★</sup></div>
+            <div class="meta-label">Đánh giá khách hàng</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="shop-ph"><span class="shop-ph-label">Phòng khách combo WOTU — 1600×2000</span></div>
+        <div class="sticker">
+          −35%<small>combo tháng 5</small>
+        </div>
+        <div class="hero-tag">
+          <div>
+            <div class="l">Combo Phòng khách · Tổ Ấm</div>
+            <div class="v"><s>28.900.000đ</s>18.900.000đ</div>
+          </div>
+          <a class="combo-cta" href="/combo/to-am/" aria-label="Xem combo">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
   <Marquee />
-  <Philosophy />
-  <Services />
-  <ProjectsGrid projects={projects} />
-  <Process />
-  <About />
-  <Quote />
-  <Contact />
+
+  <!-- ====== COMBOS ====== -->
+  <section id="combos" class="shop-reveal">
+    <div class="combos">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Combo nội thất</span>
+          <h2>Mua trọn bộ — về <em>là ở ngay</em>.</h2>
+        </div>
+        <div class="right">
+          Mỗi combo WOTU được thiết kế bởi đội ngũ nội thất giàu kinh nghiệm — chuẩn tỉ lệ, đồng bộ chất liệu &amp; tông màu. Bạn không phải mất hàng tuần đi chọn từng món.
+        </div>
+      </div>
+
+      <div class="combo-tabs">
+        <button class="combo-tab" type="button" data-active="true" data-room="">Tất cả</button>
+        <button class="combo-tab" type="button" data-room="phong-khach">Phòng khách</button>
+        <button class="combo-tab" type="button" data-room="phong-ngu">Phòng ngủ</button>
+        <button class="combo-tab" type="button" data-room="phong-an">Phòng ăn &amp; bếp</button>
+        <button class="combo-tab" type="button" data-room="lam-viec">Làm việc</button>
+        <button class="combo-tab" type="button" data-room="studio">Căn hộ studio</button>
+        <button class="combo-tab" type="button" data-room="tre-em">Phòng trẻ em</button>
+      </div>
+
+      <div class="combo-grid shop-reveal-stagger" id="combo-grid">
+        {combos.map((c) => (
+          <article
+            class={`combo-card${c.feature ? ' feature' : ''}`}
+            data-room={c.room}
+            data-id={c.id}
+            data-price={c.price}
+            data-name={`Combo ${c.nameEm}${c.nameTail ?? ''}`}
+          >
+            <div class="combo-img">
+              <div class={`shop-ph ${c.tone}`}><span class="shop-ph-label">{c.placeholder}</span></div>
+              {c.badge && (
+                <span class={`combo-badge${c.badgeClass ? ' ' + c.badgeClass : ''}`} style={c.badgeStyle || undefined}>{c.badge}</span>
+              )}
+              {!c.feature && (
+                <button class="combo-fav" type="button" data-fav={c.id} aria-label="Yêu thích">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3 5.97 5.97 0 0 0 12 5a5.97 5.97 0 0 0-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
+                </button>
+              )}
+            </div>
+            <div class="combo-body">
+              <span class="combo-cat">{c.cat}</span>
+              <h3 class="combo-title">
+                {c.name}{c.feature && <br/>} <em>{c.nameEm}</em>{c.nameTail}
+              </h3>
+              <p class="combo-includes">{c.desc}</p>
+              <div class="combo-foot">
+                <div class="price"><s>{c.priceOld}</s>{c.priceNew}<small>{c.priceNote}</small></div>
+                <div class="combo-foot-actions">
+                  <button class="combo-add" type="button" data-add aria-label="Thêm vào giỏ">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+                    <span>Giỏ</span>
+                  </button>
+                  <a class="combo-cta" href={c.href} aria-label="Xem combo">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <p class="combo-empty" id="combo-empty" hidden>Chưa có combo phù hợp danh mục này — chúng tôi đang chuẩn bị. Để lại số ở <a href="#contact">phần liên hệ</a> để được tư vấn riêng.</p>
+
+      <div style="text-align: center; margin-top: 44px;">
+        <a class="shop-btn shop-btn-outline" href="/san-pham/">Xem tất cả 24 combo <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== BESTSELLERS ====== -->
+  <section id="shop" class="shop-reveal">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Sản phẩm bán chạy</span>
+          <h2>Mua lẻ <em>cũng tinh tế</em>.</h2>
+        </div>
+        <div class="right">
+          Những món được khách hàng WOTU đặt mua nhiều nhất 30 ngày qua. Có sẵn — giao trong 48 giờ tại Quy Nhơn &amp; các tỉnh lân cận.
+        </div>
+      </div>
+
+      <div class="products-grid shop-reveal-stagger">
+        {bestsellers.map((p) => (
+          <article
+            class="product-card"
+            data-id={p.id}
+            data-price={p.priceNum}
+            data-name={p.name}
+          >
+            <a href={p.href} style="text-decoration: none; display: contents;">
+              <div class="combo-img">
+                <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
+              </div>
+              <div class="product-body">
+                <span class="product-meta">{p.meta}</span>
+                <h4>{p.name}</h4>
+                <div class="product-foot">
+                  <div class="price">{p.price}</div>
+                  <span class="stars">{p.stars}</span>
+                </div>
+              </div>
+            </a>
+            <button class="product-add" type="button" data-add aria-label={`Thêm ${p.name} vào giỏ`}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+              Thêm giỏ
+            </button>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== INSPIRATION ====== -->
+  <section id="inspo" class="shop-reveal">
+    <div class="inspo">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Phòng cảm hứng</span>
+          <h2>Trông trước, <em>hình dung sau.</em></h2>
+        </div>
+        <div class="right">
+          Lướt qua những căn phòng thật của khách hàng WOTU — chụp tại các căn hộ và nhà phố ở Quy Nhơn · Bình Định.
+        </div>
+      </div>
+
+      <div class="inspo-grid shop-reveal-stagger">
+        {inspo.map((i) => (
+          <a class={`inspo-card${i.tall ? ' tall' : ''}`} href="#">
+            <div class="shop-ph dark"><span class="shop-ph-label">{i.placeholder}</span></div>
+            <div class="label">
+              <span>{i.label}</span>
+              <span class="arrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== WHY US ====== -->
+  <section id="why" class="shop-reveal">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Tại sao chọn Wotu</span>
+          <h2>Cam kết <em>vững như gỗ</em>.</h2>
+        </div>
+        <div class="right">
+          Chúng tôi không bán đồ — chúng tôi đồng hành cùng bạn xây tổ ấm. 4 cam kết dưới đây là điều mọi khách hàng WOTU đều nhận được.
+        </div>
+      </div>
+
+      <div class="why-grid shop-reveal-stagger">
+        <div class="why-card">
+          <div class="why-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+          </div>
+          <h3>Bảo hành 5 năm</h3>
+          <p>Khung gỗ và cấu trúc chính được bảo hành 5 năm — gấp đôi mặt bằng thị trường nội thất Việt.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="5" width="14" height="13" rx="1"/><polygon points="15 8 19 8 22 11 22 18 15 18"/><circle cx="6" cy="20" r="2"/><circle cx="18" cy="20" r="2"/></svg>
+          </div>
+          <h3>Giao &amp; lắp miễn phí</h3>
+          <p>Miễn phí giao và lắp đặt tận nhà tại Quy Nhơn, Bình Định và các tỉnh lân cận — đội kỹ thuật riêng, không qua bên thứ ba.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/></svg>
+          </div>
+          <h3>Đổi trả 30 ngày</h3>
+          <p>Không vừa ý vì bất kỳ lý do gì? Đổi trả miễn phí trong 30 ngày — kể cả combo đã lắp đặt.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>
+          </div>
+          <h3>Tư vấn 1:1</h3>
+          <p>Kiến trúc sư WOTU tư vấn miễn phí qua Zalo — đo đạc, dựng 3D phòng &amp; gợi ý combo phù hợp.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== REVIEWS ====== -->
+  <section class="shop-reveal">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Khách hàng nói gì</span>
+          <h2>8.500+ tổ ấm <em>đã chọn</em>.</h2>
+        </div>
+        <div class="right">
+          Trung bình 4.9/5 sao trên 2.300+ đánh giá Shopee, Google, Facebook — chúng tôi để khách hàng nói thay.
+        </div>
+      </div>
+
+      <div class="reviews-grid shop-reveal-stagger">
+        {reviews.map((r) => (
+          <div class="review">
+            <span class="stars">★★★★★</span>
+            <p>"{r.quote}"</p>
+            <div class="author">
+              <div class="avatar">{r.initial}</div>
+              <div>
+                <div class="name">{r.name}</div>
+                <div class="role">{r.role}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== CTA ====== -->
+  <section id="contact" class="shop-reveal" style="padding-bottom: 0;">
+    <div class="cta">
+      <div>
+        <span class="eyebrow" style="color: color-mix(in oklab, var(--shop-bg) 80%, transparent);">Đặt tư vấn miễn phí</span>
+        <h2>Để chuyên gia WOTU<br>chọn combo <em>cho tổ ấm</em> của bạn.</h2>
+        <p>Để lại số điện thoại — chúng tôi gọi trong 15 phút, tặng bạn 1 buổi tư vấn 1:1 và bản dựng 3D miễn phí cho căn hộ của bạn. Hoặc gọi trực tiếp <a href={`tel:+84${phone.replace(/\s+/g, '').slice(1)}`} style="text-decoration: underline;">{phone}</a> · email <a href={`mailto:${email}`} style="text-decoration: underline;">{email}</a>.</p>
+      </div>
+      <form
+        class="cta-form"
+        action="https://api.web3forms.com/submit"
+        method="POST"
+        data-shop-contact
+      >
+        <input type="hidden" name="access_key" value={site.forms.contactAccessKey} />
+        <input type="hidden" name="subject" value="[WOTU shop] Đặt tư vấn combo" />
+        <input type="hidden" name="from_name" value="WOTU Shop website" />
+        <input type="tel" name="phone" placeholder="Số điện thoại của bạn" required />
+        <button type="submit">Gọi tôi <span class="arr">→</span></button>
+      </form>
+    </div>
+  </section>
+
   <Footer />
-  <TweaksPanel />
-</BaseLayout>
+</ShopLayout>
+
+<style>
+  /* ===== HERO ===== */
+  .hero { padding: 40px 0 var(--shop-section-py); position: relative; }
+  .hero-grid {
+    display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px;
+    align-items: end;
+  }
+  .hero-eyebrow-row {
+    display: flex; align-items: center; gap: 18px; margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--shop-warm-soft); color: var(--shop-accent-deep);
+    padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 600;
+  }
+  .pill .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--shop-accent);
+    animation: shopPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes shopPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .4; transform: scale(1.3); }
+  }
+  .hero h1 {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(48px, 7vw, 96px); line-height: 0.98; letter-spacing: -0.02em;
+    margin: 0 0 26px;
+  }
+  .hero h1 em { font-style: italic; color: var(--shop-accent); }
+  .hero h1 .stroke {
+    -webkit-text-stroke: 1.5px var(--shop-ink); color: transparent;
+    font-style: italic;
+  }
+  .hero-sub {
+    font-size: 18px; color: var(--shop-ink-soft); max-width: 480px; line-height: 1.55;
+    margin: 0 0 36px;
+  }
+  .hero-actions { display: flex; gap: 14px; align-items: center; margin-bottom: 44px; flex-wrap: wrap; }
+  .hero-meta {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+    padding-top: 28px; border-top: 1px solid var(--shop-line);
+  }
+  .meta-num { font-family: var(--shop-serif); font-size: 36px; color: var(--shop-ink); line-height: 1; }
+  .meta-num sup { font-size: 18px; color: var(--shop-accent); margin-left: 2px; }
+  .meta-label { font-size: 12px; color: var(--shop-ink-soft); margin-top: 6px; letter-spacing: 0.04em; }
+
+  .hero-visual {
+    position: relative; aspect-ratio: 4 / 5;
+    border-radius: var(--shop-radius-xl); overflow: hidden;
+    background: var(--shop-bg-soft);
+  }
+  .hero-tag {
+    position: absolute; left: 22px; bottom: 22px; right: 22px;
+    background: color-mix(in oklab, var(--shop-bg-card) 85%, transparent);
+    backdrop-filter: blur(8px);
+    border-radius: 18px; padding: 16px 18px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    box-shadow: 0 8px 32px -12px rgba(0,0,0,.12);
+  }
+  .hero-tag .l { font-size: 12px; color: var(--shop-ink-soft); letter-spacing: .14em; text-transform: uppercase; }
+  .hero-tag .v { font-family: var(--shop-serif); font-size: 22px; color: var(--shop-ink); }
+  .hero-tag .v s { color: var(--shop-ink-soft); font-size: 14px; margin-right: 8px; font-family: var(--shop-sans); }
+  .sticker {
+    position: absolute; top: 22px; right: 22px;
+    width: 110px; height: 110px; border-radius: 50%;
+    background: var(--shop-accent); color: white;
+    display: grid; place-items: center; text-align: center;
+    font-family: var(--shop-serif); font-size: 22px; line-height: 1;
+    transform: rotate(-12deg);
+    box-shadow: 0 14px 30px -14px rgba(0,0,0,.4);
+    animation: shopSway 4s ease-in-out infinite;
+  }
+  .sticker small { display: block; font-family: var(--shop-sans); font-size: 10px; letter-spacing: .2em; margin-top: 6px; font-weight: 700; }
+  @keyframes shopSway {
+    0%,100% { transform: rotate(-12deg) translateY(0); }
+    50% { transform: rotate(-8deg) translateY(-6px); }
+  }
+
+  /* ===== COMBOS ===== */
+  .combos {
+    background: var(--shop-bg-soft);
+    border-radius: var(--shop-radius-xl);
+    padding: 80px 56px;
+    margin: 0 28px;
+  }
+  .combo-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 36px; }
+  .combo-tab {
+    padding: 10px 18px; border-radius: 999px;
+    background: var(--shop-bg-card); color: var(--shop-ink-soft);
+    font-size: 13px; font-weight: 600;
+    border: 1px solid var(--shop-line);
+    transition: all .2s ease;
+    cursor: pointer;
+  }
+  .combo-tab[data-active="true"] {
+    background: var(--shop-ink); color: var(--shop-bg); border-color: var(--shop-ink);
+  }
+  .combo-tab:hover { color: var(--shop-ink); }
+
+  .combo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .combo-card {
+    background: var(--shop-bg-card); border-radius: var(--shop-radius-lg);
+    overflow: hidden; display: flex; flex-direction: column;
+    transition: transform .3s ease, box-shadow .3s ease;
+    border: 1px solid color-mix(in oklab, var(--shop-line) 50%, transparent);
+  }
+  .combo-card:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -20px rgba(58, 42, 30, .18); }
+  .combo-img {
+    aspect-ratio: 4/3; position: relative; overflow: hidden;
+    background: var(--shop-warm-soft);
+  }
+  .combo-badge {
+    position: absolute; top: 14px; left: 14px;
+    background: var(--shop-ink); color: var(--shop-bg);
+    padding: 6px 12px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; letter-spacing: .08em;
+  }
+  .combo-badge.sage { background: var(--shop-accent-2); color: white; }
+  .combo-badge.terra { background: var(--shop-accent); color: white; }
+  .combo-fav {
+    position: absolute; top: 14px; right: 14px;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--shop-bg-card); display: grid; place-items: center;
+    transition: transform .2s ease;
+    color: var(--shop-ink-soft);
+  }
+  .combo-fav:hover { transform: scale(1.1); color: var(--shop-accent); }
+  .combo-body { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+  .combo-cat { font-size: 11px; letter-spacing: .18em; color: var(--shop-ink-soft); text-transform: uppercase; font-weight: 600; }
+  .combo-title { font-family: var(--shop-serif); font-size: 28px; line-height: 1.05; margin: 0; font-weight: 400; }
+  .combo-title em { font-style: italic; color: var(--shop-accent); }
+  .combo-includes { font-size: 13px; color: var(--shop-ink-soft); line-height: 1.5; min-height: 40px; margin: 0; }
+  .combo-foot {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding-top: 14px; border-top: 1px solid var(--shop-line);
+  }
+  .price { font-family: var(--shop-serif); font-size: 24px; color: var(--shop-ink); }
+  .price s { font-size: 14px; color: var(--shop-ink-soft); font-family: var(--shop-sans); margin-right: 8px; }
+  .price small { display: block; font-size: 11px; color: var(--shop-accent-2); font-family: var(--shop-sans); margin-top: 2px; }
+  .combo-cta {
+    width: 40px; height: 40px; border-radius: 50%; background: var(--shop-warm-soft);
+    display: grid; place-items: center;
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+    color: var(--shop-ink);
+    flex-shrink: 0;
+  }
+  .combo-cta:hover { background: var(--shop-accent); color: white; transform: rotate(-45deg); }
+
+  .combo-card.feature {
+    grid-column: span 2;
+    flex-direction: row;
+    background: linear-gradient(135deg, var(--shop-accent), var(--shop-accent-deep));
+    color: var(--shop-bg);
+    border: 0;
+  }
+  .combo-card.feature .combo-img { width: 50%; aspect-ratio: auto; }
+  .combo-card.feature .combo-body { width: 50%; padding: 36px; gap: 18px; }
+  .combo-card.feature .combo-cat { color: color-mix(in oklab, var(--shop-bg) 80%, transparent); }
+  .combo-card.feature .combo-title { font-size: 38px; color: var(--shop-bg); }
+  .combo-card.feature .combo-title em { color: var(--shop-warm-soft); }
+  .combo-card.feature .combo-includes { color: color-mix(in oklab, var(--shop-bg) 85%, transparent); min-height: 0; font-size: 14px; }
+  .combo-card.feature .combo-foot { border-color: color-mix(in oklab, var(--shop-bg) 25%, transparent); }
+  .combo-card.feature .price { color: var(--shop-bg); }
+  .combo-card.feature .price s { color: color-mix(in oklab, var(--shop-bg) 70%, transparent); }
+  .combo-card.feature .price small { color: var(--shop-warm-soft); }
+  .combo-card.feature .combo-cta { background: var(--shop-bg); color: var(--shop-ink); }
+  .combo-card.feature .combo-cta:hover { background: var(--shop-ink); color: var(--shop-bg); }
+
+  /* Combo card add-to-cart cluster (button + arrow CTA) */
+  .combo-foot-actions { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .combo-add {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 12px; border-radius: 999px;
+    background: var(--shop-warm-soft); color: var(--shop-ink);
+    border: 0; cursor: pointer; font: 600 12px/1 var(--shop-sans);
+    transition: background .2s, color .2s, transform .2s;
+  }
+  .combo-add:hover { background: var(--shop-accent); color: white; transform: translateY(-1px); }
+  .combo-card.feature .combo-add { background: var(--shop-bg); color: var(--shop-ink); }
+  .combo-card.feature .combo-add:hover { background: var(--shop-ink); color: var(--shop-bg); }
+
+  /* Favorite active state — heart fill */
+  .combo-fav[data-active="true"],
+  .combo-fav[data-active="true"]:hover { color: var(--shop-accent); }
+  .combo-fav[data-active="true"] svg { fill: currentColor; }
+
+  /* Empty state shown when tab filter yields zero combos */
+  .combo-empty {
+    text-align: center; margin: 36px auto 0; max-width: 56ch;
+    color: var(--shop-ink-soft); font-size: 14px; line-height: 1.6;
+  }
+  .combo-empty a { color: var(--shop-accent); border-bottom: 1px solid currentColor; }
+
+  /* ===== BESTSELLERS ===== */
+  .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .product-card {
+    background: var(--shop-bg-card); border-radius: var(--shop-radius-lg);
+    overflow: hidden; display: flex; flex-direction: column;
+    border: 1px solid color-mix(in oklab, var(--shop-line) 60%, transparent);
+    transition: transform .3s ease, box-shadow .3s ease;
+    color: var(--shop-ink);
+  }
+  .product-card { position: relative; }
+  .product-card:hover { transform: translateY(-4px); box-shadow: 0 18px 36px -16px rgba(58,42,30,.16); }
+  .product-card .combo-img { aspect-ratio: 1/1; background: var(--shop-bg-soft); }
+  .product-add {
+    position: absolute; bottom: 14px; right: 14px; z-index: 2;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 12px; border-radius: 999px;
+    background: var(--shop-ink); color: var(--shop-bg);
+    border: 0; cursor: pointer; font: 600 11px/1 var(--shop-sans); letter-spacing: .04em;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .2s, transform .2s, background .2s;
+  }
+  .product-card:hover .product-add,
+  .product-card:focus-within .product-add { opacity: 1; transform: none; }
+  .product-add:hover { background: var(--shop-accent); }
+  .product-body { padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+  .product-body h4 { font-family: var(--shop-serif); font-size: 22px; margin: 0; line-height: 1.1; font-weight: 400; }
+  .product-meta { font-size: 12px; color: var(--shop-ink-soft); }
+  .product-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; }
+  .product-foot .price { font-size: 18px; }
+  .stars { display: inline-flex; gap: 1px; color: var(--shop-accent); }
+
+  /* ===== INSPIRATION ===== */
+  .inspo {
+    background: var(--shop-ink); color: var(--shop-bg);
+    border-radius: var(--shop-radius-xl);
+    padding: 80px 56px;
+    margin: 0 28px;
+    position: relative; overflow: hidden;
+  }
+  .inspo .section-head h2 { color: var(--shop-bg); }
+  .inspo .section-head h2 em { color: var(--shop-accent); }
+  .inspo .section-head .right { color: color-mix(in oklab, var(--shop-bg) 70%, transparent); }
+  .inspo :global(.eyebrow) { color: color-mix(in oklab, var(--shop-bg) 70%, transparent); }
+  .inspo-grid {
+    display: grid; grid-template-columns: 1.4fr 1fr 1fr; grid-template-rows: 260px 260px; gap: 18px;
+  }
+  .inspo-card {
+    position: relative; border-radius: var(--shop-radius); overflow: hidden;
+    background: color-mix(in oklab, var(--shop-bg) 8%, transparent);
+    color: var(--shop-bg);
+  }
+  .inspo-card.tall { grid-row: span 2; }
+  .inspo-card .label {
+    position: absolute; left: 16px; bottom: 16px; right: 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    font-size: 14px;
+  }
+  .inspo-card .label span:first-child { background: rgba(0,0,0,.4); backdrop-filter: blur(6px); padding: 6px 12px; border-radius: 999px; font-weight: 600; color: var(--shop-bg); }
+  .inspo-card .label .arrow { width: 36px; height: 36px; border-radius: 50%; background: var(--shop-bg); color: var(--shop-ink); display: grid; place-items: center; }
+
+  /* ===== WHY ===== */
+  .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .why-card {
+    background: var(--shop-bg-card); border-radius: var(--shop-radius-lg);
+    padding: 30px 26px; display: flex; flex-direction: column; gap: 14px;
+    border: 1px solid color-mix(in oklab, var(--shop-line) 60%, transparent);
+    transition: transform .3s ease;
+  }
+  .why-card:hover { transform: translateY(-4px); }
+  .why-icon {
+    width: 54px; height: 54px; border-radius: 16px;
+    background: var(--shop-warm-soft); color: var(--shop-accent);
+    display: grid; place-items: center;
+  }
+  .why-card:nth-child(2) .why-icon { background: var(--shop-accent-2-soft); color: var(--shop-accent-2); }
+  .why-card:nth-child(3) .why-icon { background: color-mix(in oklab, var(--shop-yellow) 35%, white); color: #B4892B; }
+  .why-card:nth-child(4) .why-icon { background: var(--shop-warm-soft); color: var(--shop-accent-deep); }
+  .why-card h3 { font-family: var(--shop-serif); font-size: 24px; margin: 0; line-height: 1.1; font-weight: 400; }
+  .why-card p { margin: 0; font-size: 14px; color: var(--shop-ink-soft); line-height: 1.55; }
+
+  /* ===== REVIEWS ===== */
+  .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .review {
+    background: var(--shop-bg-card); border-radius: var(--shop-radius-lg);
+    padding: 28px; border: 1px solid color-mix(in oklab, var(--shop-line) 60%, transparent);
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .review .stars { font-size: 18px; }
+  .review p { margin: 0; font-family: var(--shop-serif); font-size: 22px; line-height: 1.3; color: var(--shop-ink); font-weight: 400; }
+  .review .author { display: flex; align-items: center; gap: 12px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--shop-line); }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--shop-warm-soft); display: grid; place-items: center; font-family: var(--shop-serif); font-size: 20px; color: var(--shop-accent); }
+  .author .name { font-weight: 600; font-size: 14px; }
+  .author .role { font-size: 12px; color: var(--shop-ink-soft); }
+
+  /* ===== CTA STRIPE ===== */
+  .cta {
+    background: var(--shop-accent-2);
+    border-radius: var(--shop-radius-xl);
+    margin: 0 28px;
+    padding: 70px 56px;
+    color: var(--shop-bg);
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .cta h2 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(36px, 5vw, 56px); line-height: 1; margin: 0; letter-spacing: -.015em; color: var(--shop-bg); }
+  .cta h2 em { font-style: italic; color: var(--shop-warm-soft); }
+  .cta p { color: color-mix(in oklab, var(--shop-bg) 85%, transparent); margin: 18px 0 0; max-width: 540px; line-height: 1.6; }
+  .cta p a { color: var(--shop-bg); }
+  .cta-form {
+    background: var(--shop-bg-card); border-radius: 999px;
+    padding: 8px 8px 8px 22px;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 20px 40px -20px rgba(0,0,0,.3);
+  }
+  .cta-form input {
+    flex: 1; border: 0; outline: 0; background: transparent;
+    font: inherit; padding: 10px 0; color: var(--shop-ink); font-size: 15px;
+  }
+  .cta-form input::placeholder { color: var(--shop-ink-soft); }
+  .cta-form button {
+    background: var(--shop-ink); color: var(--shop-bg); border-radius: 999px;
+    padding: 12px 22px; font-weight: 600; font-size: 14px;
+    transition: background .2s ease;
+    border: 0; cursor: pointer; font-family: inherit;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .cta-form button:hover { background: var(--shop-accent); }
+  .cta-form button .arr { transition: transform .2s ease; }
+  .cta-form button:hover .arr { transform: translateX(4px); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1100px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .combo-grid, .products-grid, .why-grid, .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+    .combo-card.feature { grid-column: span 2; flex-direction: column; }
+    .combo-card.feature .combo-img, .combo-card.feature .combo-body { width: 100%; }
+    .inspo-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 220px 220px 220px; }
+    .inspo-card.tall { grid-row: span 1; grid-column: span 2; }
+    .cta { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 680px) {
+    .combo-grid, .products-grid, .why-grid, .reviews-grid { grid-template-columns: 1fr; }
+    .combo-card.feature { grid-column: span 1; }
+    .combos, .inspo, .cta { margin: 0 12px; padding: 50px 22px; }
+    .hero-meta { grid-template-columns: 1fr; gap: 12px; }
+    .inspo-grid { grid-template-columns: 1fr; grid-template-rows: repeat(5, 200px); }
+    .inspo-card.tall { grid-column: span 1; }
+  }
+</style>
+
+<script>
+  import { addToCart, toggleFavorite, isFavorite, onChange, toast } from '../lib/shop-store';
+
+  // ===== Combo tabs filter =====
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.combo-tab');
+  const grid = document.getElementById('combo-grid');
+  const empty = document.getElementById('combo-empty');
+
+  function applyComboFilter(room: string): void {
+    if (!grid) return;
+    let visible = 0;
+    grid.querySelectorAll<HTMLElement>('.combo-card').forEach((card) => {
+      const match = !room || card.dataset.room === room;
+      card.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    if (empty) empty.hidden = visible > 0;
+  }
+
+  tabs.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      tabs.forEach((b) => (b.dataset.active = 'false'));
+      btn.dataset.active = 'true';
+      applyComboFilter(btn.dataset.room ?? '');
+    });
+  });
+
+  // ===== Add to cart (combo + bestseller cards) =====
+  document.querySelectorAll<HTMLButtonElement>('[data-add]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const card = btn.closest<HTMLElement>('[data-id]');
+      if (!card) return;
+      const id = card.dataset.id ?? '';
+      const name = card.dataset.name ?? 'Sản phẩm';
+      const price = Number(card.dataset.price ?? 0);
+      addToCart({ id, name, price }, 1);
+      toast(`✓ Đã thêm "${name}" vào giỏ`);
+    });
+  });
+
+  // ===== Favorite toggle =====
+  function syncFavUi(): void {
+    document.querySelectorAll<HTMLButtonElement>('[data-fav]').forEach((b) => {
+      const id = b.dataset.fav ?? '';
+      b.dataset.active = isFavorite(id) ? 'true' : 'false';
+    });
+  }
+  document.querySelectorAll<HTMLButtonElement>('[data-fav]').forEach((b) => {
+    b.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const id = b.dataset.fav ?? '';
+      const nowOn = toggleFavorite(id);
+      b.dataset.active = nowOn ? 'true' : 'false';
+      toast(nowOn ? '♥ Đã lưu vào yêu thích' : 'Đã bỏ yêu thích', { type: 'info' });
+    });
+  });
+  syncFavUi();
+  onChange(syncFavUi);
+
+  // ===== Contact form =====
+  const form = document.querySelector<HTMLFormElement>('form[data-shop-contact]');
+  form?.addEventListener('submit', () => {
+    const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (btn) {
+      setTimeout(() => {
+        btn.innerHTML = 'Đã nhận ✓';
+        const input = form.querySelector<HTMLInputElement>('input[type="tel"]');
+        if (input) input.value = '';
+      }, 100);
+    }
+  });
+</script>

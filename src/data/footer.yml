@@ -1,56 +1,57 @@
-tagline: Studio thiết kế & thi công nội thất.<br/>Lô 17 -18 Hoa Lư, Quy Nhơn, Gia Lai · 2022.
-copyright: © 2026 WOTU. Tất cả quyền được bảo lưu.
-signature: Design and developed by Anh Quoc
+tagline: "Studio thiết kế & thi công nội thất.<br/>Lô 17-18 Hoa Lư, Quy Nhơn, Gia Lai · 2018.<br/><em>We don't sell furniture, we sell satisfaction.</em>"
+copyright: "© 2026 WOTU. Tất cả quyền được bảo lưu."
+signature: "Made in Quy Nhơn"
+
 columns:
   - title: Studio
     links:
-      - label: Triết lý
-        href: /#about
-      - label: Quy trình
-        href: /#process
-      - label: Báo chí
-        href: '#'
-      - label: Tuyển dụng
-        href: '#'
-  - title: Dịch vụ
+      - label: "Triết lý"
+        href: "/studio/#about"
+      - label: "Quy trình"
+        href: "/studio/#process"
+      - label: "Báo chí"
+        href: "#"
+      - label: "Tuyển dụng"
+        href: "#"
+  - title: "Dịch vụ"
     links:
-      - label: Thiết kế
-        href: /#services
-      - label: Xây dựng
-        href: /#services
-      - label: Nội thất
-        href: /#services
-      - label: Cải tạo
-        href: /#services
-  - title: Liên hệ
+      - label: "Thiết kế"
+        href: "/studio/#services"
+      - label: "Xây dựng"
+        href: "/studio/#services"
+      - label: "Nội thất"
+        href: "/studio/#services"
+      - label: "Cải tạo"
+        href: "/studio/#services"
+  - title: "Liên hệ"
     links:
-      - label: wotu.decor@gmail.com
-        href: mailto:hello@gmail.com
-      - label: +84 933 774 708
-        href: tel:+84933774708
-      - label: Instagram
-        href: https://instagram.com/wotudecor
-      - label: Facebook
-        href: https://www.facebook.com/wotudecor
-      - label: Chính sách bảo mật
-        href: /bao-mat
+      - label: "hello@wotu.vn"
+        href: "mailto:hello@wotu.vn"
+      - label: "+84 933 774 708"
+        href: "tel:+84933774708"
+      - label: "Lô 17-18 Hoa Lư, Quy Nhơn"
+        href: "https://maps.app.goo.gl/eovTsyCiwiSP5YAA6"
+      - label: "Facebook · Nội thất Quy Nhơn"
+        href: "https://www.facebook.com/wotudecor1"
+      - label: "Facebook · Xưởng nội thất"
+        href: "https://www.facebook.com/wotudecor22"
+      - label: "Chính sách bảo mật"
+        href: "/bao-mat"
+
 nav:
   links:
-    - label: Dịch vụ
-      anchor: services
-      route: ''
-    - label: Dự án
-      anchor: projects
-      route: /projects
-    - label: Quy trình
-      anchor: process
-      route: ''
-    - label: Studio
-      anchor: about
-      route: ''
-    - label: Nhật ký
-      anchor: ''
-      route: /blog
-    - label: Liên hệ
-      anchor: contact
-      route: ''
+    - label: "Dịch vụ"
+      anchor: "services"
+    - label: "Dự án"
+      anchor: "projects"
+      route: "/studio/projects"
+    - label: "Quy trình"
+      anchor: "process"
+    - label: "Studio"
+      anchor: "about"
+    - label: "Nhật ký"
+      route: "/studio/blog"
+    - label: "Liên hệ"
+      anchor: "contact"
+    - label: "Shop ↗"
+      route: "/"

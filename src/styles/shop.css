@@ -1,0 +1,339 @@
+/* ============================================================
+   WOTU Shop — tokens, base, shared components
+   Source of truth cho aesthetic retail (khác editorial studio).
+   Palette default: warm (cream + terracotta + sage)
+   ============================================================ */
+
+:root {
+  /* Palette A — Cream + Terracotta + Sage (default) */
+  --shop-bg: #FBF7F0;
+  --shop-bg-soft: #F4ECDD;
+  --shop-bg-card: #FFFFFF;
+  --shop-ink: #2A2520;
+  --shop-ink-soft: #6B6259;
+  --shop-line: #E8DFCE;
+  --shop-accent: #C97B5E;
+  --shop-accent-deep: #A35E45;
+  --shop-accent-2: #6B8E7A;
+  --shop-accent-2-soft: #DCE5DC;
+  --shop-warm-soft: #F2E5D0;
+  --shop-yellow: #E9C46A;
+
+  /* Match studio fonts (Cormorant Garamond + Inter) — đồng bộ identity hai phần. */
+  --shop-serif: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --shop-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+
+  --shop-radius-sm: 8px;
+  --shop-radius: 14px;
+  --shop-radius-lg: 22px;
+  --shop-radius-xl: 32px;
+
+  --shop-maxw: 1280px;
+  --shop-section-py: 100px;
+}
+
+[data-shop-density="cozy"]   { --shop-section-py: 70px; }
+[data-shop-density="airy"]   { --shop-section-py: 130px; }
+
+[data-shop-palette="sunny"] {
+  --shop-bg: #FFFCF5; --shop-bg-soft: #FFF4DC;
+  --shop-ink: #1F2A2E; --shop-ink-soft: #5B6A6F; --shop-line: #ECE3CC;
+  --shop-accent: #F5C57B; --shop-accent-deep: #D9A24F;
+  --shop-accent-2: #7FA8B5; --shop-accent-2-soft: #DCE9ED;
+  --shop-warm-soft: #FCEFCF;
+}
+[data-shop-palette="sage"] {
+  --shop-bg: #F6F8F3; --shop-bg-soft: #E7EFDF;
+  --shop-ink: #23332B; --shop-ink-soft: #5C6C61; --shop-line: #DDE6D6;
+  --shop-accent: #6B8E7A; --shop-accent-deep: #4E6F5D;
+  --shop-accent-2: #D88660; --shop-accent-2-soft: #F4DDC9;
+  --shop-warm-soft: #EAF1E2;
+}
+[data-shop-palette="rose"] {
+  --shop-bg: #FDF5F1; --shop-bg-soft: #F8E3D9;
+  --shop-ink: #2E1F1A; --shop-ink-soft: #74574E; --shop-line: #EFD9CB;
+  --shop-accent: #D88660; --shop-accent-deep: #B0613D;
+  --shop-accent-2: #6E7F5C; --shop-accent-2-soft: #E1E6CF;
+  --shop-warm-soft: #F8E0D0;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+body.shop {
+  margin: 0;
+  padding: 0;
+  font-family: var(--shop-sans);
+  background: var(--shop-bg);
+  color: var(--shop-ink);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body.shop * { box-sizing: border-box; }
+body.shop img { max-width: 100%; display: block; }
+body.shop a { color: inherit; text-decoration: none; }
+body.shop button { font-family: inherit; cursor: pointer; border: 0; background: none; }
+
+.shop .container { max-width: var(--shop-maxw); margin: 0 auto; padding: 0 28px; }
+
+.shop .serif { font-family: var(--shop-serif); font-weight: 400; letter-spacing: -0.01em; }
+.shop .eyebrow {
+  font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--shop-ink-soft); font-weight: 600;
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.shop .eyebrow::before {
+  content: ""; width: 22px; height: 1px; background: currentColor; opacity: .6;
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.shop-nav {
+  position: sticky; top: 0; z-index: 50;
+  /* Solid bg để text product card phía sau không bleed-through khi cuộn —
+     88% opacity + backdrop blur trước không đủ che chữ trên page bg cùng tông. */
+  background: var(--shop-bg);
+  border-bottom: 1px solid color-mix(in oklab, var(--shop-line) 70%, transparent);
+}
+.shop-nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 32px; padding-bottom: 32px;
+}
+.shop-brand {
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--shop-serif); font-size: 26px; letter-spacing: 0.02em;
+  color: var(--shop-ink);
+}
+.shop-brand-mark {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--shop-accent);
+  display: grid; place-items: center;
+  color: var(--shop-bg-card);
+  position: relative;
+  flex-shrink: 0;
+}
+.shop-brand-mark svg { display: block; }
+.shop-brand-mark::after {
+  content: ""; position: absolute; inset: -4px;
+  border-radius: 50%; border: 1px solid var(--shop-accent); opacity: .25;
+}
+.shop-brand b { font-weight: 400; }
+.shop-brand span {
+  color: var(--shop-ink-soft); font-size: 12px; font-family: var(--shop-sans);
+  letter-spacing: 0.22em; text-transform: uppercase; margin-top: 6px; display: block;
+}
+.shop-nav-links { display: flex; gap: 30px; font-size: 14px; font-weight: 500; }
+.shop-nav-links a { position: relative; padding: 8px 0; color: var(--shop-ink); }
+.shop-nav-links a:hover { color: var(--shop-accent); }
+.shop-nav-cta { display: flex; align-items: center; gap: 14px; }
+
+.shop-icon-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--shop-line); display: grid; place-items: center;
+  transition: transform .2s ease, background .2s ease;
+  color: var(--shop-ink);
+}
+.shop-icon-btn:hover { background: var(--shop-warm-soft); transform: translateY(-1px); }
+.shop-badge-dot {
+  background: var(--shop-accent); color: white; font-size: 10px; font-weight: 700;
+  border-radius: 999px; min-width: 18px; height: 18px; padding: 0 5px;
+  display: inline-flex; align-items: center; justify-content: center;
+  position: absolute; top: -2px; right: -2px;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+/* `.shop` prefix beats body.shop a (specificity 0,1,1) so button text colour
+   wins over the link reset above — without this, .shop-btn-primary text gets
+   inherited as ink-on-ink and disappears. */
+.shop .shop-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 22px; border-radius: 999px; font-weight: 600; font-size: 14px;
+  transition: transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+  cursor: pointer;
+}
+.shop .shop-btn-primary { background: var(--shop-ink); color: var(--shop-bg); }
+.shop .shop-btn-primary:hover {
+  background: var(--shop-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -12px color-mix(in oklab, var(--shop-accent) 50%, transparent);
+}
+.shop .shop-btn-outline { border: 1px solid var(--shop-ink); color: var(--shop-ink); background: transparent; }
+.shop .shop-btn-outline:hover { background: var(--shop-ink); color: var(--shop-bg); }
+.shop .shop-btn-ghost { color: var(--shop-ink); padding: 12px 0; }
+.shop .shop-btn-ghost:hover { color: var(--shop-accent); }
+.shop .shop-btn .arr { transition: transform .2s ease; display: inline-block; }
+.shop .shop-btn:hover .arr { transform: translateX(4px); }
+
+/* ============================================================
+   MARQUEE
+   ============================================================ */
+.shop-marquee {
+  border-top: 1px solid var(--shop-line);
+  border-bottom: 1px solid var(--shop-line);
+  padding: 18px 0;
+  overflow: hidden;
+  background: var(--shop-bg);
+}
+.shop-marquee-track {
+  display: flex; gap: 56px; white-space: nowrap;
+  animation: shopMarq 35s linear infinite;
+  font-family: var(--shop-serif); font-size: 22px; color: var(--shop-ink);
+}
+.shop-marquee-track > span {
+  display: inline-flex; align-items: center; gap: 56px;
+  flex-shrink: 0;
+}
+.shop-marquee-track i { font-style: normal; color: var(--shop-accent); }
+.shop-marquee-track .star {
+  display: inline-block; width: 16px; height: 16px; background: var(--shop-accent);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  flex-shrink: 0;
+}
+@keyframes shopMarq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ============================================================
+   SECTION HEADERS
+   ============================================================ */
+.shop section { padding: var(--shop-section-py) 0; }
+.shop .section-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 32px; margin-bottom: 50px;
+}
+.shop .section-head h2 {
+  font-family: var(--shop-serif); font-weight: 400;
+  font-size: clamp(36px, 5vw, 64px); line-height: 1; letter-spacing: -0.015em;
+  margin: 14px 0 0; max-width: 760px;
+}
+.shop .section-head h2 em { font-style: italic; color: var(--shop-accent); }
+.shop .section-head .right { color: var(--shop-ink-soft); max-width: 360px; font-size: 15px; }
+
+/* ============================================================
+   PLACEHOLDER (warm-stripe — replaces image-slot)
+   ============================================================ */
+.shop-ph {
+  background:
+    repeating-linear-gradient(135deg,
+      color-mix(in oklab, var(--shop-accent) 18%, transparent) 0 2px,
+      transparent 2px 10px),
+    linear-gradient(135deg, var(--shop-warm-soft), var(--shop-bg-soft));
+  display: grid; place-items: center; color: var(--shop-ink-soft);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px;
+  letter-spacing: .08em; text-align: center;
+  position: absolute; inset: 0;
+}
+.shop-ph.sage {
+  background:
+    repeating-linear-gradient(135deg,
+      color-mix(in oklab, var(--shop-accent-2) 18%, transparent) 0 2px,
+      transparent 2px 10px),
+    linear-gradient(135deg, var(--shop-accent-2-soft), var(--shop-bg-soft));
+}
+.shop-ph.dark {
+  background:
+    repeating-linear-gradient(135deg,
+      color-mix(in oklab, var(--shop-bg) 8%, transparent) 0 2px,
+      transparent 2px 10px),
+    linear-gradient(135deg, #3a3329, #2a2520);
+  color: color-mix(in oklab, var(--shop-bg) 60%, transparent);
+}
+.shop-ph-label { padding: 8px 14px; border: 1px dashed currentColor; border-radius: 6px; opacity: .55; }
+
+/* ============================================================
+   FOOTER (shop)
+   ============================================================ */
+.shop-footer {
+  background: var(--shop-ink);
+  color: color-mix(in oklab, var(--shop-bg) 80%, transparent);
+  padding: 70px 0 30px;
+  margin-top: var(--shop-section-py);
+}
+.shop-footer .shop-brand { color: var(--shop-bg); }
+.shop-foot-grid {
+  display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px;
+}
+.shop-foot-grid h5 {
+  font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+  color: color-mix(in oklab, var(--shop-bg) 60%, transparent);
+  margin: 0 0 18px; font-weight: 700;
+}
+.shop-foot-col ul {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 10px; font-size: 14px;
+}
+.shop-foot-col li a:hover { color: var(--shop-accent); }
+.shop-foot-about p { font-size: 14px; max-width: 320px; line-height: 1.55; }
+.shop-foot-bottom {
+  margin-top: 50px; padding-top: 24px;
+  border-top: 1px solid color-mix(in oklab, var(--shop-bg) 12%, transparent);
+  display: flex; justify-content: space-between; font-size: 13px;
+  color: color-mix(in oklab, var(--shop-bg) 55%, transparent);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px) {
+  .shop-nav-links { display: none; }
+  .shop-foot-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 680px) {
+  .shop-foot-grid { grid-template-columns: 1fr; }
+  .shop .container { padding: 0 18px; }
+}
+
+/* Skip link for shop pages (a11y) */
+.shop .skip-to-main {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--shop-ink); color: var(--shop-bg);
+  padding: 10px 16px; font-size: 13px; z-index: 100;
+}
+.shop .skip-to-main:focus { left: 0; }
+
+/* ============================================================
+   REVEAL ANIMATIONS — fade + slide up khi vào viewport.
+   Init bởi IntersectionObserver trong ShopLayout. One-shot.
+   ============================================================ */
+.shop .shop-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.shop .shop-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+/* Staggered children */
+.shop .shop-reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.shop .shop-reveal-stagger.is-visible > * {
+  opacity: 1;
+  transform: none;
+}
+.shop .shop-reveal-stagger.is-visible > *:nth-child(1) { transition-delay: 0ms; }
+.shop .shop-reveal-stagger.is-visible > *:nth-child(2) { transition-delay: 80ms; }
+.shop .shop-reveal-stagger.is-visible > *:nth-child(3) { transition-delay: 160ms; }
+.shop .shop-reveal-stagger.is-visible > *:nth-child(4) { transition-delay: 240ms; }
+.shop .shop-reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 320ms; }
+.shop .shop-reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 400ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .shop .shop-reveal,
+  .shop .shop-reveal-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

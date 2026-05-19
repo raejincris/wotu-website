@@ -2,6 +2,15 @@
 
 Tài liệu này dành cho người **không cần biết code** — chỉ vào trang admin, điền form, lưu là xong. Site sẽ tự rebuild và live trong 1-2 phút.
 
+## Website giờ có 2 phần
+
+| URL | Phần | Edit qua đâu |
+|---|---|---|
+| https://www.wotu.vn/ | **Shop** — bán nội thất combo + sản phẩm | Chưa CMS-ify, dev edit code directly |
+| https://www.wotu.vn/studio/ | **Studio** — kiến trúc + nội thất + xây dựng | CMS này → 5 mục bên dưới |
+
+Tài liệu này hướng dẫn edit phần **Studio** qua CMS. Phần Shop (combo / sản phẩm / reviews) hiện vẫn hardcode trong code — liên hệ team dev nếu cần đổi content.
+
 ## Vào trang quản lý
 
 URL admin: **https://www.wotu.vn/admin/**
@@ -9,7 +18,12 @@ URL admin: **https://www.wotu.vn/admin/**
 1. Mở URL trên trong trình duyệt (Chrome/Safari/Edge đều OK).
 2. Click nút **"Login with GitHub"** → đăng nhập tài khoản GitHub được cấp quyền.
 3. Lần đầu, GitHub sẽ hỏi authorize cho ứng dụng — click **Authorize**.
-4. Vào dashboard, thấy 5 mục: **Dự án · Nhật ký · Thông tin Studio · Trang chủ · Footer & Menu**.
+4. Vào dashboard, thấy 5 mục:
+   - **Dự án Studio** (case study)
+   - **Nhật ký Studio** (bài viết)
+   - **Thông tin chung WOTU** (hotline, email, địa chỉ, social — ÁP DỤNG CHO CẢ shop + studio)
+   - **Trang chủ Studio** (copy 9 section trang chủ studio)
+   - **Footer & Menu Studio** (footer + nav menu)
 
 ## Các tác vụ thường gặp
 
@@ -31,13 +45,13 @@ URL admin: **https://www.wotu.vn/admin/**
    - **Mô tả ảnh (alt)**: cho SEO, vd `Mặt tiền nhà phố ốp đá ong tự nhiên`
    - **Nội dung dự án**: editor markdown — viết câu chuyện, vật liệu, ánh sáng, etc.
 3. Click **Save** ở góc trên phải → click **Publish**.
-4. Đợi 1-2 phút. Mở https://www.wotu.vn/projects → thấy dự án mới hiện ra.
+4. Đợi 1-2 phút. Mở https://www.wotu.vn/studio/projects → thấy dự án mới hiện ra.
 
 ### B. Thêm một bài Nhật ký (blog)
 
 1. Click **Nhật ký** → **"New Nhật ký"**.
 2. Điền: tiêu đề, ngày xuất bản, tóm tắt, ảnh bìa, nội dung markdown.
-3. Save → Publish → đợi 1-2 phút → kiểm tra https://www.wotu.vn/blog.
+3. Save → Publish → đợi 1-2 phút → kiểm tra https://www.wotu.vn/studio/blog.
 
 ### C. Sửa copy trang chủ (Hero, Triết lý, Dịch vụ, Quy trình, About, Quote, Form)
 
@@ -59,9 +73,13 @@ URL admin: **https://www.wotu.vn/admin/**
 
 ### D. Sửa địa chỉ / hotline / email / mạng xã hội
 
-1. Click **Thông tin Studio** → **Thông tin chung**.
-2. Sửa địa chỉ, hotline, email, link Instagram/Behance.
-3. Save → Publish. Các thay đổi này sẽ xuất hiện ở **mọi nơi** trên site (header, footer, contact section).
+1. Click **Thông tin chung WOTU** → **Hotline · email · địa chỉ · social**.
+2. Sửa:
+   - Tagline studio, mô tả SEO, slogan tiếng Anh
+   - Địa chỉ: đường + thành phố + URL Google Maps
+   - Hotline + email
+   - 2 link Facebook (chính + xưởng) + Google Maps URL
+3. Save → Publish. Các thay đổi này sẽ xuất hiện ở **mọi nơi** trên site (Nav, footer shop + studio, contact section, JSON-LD SEO).
 
 ### E. Sửa menu (top nav) hoặc footer
 
@@ -107,7 +125,7 @@ Nếu lỡ publish nhầm, không có nút "undo" trong CMS. Cách rollback:
 | Save xong nhưng site không update sau 5 phút | Vào dashboard deploy platform (Cloudflare Pages / Netlify / Vercel) xem build log có lỗi gì. Nếu build fail → revert commit cuối qua GitHub. |
 | Ảnh upload nhưng không hiện trên site | Chờ build xong (1-2 phút). Nếu vẫn không hiện, check tên file (không có dấu / khoảng trắng — Sveltia tự xử lý nhưng ảnh tên cũ thì cần đổi tên). |
 | Lỡ xoá nhầm dự án / bài blog | Vào GitHub commits → revert commit "Delete entry" → entry quay lại. |
-| Form contact không gửi email | Form hiện chỉ hiện alert, chưa wire email backend. Cần dev set up Formspree / Netlify Forms / Resend. |
+| Form contact / cart không gửi email | Form đã wire Web3Forms (250 submit/m free) → email `hello@wotu.vn`. Check access key trong `site.yml`. Nếu quá quota tháng, đổi sang plan paid hoặc đổi access key mới. |
 
 ## Backup
 

@@ -1,0 +1,67 @@
+---
+interface NavLink { label: string; href: string; }
+
+interface Props {
+  /** Active nav item label (visual highlight). */
+  active?: string;
+}
+
+const { active } = Astro.props;
+
+const links: NavLink[] = [
+  { label: 'Combo nội thất', href: '/#combos' },
+  { label: 'Sản phẩm', href: '/san-pham/' },
+  { label: 'Cảm hứng', href: '/#inspo' },
+  { label: 'Bảo hành', href: '/#why' },
+  { label: 'Studio ↗', href: '/studio/' },
+  { label: 'Tư vấn', href: '/#contact' },
+];
+---
+<nav class="shop-nav">
+  <div class="container shop-nav-inner">
+    <a href="/" class="shop-brand" aria-label="WOTU — trang chủ shop">
+      <img src="/logo.svg" alt="WOTU" width="160" height="64" style="height: 40px; width: auto; display: block;" />
+    </a>
+    <div class="shop-nav-links">
+      {links.map((l) => (
+        <a href={l.href} style={active === l.label ? 'color: var(--shop-accent);' : undefined}>{l.label}</a>
+      ))}
+    </div>
+    <div class="shop-nav-cta">
+      <a class="shop-icon-btn" href="/san-pham/" aria-label="Tìm sản phẩm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </a>
+      <button class="shop-icon-btn" id="wotu-cart-btn" aria-label="Mở giỏ hàng" type="button" style="position: relative;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="shop-badge-dot" id="wotu-cart-badge" hidden>0</span>
+      </button>
+      <a class="shop-btn shop-btn-primary" href="/#contact">Đặt tư vấn <span class="arr">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  import { getCartCount, onChange } from '../../lib/shop-store';
+
+  const btn = document.getElementById('wotu-cart-btn');
+  const badge = document.getElementById('wotu-cart-badge');
+
+  function refreshBadge(): void {
+    if (!badge) return;
+    const n = getCartCount();
+    if (n <= 0) {
+      badge.hidden = true;
+    } else {
+      badge.hidden = false;
+      badge.textContent = String(n);
+    }
+  }
+
+  btn?.addEventListener('click', () => {
+    const fn = (window as unknown as { __wotuOpenCart?: () => void }).__wotuOpenCart;
+    if (typeof fn === 'function') fn();
+  });
+
+  refreshBadge();
+  onChange(refreshBadge);
+</script>

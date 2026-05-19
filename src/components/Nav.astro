@@ -3,18 +3,22 @@ import footer from '../data/footer.yml';
 
 interface Props {
   variant?: 'home' | 'inner';
+  /** Where the logo + home-anchor links point. Defaults to '/' (root).
+   *  Studio inner pages pass '/studio/' so anchors return to the studio
+   *  homepage rather than the shop homepage at root. */
+  homeRoute?: string;
 }
-const { variant = 'home' } = Astro.props;
+const { variant = 'home', homeRoute = '/' } = Astro.props;
 
 interface NavLink { label: string; anchor?: string; route?: string; }
 const navLinks = footer.nav.links as NavLink[];
-const homeAnchor = variant === 'home' ? '#' : '/';
+const homeAnchor = variant === 'home' ? '#' : homeRoute;
 
 const links = navLinks.map((l) => {
   if (variant === 'home') {
     return { label: l.label, href: l.route ? l.route : `#${l.anchor}` };
   }
-  return { label: l.label, href: l.route ? l.route : `/#${l.anchor}` };
+  return { label: l.label, href: l.route ? l.route : `${homeRoute}#${l.anchor}` };
 });
 ---
 <nav class="wotu-nav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 16px var(--pad-x); display: flex; justify-content: space-between; align-items: center; color: var(--ink);">

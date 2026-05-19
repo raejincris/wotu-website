@@ -47,16 +47,16 @@ const localBusiness = {
     '@type': 'PostalAddress',
     streetAddress: site.address.line1,
     addressLocality: 'Quy Nhơn',
-    addressRegion: 'Bình Định',
+    addressRegion: 'Gia Lai',
     addressCountry: 'VN',
   },
   geo: {
     '@type': 'GeoCoordinates',
-    // Approximate Quy Nhơn coordinates — refine if studio moves.
-    latitude: 13.7820,
-    longitude: 109.2197,
+    // Canonical từ company-info.md (place "WOTU - Nội thất Quy Nhơn" trên Google Maps).
+    latitude: 13.7893,
+    longitude: 109.2081161,
   },
-  sameAs: [site.social.instagram, site.social.behance].filter(Boolean),
+  sameAs: [site.social.facebook, site.social.facebookWorkshop, site.social.maps].filter(Boolean),
   founder: {
     '@type': 'Organization',
     name: ORG_NAME,

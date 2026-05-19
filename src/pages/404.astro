@@ -1,0 +1,92 @@
+---
+import ShopLayout from '../layouts/ShopLayout.astro';
+import Nav from '../components/shop/Nav.astro';
+import Footer from '../components/shop/Footer.astro';
+---
+<ShopLayout title="Không tìm thấy trang — WOTU" description="Trang bạn cần không tồn tại hoặc đã được chuyển. Quay lại trang chủ shop hoặc khám phá danh mục sản phẩm.">
+  <Nav />
+
+  <section class="nf-wrap container shop-reveal">
+    <div class="nf-num">404</div>
+    <h1>
+      Đây là <em>khoảng trống</em>
+      <br/>chưa được dựng.
+    </h1>
+    <p class="nf-sub">
+      Trang bạn vừa mở không tồn tại, hoặc đã được chuyển sang đường dẫn mới.
+      Đường về nhà gần nhất:
+    </p>
+
+    <div class="nf-actions">
+      <a class="shop-btn shop-btn-primary" href="/">Về trang chủ shop <span class="arr">→</span></a>
+      <a class="shop-btn shop-btn-outline" href="/san-pham/">Xem tất cả sản phẩm</a>
+      <a class="shop-btn shop-btn-ghost" href="/studio/">Studio thiết kế ↗</a>
+    </div>
+
+    <div class="nf-links">
+      <h2>Hoặc bạn đang tìm…</h2>
+      <ul>
+        <li><a href="/combo/to-am/">Combo Tổ Ấm — Phòng khách trọn bộ</a></li>
+        <li><a href="/san-pham/sofa-may/">Sofa văng "Mây" 3 chỗ</a></li>
+        <li><a href="/san-pham/?cat=sofa">Tất cả sofa &amp; ghế ngồi</a></li>
+        <li><a href="/san-pham/?room=phong-ngu">Combo phòng ngủ</a></li>
+        <li><a href="/#why">Chính sách bảo hành</a></li>
+        <li><a href="/#contact">Đặt tư vấn miễn phí</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <Footer />
+</ShopLayout>
+
+<style>
+  .nf-wrap {
+    padding: 100px 28px var(--shop-section-py);
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0;
+  }
+  .nf-num {
+    font-family: var(--shop-serif); font-size: clamp(120px, 22vw, 240px);
+    line-height: 0.85; color: var(--shop-accent);
+    letter-spacing: -.04em; opacity: .9;
+    margin-bottom: 6px;
+  }
+  .nf-wrap h1 {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(36px, 6vw, 64px); line-height: 1; letter-spacing: -.02em;
+    margin: 0 0 24px;
+  }
+  .nf-wrap h1 em { font-style: italic; color: var(--shop-accent); }
+  .nf-sub {
+    font-size: 17px; color: var(--shop-ink-soft); line-height: 1.55;
+    max-width: 44ch; margin: 0 0 36px;
+  }
+  .nf-actions {
+    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 56px;
+  }
+  .nf-links {
+    border-top: 1px solid var(--shop-line); padding-top: 36px;
+    max-width: 480px; width: 100%;
+  }
+  .nf-links h2 {
+    font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--shop-ink-soft); font-weight: 600; margin: 0 0 18px;
+  }
+  .nf-links ul {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 12px;
+    text-align: left;
+  }
+  .nf-links li a {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid color-mix(in oklab, var(--shop-line) 60%, transparent);
+    font-size: 15px;
+    transition: color .2s, padding .2s;
+  }
+  .nf-links li a::after { content: '→'; color: var(--shop-accent); opacity: .5; transition: transform .2s, opacity .2s; }
+  .nf-links li a:hover { color: var(--shop-accent); padding-left: 6px; }
+  .nf-links li a:hover::after { transform: translateX(4px); opacity: 1; }
+</style>

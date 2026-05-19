@@ -1,0 +1,56 @@
+---
+import site from '../../data/site.yml';
+---
+<footer class="shop-footer">
+  <div class="container">
+    <div class="shop-foot-grid">
+      <div class="shop-foot-about">
+        <a href="/" class="shop-brand" aria-label="WOTU — về trang chủ">
+          <img src="/logo-light.svg" alt="WOTU" width="160" height="64" style="height: 48px; width: auto; display: block;" />
+        </a>
+        <p style="margin-top: 18px;">
+          WOTU — studio thiết kế và xưởng nội thất tại Quy Nhơn. Combo phòng khách, phòng ngủ, phòng ăn và căn hộ trọn gói. Bảo hành 5 năm, giao và lắp tận nơi.
+        </p>
+        {site.slogan && (
+          <p style="margin-top: 12px; font-family: var(--shop-serif); font-style: italic; font-size: 16px; color: color-mix(in oklab, var(--shop-bg) 70%, transparent);">
+            {site.slogan}
+          </p>
+        )}
+      </div>
+      <div class="shop-foot-col">
+        <h5>Sản phẩm</h5>
+        <ul>
+          <li><a href="/#combos">Combo nội thất</a></li>
+          <li><a href="/san-pham/">Tất cả sản phẩm</a></li>
+          <li><a href="/#combos">Phòng khách</a></li>
+          <li><a href="/#combos">Phòng ngủ</a></li>
+          <li><a href="/#combos">Phòng ăn &amp; bếp</a></li>
+        </ul>
+      </div>
+      <div class="shop-foot-col">
+        <h5>Hỗ trợ</h5>
+        <ul>
+          <li><a href="/#why">Chính sách bảo hành</a></li>
+          <li><a href="/#why">Giao hàng &amp; lắp đặt</a></li>
+          <li><a href="/#why">Đổi trả 30 ngày</a></li>
+          <li><a href="/bao-mat">Chính sách bảo mật</a></li>
+          <li><a href="/studio/">Studio thiết kế ↗</a></li>
+        </ul>
+      </div>
+      <div class="shop-foot-col">
+        <h5>Liên hệ</h5>
+        <ul>
+          <li><a href={`tel:+84${site.hotline.replace(/\s+/g, '').slice(1)}`}>{site.hotline}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href={site.address.mapsUrl} target="_blank" rel="noopener noreferrer">{site.address.line1}<br/>{site.address.city}</a></li>
+          <li><a href={site.social.facebook} target="_blank" rel="noopener noreferrer">Facebook · Nội thất Quy Nhơn</a></li>
+          <li><a href={site.social.facebookWorkshop} target="_blank" rel="noopener noreferrer">Facebook · Xưởng nội thất</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="shop-foot-bottom">
+      <span>© 2026 WOTU — Thiết kế &amp; thi công nội thất.</span>
+      <span>Studio + Xưởng tại Quy Nhơn, Gia Lai</span>
+    </div>
+  </div>
+</footer>

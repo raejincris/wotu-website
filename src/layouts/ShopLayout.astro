@@ -1,0 +1,104 @@
+---
+import '../styles/shop.css';
+import site from '../data/site.yml';
+import CartDrawer from '../components/shop/CartDrawer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = `WOTU — Nội thất cho tổ ấm Việt`,
+  description = 'WOTU — combo nội thất phòng khách, phòng ngủ, phòng ăn. Gỗ tự nhiên, bảo hành 5 năm, giao và lắp đặt tận nơi tại Quy Nhơn.',
+  ogImage,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+
+const cfToken = (site.analytics?.cfBeaconToken ?? '').trim();
+const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
+---
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://avatars.githubusercontent.com; connect-src 'self' https://api.web3forms.com https://api.github.com https://github.com https://unpkg.com https://cloudflareinsights.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://github.com https://api.web3forms.com;" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:site_name" content="WOTU" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="shop" data-shop-palette="warm" data-shop-density="comfy">
+    <a href="#main" class="skip-to-main">Bỏ qua điều hướng — đến nội dung chính</a>
+    <main id="main"><slot /></main>
+    <CartDrawer />
+
+    <script is:inline>
+      // Reveal-on-scroll cho shop. Reveal ngay element đang trong viewport
+      // (covers prerendered / no-IO browser); IO progressively reveal phần còn lại.
+      (function () {
+        var els = document.querySelectorAll('.shop-reveal, .shop-reveal-stagger');
+        if (!els.length) return;
+
+        function revealVisible() {
+          var vh = window.innerHeight;
+          els.forEach(function (el) {
+            var r = el.getBoundingClientRect();
+            if (r.top < vh * 0.92 && r.bottom > 0) el.classList.add('is-visible');
+          });
+        }
+        revealVisible();
+
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-visible');
+                io.unobserve(e.target);
+              }
+            });
+          }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+          els.forEach(function (el) { io.observe(el); });
+        } else {
+          window.addEventListener('scroll', revealVisible, { passive: true });
+        }
+        // Safety net: nếu vì lý do gì element không bao giờ trigger, hiện hết sau 1.5s.
+        setTimeout(function () { els.forEach(function (el) { el.classList.add('is-visible'); }); }, 1500);
+      })();
+    </script>
+
+    {cfToken && (
+      <script
+        is:inline
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={cfBeaconConfig}
+      />
+    )}
+  </body>
+</html>

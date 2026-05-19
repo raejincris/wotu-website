@@ -23,7 +23,7 @@ interface Props {
 const { p, large = false, delay = 0 } = Astro.props;
 const titleSize = large ? 44 : 32;
 ---
-<Reveal variant="reveal" delay={delay} as="a" href={`/projects/${p.slug}`} style="display: block; cursor: pointer;">
+<Reveal variant="reveal" delay={delay} as="a" href={`/studio/projects/${p.slug}`} style="display: block; cursor: pointer;">
   <Reveal variant="reveal-img" delay={delay + 100}>
     <Placeholder
       label={`${p.cat.toUpperCase()} · ${p.id}`}

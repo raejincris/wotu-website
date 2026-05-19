@@ -1,6 +1,15 @@
 # Sveltia CMS config — schema cho website wotu.vn
 # Khi user save → CMS commit thẳng lên branch `main` của GitHub repo →
 # platform deploy auto-rebuild trong 1-2 phút → site live.
+#
+# Site có 2 phần:
+#   - Shop /  /san-pham/  /combo/... — content combo/bestsellers/reviews
+#     đang HARDCODE trong .astro page (chưa CMS-ify). Khi cần edit qua CMS,
+#     bổ sung collection combos/products/reviews ở đây + extract YAML.
+#   - Studio /studio/ — Dự án + Nhật ký + Trang chủ + Footer/Menu — đều CMS.
+#
+# Site collection (site.yml) dùng CHUNG cho cả 2 phần (hotline, email, địa chỉ,
+# social) — sửa 1 lần áp lên cả Shop và Studio footer.
 
 backend:
   name: github
@@ -28,10 +37,10 @@ i18n: false
 
 collections:
   # ============================================================
-  # 1. PROJECTS — case study dự án
+  # 1. PROJECTS — case study dự án (/studio/projects/[slug])
   # ============================================================
   - name: projects
-    label: 'Dự án'
+    label: 'Dự án Studio'
     label_singular: 'Dự án'
     folder: 'src/content/projects'
     create: true
@@ -74,10 +83,10 @@ collections:
       - { name: body, label: 'Nội dung dự án', widget: markdown, hint: 'Câu chuyện về dự án, vật liệu, ánh sáng...' }
 
   # ============================================================
-  # 2. BLOG (Nhật ký) — bài viết studio
+  # 2. BLOG (Nhật ký) — bài viết studio (/studio/blog/[slug])
   # ============================================================
   - name: blog
-    label: 'Nhật ký'
+    label: 'Nhật ký Studio'
     label_singular: 'Bài viết'
     folder: 'src/content/blog'
     create: true
@@ -103,31 +112,35 @@ collections:
       - { name: body, label: 'Nội dung bài', widget: markdown }
 
   # ============================================================
-  # 3. SITE — thông tin chung (địa chỉ, hotline, social)
+  # 3. SITE — thông tin chung WOTU (địa chỉ, hotline, social)
+  #    Áp dụng CẢ Shop và Studio footer. Sửa 1 lần — đồng bộ 2 nơi.
   # ============================================================
   - name: site
-    label: 'Thông tin Studio'
+    label: 'Thông tin chung WOTU'
     files:
       - name: site
-        label: 'Thông tin chung'
+        label: 'Hotline · email · địa chỉ · social'
         file: 'src/data/site.yml'
         fields:
-          - { name: tagline, label: 'Tagline', widget: string }
+          - { name: tagline, label: 'Tagline (Studio)', widget: string }
           - { name: description, label: 'Mô tả SEO', widget: text }
+          - { name: slogan, label: 'Slogan tiếng Anh (hiển thị footer)', widget: string, required: false, hint: 'VD: We don''t sell furniture, we sell satisfaction' }
           - name: address
             label: 'Địa chỉ'
             widget: object
             fields:
-              - { name: line1, label: 'Đường', widget: string }
-              - { name: city, label: 'Thành phố', widget: string }
+              - { name: line1, label: 'Đường / Lô', widget: string, hint: 'VD: Lô 17-18 Hoa Lư' }
+              - { name: city, label: 'Thành phố / Tỉnh', widget: string, hint: 'VD: Quy Nhơn, Gia Lai' }
+              - { name: mapsUrl, label: 'Google Maps URL', widget: string, required: false, hint: 'Short URL từ maps.app.goo.gl' }
           - { name: hotline, label: 'Hotline', widget: string }
           - { name: email, label: 'Email', widget: string }
           - name: social
             label: 'Mạng xã hội'
             widget: object
             fields:
-              - { name: instagram, label: 'Instagram URL', widget: string }
-              - { name: behance, label: 'Behance URL', widget: string }
+              - { name: facebook, label: 'Facebook chính (Nội thất Quy Nhơn) URL', widget: string, required: false }
+              - { name: facebookWorkshop, label: 'Facebook Xưởng URL', widget: string, required: false }
+              - { name: maps, label: 'Google Maps URL (lặp lại địa chỉ)', widget: string, required: false }
           - name: meta
             label: 'Meta'
             widget: object
@@ -150,13 +163,15 @@ collections:
               - { name: cfBeaconToken, label: 'Beacon Token', widget: string, required: false }
 
   # ============================================================
-  # 4. HOMEPAGE — copy từng section trang chủ
+  # 4. HOMEPAGE STUDIO — copy từng section trang chủ /studio/
+  #    LƯU Ý: homepage SHOP / (cream + terracotta, combo nội thất) hiện
+  #    hardcode trong src/pages/index.astro — chưa CMS-ify.
   # ============================================================
   - name: home
-    label: 'Trang chủ'
+    label: 'Trang chủ Studio (/studio/)'
     files:
       - name: home
-        label: 'Nội dung trang chủ'
+        label: 'Nội dung trang chủ Studio'
         file: 'src/data/home.yml'
         fields:
           - name: hero
@@ -267,13 +282,15 @@ collections:
                   - { name: placeholder, label: 'Placeholder', widget: string, required: false }
 
   # ============================================================
-  # 5. FOOTER + NAV
+  # 5. FOOTER + NAV STUDIO
+  #    Áp cho footer + Nav trên các route /studio/*.
+  #    Shop / có Nav + Footer riêng (hardcode trong src/components/shop/).
   # ============================================================
   - name: footer
-    label: 'Footer & Menu'
+    label: 'Footer & Menu Studio'
     files:
       - name: footer
-        label: 'Footer & Menu trên cùng'
+        label: 'Footer & Menu /studio/'
         file: 'src/data/footer.yml'
         fields:
           - { name: tagline, label: 'Tagline footer (cho phép br/)', widget: text }

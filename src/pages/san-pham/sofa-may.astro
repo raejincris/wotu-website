@@ -1,0 +1,1099 @@
+---
+import ShopLayout from '../../layouts/ShopLayout.astro';
+import Nav from '../../components/shop/Nav.astro';
+import Footer from '../../components/shop/Footer.astro';
+
+const fabricSwatchesTop = [
+  { name: 'Linen Nâu Đất', style: 'linear-gradient(135deg,#B77452,#915438)', active: true },
+  { name: 'Linen Be Sữa', style: 'linear-gradient(135deg,#E5D2B5,#C9B091)' },
+  { name: 'Linen Xám Tro', style: 'linear-gradient(135deg,#A39C92,#736C61)' },
+  { name: 'Linen Xanh Rêu', style: 'linear-gradient(135deg,#7A8E73,#566954)' },
+  { name: 'Bouclé Trắng Kem', style: 'radial-gradient(circle at 30% 30%, #fff, #EDE3D0)' },
+];
+
+const fabricLibrary = [
+  { name: 'Linen Nâu Đất', label: 'Nâu Đất', style: 'linear-gradient(135deg,#B77452,#915438)', active: true },
+  { name: 'Linen Be Sữa', label: 'Be Sữa', style: 'linear-gradient(135deg,#E5D2B5,#C9B091)' },
+  { name: 'Linen Xám Tro', label: 'Xám Tro', style: 'linear-gradient(135deg,#A39C92,#736C61)' },
+  { name: 'Linen Xanh Rêu', label: 'Xanh Rêu', style: 'linear-gradient(135deg,#7A8E73,#566954)' },
+  { name: 'Linen Xanh Than', label: 'Xanh Than', style: 'linear-gradient(135deg,#3C4A5E,#25303D)' },
+  { name: 'Linen Hồng Đào', label: 'Hồng Đào', style: 'linear-gradient(135deg,#E1B3A1,#C48D78)' },
+  { name: 'Linen Vàng Mơ', label: 'Vàng Mơ', style: 'linear-gradient(135deg,#E5C99A,#C9A370)' },
+  { name: 'Linen Mật Ong', label: 'Mật Ong', style: 'linear-gradient(135deg,#D9A75C,#B07F38)' },
+  { name: 'Bouclé Trắng Kem', label: 'Bouclé Kem', style: 'radial-gradient(circle at 30% 30%,#fff,#EDE3D0)' },
+  { name: 'Bouclé Be Đậm', label: 'Bouclé Be', style: 'radial-gradient(circle at 30% 30%,#E5D2B5,#9B7B58)' },
+  { name: 'Bouclé Xám', label: 'Bouclé Xám', style: 'radial-gradient(circle at 30% 30%,#C0BBB1,#76705F)' },
+  { name: 'Bouclé Đen', label: 'Bouclé Đen', style: 'radial-gradient(circle at 30% 30%,#3B3530,#1B1612)' },
+  { name: 'Da bò Ý — Nâu Cognac', label: 'Da Cognac', style: 'linear-gradient(135deg,#A56237,#6E3D1C)' },
+  { name: 'Da bò Ý — Đen Mờ', label: 'Da Đen', style: 'linear-gradient(135deg,#2B2722,#0F0C09)' },
+  { name: 'Da bò Ý — Caramel', label: 'Da Caramel', style: 'linear-gradient(135deg,#C9925A,#8F5D2C)' },
+  { name: 'Da bò Ý — Nâu Hạt Dẻ', label: 'Hạt Dẻ', style: 'linear-gradient(135deg,#704633,#3D261A)' },
+  { name: 'Velvet Xanh Cổ Vịt', label: 'Velvet', style: 'linear-gradient(135deg,#2E5C5B,#143B3A)' },
+  { name: 'Velvet Hồng Phấn', label: 'Velvet Hồng', style: 'linear-gradient(135deg,#D9AAA5,#A86F69)' },
+  { name: 'Velvet Xanh Lá', label: 'Velvet Lá', style: 'linear-gradient(135deg,#456E4E,#22442C)' },
+  { name: 'Velvet Đỏ Đô', label: 'Đỏ Đô', style: 'linear-gradient(135deg,#7B2C2E,#4B1517)' },
+  { name: 'Cotton Pha — Trắng Be', label: 'Cotton', style: 'linear-gradient(135deg,#F0E7D6,#D9C9AC)' },
+  { name: 'Cotton Pha — Xám Sáng', label: 'Cotton Xám', style: 'linear-gradient(135deg,#D6D3CB,#A6A299)' },
+  { name: 'Cotton Pha — Xanh Pastel', label: 'Cotton Xanh', style: 'linear-gradient(135deg,#B7C7CC,#7E9298)' },
+  { name: 'Linen Pha — Kẻ Sọc', label: 'Kẻ Sọc', style: 'repeating-linear-gradient(90deg,#E5D2B5 0 6px,#B77452 6px 12px)' },
+];
+
+const specsLeft = [
+  { k: 'Kích thước phủ bì (D × R × C)', v: '210 × 92 × 80 cm' },
+  { k: 'Mặt ngồi (D × R × C)', v: '180 × 56 × 42 cm' },
+  { k: 'Độ dày đệm', v: '14 cm · mút D40' },
+  { k: 'Khung', v: 'Gỗ sồi tự nhiên · mộng âm dương' },
+  { k: 'Đệm tựa', v: 'Mút lò xo zigzag thép C75' },
+  { k: 'Vỏ bọc', v: 'Vải bố linen 380 g/m² · tháo rời' },
+];
+const specsRight = [
+  { k: 'Trọng lượng', v: '52 kg' },
+  { k: 'Tải trọng tối đa', v: '320 kg' },
+  { k: 'Hoàn thiện chân', v: 'Sơn PU gốc nước · 3 lớp' },
+  { k: 'Chứng nhận an toàn', v: 'OEKO-TEX Standard 100' },
+  { k: 'Bảo hành', v: '5 năm khung · 2 năm đệm' },
+  { k: 'Xuất xứ', v: 'Sản xuất tại Quy Nhơn · VN' },
+];
+
+const reviews = [
+  {
+    avatar: 'P',
+    name: 'Phạm Thanh Tâm',
+    place: 'Nhơn Bình · Quy Nhơn',
+    date: '09/05/2026',
+    stars: '★★★★★',
+    body: 'Mua thay chiếc sofa cũ 5 năm rồi. Ngồi vào là biết khác liền — êm, mà vẫn có lực đỡ lưng. Vải bố linen Nâu Đất nhìn ảnh hơi tối, ngoài đời ấm hơn, hợp căn hộ tông gỗ.',
+    fab: 'Linen Nâu Đất', size: '3 chỗ', cushion: 'Vừa', helpful: 38,
+  },
+  {
+    avatar: 'D',
+    name: 'Đặng Hữu Khoa',
+    place: 'Trần Phú · Quy Nhơn',
+    date: '02/05/2026',
+    stars: '★★★★★',
+    body: 'Order thử cái mẫu vải miễn phí trước khi mua, đúng là khác xa ảnh chụp web. Cuối cùng chọn Bouclé Trắng Kem — căn hộ sáng hẳn. Giao đúng 48h, lắp 2 anh trong 25 phút.',
+    fab: 'Bouclé Trắng Kem', size: '3 chỗ', cushion: 'Êm', helpful: 27,
+  },
+  {
+    avatar: 'H',
+    name: 'Hoàng Thị Quỳnh',
+    place: 'Tuy Phước · Bình Định',
+    date: '21/04/2026',
+    stars: '★★★★☆',
+    body: 'Mọi thứ tốt — chỉ có chân gỗ 18cm mình thấy hơi cao, có lẽ nên thử bản 12cm. Nhưng tổng thể chắc chắn, đáng tiền. Đặc biệt cái khóa kéo tháo vỏ bọc rất tiện.',
+    fab: 'Linen Xám Tro', size: 'Chữ L', cushion: 'Chắc', helpful: 19,
+  },
+];
+---
+<ShopLayout
+  title="Sofa văng Mây 3 chỗ — WOTU"
+  description="Sofa văng Mây — 3 chỗ ngồi, gỗ sồi tự nhiên, 24 màu vải tuỳ chọn. Bảo hành 5 năm, giao và lắp tận nơi tại Quy Nhơn."
+>
+  <Nav active="Sản phẩm" />
+
+  <!-- BREADCRUMB -->
+  <div class="container crumb">
+    <div class="crumb-list">
+      <a href="/">Trang chủ</a>
+      <span class="sep">/</span>
+      <a href="/san-pham/">Sản phẩm</a>
+      <span class="sep">/</span>
+      <a href="#">Sofa</a>
+      <span class="sep">/</span>
+      <span class="here">Sofa văng "Mây" 3 chỗ</span>
+    </div>
+  </div>
+
+  <!-- PRODUCT HERO -->
+  <section class="shop-reveal ph-hero container">
+    <div class="ph-grid">
+      <div class="gallery">
+        <div class="main-image">
+          <div class="shop-ph"><span class="shop-ph-label">Sofa văng Mây — góc khách quan, ánh sáng tự nhiên · 1600×1280</span></div>
+          <div class="gallery-tags">
+            <span class="tag accent">Bestseller tháng 5</span>
+            <span class="tag"><span class="pulse"></span>Còn 12 cái</span>
+          </div>
+          <span class="gallery-360">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/></svg>
+            XEM 360°
+          </span>
+        </div>
+        <div class="gallery-row">
+          <button class="thumb active" data-i="0" type="button">
+            <div class="shop-ph"><span class="shop-ph-label">Cận cảnh</span></div>
+            <span class="thumb-label">Cận cảnh</span>
+          </button>
+          <button class="thumb" data-i="1" type="button">
+            <div class="shop-ph sage"><span class="shop-ph-label">Vải bố</span></div>
+            <span class="thumb-label">Chi tiết vải</span>
+          </button>
+          <button class="thumb" data-i="2" type="button">
+            <div class="shop-ph"><span class="shop-ph-label">Trong phòng</span></div>
+            <span class="thumb-label">Trong phòng</span>
+          </button>
+          <button class="thumb" data-i="3" type="button">
+            <div class="shop-ph sage"><span class="shop-ph-label">Chân gỗ</span></div>
+            <span class="thumb-label">Chân gỗ sồi</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="info">
+        <div class="cat-row">
+          <a class="cat-link" href="#">Sofa · Bộ sưu tập Mây</a>
+          <span class="review-row">
+            <span class="stars">★★★★★</span>
+            <span>4.8 · 184 đánh giá</span>
+          </span>
+        </div>
+
+        <h1>Sofa văng <em>"Mây"</em><br />3 chỗ ngồi</h1>
+        <p class="lede">
+          Sofa văng dáng thấp — kiểu Japandi nguyên bản. Khung gỗ sồi tự nhiên, đệm mút D40, vải bố linen Hàn Quốc. Ngồi êm trong 5 phút, dùng êm trong 5 năm.
+        </p>
+
+        <div class="price-row">
+          <div>
+            <span class="price-now">6.900.000đ</span>
+            <span class="price-hint">trả góp 0% — từ <b>575.000đ</b> / tháng</span>
+          </div>
+          <span class="price-was">8.500.000đ</span>
+          <span class="price-save">− 19%</span>
+          <span class="price-stock"><span class="pulse"></span>Còn hàng · giao 48h</span>
+        </div>
+
+        <div class="pickers">
+          <div class="picker">
+            <div class="label">
+              <b>Vải bọc <span style="font-weight: 400; color: var(--ink-soft);">· 24 lựa chọn</span></b>
+              <span class="v" id="fabricName">Linen Nâu Đất</span>
+            </div>
+            <div class="swatches" id="fabricSwatches">
+              {fabricSwatchesTop.map((s) => (
+                <button class="swatch" data-active={s.active ? 'true' : 'false'} data-name={s.name} type="button">
+                  <span style={`background:${s.style}`}></span>
+                </button>
+              ))}
+              <button class="swatch" data-name="+ 19 lựa chọn" type="button">
+                <span style="background: var(--bg-soft); display:grid; place-items:center; color: var(--ink-soft); font-weight:700; font-size:13px;">+19</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="picker">
+            <div class="label"><b>Kích thước</b><span class="v">3 chỗ · D210 cm</span></div>
+            <div class="row-buttons" id="sizes">
+              <button class="opt-btn" type="button">2 chỗ<small>D 165 cm</small></button>
+              <button class="opt-btn" data-active="true" type="button">3 chỗ<small>D 210 cm</small></button>
+              <button class="opt-btn" type="button">Chữ L<small>D 240 + 160</small></button>
+            </div>
+          </div>
+
+          <div class="picker">
+            <div class="label"><b>Chân</b><span class="v">Gỗ sồi cao 18cm</span></div>
+            <div class="row-buttons" id="feet">
+              <button class="opt-btn" data-active="true" type="button">Gỗ sồi 18cm</button>
+              <button class="opt-btn" type="button">Gỗ sồi 12cm</button>
+              <button class="opt-btn" type="button">Inox đen</button>
+            </div>
+          </div>
+
+          <div class="picker">
+            <div class="label"><b>Độ êm đệm</b><span class="v">Vừa · D40 mật độ cao</span></div>
+            <div class="row-buttons">
+              <button class="opt-btn" type="button">Êm<small>mềm tay</small></button>
+              <button class="opt-btn" data-active="true" type="button">Vừa<small>khuyên dùng</small></button>
+              <button class="opt-btn" type="button">Chắc<small>nâng đỡ lưng</small></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="qty-and-cart">
+          <div class="qty">
+            <button id="qDec" aria-label="Giảm" type="button">−</button>
+            <span class="v" id="qV">1</span>
+            <button id="qInc" aria-label="Tăng" type="button">+</button>
+          </div>
+          <a class="btn btn-primary btn-lg" href="/#contact" id="addCart">Thêm vào giỏ · 6.900.000đ</a>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn btn-accent btn-lg" href="/#contact">Mua ngay <span class="arr">→</span></a>
+          <a class="btn btn-outline btn-lg" href="#">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            Đến showroom thử
+          </a>
+        </div>
+
+        <div class="key-features">
+          <div class="feat">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+            <div><b>Bảo hành 5 năm</b><span>Khung gỗ sồi</span></div>
+          </div>
+          <div class="feat">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="1" y="5" width="14" height="13" rx="1"/><polygon points="15 8 19 8 22 11 22 18 15 18"/><circle cx="6" cy="20" r="2"/><circle cx="18" cy="20" r="2"/></svg>
+            <div><b>Giao 48h</b><span>Quy Nhơn &amp; lân cận</span></div>
+          </div>
+          <div class="feat">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/></svg>
+            <div><b>Đổi trả 30 ngày</b><span>Miễn phí</span></div>
+          </div>
+          <div class="feat">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            <div><b>Ngồi thử miễn phí</b><span>Showroom Quy Nhơn</span></div>
+          </div>
+        </div>
+
+        <div class="pay-line">
+          <span>Thanh toán:</span>
+          <div class="pay-logos">
+            <span>VISA</span><span>MC</span><span>MOMO</span><span>VNPAY</span><span>HOME CREDIT</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- READING NAV -->
+  <nav class="read-nav">
+    <div class="container">
+      <ul>
+        <li><a href="#customize" class="active">Tuỳ chỉnh</a></li>
+        <li><a href="#bundle">Mua kèm</a></li>
+        <li><a href="#material">Câu chuyện chất liệu</a></li>
+        <li><a href="#specs">Thông số</a></li>
+        <li><a href="#care">Hướng dẫn vệ sinh</a></li>
+        <li><a href="#reviews">Đánh giá · 184</a></li>
+        <li><a href="#collection">Cùng bộ sưu tập</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- CUSTOMIZE — fabric library -->
+  <section class="shop-reveal block container" id="customize">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Tuỳ chỉnh đến từng centimet</span>
+        <h2>24 loại vải — <em>chọn cái hợp tổ ấm bạn</em>.</h2>
+      </div>
+      <div class="right">Mỗi mẫu vải đều có sẵn để yêu cầu gửi miếng test miễn phí về nhà trong 5 ngày.</div>
+    </div>
+
+    <div class="fabric-wrap">
+      <div class="fabric-top">
+        <div class="preview"><div class="shop-ph"><span class="shop-ph-label">Cận cảnh vải linen — Nâu Đất</span></div></div>
+        <div class="fabric-info">
+          <span class="eyebrow">Đã chọn</span>
+          <h3 id="fabH">Linen Nâu Đất</h3>
+          <p style="color: var(--ink-soft); font-size: 14px; margin: 0;">Vải bố linen 100% Hàn Quốc, dệt thoáng, mát tay, không tích bụi. Tông màu chủ đạo của combo Tổ Ấm.</p>
+          <div class="meta-grid">
+            <div><b>Chất liệu</b><span>100% linen</span></div>
+            <div><b>Trọng lượng</b><span>380 g/m²</span></div>
+            <div><b>Độ bền</b><span>30.000 vòng Martindale</span></div>
+            <div><b>Kháng nước</b><span>Có (phủ Nano)</span></div>
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <a class="btn btn-outline" href="#">Yêu cầu mẫu vải miễn phí</a>
+            <a class="btn btn-ghost" href="#" style="padding: 14px 0;">Xem chứng nhận →</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding-top: 20px; border-top: 1px solid var(--line);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px;">
+          <span class="eyebrow">Tất cả 24 lựa chọn</span>
+          <div style="display: flex; gap: 6px; font-size: 12px;">
+            <button class="opt-btn" data-active="true" type="button" style="padding: 6px 12px; font-size: 12px;">Tất cả</button>
+            <button class="opt-btn" type="button" style="padding: 6px 12px; font-size: 12px;">Linen</button>
+            <button class="opt-btn" type="button" style="padding: 6px 12px; font-size: 12px;">Bouclé</button>
+            <button class="opt-btn" type="button" style="padding: 6px 12px; font-size: 12px;">Da bò Ý</button>
+          </div>
+        </div>
+        <div class="fabric-grid">
+          {fabricLibrary.map((f) => (
+            <button class="fab-swatch" data-active={f.active ? 'true' : 'false'} data-fab={f.name} type="button">
+              <span class="pick" style={`background:${f.style}`}></span>
+              <span class="name">{f.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUNDLE -->
+  <section class="shop-reveal block container" id="bundle">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Mua kèm — tiết kiệm</span>
+        <h2>Khách thường <em>chọn thêm</em>.</h2>
+      </div>
+      <div class="right">Tích chọn để xem giá tổng và mua một lần — Wotu giao &amp; lắp cùng đợt với sofa.</div>
+    </div>
+
+    <div class="bundle">
+      <div class="bundle-list" id="bundleList">
+        <div class="bundle-row" data-price="6900000" data-id="p-sofa-may-3" data-name="Sofa văng "Mây" 3 chỗ">
+          <input type="checkbox" checked disabled />
+          <div class="bundle-img"><div class="shop-ph"><span class="shop-ph-label">Sofa Mây</span></div></div>
+          <div class="bundle-name">Sofa văng "Mây" 3 chỗ <small>· vải bố Nâu Đất · chân gỗ sồi 18cm</small></div>
+          <div class="bundle-price">6.900.000đ</div>
+        </div>
+        <div class="bundle-row" data-price="450000" data-id="p-bundle-goi-suong" data-name="Bộ gối ôm "Sương" ×2">
+          <input type="checkbox" checked />
+          <div class="bundle-img"><div class="shop-ph sage"><span class="shop-ph-label">Gối ôm</span></div></div>
+          <div class="bundle-name">Bộ gối ôm "Sương" ×2 <small>· linen tông cùng sofa · 45×45 cm</small></div>
+          <div class="bundle-price"><s>590.000đ</s>450.000đ</div>
+        </div>
+        <div class="bundle-row" data-price="380000" data-id="p-bundle-throw-som-mai" data-name="Throw len "Sớm Mai"">
+          <input type="checkbox" checked />
+          <div class="bundle-img"><div class="shop-ph"><span class="shop-ph-label">Thảm trải sàn</span></div></div>
+          <div class="bundle-name">Throw len "Sớm Mai" <small>· 130×170cm · len New Zealand</small></div>
+          <div class="bundle-price"><s>490.000đ</s>380.000đ</div>
+        </div>
+        <div class="bundle-row" data-price="280000" data-id="p-bundle-den-mat-troi" data-name="Đèn sàn "Mặt Trời"">
+          <input type="checkbox" />
+          <div class="bundle-img"><div class="shop-ph sage"><span class="shop-ph-label">Đèn sàn</span></div></div>
+          <div class="bundle-name">Đèn sàn "Mặt Trời" <small>· chao tre đan thủ công · cao 1m5</small></div>
+          <div class="bundle-price">280.000đ</div>
+        </div>
+        <div class="bundle-row" data-price="220000" data-id="p-bundle-cay-bang" data-name="Cây bàng Singapore + chậu gốm">
+          <input type="checkbox" />
+          <div class="bundle-img"><div class="shop-ph"><span class="shop-ph-label">Cây cảnh</span></div></div>
+          <div class="bundle-name">Cây bàng Singapore + chậu gốm <small>· cao 1m2 · cây thật</small></div>
+          <div class="bundle-price">220.000đ</div>
+        </div>
+      </div>
+
+      <aside class="bundle-summary">
+        <span class="eyebrow" style="color: color-mix(in oklab, var(--bg) 70%, transparent);">Đã chọn 3 món</span>
+        <div class="bs-row"><span>Tạm tính</span><span class="v" id="bsSub">7.860.000đ</span></div>
+        <div class="bs-row"><span>Tiết kiệm</span><span class="v save" id="bsSave">−250.000đ</span></div>
+        <div class="bs-row"><span>Giao &amp; lắp</span><span class="v">Miễn phí</span></div>
+        <div class="bs-row tot"><span>Tổng cộng</span><span class="v total" id="bsTot">7.610.000đ</span></div>
+        <button class="btn btn-lg" id="bundleAddAll" type="button">Thêm tất cả vào giỏ <span class="arr">→</span></button>
+      </aside>
+    </div>
+  </section>
+
+  <!-- MATERIAL STORY -->
+  <section class="shop-reveal block container" id="material">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Câu chuyện chất liệu</span>
+        <h2>Bóc tách bên trong — <em>điểm khác biệt nằm ở đâu</em>.</h2>
+      </div>
+      <div class="right">Hover các điểm đánh dấu trên ảnh để xem chi tiết bên trong sofa.</div>
+    </div>
+
+    <div class="mat-grid">
+      <div class="mat-img">
+        <div class="shop-ph sage"><span class="shop-ph-label">Bóc tách sofa — exploded view</span></div>
+        <div class="pin p1">
+          <span class="dot"></span>
+          <div class="card"><b>Khung gỗ sồi</b><span>Sấy 2 lần · ghép mộng âm dương</span></div>
+        </div>
+        <div class="pin p2">
+          <span class="dot"></span>
+          <div class="card"><b>Đệm mút D40</b><span>Mật độ cao · không xẹp 5 năm</span></div>
+        </div>
+        <div class="pin p3">
+          <span class="dot"></span>
+          <div class="card"><b>Chân gỗ sồi</b><span>Bắt vít inox · tháo lắp được</span></div>
+        </div>
+      </div>
+
+      <div class="mat-body">
+        <div class="mat-step">
+          <span class="num">01</span>
+          <h4>Gỗ sồi sấy chuẩn 12%</h4>
+          <p>Gỗ nhập khẩu từ rừng FSC, sấy hai lần đến độ ẩm dưới 12% — không cong vênh trong khí hậu nồm ẩm miền Bắc hay nóng khô miền Trung.</p>
+        </div>
+        <div class="mat-step">
+          <span class="num">02</span>
+          <h4>Mộng âm dương — không đinh</h4>
+          <p>Khớp nối kiểu mộc truyền thống. Vít inox chỉ dùng ở 4 điểm chân — phần còn lại dùng mộng. Càng dùng càng siết, không lung lay sau 5–10 năm.</p>
+        </div>
+        <div class="mat-step">
+          <span class="num">03</span>
+          <h4>Mút D40 nguyên khối</h4>
+          <p>Đệm dày 14cm — mút D40 cao cấp (mật độ 40 kg/m³), nguyên khối không ghép. Lò xo zigzag thép C75 đỡ phía dưới — không xẹp võng sau hàng năm.</p>
+        </div>
+        <div class="mat-step">
+          <span class="num">04</span>
+          <h4>Vỏ bọc tháo giặt</h4>
+          <p>Vải bọc dùng khóa kéo YKK — tháo rời để giặt khô hoặc thay mới. Bạn có thể đổi tông sofa sau 3 năm mà không cần đổi cả khung.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPECS -->
+  <section class="shop-reveal block container" id="specs">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Thông số kỹ thuật</span>
+        <h2>Đo bằng <em>centimet, không phải lời</em>.</h2>
+      </div>
+      <div class="right">Đầy đủ kích thước, khối lượng, tải trọng và chứng nhận — minh bạch.</div>
+    </div>
+
+    <div class="specs-grid">
+      <div>
+        {specsLeft.map((r) => (
+          <div class="spec-row"><span class="k">{r.k}</span><span class="v">{r.v}</span></div>
+        ))}
+      </div>
+      <div>
+        {specsRight.map((r) => (
+          <div class="spec-row"><span class="k">{r.k}</span><span class="v">{r.v}</span></div>
+        ))}
+      </div>
+    </div>
+
+    <div style="margin-top: 28px; display: flex; gap: 14px; flex-wrap: wrap;">
+      <a class="btn btn-outline" href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Tải bản PDF kỹ thuật
+      </a>
+      <a class="btn btn-ghost" href="#" style="padding: 14px 0;">So sánh với 3 chỗ khác <span class="arr">→</span></a>
+    </div>
+  </section>
+
+  <!-- CARE GUIDE -->
+  <section class="shop-reveal block container" id="care">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Hướng dẫn vệ sinh</span>
+        <h2>Giữ sofa <em>như mới</em>.</h2>
+      </div>
+      <div class="right">Vài thói quen nhỏ sẽ giúp sofa luôn đẹp suốt 5 năm bảo hành — và hơn thế nữa.</div>
+    </div>
+
+    <div class="care-grid">
+      <div class="care-card">
+        <span class="care-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v8M5.6 5.6l5.7 5.7M2 12h8M5.6 18.4l5.7-5.7M12 22v-8M18.4 18.4l-5.7-5.7M22 12h-8M18.4 5.6l-5.7 5.7"/></svg>
+        </span>
+        <h5>Hút bụi hàng tuần</h5>
+        <p>Dùng đầu bàn chải mềm, hút bụi mặt ngồi và khe nệm. Hạn chế bụi bám sâu, giữ độ phẳng đệm.</p>
+      </div>
+      <div class="care-card">
+        <span class="care-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18l-2 13H5z"/><path d="M16 6V4a4 4 0 0 0-8 0v2"/></svg>
+        </span>
+        <h5>Lật đệm 1 tháng / lần</h5>
+        <p>Xoay đệm ngồi và lưng 180° — giúp đệm phẳng đều, kéo dài tuổi thọ mút D40 thêm 2–3 năm.</p>
+      </div>
+      <div class="care-card">
+        <span class="care-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12c0 1-2 6-9 6s-9-5-9-6 2-6 9-6 9 5 9 6Z"/><circle cx="12" cy="12" r="3"/></svg>
+        </span>
+        <h5>Tránh nắng trực tiếp</h5>
+        <p>Vải linen có thể bạc màu nhẹ nếu phơi nắng gắt quá 4h/ngày. Dùng rèm vải sheer cho cửa sổ hướng Tây.</p>
+      </div>
+      <div class="care-card">
+        <span class="care-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18M10.5 10.5a2 2 0 1 0 3 3"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a13.16 13.16 0 0 1-1.67 2.68"/></svg>
+        </span>
+        <h5>Đổ nước? Thấm khô ngay</h5>
+        <p>Dùng khăn cotton trắng thấm trực tiếp, không chà xát. Vỏ bọc có thể tháo và giặt khô tại tiệm.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="shop-reveal block container" id="reviews">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Đánh giá khách hàng</span>
+        <h2><em>4.8 / 5</em> · 184 đánh giá thật.</h2>
+      </div>
+      <div class="right">Đánh giá có ảnh thật, có thông tin cấu hình khách đã chọn.</div>
+    </div>
+
+    <div class="rev-grid">
+      <aside class="rev-summary">
+        <div class="rev-score">4.8<sub>/5</sub></div>
+        <div class="stars" style="font-size: 22px; margin-top: 4px;">★★★★★</div>
+        <div style="font-size: 13px; color: var(--ink-soft); margin-top: 4px;">184 đánh giá xác thực</div>
+        <div class="rev-bars">
+          <div class="rev-bar"><span>5★</span><div class="bar-track"><div class="bar-fill" style="width: 86%;"></div></div><span style="text-align:right;">158</span></div>
+          <div class="rev-bar"><span>4★</span><div class="bar-track"><div class="bar-fill" style="width: 10%;"></div></div><span style="text-align:right;">19</span></div>
+          <div class="rev-bar"><span>3★</span><div class="bar-track"><div class="bar-fill" style="width: 3%;"></div></div><span style="text-align:right;">5</span></div>
+          <div class="rev-bar"><span>2★</span><div class="bar-track"><div class="bar-fill" style="width: 1%;"></div></div><span style="text-align:right;">2</span></div>
+          <div class="rev-bar"><span>1★</span><div class="bar-track"><div class="bar-fill" style="width: 0%;"></div></div><span style="text-align:right;">0</span></div>
+        </div>
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-soft);">
+          <b style="color: var(--ink); font-weight: 600; display: block; margin-bottom: 6px;">Khách nhắc nhiều</b>
+          <span style="display: inline-block; background: var(--warm-soft); padding: 4px 10px; border-radius: 999px; margin: 2px; color: var(--accent-deep); font-weight: 600;">êm · 92</span>
+          <span style="display: inline-block; background: var(--warm-soft); padding: 4px 10px; border-radius: 999px; margin: 2px; color: var(--accent-deep); font-weight: 600;">chắc · 64</span>
+          <span style="display: inline-block; background: var(--warm-soft); padding: 4px 10px; border-radius: 999px; margin: 2px; color: var(--accent-deep); font-weight: 600;">đúng ảnh · 58</span>
+          <span style="display: inline-block; background: var(--warm-soft); padding: 4px 10px; border-radius: 999px; margin: 2px; color: var(--accent-deep); font-weight: 600;">gỗ thật · 41</span>
+        </div>
+      </aside>
+
+      <div class="review-list">
+        {reviews.map((r) => (
+          <article class="review-item">
+            <div class="review-head">
+              <div class="review-author">
+                <div class="avatar">{r.avatar}</div>
+                <div>
+                  <div class="name">{r.name}</div>
+                  <div class="when">{r.place} · Mua {r.date}</div>
+                </div>
+              </div>
+              <span class="stars">{r.stars}</span>
+            </div>
+            <div class="review-body">{r.body}</div>
+            <div class="review-meta">
+              <span>Vải: <b style="color: var(--ink);">{r.fab}</b></span>
+              <span>Size: <b style="color: var(--ink);">{r.size}</b></span>
+              <span>Đệm: <b style="color: var(--ink);">{r.cushion}</b></span>
+              <span>👍 Hữu ích · {r.helpful}</span>
+            </div>
+          </article>
+        ))}
+
+        <div style="text-align: center;">
+          <a class="btn btn-outline" href="#">Xem tất cả 184 đánh giá <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTION -->
+  <section class="shop-reveal block container" id="collection">
+    <div class="block-head">
+      <div>
+        <span class="eyebrow">Cùng bộ sưu tập Mây</span>
+        <h2>Sản phẩm cùng <em>thiết kế</em>.</h2>
+      </div>
+      <div class="right">Cùng tỉ lệ, chất liệu &amp; tông màu — dễ đặt cạnh nhau trong một phòng.</div>
+    </div>
+
+    <div class="coll-grid">
+      <a class="coll-card" href="#">
+        <div class="coll-img"><div class="shop-ph"><span class="shop-ph-label">Sofa Mây 2 chỗ</span></div></div>
+        <div class="coll-body">
+          <span class="meta">Sofa · 2 chỗ ngồi</span>
+          <h4>Sofa văng <em>"Mây"</em> · 2 chỗ</h4>
+          <div class="coll-foot">
+            <div class="coll-price">5.500.000đ</div>
+            <span class="stars">★★★★★</span>
+          </div>
+        </div>
+      </a>
+      <a class="coll-card" href="#">
+        <div class="coll-img"><div class="shop-ph sage"><span class="shop-ph-label">Ghế đơn Mây</span></div></div>
+        <div class="coll-body">
+          <span class="meta">Ghế đơn · armchair</span>
+          <h4>Armchair <em>"Mây Lone"</em></h4>
+          <div class="coll-foot">
+            <div class="coll-price">3.200.000đ</div>
+            <span class="stars">★★★★★</span>
+          </div>
+        </div>
+      </a>
+      <a class="coll-card" href="#">
+        <div class="coll-img"><div class="shop-ph"><span class="shop-ph-label">Ottoman Mây</span></div></div>
+        <div class="coll-body">
+          <span class="meta">Ottoman / Đôn</span>
+          <h4>Ottoman <em>"Mây Mini"</em></h4>
+          <div class="coll-foot">
+            <div class="coll-price">1.450.000đ</div>
+            <span class="stars">★★★★☆</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- IN COMBO BANNER -->
+  <section class="shop-reveal container" style="padding: 30px 0 60px;">
+    <div class="combo-banner">
+      <div>
+        <span class="eyebrow">Cũng có trong combo</span>
+        <h3>Mua trọn phòng khách —<br /><em>tiết kiệm 10 triệu</em>.</h3>
+        <p>Sofa "Mây" 3 chỗ + bàn trà gỗ sồi + kệ TV 1m8 + thảm dệt tay. Combo Tổ Ấm được khách Quy Nhơn &amp; Bình Định tin chọn nhiều nhất tháng 5.</p>
+      </div>
+      <div class="price-card">
+        <span class="eyebrow" style="color: color-mix(in oklab, var(--bg) 60%, transparent)">Combo Tổ Ấm — 4 món</span>
+        <span class="name">Phòng khách trọn bộ</span>
+        <div class="row">
+          <span class="now">18.900.000đ</span>
+          <span class="was">28.900.000đ</span>
+        </div>
+        <span class="save">Tiết kiệm 10 triệu so với mua lẻ</span>
+        <a class="btn btn-lg" href="/combo/to-am/">Xem combo Tổ Ấm <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <!-- STICKY CART BAR -->
+  <div class="sticky-bar" id="stickyBar">
+    <span class="sb-title">Sofa Mây 3 chỗ</span>
+    <span class="sb-price">6.900.000đ</span>
+    <a class="btn btn-accent" href="/#contact">Mua ngay <span class="arr">→</span></a>
+  </div>
+</ShopLayout>
+
+<style>
+  /* Alias shop tokens so design CSS doesn't need rename */
+  :where(main) {
+    --bg: var(--shop-bg);
+    --bg-soft: var(--shop-bg-soft);
+    --bg-card: var(--shop-bg-card);
+    --ink: var(--shop-ink);
+    --ink-soft: var(--shop-ink-soft);
+    --ink-mid: #8E8478;
+    --line: var(--shop-line);
+    --accent: var(--shop-accent);
+    --accent-deep: var(--shop-accent-deep);
+    --accent-2: var(--shop-accent-2);
+    --accent-2-soft: var(--shop-accent-2-soft);
+    --warm-soft: var(--shop-warm-soft);
+    --yellow: var(--shop-yellow);
+    --green: var(--shop-accent-2);
+    --serif: var(--shop-serif);
+    --sans: var(--shop-sans);
+    --radius: var(--shop-radius);
+    --radius-sm: var(--shop-radius-sm);
+    --radius-lg: var(--shop-radius-lg);
+    --radius-xl: var(--shop-radius-xl);
+    --maxw: var(--shop-maxw);
+  }
+
+  /* BUTTONS — local to this page (use btn-* class) */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 22px; border-radius: 999px; font-weight: 600; font-size: 14px; transition: transform .2s, background .2s, color .2s, box-shadow .2s; cursor: pointer; }
+  .btn-primary { background: var(--ink); color: var(--bg); }
+  .btn-primary:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 14px 30px -12px color-mix(in oklab, var(--accent) 50%, transparent); }
+  .btn-outline { border: 1px solid var(--ink); color: var(--ink); }
+  .btn-outline:hover { background: var(--ink); color: var(--bg); }
+  .btn-accent { background: var(--accent); color: var(--bg); }
+  .btn-accent:hover { background: var(--accent-deep); }
+  .btn-lg { padding: 18px 28px; font-size: 15px; }
+  .btn .arr { transition: transform .2s; display: inline-block; }
+  .btn:hover .arr { transform: translateX(4px); }
+  .btn-ghost { color: var(--ink); }
+  .btn-ghost:hover { color: var(--accent); }
+
+  /* CRUMB */
+  .crumb { padding: 22px 0 6px; }
+  .crumb-list { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--ink-soft); align-items: center; }
+  .crumb-list a:hover { color: var(--accent); }
+  .crumb-list .sep { opacity: .5; }
+  .crumb-list .here { color: var(--ink); font-weight: 600; }
+
+  /* PRODUCT HERO */
+  .ph-hero { padding: 18px 0 60px; }
+  .ph-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 56px; align-items: flex-start; }
+
+  .gallery { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .main-image { position: relative; aspect-ratio: 5/4; border-radius: var(--radius-xl); overflow: hidden; background: var(--bg-soft); }
+  .gallery-tags { position: absolute; top: 22px; left: 22px; display: flex; gap: 8px; flex-wrap: wrap; z-index: 2; }
+  .tag { background: var(--bg-card); padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--ink); display: inline-flex; align-items: center; gap: 6px; }
+  .tag.accent { background: var(--accent); color: white; }
+  .tag.dark { background: var(--ink); color: var(--bg); }
+  .tag .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  .gallery-360 { position: absolute; top: 22px; right: 22px; background: var(--bg-card); padding: 8px 14px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .12em; display: inline-flex; align-items: center; gap: 8px; z-index: 2; }
+  .gallery-360 svg { color: var(--accent); }
+
+  .gallery-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .thumb {
+    aspect-ratio: 1/1; border-radius: 14px; overflow: hidden; cursor: pointer;
+    border: 2px solid transparent; background: var(--bg-soft); position: relative;
+    transition: border-color .2s, transform .2s; padding: 0;
+  }
+  .thumb.active { border-color: var(--ink); }
+  .thumb:hover { transform: translateY(-1px); }
+  .thumb .thumb-label { position: absolute; bottom: 6px; left: 8px; right: 8px; background: color-mix(in oklab, var(--bg-card) 80%, transparent); backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; text-align: center; z-index: 2; }
+
+  /* product info column */
+  .info { display: flex; flex-direction: column; gap: 22px; position: sticky; top: 124px; }
+  .cat-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .cat-link { font-size: 12px; letter-spacing: .18em; color: var(--accent); text-transform: uppercase; font-weight: 700; }
+  .review-row { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-soft); }
+  .stars { display: inline-flex; gap: 1px; color: var(--accent); }
+  .info h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 5vw, 64px); line-height: 1; letter-spacing: -.015em; margin: 0; }
+  .info h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 15px; color: var(--ink-soft); margin: 0; line-height: 1.6; }
+
+  .price-row { display: flex; align-items: baseline; gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .price-now { font-family: var(--serif); font-size: 42px; color: var(--ink); line-height: 1; }
+  .price-was { font-size: 16px; color: var(--ink-soft); text-decoration: line-through; }
+  .price-save { background: var(--warm-soft); color: var(--accent-deep); padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .price-hint { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+  .price-stock { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--green); font-weight: 600; font-size: 13px; }
+  .price-stock .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulseAnim 1.6s ease-in-out infinite; }
+  @keyframes pulseAnim { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+  /* configurator pickers */
+  .pickers { display: flex; flex-direction: column; gap: 18px; }
+  .picker .label { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; margin-bottom: 10px; gap: 8px; }
+  .picker .label b { font-weight: 600; color: var(--ink); }
+  .picker .label .v { color: var(--ink-soft); text-align: right; }
+  .picker .label .help { font-size: 11px; color: var(--accent); cursor: pointer; }
+
+  .swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+  .swatch { width: 44px; height: 44px; border-radius: 12px; border: 2px solid transparent; cursor: pointer; padding: 3px; background: var(--bg-card); transition: border-color .2s, transform .2s; position: relative; }
+  .swatch span { display: block; width: 100%; height: 100%; border-radius: 8px; background-size: cover; background-position: center; }
+  .swatch[data-active="true"] { border-color: var(--ink); }
+  .swatch:hover { transform: translateY(-1px); }
+
+  .row-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .opt-btn {
+    padding: 10px 14px; border-radius: 10px; background: var(--bg-card);
+    border: 1px solid var(--line); font-size: 13px; font-weight: 600; color: var(--ink);
+    transition: all .15s; min-width: 64px; text-align: center; cursor: pointer;
+  }
+  .opt-btn[data-active="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .opt-btn small { display: block; font-size: 10px; color: var(--ink-soft); font-weight: 500; margin-top: 2px; }
+  .opt-btn[data-active="true"] small { color: color-mix(in oklab, var(--bg) 70%, transparent); }
+
+  /* qty + cart */
+  .qty-and-cart { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: stretch; }
+  .qty { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; background: var(--bg-card); }
+  .qty button { width: 36px; height: 36px; border-radius: 50%; font-size: 16px; color: var(--ink); display: grid; place-items: center; border: 0; background: none; cursor: pointer; }
+  .qty button:hover { background: var(--warm-soft); }
+  .qty .v { min-width: 28px; text-align: center; font-weight: 600; }
+
+  .cta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .key-features { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px; background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); }
+  .feat { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .feat svg { color: var(--accent); flex: none; }
+  .feat b { font-weight: 600; }
+  .feat span { color: var(--ink-soft); display: block; font-size: 11px; }
+
+  .pay-line {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 14px 16px; background: var(--bg-card); border: 1px dashed var(--line); border-radius: var(--radius);
+    font-size: 12px; color: var(--ink-soft);
+  }
+  .pay-logos { display: flex; gap: 8px; align-items: center; }
+  .pay-logos span { background: var(--warm-soft); color: var(--accent-deep); padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 10px; letter-spacing: .04em; }
+
+  /* READING NAV */
+  .read-nav { position: sticky; top: 102px; z-index: 40; background: var(--bg); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 60px; }
+  .read-nav ul { list-style: none; padding: 0; margin: 0; display: flex; gap: 6px; overflow-x: auto; }
+  .read-nav a { display: inline-block; padding: 16px 18px; font-size: 13px; font-weight: 600; color: var(--ink-soft); border-bottom: 2px solid transparent; white-space: nowrap; }
+  .read-nav a:hover { color: var(--ink); }
+  .read-nav a.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+  section.block { padding: 50px 0; scroll-margin-top: 140px; }
+  .block-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 36px; }
+  .block-head h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(32px, 4.4vw, 52px); line-height: 1; letter-spacing: -.01em; margin: 12px 0 0; max-width: 720px; }
+  .block-head h2 em { font-style: italic; color: var(--accent); }
+  .block-head .right { color: var(--ink-soft); max-width: 380px; font-size: 14px; }
+
+  /* CUSTOMIZE — fabric library */
+  .fabric-wrap { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 36px; }
+  .fabric-top { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; margin-bottom: 28px; }
+  .fabric-top .preview { aspect-ratio: 4/3; border-radius: var(--radius); overflow: hidden; background: var(--bg-soft); position: relative; }
+  .fabric-info h3 { font-family: var(--serif); font-size: 32px; margin: 8px 0; line-height: 1.05; }
+  .fabric-info .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; margin-top: 16px; font-size: 13px; }
+  .fabric-info .meta-grid b { display: block; color: var(--ink); font-weight: 600; }
+  .fabric-info .meta-grid span { color: var(--ink-soft); }
+  .fabric-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; }
+  .fab-swatch { aspect-ratio: 1/1; border-radius: 10px; cursor: pointer; border: 2px solid transparent; padding: 3px; background: var(--bg); transition: transform .15s, border-color .15s; position: relative; }
+  .fab-swatch .pick { display: block; width: 100%; height: 100%; border-radius: 6px; }
+  .fab-swatch[data-active="true"] { border-color: var(--ink); }
+  .fab-swatch:hover { transform: translateY(-1px); }
+  .fab-swatch .name { position: absolute; bottom: -22px; left: 0; right: 0; text-align: center; font-size: 10px; color: var(--ink-soft); white-space: nowrap; opacity: 0; transition: opacity .15s; }
+  .fab-swatch:hover .name { opacity: 1; }
+
+  /* BUNDLE / FREQUENTLY BOUGHT */
+  .bundle { display: grid; grid-template-columns: 2.5fr 1fr; gap: 32px; align-items: flex-start; }
+  .bundle-list { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+  .bundle-row { display: grid; grid-template-columns: 22px 80px 1fr auto; gap: 14px; align-items: center; padding: 6px 0; }
+  .bundle-row + .bundle-row { border-top: 1px solid var(--line); padding-top: 16px; }
+  .bundle-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--ink); cursor: pointer; }
+  .bundle-img { width: 80px; height: 80px; border-radius: 12px; background: var(--bg-soft); position: relative; overflow: hidden; }
+  .bundle-name { font-weight: 600; font-size: 14px; }
+  .bundle-name small { display: block; color: var(--ink-soft); font-weight: 400; font-size: 12px; margin-top: 2px; }
+  .bundle-price { font-family: var(--serif); font-size: 18px; text-align: right; }
+  .bundle-price s { font-size: 12px; color: var(--ink-soft); font-family: var(--sans); display: block; }
+  .bundle-summary { background: var(--ink); color: var(--bg); border-radius: var(--radius-lg); padding: 28px; display: flex; flex-direction: column; gap: 14px; position: sticky; top: 200px; }
+  .bs-row { display: flex; justify-content: space-between; font-size: 14px; }
+  .bs-row.tot { padding-top: 14px; border-top: 1px solid color-mix(in oklab, var(--bg) 18%, transparent); font-size: 16px; font-weight: 600; }
+  .bs-row .v.save { color: var(--warm-soft); }
+  .bs-row .v.total { font-family: var(--serif); font-size: 24px; }
+  .bundle-summary .btn { background: var(--accent); color: var(--bg); }
+  .bundle-summary .btn:hover { background: var(--accent-deep); }
+
+  /* MATERIAL STORY */
+  .mat-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 50px; align-items: stretch; }
+  .mat-img { aspect-ratio: 4/5; border-radius: var(--radius-xl); background: var(--bg-soft); position: relative; overflow: hidden; }
+  .pin { position: absolute; display: flex; align-items: center; gap: 10px; z-index: 2; }
+  .pin .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 30%, transparent); flex: none; animation: pulseAnim 2s ease-in-out infinite; }
+  .pin .card { background: var(--bg-card); border-radius: 12px; padding: 10px 12px; font-size: 12px; box-shadow: 0 12px 24px -10px rgba(0,0,0,.15); min-width: 160px; }
+  .pin .card b { display: block; font-weight: 600; }
+  .pin .card span { color: var(--ink-soft); }
+  .pin.p1 { top: 12%; left: 10%; }
+  .pin.p2 { top: 42%; right: -50px; flex-direction: row-reverse; }
+  .pin.p3 { bottom: 14%; left: 14%; }
+  .mat-body { display: flex; flex-direction: column; gap: 24px; justify-content: center; }
+  .mat-step h4 { font-family: var(--serif); font-size: 28px; margin: 6px 0 6px; line-height: 1.05; }
+  .mat-step p { color: var(--ink-soft); font-size: 14px; line-height: 1.55; margin: 0; }
+  .mat-step .num { font-family: var(--serif); font-size: 14px; color: var(--accent); letter-spacing: .12em; }
+
+  /* SPECS */
+  .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; }
+  .spec-row { display: flex; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--line); font-size: 14px; gap: 14px; }
+  .spec-row .k { color: var(--ink-soft); }
+  .spec-row .v { color: var(--ink); font-weight: 600; text-align: right; }
+
+  /* CARE */
+  .care-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .care-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+  .care-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--warm-soft); color: var(--accent); display: grid; place-items: center; }
+  .care-card:nth-child(2) .care-icon { background: var(--accent-2-soft); color: var(--accent-2); }
+  .care-card:nth-child(4) .care-icon { background: var(--accent-2-soft); color: var(--accent-2); }
+  .care-card h5 { font-family: var(--serif); font-size: 20px; margin: 6px 0 0; line-height: 1.1; }
+  .care-card p { color: var(--ink-soft); font-size: 13px; line-height: 1.55; margin: 0; }
+
+  /* REVIEWS */
+  .rev-grid { display: grid; grid-template-columns: 280px 1fr; gap: 50px; align-items: flex-start; }
+  .rev-summary { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 28px; position: sticky; top: 200px; }
+  .rev-score { font-family: var(--serif); font-size: 72px; line-height: 1; color: var(--ink); }
+  .rev-score sub { font-size: 24px; color: var(--ink-soft); }
+  .rev-bars { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+  .rev-bar { display: grid; grid-template-columns: 30px 1fr 30px; gap: 10px; align-items: center; font-size: 12px; color: var(--ink-soft); }
+  .bar-track { height: 6px; background: var(--bg-soft); border-radius: 999px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--accent); border-radius: 999px; }
+  .review-list { display: flex; flex-direction: column; gap: 18px; }
+  .review-item { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .review-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+  .review-author { display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--warm-soft); color: var(--accent); display: grid; place-items: center; font-family: var(--serif); font-size: 18px; }
+  .review-author .name { font-weight: 600; font-size: 14px; }
+  .review-author .when { font-size: 12px; color: var(--ink-soft); }
+  .review-body { font-size: 15px; color: var(--ink); line-height: 1.55; }
+  .review-meta { font-size: 12px; color: var(--ink-soft); display: flex; gap: 14px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid var(--line); }
+
+  /* COLLECTION */
+  .coll-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .coll-card { background: var(--bg-card); border: 1px solid color-mix(in oklab, var(--line) 60%, transparent); border-radius: var(--radius-lg); overflow: hidden; transition: transform .2s, box-shadow .2s; }
+  .coll-card:hover { transform: translateY(-3px); box-shadow: 0 22px 40px -22px rgba(58,42,30,.18); }
+  .coll-img { aspect-ratio: 4/3; background: var(--warm-soft); position: relative; }
+  .coll-body { padding: 22px; }
+  .coll-body .meta { font-size: 11px; color: var(--ink-soft); letter-spacing: .14em; text-transform: uppercase; font-weight: 600; }
+  .coll-body h4 { font-family: var(--serif); font-size: 26px; margin: 6px 0 8px; line-height: 1.05; }
+  .coll-body h4 em { font-style: italic; color: var(--accent); }
+  .coll-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--line); margin-top: 14px; }
+  .coll-price { font-family: var(--serif); font-size: 20px; }
+
+  /* IN COMBO BANNER */
+  .combo-banner { background: linear-gradient(135deg, var(--accent), var(--accent-deep)); color: var(--bg); border-radius: var(--radius-xl); padding: 50px 56px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 36px; align-items: center; }
+  .combo-banner h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.6vw, 44px); line-height: 1; margin: 12px 0; color: var(--bg); }
+  .combo-banner h3 em { font-style: italic; color: var(--warm-soft); }
+  .combo-banner p { color: color-mix(in oklab, var(--bg) 80%, transparent); margin: 0; max-width: 480px; }
+  .combo-banner .eyebrow { color: color-mix(in oklab, var(--bg) 70%, transparent); }
+  .combo-banner .price-card { background: color-mix(in oklab, var(--bg) 12%, transparent); border-radius: var(--radius-lg); padding: 26px; display: flex; flex-direction: column; gap: 10px; }
+  .combo-banner .price-card .name { font-family: var(--serif); font-size: 24px; }
+  .combo-banner .price-card .save { font-size: 13px; color: var(--warm-soft); }
+  .combo-banner .price-card .row { display: flex; align-items: baseline; gap: 10px; }
+  .combo-banner .price-card .now { font-family: var(--serif); font-size: 36px; }
+  .combo-banner .price-card .was { text-decoration: line-through; opacity: .55; font-size: 14px; }
+  .combo-banner .price-card .btn { background: var(--bg); color: var(--ink); margin-top: 6px; }
+  .combo-banner .price-card .btn:hover { background: var(--ink); color: var(--bg); }
+
+  /* STICKY BAR */
+  .sticky-bar { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 120%); background: var(--ink); color: var(--bg); border-radius: 999px; padding: 12px 12px 12px 26px; display: flex; align-items: center; gap: 20px; box-shadow: 0 24px 50px -16px rgba(0,0,0,.4); transition: transform .35s ease; z-index: 70; max-width: 92vw; }
+  .sticky-bar.in { transform: translate(-50%, 0); }
+  .sticky-bar .sb-title { font-family: var(--serif); font-size: 18px; }
+  .sticky-bar .sb-price { font-weight: 700; }
+  .sticky-bar .btn { padding: 12px 20px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .ph-grid { grid-template-columns: 1fr; }
+    .info { position: static; }
+    .fabric-top, .mat-grid, .bundle, .rev-grid, .combo-banner { grid-template-columns: 1fr; }
+    .fabric-grid { grid-template-columns: repeat(6, 1fr); }
+    .specs-grid { grid-template-columns: 1fr; gap: 0; }
+    .care-grid { grid-template-columns: repeat(2, 1fr); }
+    .coll-grid { grid-template-columns: 1fr 1fr; }
+    .bundle-summary { position: static; }
+    .pin.p2 { right: 12%; }
+  }
+  @media (max-width: 680px) {
+    .gallery-row { grid-template-columns: repeat(4, 1fr); }
+    .fabric-grid { grid-template-columns: repeat(5, 1fr); }
+    .care-grid, .coll-grid { grid-template-columns: 1fr; }
+    .cta-row { grid-template-columns: 1fr; }
+    .key-features { grid-template-columns: 1fr; }
+    .bundle-row { grid-template-columns: 22px 60px 1fr; }
+    .bundle-row .bundle-price { grid-column: 2 / -1; text-align: left; }
+  }
+</style>
+
+<script>
+  // Thumbs
+  document.querySelectorAll<HTMLButtonElement>('.thumb').forEach((t) =>
+    t.addEventListener('click', () => {
+      document.querySelectorAll<HTMLButtonElement>('.thumb').forEach((x) => x.classList.remove('active'));
+      t.classList.add('active');
+    }),
+  );
+
+  // Top fabric swatches
+  const fabSwatches = document.querySelectorAll<HTMLButtonElement>('#fabricSwatches .swatch');
+  fabSwatches.forEach((s) => {
+    s.addEventListener('click', () => {
+      fabSwatches.forEach((x) => (x.dataset.active = 'false'));
+      s.dataset.active = 'true';
+      const v = s.dataset.name ?? s.textContent?.trim() ?? '';
+      const t = document.getElementById('fabricName');
+      if (t) t.textContent = v;
+    });
+  });
+
+  // Pickers: sizes/feet/cushion — scoped inside .picker
+  document.querySelectorAll<HTMLElement>('.pickers .picker').forEach((p) => {
+    const opts = p.querySelectorAll<HTMLButtonElement>('.opt-btn');
+    opts.forEach((o) =>
+      o.addEventListener('click', () => {
+        opts.forEach((x) => (x.dataset.active = 'false'));
+        o.dataset.active = 'true';
+        const small = o.querySelector('small')?.textContent;
+        const v = small || (o.textContent?.trim().split('\n')[0] ?? '');
+        const labelEl = p.querySelector<HTMLElement>('.label .v');
+        if (labelEl) labelEl.textContent = v;
+      }),
+    );
+  });
+
+  // Fabric library (mid-page)
+  const fabLib = document.querySelectorAll<HTMLButtonElement>('.fab-swatch');
+  fabLib.forEach((s) => {
+    s.addEventListener('click', () => {
+      fabLib.forEach((x) => (x.dataset.active = 'false'));
+      s.dataset.active = 'true';
+      const h = document.getElementById('fabH');
+      if (h && s.dataset.fab) h.textContent = s.dataset.fab;
+    });
+  });
+
+  // Qty
+  let qty = 1;
+  const qV = document.getElementById('qV');
+  const addCart = document.getElementById('addCart');
+  function fmt(n: number) {
+    return n.toLocaleString('vi-VN') + 'đ';
+  }
+  function updateQty() {
+    if (qV) qV.textContent = String(qty);
+    if (addCart && addCart.firstChild) addCart.firstChild.textContent = `Thêm vào giỏ · ${fmt(6900000 * qty)}`;
+  }
+  const qInc = document.getElementById('qInc');
+  const qDec = document.getElementById('qDec');
+  if (qInc) qInc.onclick = () => { qty++; updateQty(); };
+  if (qDec) qDec.onclick = () => { if (qty > 1) { qty--; updateQty(); } };
+
+  // ===== Hook "Thêm vào giỏ" to shop-store =====
+  // Note: this is a sub-script — import statement at top of script tag below.
+  if (addCart) {
+    addCart.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const mod = await import('../../lib/shop-store');
+      const fabH = document.getElementById('fabH')?.textContent ?? '';
+      const sizeH = document.getElementById('sizeH')?.textContent ?? '';
+      const variant = [fabH, sizeH].filter(Boolean).join(' · ');
+      mod.addToCart(
+        {
+          id: 'p-sofa-may-3',
+          name: 'Sofa văng "Mây" 3 chỗ',
+          price: 6_900_000,
+          variant: variant || undefined,
+        },
+        qty,
+      );
+      mod.toast(`✓ Đã thêm Sofa "Mây" 3 chỗ (×${qty}) vào giỏ`);
+    });
+  }
+
+  // Bundle summary
+  function recalcBundle() {
+    let sub = 0, save = 0, count = 0;
+    document.querySelectorAll<HTMLElement>('.bundle-row').forEach((row) => {
+      const cb = row.querySelector<HTMLInputElement>('input[type="checkbox"]');
+      if (cb && cb.checked) {
+        const price = Number(row.dataset.price ?? '0');
+        sub += price;
+        count++;
+        const s = row.querySelector('.bundle-price s');
+        if (s) {
+          const orig = Number((s.textContent ?? '').replace(/\D/g, ''));
+          save += orig - price;
+        }
+      }
+    });
+    const bsSub = document.getElementById('bsSub');
+    const bsSave = document.getElementById('bsSave');
+    const bsTot = document.getElementById('bsTot');
+    if (bsSub) bsSub.textContent = fmt(sub + save);
+    if (bsSave) bsSave.textContent = save > 0 ? '−' + fmt(save) : '0đ';
+    if (bsTot) bsTot.textContent = fmt(sub);
+    const eyebrow = document.querySelector('.bundle-summary .eyebrow');
+    if (eyebrow) eyebrow.textContent = 'Đã chọn ' + count + ' món';
+  }
+  document.querySelectorAll<HTMLInputElement>('.bundle-row input[type="checkbox"]').forEach((cb) =>
+    cb.addEventListener('change', recalcBundle),
+  );
+  recalcBundle();
+
+  // ===== Bundle "Thêm tất cả vào giỏ" =====
+  document.getElementById('bundleAddAll')?.addEventListener('click', async () => {
+    const mod = await import('../../lib/shop-store');
+    let added = 0;
+    document.querySelectorAll<HTMLElement>('.bundle-row').forEach((row) => {
+      const cb = row.querySelector<HTMLInputElement>('input[type="checkbox"]');
+      if (!cb?.checked) return;
+      const id = row.dataset.id ?? '';
+      const name = row.dataset.name ?? 'Sản phẩm';
+      const price = Number(row.dataset.price ?? 0);
+      if (!id) return;
+      mod.addToCart({ id, name, price }, 1);
+      added++;
+    });
+    if (added > 0) mod.toast(`✓ Đã thêm ${added} món vào giỏ`);
+    else mod.toast('Chưa chọn món nào', { type: 'error' });
+  });
+
+  // Reading nav + sticky bar
+  const sectionIds = ['customize', 'bundle', 'material', 'specs', 'care', 'reviews', 'collection'];
+  const sections = sectionIds.map((id) => document.getElementById(id)).filter((x): x is HTMLElement => x !== null);
+  const readLinks = document.querySelectorAll<HTMLAnchorElement>('.read-nav a');
+  const stickyBar = document.getElementById('stickyBar');
+  const hero = document.querySelector<HTMLElement>('.ph-hero');
+  function onScroll() {
+    const y = window.scrollY + 200;
+    let active = sections[0];
+    for (const s of sections) if (s.offsetTop <= y) active = s;
+    readLinks.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === '#' + (active?.id ?? '')));
+    if (hero && stickyBar) {
+      const r = hero.getBoundingClientRect();
+      stickyBar.classList.toggle('in', r.bottom < 100);
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  readLinks.forEach((a) =>
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href');
+      if (id && id.startsWith('#')) {
+        const el = document.querySelector<HTMLElement>(id);
+        if (el) {
+          e.preventDefault();
+          window.scrollTo({ top: el.offsetTop - 140, behavior: 'smooth' });
+        }
+      }
+    }),
+  );
+</script>

@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Hero from '../../components/Hero.astro';
+import Marquee from '../../components/Marquee.astro';
+import Philosophy from '../../components/Philosophy.astro';
+import Services from '../../components/Services.astro';
+import ProjectsGrid from '../../components/ProjectsGrid.astro';
+import Process from '../../components/Process.astro';
+import About from '../../components/About.astro';
+import Quote from '../../components/Quote.astro';
+import Contact from '../../components/Contact.astro';
+import Footer from '../../components/Footer.astro';
+import TweaksPanel from '../../components/TweaksPanel.astro';
+
+const all = await getCollection('projects');
+const projects = all
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 4)
+  .map((p) => ({
+    slug: p.id,
+    name: p.data.name,
+    id: p.data.id,
+    loc: p.data.loc,
+    cat: p.data.cat,
+    tone: p.data.tone,
+    ratio: p.data.ratio,
+    photo: p.data.photo,
+    photoAlt: p.data.photoAlt,
+  }));
+---
+<BaseLayout>
+  <Nav variant="home" />
+  <Hero />
+  <Marquee />
+  <Philosophy />
+  <Services />
+  <ProjectsGrid projects={projects} />
+  <Process />
+  <About />
+  <Quote />
+  <Contact />
+  <Footer />
+  <TweaksPanel />
+</BaseLayout>

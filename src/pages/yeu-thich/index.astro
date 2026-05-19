@@ -1,0 +1,282 @@
+---
+/* Wishlist page — render từ localStorage favorites client-side.
+ * Catalog của shop là static, nên chúng ta hardcode metadata cho từng favorite ID
+ * trong cùng dataset để tra cứu khi cần render thẻ.
+ */
+import ShopLayout from '../../layouts/ShopLayout.astro';
+import Nav from '../../components/shop/Nav.astro';
+import Footer from '../../components/shop/Footer.astro';
+
+/* Hydrate-able catalog metadata cho client lookup. Mỗi entry là 1 sản phẩm/combo
+ * có thể được lưu vào favorites — id phải khớp với data-id ở các page khác. */
+interface CatalogEntry {
+  id: string;
+  name: string;
+  meta: string;
+  price: number;
+  priceLabel: string;
+  href: string;
+  tone: '' | 'sage';
+  placeholder: string;
+}
+
+const catalog: CatalogEntry[] = [
+  // Combos
+  { id: 'combo-an-cu',         name: 'Combo Studio An Cư 30m²',         meta: 'Combo căn hộ · 30m²',     price: 45_000_000, priceLabel: '45.000.000đ', href: '/combo/to-am/',           tone: '',     placeholder: 'Combo Studio An Cư' },
+  { id: 'combo-to-am',         name: 'Combo Tổ Ấm',                      meta: 'Phòng khách',             price: 18_900_000, priceLabel: '18.900.000đ', href: '/combo/to-am/',           tone: '',     placeholder: 'Combo Tổ Ấm' },
+  { id: 'combo-an-yen',        name: 'Combo An Yên',                     meta: 'Phòng ngủ master',        price: 22_500_000, priceLabel: '22.500.000đ', href: '/san-pham/?room=phong-ngu',tone: 'sage', placeholder: 'Combo An Yên' },
+  { id: 'combo-sum-vay',       name: 'Combo Sum Vầy',                    meta: 'Phòng ăn · 6 chỗ',        price: 12_800_000, priceLabel: '12.800.000đ', href: '/san-pham/?room=phong-an', tone: '',     placeholder: 'Combo Sum Vầy' },
+  { id: 'combo-tap-trung',     name: 'Combo Tập Trung',                  meta: 'Phòng làm việc tại nhà',  price:  8_900_000, priceLabel: '8.900.000đ',  href: '/san-pham/?room=lam-viec', tone: 'sage', placeholder: 'Combo Tập Trung' },
+  { id: 'combo-vuon-co-tich',  name: 'Combo Vườn Cổ Tích',               meta: 'Phòng trẻ em',            price: 14_500_000, priceLabel: '14.500.000đ', href: '/san-pham/?room=tre-em',   tone: '',     placeholder: 'Combo Vườn Cổ Tích' },
+
+  // Products
+  { id: 'p-sofa-may-3',        name: 'Sofa văng "Mây" 3 chỗ',            meta: 'Sofa · 3 chỗ · BST Mây',  price:  6_900_000, priceLabel: '6.900.000đ',  href: '/san-pham/sofa-may/',     tone: '',     placeholder: 'Sofa Mây 3 chỗ' },
+  { id: 'p-sofa-may-2',        name: 'Sofa văng "Mây" 2 chỗ',            meta: 'Sofa · 2 chỗ · BST Mây',  price:  5_500_000, priceLabel: '5.500.000đ',  href: '/san-pham/sofa-may/',     tone: 'sage', placeholder: 'Sofa Mây 2 chỗ' },
+  { id: 'p-ban-tra-nang-mai',  name: 'Bàn trà "Nắng Mai"',               meta: 'Bàn trà · gỗ sồi',        price:  3_800_000, priceLabel: '3.800.000đ',  href: '/san-pham/?cat=ban',      tone: '',     placeholder: 'Bàn trà Nắng Mai' },
+  { id: 'p-ban-doan-vien',     name: 'Bàn ăn "Đoàn Viên"',               meta: 'Bàn ăn · gỗ sồi',         price:  4_500_000, priceLabel: '4.500.000đ',  href: '/san-pham/?cat=ban',      tone: 'sage', placeholder: 'Bàn ăn Đoàn Viên' },
+  { id: 'p-ghe-sum-vay',       name: 'Ghế ăn "Sum Vầy"',                 meta: 'Ghế ăn · bọc nệm',        price:    850_000, priceLabel: '850.000đ',    href: '/san-pham/?cat=ghe',      tone: '',     placeholder: 'Ghế ăn Sum Vầy' },
+  { id: 'p-giuong-trang-non',  name: 'Giường "Trăng Non"',               meta: 'Giường · 1m6 · gỗ sồi',   price:  5_900_000, priceLabel: '5.900.000đ',  href: '/san-pham/?cat=giuong',   tone: 'sage', placeholder: 'Giường Trăng Non' },
+  { id: 'p-tu-moc',            name: 'Tủ áo "Mộc"',                      meta: 'Tủ áo · 4 cánh · 2m1',    price:  7_200_000, priceLabel: '7.200.000đ',  href: '/san-pham/?cat=tu',       tone: '',     placeholder: 'Tủ áo Mộc' },
+  { id: 'p-ban-tap-trung',     name: 'Bàn "Tập Trung"',                  meta: 'Bàn làm việc · 1m4',      price:  2_900_000, priceLabel: '2.900.000đ',  href: '/san-pham/?cat=ban',      tone: 'sage', placeholder: 'Bàn làm việc Tập Trung' },
+  { id: 'p-ghe-tua',           name: 'Ghế "Tựa"',                        meta: 'Ghế · công thái học',     price:  2_400_000, priceLabel: '2.400.000đ',  href: '/san-pham/?cat=ghe',      tone: '',     placeholder: 'Ghế công thái học Tựa' },
+  { id: 'p-ke-cao',            name: 'Kệ sách "Cao"',                    meta: 'Kệ sách · 5 tầng',        price:  3_200_000, priceLabel: '3.200.000đ',  href: '/san-pham/?cat=ke',       tone: 'sage', placeholder: 'Kệ sách Cao 5 tầng' },
+  { id: 'p-ke-tv-an',          name: 'Kệ TV "An"',                       meta: 'Kệ TV · 1m8 · gỗ sồi',    price:  4_800_000, priceLabel: '4.800.000đ',  href: '/san-pham/?cat=ke',       tone: '',     placeholder: 'Kệ TV An 1m8' },
+  { id: 'p-den-trang',         name: 'Đèn "Trăng"',                      meta: 'Đèn sàn · vải linen',     price:  1_790_000, priceLabel: '1.790.000đ',  href: '/san-pham/?cat=den',      tone: 'sage', placeholder: 'Đèn sàn Trăng' },
+  { id: 'p-tham-soi',          name: 'Thảm "Sợi"',                       meta: 'Thảm · 2×3m · dệt tay',   price:  3_500_000, priceLabel: '3.500.000đ',  href: '/san-pham/?cat=tham',     tone: '',     placeholder: 'Thảm Sợi' },
+  { id: 'p-ban-dieu',          name: 'Bàn "Diệu"',                       meta: 'Bàn trang điểm · gỗ sồi', price:  4_200_000, priceLabel: '4.200.000đ',  href: '/san-pham/?cat=ban',      tone: 'sage', placeholder: 'Bàn trang điểm Diệu' },
+  { id: 'p-tu-chen-sum',       name: 'Tủ chén "Sum"',                    meta: 'Tủ chén · 3 cánh',        price:  5_400_000, priceLabel: '5.400.000đ',  href: '/san-pham/?cat=tu',       tone: '',     placeholder: 'Tủ chén Sum' },
+  { id: 'p-ban-doi',           name: 'Bàn console "Đợi"',                meta: 'Bàn console · gỗ óc chó', price:  2_800_000, priceLabel: '2.800.000đ',  href: '/san-pham/?cat=ban',      tone: 'sage', placeholder: 'Bàn console Đợi' },
+  { id: 'p-ghe-ru',            name: 'Ghế bành "Ru"',                    meta: 'Ghế bành · 1 chỗ',        price:  4_900_000, priceLabel: '4.900.000đ',  href: '/san-pham/?cat=ghe',      tone: '',     placeholder: 'Ghế bành Ru' },
+  { id: 'p-giuong-vuon',       name: 'Giường "Vườn"',                    meta: 'Giường tầng · gỗ thông',  price:  7_500_000, priceLabel: '7.500.000đ',  href: '/san-pham/?cat=giuong',   tone: 'sage', placeholder: 'Giường tầng Vườn' },
+];
+
+/* Serialize cho client lookup (Astro chỉ render server-side; client cần raw JSON). */
+const catalogJson = JSON.stringify(catalog);
+---
+<ShopLayout title="Yêu thích — WOTU" description="Sản phẩm và combo bạn đã đánh dấu yêu thích. Lưu trong trình duyệt — không cần đăng nhập.">
+  <Nav />
+
+  <div class="container crumb">
+    <div class="crumb-list">
+      <a href="/">Trang chủ</a>
+      <span class="sep">/</span>
+      <span class="here">Yêu thích</span>
+    </div>
+  </div>
+
+  <header class="wl-head container shop-reveal">
+    <span class="eyebrow">Của riêng bạn</span>
+    <h1>Yêu thích <em>của bạn</em>.</h1>
+    <p class="wl-sub">Mọi sản phẩm và combo bạn đánh dấu ♥ trên các trang khác sẽ xuất hiện ở đây. Danh sách lưu trong trình duyệt — không cần đăng nhập, đồng bộ tự động giữa các tab.</p>
+  </header>
+
+  <section class="container shop-reveal" style="padding: 24px 28px var(--shop-section-py);">
+    <div id="wl-empty" class="wl-empty" hidden>
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3 5.97 5.97 0 0 0 12 5a5.97 5.97 0 0 0-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/>
+      </svg>
+      <h2>Chưa có sản phẩm yêu thích</h2>
+      <p>Khi bạn click vào biểu tượng ♥ trên các sản phẩm hoặc combo, nó sẽ xuất hiện ở đây để dễ tìm lại.</p>
+      <div class="wl-empty-actions">
+        <a class="shop-btn shop-btn-primary" href="/san-pham/">Khám phá sản phẩm <span class="arr">→</span></a>
+        <a class="shop-btn shop-btn-outline" href="/#combos">Xem combo</a>
+      </div>
+    </div>
+
+    <div id="wl-grid" class="wl-grid" hidden></div>
+
+    <div id="wl-actions" class="wl-actions" hidden>
+      <span id="wl-count" class="wl-count">0 sản phẩm</span>
+      <button type="button" class="wl-clear" id="wl-clear">Xoá tất cả</button>
+    </div>
+  </section>
+
+  <Footer />
+</ShopLayout>
+
+<script is:inline define:vars={{ catalogJson }}>
+  window.__wotuCatalog = JSON.parse(catalogJson);
+</script>
+
+<script>
+  import { getFavorites, toggleFavorite, addToCart, onChange, toast, formatPrice } from '../../lib/shop-store';
+
+  interface CatalogEntry {
+    id: string;
+    name: string;
+    meta: string;
+    price: number;
+    priceLabel: string;
+    href: string;
+    tone: string;
+    placeholder: string;
+  }
+
+  const catalog: CatalogEntry[] =
+    (window as unknown as { __wotuCatalog?: CatalogEntry[] }).__wotuCatalog ?? [];
+  const byId = new Map(catalog.map((c) => [c.id, c]));
+
+  const grid = document.getElementById('wl-grid');
+  const empty = document.getElementById('wl-empty');
+  const actions = document.getElementById('wl-actions');
+  const count = document.getElementById('wl-count');
+  const clearBtn = document.getElementById('wl-clear');
+
+  function escapeHtml(s: string): string {
+    return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  }
+
+  function render(): void {
+    if (!grid || !empty || !actions || !count) return;
+    const ids = getFavorites();
+    const items = ids
+      .map((id) => byId.get(id))
+      .filter((x): x is CatalogEntry => !!x);
+
+    if (items.length === 0) {
+      grid.hidden = true;
+      empty.hidden = false;
+      actions.hidden = true;
+      return;
+    }
+    grid.hidden = false;
+    empty.hidden = true;
+    actions.hidden = false;
+    count.textContent = `${items.length} sản phẩm yêu thích`;
+
+    grid.innerHTML = items
+      .map(
+        (it) => `
+          <article class="wl-card" data-id="${it.id}">
+            <a href="${it.href}" class="wl-link">
+              <div class="wl-img">
+                <div class="shop-ph ${it.tone}"><span class="shop-ph-label">${escapeHtml(it.placeholder)}</span></div>
+              </div>
+              <div class="wl-body">
+                <span class="wl-meta">${escapeHtml(it.meta)}</span>
+                <h3>${escapeHtml(it.name)}</h3>
+                <div class="wl-price">${escapeHtml(it.priceLabel)}</div>
+              </div>
+            </a>
+            <div class="wl-actions-row">
+              <button type="button" class="wl-add" data-act="add">+ Thêm giỏ</button>
+              <button type="button" class="wl-remove" data-act="remove" aria-label="Bỏ khỏi yêu thích">♥</button>
+            </div>
+          </article>
+        `,
+      )
+      .join('');
+
+    grid.querySelectorAll<HTMLElement>('.wl-card').forEach((card) => {
+      const id = card.dataset.id ?? '';
+      const item = byId.get(id);
+      if (!item) return;
+      card.querySelector<HTMLButtonElement>('[data-act="add"]')?.addEventListener('click', () => {
+        addToCart({ id: item.id, name: item.name, price: item.price }, 1);
+        toast(`✓ Đã thêm "${item.name}" vào giỏ`);
+      });
+      card.querySelector<HTMLButtonElement>('[data-act="remove"]')?.addEventListener('click', () => {
+        toggleFavorite(item.id);
+        toast('Đã bỏ khỏi yêu thích', { type: 'info' });
+      });
+    });
+  }
+
+  clearBtn?.addEventListener('click', () => {
+    if (!confirm('Xoá toàn bộ danh sách yêu thích?')) return;
+    getFavorites().forEach((id) => toggleFavorite(id));
+  });
+
+  render();
+  onChange(render);
+</script>
+
+<style>
+  .crumb { padding: 22px 0 6px; }
+  .crumb-list { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--shop-ink-soft); align-items: center; }
+  .crumb-list a:hover { color: var(--shop-accent); }
+  .crumb-list .sep { opacity: .5; }
+  .crumb-list .here { color: var(--shop-ink); font-weight: 600; }
+
+  .wl-head { padding: 14px 28px 36px; max-width: 880px; }
+  .wl-head h1 {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(44px, 6vw, 76px); line-height: 0.98; letter-spacing: -.02em;
+    margin: 14px 0 18px;
+  }
+  .wl-head h1 em { font-style: italic; color: var(--shop-accent); }
+  .wl-sub { font-size: 16px; color: var(--shop-ink-soft); line-height: 1.55; max-width: 60ch; margin: 0; }
+
+  .wl-empty {
+    text-align: center; padding: 80px 24px;
+    border: 1px dashed var(--shop-line); border-radius: var(--shop-radius-xl);
+    color: var(--shop-ink-soft);
+    max-width: 560px; margin: 0 auto;
+  }
+  .wl-empty svg { color: var(--shop-warm-soft); margin-bottom: 24px; }
+  .wl-empty h2 { font-family: var(--shop-serif); font-weight: 400; font-size: 32px; margin: 0 0 12px; color: var(--shop-ink); }
+  .wl-empty p { font-size: 15px; line-height: 1.55; max-width: 38ch; margin: 0 auto 28px; }
+  .wl-empty-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  .wl-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  }
+  .wl-card {
+    background: var(--shop-bg-card); border-radius: var(--shop-radius-lg);
+    overflow: hidden; display: flex; flex-direction: column;
+    border: 1px solid color-mix(in oklab, var(--shop-line) 60%, transparent);
+    transition: transform .25s, box-shadow .25s;
+    position: relative;
+  }
+  .wl-card:hover { transform: translateY(-4px); box-shadow: 0 18px 36px -16px rgba(58,42,30,.16); }
+  .wl-link { color: inherit; }
+  .wl-img { aspect-ratio: 4/3; position: relative; overflow: hidden; background: var(--shop-bg-soft); }
+  .wl-body { padding: 16px 18px 8px; display: flex; flex-direction: column; gap: 6px; }
+  .wl-meta { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--shop-ink-soft); font-weight: 600; }
+  .wl-body h3 {
+    font-family: var(--shop-serif); font-weight: 400; font-size: 22px;
+    line-height: 1.1; margin: 0;
+  }
+  .wl-price {
+    font-family: var(--shop-serif); font-size: 18px; color: var(--shop-ink);
+    margin-top: 4px;
+  }
+  .wl-actions-row {
+    display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    padding: 8px 18px 18px;
+  }
+  .wl-add {
+    flex: 1; padding: 10px 14px; border-radius: 999px;
+    background: var(--shop-ink); color: var(--shop-bg);
+    border: 0; cursor: pointer; font: 600 12px/1 var(--shop-sans);
+    transition: background .2s;
+  }
+  .wl-add:hover { background: var(--shop-accent); }
+  .wl-remove {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--shop-warm-soft); color: var(--shop-accent);
+    border: 0; cursor: pointer; font-size: 16px;
+    display: grid; place-items: center;
+  }
+  .wl-remove:hover { background: var(--shop-accent); color: white; }
+
+  .wl-actions {
+    margin-top: 32px; padding-top: 24px;
+    border-top: 1px solid var(--shop-line);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .wl-count { font-size: 13px; color: var(--shop-ink-soft); }
+  .wl-clear {
+    background: none; border: 0; cursor: pointer;
+    color: var(--shop-ink-soft); font-size: 13px;
+    text-decoration: underline; padding: 4px;
+  }
+  .wl-clear:hover { color: var(--shop-accent-deep); }
+
+  @media (max-width: 980px) {
+    .wl-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .wl-grid { grid-template-columns: 1fr; }
+  }
+</style>
