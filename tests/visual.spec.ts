@@ -1,21 +1,28 @@
+/**
+ * visual.spec.ts
+ * Screenshot smoke tests cho WOTU website.
+ *
+ * Sau tái cấu trúc:
+ *  - Studio homepage đã move sang /studio/ (không còn ở /)
+ *  - Shop homepage mới ở /
+ *
+ * Tests:
+ *  1. home-parity: chụp shop homepage mới tại / (desktop + mobile)
+ *  2. studio-parity: chụp studio homepage tại /studio/ (desktop + mobile)
+ *  3. routes smoke: check text trên key routes
+ */
 import { test, expect } from '@playwright/test';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// Reference prototype lives one folder up from `site/`.
-const BASELINE_URL = pathToFileURL(
-  path.resolve(__dirname, '..', '..', 'homepage-a.html')
-).href;
-
 const screenshotsDir = path.join(__dirname, '__screenshots__');
 
 async function settleAndShoot(page: import('@playwright/test').Page, file: string) {
-  // Bypass reveal animations so screenshots are deterministic.
+  // Bypass reveal animations để screenshot deterministic.
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.waitForLoadState('domcontentloaded');
-  // Force-load lazy images by scrolling the full page first, then back to top.
+  // Force-load lazy images bằng cách scroll full page rồi về top.
   await page.evaluate(async () => {
     const total = document.documentElement.scrollHeight;
     for (let y = 0; y < total; y += 600) {
@@ -24,7 +31,7 @@ async function settleAndShoot(page: import('@playwright/test').Page, file: strin
     }
     window.scrollTo(0, 0);
   });
-  // Give the now-eager-fetching images up to 8s to finish.
+  // Đợi images load xong (tối đa 8s).
   await page.evaluate(
     () =>
       new Promise<void>((res) => {
@@ -48,33 +55,68 @@ async function settleAndShoot(page: import('@playwright/test').Page, file: strin
   await page.screenshot({ path: file, fullPage: true });
 }
 
-test.describe('home parity', () => {
-  test('baseline (homepage-a.html)', async ({ page }, info) => {
-    await page.goto(BASELINE_URL);
-    await settleAndShoot(
-      page,
-      path.join(screenshotsDir, `home-${info.project.name}-baseline.png`)
-    );
-  });
-
-  test('new (Astro site)', async ({ page }, info) => {
+// ---------------------------------------------------------------------------
+// SHOP HOMEPAGE (/) — new home after restructure
+// ---------------------------------------------------------------------------
+test.describe('shop homepage screenshot', () => {
+  test('shop home (Astro site /)', async ({ page }, info) => {
     await page.goto('/');
     await settleAndShoot(
       page,
-      path.join(screenshotsDir, `home-${info.project.name}-new.png`)
+      path.join(screenshotsDir, `shop-home-${info.project.name}-new.png`)
     );
   });
 });
 
+// ---------------------------------------------------------------------------
+// STUDIO HOMEPAGE (/studio/) — old home, now at subpath
+// ---------------------------------------------------------------------------
+test.describe('studio homepage screenshot', () => {
+  test('studio home (Astro site /studio/)', async ({ page }, info) => {
+    await page.goto('/studio/');
+    await settleAndShoot(
+      page,
+      path.join(screenshotsDir, `studio-home-${info.project.name}-new.png`)
+    );
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ROUTES SMOKE — text checks key pages
+// ---------------------------------------------------------------------------
 test.describe('routes smoke', () => {
-  test('projects listing renders', async ({ page }) => {
-    await page.goto('/projects');
-    // Scope to the article body — dev server injects extra <h1> via Astro DevToolbar.
-    await expect(page.locator('main, body > header').first().locator('h1').first()).toContainText('chốn');
+  test('shop homepage h1 chứa "Trọn bộ"', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('h1').first()).toContainText('Trọn bộ');
   });
 
-  test('blog listing renders', async ({ page }) => {
-    await page.goto('/blog');
-    await expect(page.locator('main, body > header').first().locator('h1').first()).toContainText('không vội');
+  test('/san-pham/ h1 chứa "sản phẩm"', async ({ page }) => {
+    await page.goto('/san-pham/');
+    await expect(page.locator('h1').first()).toContainText('sản phẩm');
+  });
+
+  test('/studio/ loads — #services section exists', async ({ page }) => {
+    await page.goto('/studio/');
+    await expect(page.locator('#services')).toBeAttached();
+  });
+
+  test('/studio/projects/ h1 chứa "chốn"', async ({ page }) => {
+    await page.goto('/studio/projects/');
+    await expect(page.locator('h1').first()).toContainText('chốn');
+  });
+
+  test('/studio/blog/ h1 chứa "không vội"', async ({ page }) => {
+    await page.goto('/studio/blog/');
+    await expect(page.locator('h1').first()).toContainText('không vội');
+  });
+
+  test('/combo/to-am/ h1 chứa "Tổ Ấm"', async ({ page }) => {
+    await page.goto('/combo/to-am/');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Tổ Ấm');
+  });
+
+  test('/yeu-thich/ h1 chứa "Yêu thích"', async ({ page }) => {
+    await page.goto('/yeu-thich/');
+    await expect(page.locator('h1').first()).toContainText('Yêu thích');
   });
 });
