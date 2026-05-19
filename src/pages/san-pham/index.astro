@@ -65,15 +65,9 @@ const productsAfterCta: Product[] = [
 ];
 
 const filters = {
-  categories: [
-    { label: 'Sofa & ghế ngồi', count: 68, checked: true },
-    { label: 'Bàn (trà, ăn, làm việc)', count: 28 },
-    { label: 'Giường & phụ kiện', count: 18 },
-    { label: 'Tủ quần áo', count: 14 },
-    { label: 'Kệ sách & kệ TV', count: 24 },
-    { label: 'Đèn trang trí', count: 12 },
-    { label: 'Thảm & phụ kiện', count: 20 },
-  ],
+  // "Danh mục" sidebar section removed — user uses cat-tiles section ở top
+  // để chọn category (single-select, có icon). Sidebar chỉ giữ multi-select
+  // filter còn lại.
   rooms: [
     { key: 'phong-khach', label: 'Phòng khách', count: 52, checked: true },
     { key: 'phong-ngu', label: 'Phòng ngủ', count: 36 },
@@ -107,9 +101,6 @@ const filters = {
   ],
 };
 
-function ProductCard(p: Product) {
-  return p;
-}
 ---
 <ShopLayout title="Tất cả sản phẩm — WOTU Nội thất Việt" description="Cửa hàng nội thất WOTU — sofa, bàn ăn, giường, tủ, kệ, đèn. 184 sản phẩm gỗ tự nhiên, giao 48h tại Quy Nhơn và các tỉnh lân cận.">
   <Nav active="Sản phẩm" />
@@ -204,17 +195,9 @@ function ProductCard(p: Product) {
         <a href="#">Xoá tất cả</a>
       </div>
 
-      <details class="fgrp" open>
-        <summary>Danh mục</summary>
-        <div class="fgrp-body">
-          {filters.categories.map((f) => (
-            <label class="check-row">
-              <span><input type="checkbox" checked={f.checked} />{f.label}</span>
-              <span class="count">{f.count}</span>
-            </label>
-          ))}
-        </div>
-      </details>
+      <!-- "Danh mục" duplicate với cat tiles trên cùng (cat-tiles section).
+           Reviewer feedback: bỏ sidebar version để tránh state desync — user
+           dùng cat tiles cho category, sidebar chỉ giữ filter còn lại. -->
 
       <details class="fgrp" open>
         <summary>Theo phòng</summary>

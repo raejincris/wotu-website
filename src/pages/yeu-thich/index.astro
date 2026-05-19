@@ -50,8 +50,10 @@ const catalog: CatalogEntry[] = [
   { id: 'p-giuong-vuon',       name: 'Giường "Vườn"',                    meta: 'Giường tầng · gỗ thông',  price:  7_500_000, priceLabel: '7.500.000đ',  href: '/san-pham/?cat=giuong',   tone: 'sage', placeholder: 'Giường tầng Vườn' },
 ];
 
-/* Serialize cho client lookup (Astro chỉ render server-side; client cần raw JSON). */
-const catalogJson = JSON.stringify(catalog);
+/* Serialize cho client lookup. Catalog hiện tĩnh — an toàn. Nhưng nếu sau này
+ * nguồn data từ CMS có thể chứa chuỗi `</script>`, escape để tránh script-tag
+ * break-out attack (đề phòng XSS qua define:vars). */
+const catalogJson = JSON.stringify(catalog).replace(/<\/script>/gi, '<\\/script>');
 ---
 <ShopLayout title="Yêu thích — WOTU" description="Sản phẩm và combo bạn đã đánh dấu yêu thích. Lưu trong trình duyệt — không cần đăng nhập.">
   <Nav />
@@ -99,7 +101,7 @@ const catalogJson = JSON.stringify(catalog);
 </script>
 
 <script>
-  import { getFavorites, toggleFavorite, addToCart, onChange, toast, formatPrice } from '../../lib/shop-store';
+  import { getFavorites, toggleFavorite, clearFavorites, addToCart, onChange, toast, formatPrice } from '../../lib/shop-store';
 
   interface CatalogEntry {
     id: string;
@@ -184,7 +186,7 @@ const catalogJson = JSON.stringify(catalog);
 
   clearBtn?.addEventListener('click', () => {
     if (!confirm('Xoá toàn bộ danh sách yêu thích?')) return;
-    getFavorites().forEach((id) => toggleFavorite(id));
+    clearFavorites();
   });
 
   render();

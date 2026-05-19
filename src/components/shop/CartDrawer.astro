@@ -254,8 +254,8 @@ const accessKey = site.forms?.contactAccessKey ?? '';
     body.innerHTML = items
       .map(
         (it) => `
-          <div class="cart-item" data-id="${it.id}" data-variant="${it.variant ?? ''}">
-            <div class="cart-item-img">${it.img ? `<img src="${it.img}" alt="" style="width:100%;height:100%;object-fit:cover;" />` : 'WOTU'}</div>
+          <div class="cart-item" data-id="${escapeHtml(it.id)}" data-variant="${escapeHtml(it.variant ?? '')}">
+            <div class="cart-item-img">${it.img ? `<img src="${escapeHtml(it.img)}" alt="" style="width:100%;height:100%;object-fit:cover;" />` : 'WOTU'}</div>
             <div class="cart-item-info">
               <p class="cart-item-name">${escapeHtml(it.name)}</p>
               ${it.variant ? `<span class="cart-item-variant">${escapeHtml(it.variant)}</span>` : ''}
@@ -317,13 +317,18 @@ const accessKey = site.forms?.contactAccessKey ?? '';
   // ===== Submit form (Web3Forms with cart payload) =====
   const form = document.getElementById('cart-form') as HTMLFormElement | null;
   const payloadField = document.getElementById('cart-payload') as HTMLInputElement | null;
+  let submitting = false;
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    // Guard: chặn double-submit do Enter key trong khi fetch đang chạy hoặc
+    // form đã submit thành công (re-open drawer không reset state).
+    if (submitting || form.classList.contains('submitted')) return;
     if (!payloadField) return;
+    submitting = true;
+
     const items = getCart();
     const total = getCartTotal();
-    // Serialize giỏ thành text dễ đọc trong email
     const summary = [
       '=== GIỎ HÀNG ===',
       ...items.map(
@@ -351,7 +356,8 @@ const accessKey = site.forms?.contactAccessKey ?? '';
       form.querySelectorAll<HTMLInputElement>('input[type="text"], input[type="tel"], textarea').forEach(
         (el) => (el.value = ''),
       );
-      // Clear cart sau submit thành công để tránh gửi trùng
+      // submitting flag giữ true → block resubmit. Reset chỉ khi cart clear (drawer
+      // sẽ về empty state, không còn form trong DOM).
       setTimeout(() => clearCart(), 1500);
     } catch (err) {
       console.error('Cart submit failed:', err);
@@ -359,6 +365,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
         submitBtn.disabled = false;
         submitBtn.innerHTML = 'Lỗi gửi — thử lại';
       }
+      submitting = false;
     }
   });
 

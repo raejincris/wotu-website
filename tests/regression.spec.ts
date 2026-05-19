@@ -134,11 +134,13 @@ test.describe('3 · /san-pham/ — catalog smoke', () => {
     await expect(tiles).toHaveCount(9);
   });
 
-  test('filter sidebar có ít nhất 6 nhóm filter (details.fgrp)', async ({ page }) => {
+  test('filter sidebar có 5 nhóm filter (details.fgrp)', async ({ page }) => {
     await page.goto('/san-pham/');
     const groups = page.locator('.filters .fgrp');
     const count = await groups.count();
-    expect(count).toBeGreaterThanOrEqual(6);
+    // 5 nhóm: Theo phòng / Khoảng giá / Chất liệu / Màu sắc / Trạng thái.
+    // ("Danh mục" sidebar bị bỏ — duplicate với cat tiles ở top.)
+    expect(count).toBeGreaterThanOrEqual(5);
   });
 
   test('product grid có ít nhất 7 product-card-item', async ({ page }) => {

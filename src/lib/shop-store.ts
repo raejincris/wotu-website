@@ -19,6 +19,9 @@ export interface CartItem {
 
 type Listener = () => void;
 const listeners = new Set<Listener>();
+/* Map Listener → wrapped storage handler, dùng để remove đúng handler khi
+ * unsubscribe (tránh leak multiple listeners khi onChange gọi nhiều lần). */
+const storageHandlers = new WeakMap<Listener, (e: StorageEvent) => void>();
 
 function safeParse<T>(raw: string | null, fallback: T): T {
   if (!raw) return fallback;
@@ -111,6 +114,11 @@ export function getFavorites(): string[] {
   return readFav();
 }
 
+/** Xoá toàn bộ favorites — 1 write thay vì N (toggle từng cái). */
+export function clearFavorites(): void {
+  writeFav([]);
+}
+
 export function isFavorite(id: string): boolean {
   return readFav().includes(id);
 }
@@ -132,13 +140,25 @@ export function getFavoriteCount(): number {
   return readFav().length;
 }
 
-/** Subscribe to any cart/favorite change. Returns unsubscribe. */
+/** Subscribe to any cart/favorite change. Returns unsubscribe.
+ *  Idempotent: gọi cùng cb nhiều lần chỉ đăng ký 1 lần. */
 export function onChange(cb: Listener): () => void {
+  if (listeners.has(cb)) {
+    // Already subscribed — return existing unsub
+    return () => {
+      listeners.delete(cb);
+      const handler = storageHandlers.get(cb);
+      if (handler && typeof window !== 'undefined') {
+        window.removeEventListener('storage', handler);
+        storageHandlers.delete(cb);
+      }
+    };
+  }
   listeners.add(cb);
-  // Cross-tab sync
   const onStorage = (e: StorageEvent) => {
     if (e.key === CART_KEY || e.key === FAV_KEY) cb();
   };
+  storageHandlers.set(cb, onStorage);
   if (typeof window !== 'undefined') {
     window.addEventListener('storage', onStorage);
   }
@@ -146,6 +166,7 @@ export function onChange(cb: Listener): () => void {
     listeners.delete(cb);
     if (typeof window !== 'undefined') {
       window.removeEventListener('storage', onStorage);
+      storageHandlers.delete(cb);
     }
   };
 }
