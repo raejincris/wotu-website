@@ -4,11 +4,175 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
-  <title>WOTU · Quản lý nội dung</title>
+  <title>WOTU Admin</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/admin/style.css" />
+  <!-- js-yaml phải load trước app.js (UMD → window.jsyaml) -->
+  <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script type="module" src="/admin/app.js"></script>
 </head>
 <body>
-  <!-- Sveltia CMS — git-based, runs entirely in browser. Pin version to avoid CDN cache surprises. -->
-  <script type="module" src="https://unpkg.com/@sveltia/cms@0.158.1/dist/sveltia-cms.js"></script>
+
+<!-- ══════════════════════════════════════
+     Loading overlay
+════════════════════════════════════════ -->
+<div id="loading" hidden>
+  <div class="spinner"></div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<!-- ══════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════════ -->
+<div id="screen-login" class="screen">
+  <div class="login-card">
+    <img src="/logo.svg" alt="WOTU" class="login-logo" />
+    <h1>Quản trị WOTU</h1>
+    <p class="subtitle">Đăng nhập để quản lý nội dung website</p>
+    <button id="btn-login" class="btn btn-primary btn-login">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57
+          0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695
+          -.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99
+          .105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225
+          -.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405
+          c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225
+          0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3
+          0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+      </svg>
+      Đăng nhập bằng GitHub
+    </button>
+    <p id="login-error" class="login-error"></p>
+    <p class="login-note">Chỉ thành viên WOTU có quyền truy cập</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     DASHBOARD
+════════════════════════════════════════ -->
+<div id="screen-dashboard" class="screen" hidden>
+
+  <header class="admin-header">
+    <div class="admin-header-inner container">
+      <a href="#dashboard" class="admin-brand">
+        <img src="/logo.svg" alt="WOTU" />
+        <span class="admin-brand-label">Admin</span>
+      </a>
+      <div class="admin-user">
+        <img id="user-avatar" src="" alt="" class="user-avatar" />
+        <span id="user-name" class="user-name"></span>
+        <button id="btn-logout" class="btn btn-ghost btn-sm">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="dash-section" style="margin-top:36px;">
+      <h2>Cập nhật nhanh</h2>
+      <div class="card-grid">
+
+        <button class="dash-card" data-goto="site" type="button">
+          <span class="dash-card-icon">☎</span>
+          <span class="dash-card-title">Thông tin liên hệ</span>
+          <span class="dash-card-sub">Hotline · email · địa chỉ</span>
+        </button>
+
+        <button class="dash-card" data-goto="sofa" type="button">
+          <span class="dash-card-icon">🛋</span>
+          <span class="dash-card-title">Sofa Mây</span>
+          <span class="dash-card-sub">Giá · tồn kho · badge</span>
+        </button>
+
+        <button class="dash-card" data-goto="combo" type="button">
+          <span class="dash-card-icon">📦</span>
+          <span class="dash-card-title">Combo Tổ Ấm</span>
+          <span class="dash-card-sub">Giá · phần trăm giảm</span>
+        </button>
+
+        <button class="dash-card" data-goto="shop-home" type="button">
+          <span class="dash-card-icon">🏠</span>
+          <span class="dash-card-title">Combo trang chủ</span>
+          <span class="dash-card-sub">Giá 6 combo shop</span>
+        </button>
+
+        <a class="dash-card dash-card-link" href="/admin/cms/" target="_blank" rel="noopener">
+          <span class="dash-card-icon">⚙️</span>
+          <span class="dash-card-title">Sveltia CMS đầy đủ</span>
+          <span class="dash-card-sub">Dự án · blog · menu · nội dung sâu</span>
+          <span class="dash-card-arrow">↗</span>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="dash-section">
+      <h2>Hoạt động gần đây</h2>
+      <div id="commits-list" class="commits-list">
+        <div class="commits-empty">Đang tải…</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ══════════════════════════════════════
+     EDITOR: Thông tin liên hệ
+════════════════════════════════════════ -->
+<div id="editor-site" class="screen editor-screen" hidden>
+  <div class="editor-topbar">
+    <button class="btn btn-back" data-back>← Quay lại</button>
+    <h2>Thông tin liên hệ</h2>
+  </div>
+  <div class="editor-body" id="editor-site-body">
+    <div class="editor-loading"><div class="spinner"></div><span>Đang tải…</span></div>
+  </div>
+  <div class="editor-footer" id="editor-site-footer" hidden></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     EDITOR: Sofa Mây
+════════════════════════════════════════ -->
+<div id="editor-sofa" class="screen editor-screen" hidden>
+  <div class="editor-topbar">
+    <button class="btn btn-back" data-back>← Quay lại</button>
+    <h2>Sofa Mây — Giá &amp; Tồn kho</h2>
+  </div>
+  <div class="editor-body" id="editor-sofa-body">
+    <div class="editor-loading"><div class="spinner"></div><span>Đang tải…</span></div>
+  </div>
+  <div class="editor-footer" id="editor-sofa-footer" hidden></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     EDITOR: Combo Tổ Ấm
+════════════════════════════════════════ -->
+<div id="editor-combo" class="screen editor-screen" hidden>
+  <div class="editor-topbar">
+    <button class="btn btn-back" data-back>← Quay lại</button>
+    <h2>Combo Tổ Ấm — Giá</h2>
+  </div>
+  <div class="editor-body" id="editor-combo-body">
+    <div class="editor-loading"><div class="spinner"></div><span>Đang tải…</span></div>
+  </div>
+  <div class="editor-footer" id="editor-combo-footer" hidden></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     EDITOR: Combo trang chủ
+════════════════════════════════════════ -->
+<div id="editor-shop-home" class="screen editor-screen" hidden>
+  <div class="editor-topbar">
+    <button class="btn btn-back" data-back>← Quay lại</button>
+    <h2>Combo trang chủ — Giá</h2>
+  </div>
+  <div class="editor-body" id="editor-shop-home-body">
+    <div class="editor-loading"><div class="spinner"></div><span>Đang tải…</span></div>
+  </div>
+  <div class="editor-footer" id="editor-shop-home-footer" hidden></div>
+</div>
+
 </body>
 </html>
