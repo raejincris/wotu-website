@@ -2,88 +2,15 @@
 import ShopLayout from '../../layouts/ShopLayout.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
+import sofaData from '../../data/shop-sofa-may.yml';
 
-const fabricSwatchesTop = [
-  { name: 'Linen Nâu Đất', style: 'linear-gradient(135deg,#B77452,#915438)', active: true },
-  { name: 'Linen Be Sữa', style: 'linear-gradient(135deg,#E5D2B5,#C9B091)' },
-  { name: 'Linen Xám Tro', style: 'linear-gradient(135deg,#A39C92,#736C61)' },
-  { name: 'Linen Xanh Rêu', style: 'linear-gradient(135deg,#7A8E73,#566954)' },
-  { name: 'Bouclé Trắng Kem', style: 'radial-gradient(circle at 30% 30%, #fff, #EDE3D0)' },
-];
-
-const fabricLibrary = [
-  { name: 'Linen Nâu Đất', label: 'Nâu Đất', style: 'linear-gradient(135deg,#B77452,#915438)', active: true },
-  { name: 'Linen Be Sữa', label: 'Be Sữa', style: 'linear-gradient(135deg,#E5D2B5,#C9B091)' },
-  { name: 'Linen Xám Tro', label: 'Xám Tro', style: 'linear-gradient(135deg,#A39C92,#736C61)' },
-  { name: 'Linen Xanh Rêu', label: 'Xanh Rêu', style: 'linear-gradient(135deg,#7A8E73,#566954)' },
-  { name: 'Linen Xanh Than', label: 'Xanh Than', style: 'linear-gradient(135deg,#3C4A5E,#25303D)' },
-  { name: 'Linen Hồng Đào', label: 'Hồng Đào', style: 'linear-gradient(135deg,#E1B3A1,#C48D78)' },
-  { name: 'Linen Vàng Mơ', label: 'Vàng Mơ', style: 'linear-gradient(135deg,#E5C99A,#C9A370)' },
-  { name: 'Linen Mật Ong', label: 'Mật Ong', style: 'linear-gradient(135deg,#D9A75C,#B07F38)' },
-  { name: 'Bouclé Trắng Kem', label: 'Bouclé Kem', style: 'radial-gradient(circle at 30% 30%,#fff,#EDE3D0)' },
-  { name: 'Bouclé Be Đậm', label: 'Bouclé Be', style: 'radial-gradient(circle at 30% 30%,#E5D2B5,#9B7B58)' },
-  { name: 'Bouclé Xám', label: 'Bouclé Xám', style: 'radial-gradient(circle at 30% 30%,#C0BBB1,#76705F)' },
-  { name: 'Bouclé Đen', label: 'Bouclé Đen', style: 'radial-gradient(circle at 30% 30%,#3B3530,#1B1612)' },
-  { name: 'Da bò Ý — Nâu Cognac', label: 'Da Cognac', style: 'linear-gradient(135deg,#A56237,#6E3D1C)' },
-  { name: 'Da bò Ý — Đen Mờ', label: 'Da Đen', style: 'linear-gradient(135deg,#2B2722,#0F0C09)' },
-  { name: 'Da bò Ý — Caramel', label: 'Da Caramel', style: 'linear-gradient(135deg,#C9925A,#8F5D2C)' },
-  { name: 'Da bò Ý — Nâu Hạt Dẻ', label: 'Hạt Dẻ', style: 'linear-gradient(135deg,#704633,#3D261A)' },
-  { name: 'Velvet Xanh Cổ Vịt', label: 'Velvet', style: 'linear-gradient(135deg,#2E5C5B,#143B3A)' },
-  { name: 'Velvet Hồng Phấn', label: 'Velvet Hồng', style: 'linear-gradient(135deg,#D9AAA5,#A86F69)' },
-  { name: 'Velvet Xanh Lá', label: 'Velvet Lá', style: 'linear-gradient(135deg,#456E4E,#22442C)' },
-  { name: 'Velvet Đỏ Đô', label: 'Đỏ Đô', style: 'linear-gradient(135deg,#7B2C2E,#4B1517)' },
-  { name: 'Cotton Pha — Trắng Be', label: 'Cotton', style: 'linear-gradient(135deg,#F0E7D6,#D9C9AC)' },
-  { name: 'Cotton Pha — Xám Sáng', label: 'Cotton Xám', style: 'linear-gradient(135deg,#D6D3CB,#A6A299)' },
-  { name: 'Cotton Pha — Xanh Pastel', label: 'Cotton Xanh', style: 'linear-gradient(135deg,#B7C7CC,#7E9298)' },
-  { name: 'Linen Pha — Kẻ Sọc', label: 'Kẻ Sọc', style: 'repeating-linear-gradient(90deg,#E5D2B5 0 6px,#B77452 6px 12px)' },
-];
-
-const specsLeft = [
-  { k: 'Kích thước phủ bì (D × R × C)', v: '210 × 92 × 80 cm' },
-  { k: 'Mặt ngồi (D × R × C)', v: '180 × 56 × 42 cm' },
-  { k: 'Độ dày đệm', v: '14 cm · mút D40' },
-  { k: 'Khung', v: 'Gỗ sồi tự nhiên · mộng âm dương' },
-  { k: 'Đệm tựa', v: 'Mút lò xo zigzag thép C75' },
-  { k: 'Vỏ bọc', v: 'Vải bố linen 380 g/m² · tháo rời' },
-];
-const specsRight = [
-  { k: 'Trọng lượng', v: '52 kg' },
-  { k: 'Tải trọng tối đa', v: '320 kg' },
-  { k: 'Hoàn thiện chân', v: 'Sơn PU gốc nước · 3 lớp' },
-  { k: 'Chứng nhận an toàn', v: 'OEKO-TEX Standard 100' },
-  { k: 'Bảo hành', v: '5 năm khung · 2 năm đệm' },
-  { k: 'Xuất xứ', v: 'Sản xuất tại Quy Nhơn · VN' },
-];
-
-const reviews = [
-  {
-    avatar: 'P',
-    name: 'Phạm Thanh Tâm',
-    place: 'Nhơn Bình · Quy Nhơn',
-    date: '09/05/2026',
-    stars: '★★★★★',
-    body: 'Mua thay chiếc sofa cũ 5 năm rồi. Ngồi vào là biết khác liền — êm, mà vẫn có lực đỡ lưng. Vải bố linen Nâu Đất nhìn ảnh hơi tối, ngoài đời ấm hơn, hợp căn hộ tông gỗ.',
-    fab: 'Linen Nâu Đất', size: '3 chỗ', cushion: 'Vừa', helpful: 38,
-  },
-  {
-    avatar: 'D',
-    name: 'Đặng Hữu Khoa',
-    place: 'Trần Phú · Quy Nhơn',
-    date: '02/05/2026',
-    stars: '★★★★★',
-    body: 'Order thử cái mẫu vải miễn phí trước khi mua, đúng là khác xa ảnh chụp web. Cuối cùng chọn Bouclé Trắng Kem — căn hộ sáng hẳn. Giao đúng 48h, lắp 2 anh trong 25 phút.',
-    fab: 'Bouclé Trắng Kem', size: '3 chỗ', cushion: 'Êm', helpful: 27,
-  },
-  {
-    avatar: 'H',
-    name: 'Hoàng Thị Quỳnh',
-    place: 'Tuy Phước · Bình Định',
-    date: '21/04/2026',
-    stars: '★★★★☆',
-    body: 'Mọi thứ tốt — chỉ có chân gỗ 18cm mình thấy hơi cao, có lẽ nên thử bản 12cm. Nhưng tổng thể chắc chắn, đáng tiền. Đặc biệt cái khóa kéo tháo vỏ bọc rất tiện.',
-    fab: 'Linen Xám Tro', size: 'Chữ L', cushion: 'Chắc', helpful: 19,
-  },
-];
+const d = sofaData as any;
+const fabricSwatchesTop = d.fabricSwatchesTop as any[];
+const fabricLibrary = d.fabricLibrary as any[];
+const specsLeft = d.specsLeft as any[];
+const specsRight = d.specsRight as any[];
+const reviews = d.reviews.items as any[];
+const bundleItems = d.bundle as any[];
 ---
 <ShopLayout
   title="Sofa văng Mây 3 chỗ — WOTU"
@@ -111,8 +38,8 @@ const reviews = [
         <div class="main-image">
           <div class="shop-ph"><span class="shop-ph-label">Sofa văng Mây — góc khách quan, ánh sáng tự nhiên · 1600×1280</span></div>
           <div class="gallery-tags">
-            <span class="tag accent">Bestseller tháng 5</span>
-            <span class="tag"><span class="pulse"></span>Còn 12 cái</span>
+            <span class="tag accent">{d.badge}</span>
+            <span class="tag"><span class="pulse"></span>{d.stockLabel}</span>
           </div>
           <span class="gallery-360">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/></svg>
@@ -149,18 +76,16 @@ const reviews = [
         </div>
 
         <h1>Sofa văng <em>"Mây"</em><br />3 chỗ ngồi</h1>
-        <p class="lede">
-          Sofa văng dáng thấp — kiểu Japandi nguyên bản. Khung gỗ sồi tự nhiên, đệm mút D40, vải bố linen Hàn Quốc. Ngồi êm trong 5 phút, dùng êm trong 5 năm.
-        </p>
+        <p class="lede">{d.lede}</p>
 
         <div class="price-row">
           <div>
-            <span class="price-now">6.900.000đ</span>
-            <span class="price-hint">trả góp 0% — từ <b>575.000đ</b> / tháng</span>
+            <span class="price-now">{d.priceNow}</span>
+            <span class="price-hint">trả góp 0% — từ <b>{d.priceInstallment}</b> / tháng</span>
           </div>
-          <span class="price-was">8.500.000đ</span>
-          <span class="price-save">− 19%</span>
-          <span class="price-stock"><span class="pulse"></span>Còn hàng · giao 48h</span>
+          <span class="price-was">{d.priceWas}</span>
+          <span class="price-save">{d.priceDiscount}</span>
+          <span class="price-stock"><span class="pulse"></span>{d.stockStatus}</span>
         </div>
 
         <div class="pickers">
@@ -215,7 +140,7 @@ const reviews = [
             <span class="v" id="qV">1</span>
             <button id="qInc" aria-label="Tăng" type="button">+</button>
           </div>
-          <a class="btn btn-primary btn-lg" href="/#contact" id="addCart">Thêm vào giỏ · 6.900.000đ</a>
+          <a class="btn btn-primary btn-lg" href="/#contact" id="addCart" data-price={d.priceNum}>Thêm vào giỏ · {d.priceNow}</a>
         </div>
 
         <div class="cta-row">
@@ -264,7 +189,7 @@ const reviews = [
         <li><a href="#material">Câu chuyện chất liệu</a></li>
         <li><a href="#specs">Thông số</a></li>
         <li><a href="#care">Hướng dẫn vệ sinh</a></li>
-        <li><a href="#reviews">Đánh giá · 184</a></li>
+        <li><a href="#reviews">Đánh giá · {d.reviews.total}</a></li>
         <li><a href="#collection">Cùng bộ sưu tập</a></li>
       </ul>
     </div>
@@ -334,36 +259,20 @@ const reviews = [
 
     <div class="bundle">
       <div class="bundle-list" id="bundleList">
-        <div class="bundle-row" data-price="6900000" data-id="p-sofa-may-3" data-name="Sofa văng "Mây" 3 chỗ">
-          <input type="checkbox" checked disabled />
-          <div class="bundle-img"><div class="shop-ph"><span class="shop-ph-label">Sofa Mây</span></div></div>
-          <div class="bundle-name">Sofa văng "Mây" 3 chỗ <small>· vải bố Nâu Đất · chân gỗ sồi 18cm</small></div>
-          <div class="bundle-price">6.900.000đ</div>
-        </div>
-        <div class="bundle-row" data-price="450000" data-id="p-bundle-goi-suong" data-name="Bộ gối ôm "Sương" ×2">
-          <input type="checkbox" checked />
-          <div class="bundle-img"><div class="shop-ph sage"><span class="shop-ph-label">Gối ôm</span></div></div>
-          <div class="bundle-name">Bộ gối ôm "Sương" ×2 <small>· linen tông cùng sofa · 45×45 cm</small></div>
-          <div class="bundle-price"><s>590.000đ</s>450.000đ</div>
-        </div>
-        <div class="bundle-row" data-price="380000" data-id="p-bundle-throw-som-mai" data-name="Throw len "Sớm Mai"">
-          <input type="checkbox" checked />
-          <div class="bundle-img"><div class="shop-ph"><span class="shop-ph-label">Thảm trải sàn</span></div></div>
-          <div class="bundle-name">Throw len "Sớm Mai" <small>· 130×170cm · len New Zealand</small></div>
-          <div class="bundle-price"><s>490.000đ</s>380.000đ</div>
-        </div>
-        <div class="bundle-row" data-price="280000" data-id="p-bundle-den-mat-troi" data-name="Đèn sàn "Mặt Trời"">
-          <input type="checkbox" />
-          <div class="bundle-img"><div class="shop-ph sage"><span class="shop-ph-label">Đèn sàn</span></div></div>
-          <div class="bundle-name">Đèn sàn "Mặt Trời" <small>· chao tre đan thủ công · cao 1m5</small></div>
-          <div class="bundle-price">280.000đ</div>
-        </div>
-        <div class="bundle-row" data-price="220000" data-id="p-bundle-cay-bang" data-name="Cây bàng Singapore + chậu gốm">
-          <input type="checkbox" />
-          <div class="bundle-img"><div class="shop-ph"><span class="shop-ph-label">Cây cảnh</span></div></div>
-          <div class="bundle-name">Cây bàng Singapore + chậu gốm <small>· cao 1m2 · cây thật</small></div>
-          <div class="bundle-price">220.000đ</div>
-        </div>
+        {bundleItems.map((item: any) => (
+          <div class="bundle-row" data-price={item.price} data-id={item.id} data-name={item.name}>
+            {item.fixed
+              ? <input type="checkbox" checked disabled />
+              : <input type="checkbox" checked={item.checked || false} />
+            }
+            <div class="bundle-img"><div class={`shop-ph${item.tone === 'sage' ? ' sage' : ''}`}><span class="shop-ph-label">{item.name}</span></div></div>
+            <div class="bundle-name">{item.name} <small>· {item.meta}</small></div>
+            <div class="bundle-price">
+              {item.priceOld && <s>{item.priceOld}</s>}
+              {item.priceLabel}
+            </div>
+          </div>
+        ))}
       </div>
 
       <aside class="bundle-summary">
@@ -508,22 +417,24 @@ const reviews = [
     <div class="block-head">
       <div>
         <span class="eyebrow">Đánh giá khách hàng</span>
-        <h2><em>4.8 / 5</em> · 184 đánh giá thật.</h2>
+        <h2><em>{d.reviews.score} / 5</em> · {d.reviews.total} đánh giá thật.</h2>
       </div>
       <div class="right">Đánh giá có ảnh thật, có thông tin cấu hình khách đã chọn.</div>
     </div>
 
     <div class="rev-grid">
       <aside class="rev-summary">
-        <div class="rev-score">4.8<sub>/5</sub></div>
+        <div class="rev-score">{d.reviews.score}<sub>/5</sub></div>
         <div class="stars" style="font-size: 22px; margin-top: 4px;">★★★★★</div>
-        <div style="font-size: 13px; color: var(--ink-soft); margin-top: 4px;">184 đánh giá xác thực</div>
+        <div style="font-size: 13px; color: var(--ink-soft); margin-top: 4px;">{d.reviews.total} đánh giá xác thực</div>
         <div class="rev-bars">
-          <div class="rev-bar"><span>5★</span><div class="bar-track"><div class="bar-fill" style="width: 86%;"></div></div><span style="text-align:right;">158</span></div>
-          <div class="rev-bar"><span>4★</span><div class="bar-track"><div class="bar-fill" style="width: 10%;"></div></div><span style="text-align:right;">19</span></div>
-          <div class="rev-bar"><span>3★</span><div class="bar-track"><div class="bar-fill" style="width: 3%;"></div></div><span style="text-align:right;">5</span></div>
-          <div class="rev-bar"><span>2★</span><div class="bar-track"><div class="bar-fill" style="width: 1%;"></div></div><span style="text-align:right;">2</span></div>
-          <div class="rev-bar"><span>1★</span><div class="bar-track"><div class="bar-fill" style="width: 0%;"></div></div><span style="text-align:right;">0</span></div>
+          {(d.reviews.distribution as any[]).map((bar: any) => (
+            <div class="rev-bar">
+              <span>{bar.stars}★</span>
+              <div class="bar-track"><div class="bar-fill" style={`width: ${bar.pct}%;`}></div></div>
+              <span style="text-align:right;">{bar.count}</span>
+            </div>
+          ))}
         </div>
         <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-soft);">
           <b style="color: var(--ink); font-weight: 600; display: block; margin-bottom: 6px;">Khách nhắc nhiều</b>
@@ -558,7 +469,7 @@ const reviews = [
         ))}
 
         <div style="text-align: center;">
-          <a class="btn btn-outline" href="#" rel="nofollow" aria-disabled="true">Xem tất cả 184 đánh giá <span class="arr">→</span></a>
+          <a class="btn btn-outline" href="#" rel="nofollow" aria-disabled="true">Xem tất cả {d.reviews.total} đánh giá <span class="arr">→</span></a>
         </div>
       </div>
     </div>
@@ -637,7 +548,7 @@ const reviews = [
   <!-- STICKY CART BAR -->
   <div class="sticky-bar" id="stickyBar">
     <span class="sb-title">Sofa Mây 3 chỗ</span>
-    <span class="sb-price">6.900.000đ</span>
+    <span class="sb-price">{d.priceNow}</span>
     <a class="btn btn-accent" href="/#contact">Mua ngay <span class="arr">→</span></a>
   </div>
 </ShopLayout>
@@ -989,7 +900,8 @@ const reviews = [
   }
   function updateQty() {
     if (qV) qV.textContent = String(qty);
-    if (addCart && addCart.firstChild) addCart.firstChild.textContent = `Thêm vào giỏ · ${fmt(6900000 * qty)}`;
+    const priceNum = Number(addCart?.dataset.price ?? '0');
+    if (addCart && addCart.firstChild) addCart.firstChild.textContent = `Thêm vào giỏ · ${fmt(priceNum * qty)}`;
   }
   const qInc = document.getElementById('qInc');
   const qDec = document.getElementById('qDec');
@@ -1009,7 +921,7 @@ const reviews = [
         {
           id: 'p-sofa-may-3',
           name: 'Sofa văng "Mây" 3 chỗ',
-          price: 6_900_000,
+          price: priceNum,
           variant: variant || undefined,
         },
         qty,

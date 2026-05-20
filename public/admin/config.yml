@@ -3,9 +3,8 @@
 # platform deploy auto-rebuild trong 1-2 phút → site live.
 #
 # Site có 2 phần:
-#   - Shop /  /san-pham/  /combo/... — content combo/bestsellers/reviews
-#     đang HARDCODE trong .astro page (chưa CMS-ify). Khi cần edit qua CMS,
-#     bổ sung collection combos/products/reviews ở đây + extract YAML.
+#   - Shop /  /san-pham/  /combo/... — 4 collection: shop_home, shop_products,
+#     combo_to_am, sofa_may. Content edit qua CMS, source tại src/data/.
 #   - Studio /studio/ — Dự án + Nhật ký + Trang chủ + Footer/Menu — đều CMS.
 #
 # Site collection (site.yml) dùng CHUNG cho cả 2 phần (hotline, email, địa chỉ,
@@ -522,3 +521,72 @@ collections:
               - { name: priceNew, label: 'Giá khuyến mãi', widget: string }
               - { name: discount, label: 'Phần trăm giảm', widget: string }
               - { name: href, label: 'Đường dẫn', widget: string }
+
+  # ─────────────────────────────────────────
+  # 9. SHOP — Sofa Mây (chi tiết sản phẩm)
+  # ─────────────────────────────────────────
+  - name: sofa_may
+    label: "Shop — Sofa Mây (chi tiết sản phẩm)"
+    files:
+      - file: "src/data/shop-sofa-may.yml"
+        label: "Sofa văng Mây"
+        fields:
+          - { name: name, label: 'Tên sản phẩm', widget: string }
+          - { name: subtitle, label: 'Phụ đề (3 chỗ ngồi)', widget: string }
+          - { name: lede, label: 'Mô tả ngắn (lede)', widget: text }
+          - { name: priceNow, label: 'Giá hiện tại', widget: string }
+          - { name: priceWas, label: 'Giá gốc (gạch)', widget: string }
+          - { name: priceDiscount, label: 'Phần trăm giảm', widget: string }
+          - { name: priceInstallment, label: 'Trả góp / tháng', widget: string }
+          - { name: priceNum, label: 'Giá số (VND, không dấu chấm)', widget: number, value_type: int }
+          - { name: badge, label: 'Badge ảnh chính (vd: Bestseller tháng 5)', widget: string }
+          - { name: stockLabel, label: 'Số lượng còn (vd: Còn 12 cái)', widget: string }
+          - { name: stockStatus, label: 'Trạng thái kho (vd: Còn hàng · giao 48h)', widget: string }
+
+          - name: specsLeft
+            label: 'Thông số kỹ thuật — cột trái'
+            widget: list
+            fields:
+              - { name: k, label: 'Tên thông số', widget: string }
+              - { name: v, label: 'Giá trị', widget: string }
+
+          - name: specsRight
+            label: 'Thông số kỹ thuật — cột phải'
+            widget: list
+            fields:
+              - { name: k, label: 'Tên thông số', widget: string }
+              - { name: v, label: 'Giá trị', widget: string }
+
+          - name: bundle
+            label: 'Mua kèm — Thường mua cùng (5 món)'
+            widget: list
+            fields:
+              - { name: id, label: 'ID sản phẩm', widget: string }
+              - { name: name, label: 'Tên sản phẩm', widget: string }
+              - { name: meta, label: 'Thông tin nhỏ', widget: string }
+              - { name: price, label: 'Giá số (VND)', widget: number, value_type: int }
+              - { name: priceLabel, label: 'Giá hiển thị', widget: string }
+              - { name: priceOld, label: 'Giá cũ (tùy chọn)', widget: string, required: false }
+              - { name: fixed, label: 'Cố định (không bỏ chọn được)', widget: boolean, required: false }
+              - { name: checked, label: 'Mặc định được chọn', widget: boolean, required: false }
+
+          - name: reviews
+            label: 'Đánh giá khách hàng'
+            widget: object
+            fields:
+              - { name: score, label: 'Điểm TB (vd: 4.8)', widget: string }
+              - { name: total, label: 'Tổng số đánh giá', widget: number, value_type: int }
+              - name: items
+                label: 'Đánh giá hiển thị'
+                widget: list
+                fields:
+                  - { name: avatar, label: 'Chữ cái đầu avatar', widget: string }
+                  - { name: name, label: 'Tên khách', widget: string }
+                  - { name: place, label: 'Địa điểm', widget: string }
+                  - { name: date, label: 'Ngày mua (dd/mm/yyyy)', widget: string }
+                  - { name: stars, label: 'Sao (★ ký tự)', widget: string }
+                  - { name: body, label: 'Nội dung đánh giá', widget: text }
+                  - { name: fab, label: 'Vải đã chọn', widget: string }
+                  - { name: size, label: 'Kích thước đã chọn', widget: string }
+                  - { name: cushion, label: 'Độ êm đã chọn', widget: string }
+                  - { name: helpful, label: 'Số người thấy hữu ích', widget: number, value_type: int }

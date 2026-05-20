@@ -1,0 +1,220 @@
+name: 'Sofa văng "Mây"'
+subtitle: "3 chỗ ngồi"
+collection: "Bộ sưu tập Mây"
+category: "Sofa"
+lede: "Sofa văng dáng thấp — kiểu Japandi nguyên bản. Khung gỗ sồi tự nhiên, đệm mút D40, vải bố linen Hàn Quốc. Ngồi êm trong 5 phút, dùng êm trong 5 năm."
+
+priceNow: "6.900.000đ"
+priceWas: "8.500.000đ"
+priceDiscount: "− 19%"
+priceInstallment: "575.000đ"
+priceNum: 6900000
+reviewScore: "4.8"
+reviewCount: 184
+badge: "Bestseller tháng 5"
+stockLabel: "Còn 12 cái"
+stockStatus: "Còn hàng · giao 48h"
+
+fabricSwatchesTop:
+  - name: "Linen Nâu Đất"
+    style: "linear-gradient(135deg,#B77452,#915438)"
+    active: true
+  - name: "Linen Be Sữa"
+    style: "linear-gradient(135deg,#E5D2B5,#C9B091)"
+  - name: "Linen Xám Tro"
+    style: "linear-gradient(135deg,#A39C92,#736C61)"
+  - name: "Linen Xanh Rêu"
+    style: "linear-gradient(135deg,#7A8E73,#566954)"
+  - name: "Bouclé Trắng Kem"
+    style: "radial-gradient(circle at 30% 30%, #fff, #EDE3D0)"
+
+fabricLibrary:
+  - name: "Linen Nâu Đất"
+    label: "Nâu Đất"
+    style: "linear-gradient(135deg,#B77452,#915438)"
+    active: true
+  - name: "Linen Be Sữa"
+    label: "Be Sữa"
+    style: "linear-gradient(135deg,#E5D2B5,#C9B091)"
+  - name: "Linen Xám Tro"
+    label: "Xám Tro"
+    style: "linear-gradient(135deg,#A39C92,#736C61)"
+  - name: "Linen Xanh Rêu"
+    label: "Xanh Rêu"
+    style: "linear-gradient(135deg,#7A8E73,#566954)"
+  - name: "Linen Xanh Than"
+    label: "Xanh Than"
+    style: "linear-gradient(135deg,#3C4A5E,#25303D)"
+  - name: "Linen Hồng Đào"
+    label: "Hồng Đào"
+    style: "linear-gradient(135deg,#E1B3A1,#C48D78)"
+  - name: "Linen Vàng Mơ"
+    label: "Vàng Mơ"
+    style: "linear-gradient(135deg,#E5C99A,#C9A370)"
+  - name: "Linen Mật Ong"
+    label: "Mật Ong"
+    style: "linear-gradient(135deg,#D9A75C,#B07F38)"
+  - name: "Bouclé Trắng Kem"
+    label: "Bouclé Kem"
+    style: "radial-gradient(circle at 30% 30%,#fff,#EDE3D0)"
+  - name: "Bouclé Be Đậm"
+    label: "Bouclé Be"
+    style: "radial-gradient(circle at 30% 30%,#E5D2B5,#9B7B58)"
+  - name: "Bouclé Xám"
+    label: "Bouclé Xám"
+    style: "radial-gradient(circle at 30% 30%,#C0BBB1,#76705F)"
+  - name: "Bouclé Đen"
+    label: "Bouclé Đen"
+    style: "radial-gradient(circle at 30% 30%,#3B3530,#1B1612)"
+  - name: "Da bò Ý — Nâu Cognac"
+    label: "Da Cognac"
+    style: "linear-gradient(135deg,#A56237,#6E3D1C)"
+  - name: "Da bò Ý — Đen Mờ"
+    label: "Da Đen"
+    style: "linear-gradient(135deg,#2B2722,#0F0C09)"
+  - name: "Da bò Ý — Caramel"
+    label: "Da Caramel"
+    style: "linear-gradient(135deg,#C9925A,#8F5D2C)"
+  - name: "Da bò Ý — Nâu Hạt Dẻ"
+    label: "Hạt Dẻ"
+    style: "linear-gradient(135deg,#704633,#3D261A)"
+  - name: "Velvet Xanh Cổ Vịt"
+    label: "Velvet"
+    style: "linear-gradient(135deg,#2E5C5B,#143B3A)"
+  - name: "Velvet Hồng Phấn"
+    label: "Velvet Hồng"
+    style: "linear-gradient(135deg,#D9AAA5,#A86F69)"
+  - name: "Velvet Xanh Lá"
+    label: "Velvet Lá"
+    style: "linear-gradient(135deg,#456E4E,#22442C)"
+  - name: "Velvet Đỏ Đô"
+    label: "Đỏ Đô"
+    style: "linear-gradient(135deg,#7B2C2E,#4B1517)"
+  - name: "Cotton Pha — Trắng Be"
+    label: "Cotton"
+    style: "linear-gradient(135deg,#F0E7D6,#D9C9AC)"
+  - name: "Cotton Pha — Xám Sáng"
+    label: "Cotton Xám"
+    style: "linear-gradient(135deg,#D6D3CB,#A6A299)"
+  - name: "Cotton Pha — Xanh Pastel"
+    label: "Cotton Xanh"
+    style: "linear-gradient(135deg,#B7C7CC,#7E9298)"
+  - name: "Linen Pha — Kẻ Sọc"
+    label: "Kẻ Sọc"
+    style: "repeating-linear-gradient(90deg,#E5D2B5 0 6px,#B77452 6px 12px)"
+
+specsLeft:
+  - k: "Kích thước phủ bì (D × R × C)"
+    v: "210 × 92 × 80 cm"
+  - k: "Mặt ngồi (D × R × C)"
+    v: "180 × 56 × 42 cm"
+  - k: "Độ dày đệm"
+    v: "14 cm · mút D40"
+  - k: "Khung"
+    v: "Gỗ sồi tự nhiên · mộng âm dương"
+  - k: "Đệm tựa"
+    v: "Mút lò xo zigzag thép C75"
+  - k: "Vỏ bọc"
+    v: "Vải bố linen 380 g/m² · tháo rời"
+
+specsRight:
+  - k: "Trọng lượng"
+    v: "52 kg"
+  - k: "Tải trọng tối đa"
+    v: "320 kg"
+  - k: "Hoàn thiện chân"
+    v: "Sơn PU gốc nước · 3 lớp"
+  - k: "Chứng nhận an toàn"
+    v: "OEKO-TEX Standard 100"
+  - k: "Bảo hành"
+    v: "5 năm khung · 2 năm đệm"
+  - k: "Xuất xứ"
+    v: "Sản xuất tại Quy Nhơn · VN"
+
+bundle:
+  - id: "p-sofa-may-3"
+    name: 'Sofa văng "Mây" 3 chỗ'
+    meta: "vải bố Nâu Đất · chân gỗ sồi 18cm"
+    price: 6900000
+    priceLabel: "6.900.000đ"
+    fixed: true
+    tone: ""
+  - id: "p-bundle-goi-suong"
+    name: 'Bộ gối ôm "Sương" ×2'
+    meta: "linen tông cùng sofa · 45×45 cm"
+    price: 450000
+    priceLabel: "450.000đ"
+    priceOld: "590.000đ"
+    checked: true
+    tone: "sage"
+  - id: "p-bundle-throw-som-mai"
+    name: 'Throw len "Sớm Mai"'
+    meta: "130×170cm · len New Zealand"
+    price: 380000
+    priceLabel: "380.000đ"
+    priceOld: "490.000đ"
+    checked: true
+    tone: ""
+  - id: "p-bundle-den-mat-troi"
+    name: 'Đèn sàn "Mặt Trời"'
+    meta: "chao tre đan thủ công · cao 1m5"
+    price: 280000
+    priceLabel: "280.000đ"
+    tone: "sage"
+  - id: "p-bundle-cay-bang"
+    name: "Cây bàng Singapore + chậu gốm"
+    meta: "cao 1m2 · cây thật"
+    price: 220000
+    priceLabel: "220.000đ"
+    tone: ""
+
+reviews:
+  score: "4.8"
+  total: 184
+  distribution:
+    - stars: 5
+      count: 158
+      pct: 86
+    - stars: 4
+      count: 19
+      pct: 10
+    - stars: 3
+      count: 5
+      pct: 3
+    - stars: 2
+      count: 2
+      pct: 1
+    - stars: 1
+      count: 0
+      pct: 0
+  items:
+    - avatar: "P"
+      name: "Phạm Thanh Tâm"
+      place: "Nhơn Bình · Quy Nhơn"
+      date: "09/05/2026"
+      stars: "★★★★★"
+      body: "Mua thay chiếc sofa cũ 5 năm rồi. Ngồi vào là biết khác liền — êm, mà vẫn có lực đỡ lưng. Vải bố linen Nâu Đất nhìn ảnh hơi tối, ngoài đời ấm hơn, hợp căn hộ tông gỗ."
+      fab: "Linen Nâu Đất"
+      size: "3 chỗ"
+      cushion: "Vừa"
+      helpful: 38
+    - avatar: "D"
+      name: "Đặng Hữu Khoa"
+      place: "Trần Phú · Quy Nhơn"
+      date: "02/05/2026"
+      stars: "★★★★★"
+      body: "Order thử cái mẫu vải miễn phí trước khi mua, đúng là khác xa ảnh chụp web. Cuối cùng chọn Bouclé Trắng Kem — căn hộ sáng hẳn. Giao đúng 48h, lắp 2 anh trong 25 phút."
+      fab: "Bouclé Trắng Kem"
+      size: "3 chỗ"
+      cushion: "Êm"
+      helpful: 27
+    - avatar: "H"
+      name: "Hoàng Thị Quỳnh"
+      place: "Tuy Phước · Bình Định"
+      date: "21/04/2026"
+      stars: "★★★★☆"
+      body: "Mọi thứ tốt — chỉ có chân gỗ 18cm mình thấy hơi cao, có lẽ nên thử bản 12cm. Nhưng tổng thể chắc chắn, đáng tiền. Đặc biệt cái khóa kéo tháo vỏ bọc rất tiện."
+      fab: "Linen Xám Tro"
+      size: "Chữ L"
+      cushion: "Chắc"
+      helpful: 19
