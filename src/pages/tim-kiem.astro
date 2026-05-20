@@ -1,0 +1,76 @@
+---
+import ShopLayout from '../layouts/ShopLayout.astro';
+import Nav from '../components/shop/Nav.astro';
+import Footer from '../components/shop/Footer.astro';
+---
+<ShopLayout
+  title="Tìm kiếm — WOTU Nội thất"
+  description="Tìm kiếm sản phẩm, combo nội thất WOTU. Sofa, bàn ăn, giường, kệ TV, thảm — gỗ tự nhiên, bảo hành 5 năm."
+>
+  <Nav />
+
+  <div class="container search-wrap">
+    <div class="search-head">
+      <span class="eyebrow">Tìm kiếm</span>
+      <h1>Tìm <em>đồ bạn cần</em>.</h1>
+    </div>
+
+    <div id="search" class="pagefind-ui-wrap"></div>
+  </div>
+
+  <Footer />
+</ShopLayout>
+
+<style>
+  :where(main) {
+    --bg: var(--shop-bg);
+    --bg-soft: var(--shop-bg-soft);
+    --bg-card: var(--shop-bg-card);
+    --ink: var(--shop-ink);
+    --ink-soft: var(--shop-ink-soft);
+    --line: var(--shop-line);
+    --accent: var(--shop-accent);
+    --accent-deep: var(--shop-accent-deep);
+    --serif: var(--shop-serif);
+    --sans: var(--shop-sans);
+    --radius: var(--shop-radius);
+    --maxw: var(--shop-maxw);
+  }
+
+  .search-wrap { padding: 60px 0 100px; min-height: 60vh; }
+  .search-head { margin-bottom: 40px; }
+  .search-head h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 5vw, 64px); line-height: 1; margin: 10px 0 0; }
+  .search-head h1 em { font-style: italic; color: var(--accent); }
+
+  /* Override Pagefind default styles cho phù hợp brand */
+  .pagefind-ui-wrap {
+    --pagefind-ui-scale: 1;
+    --pagefind-ui-primary: var(--shop-accent);
+    --pagefind-ui-text: var(--shop-ink);
+    --pagefind-ui-background: var(--shop-bg-card);
+    --pagefind-ui-border: var(--shop-line);
+    --pagefind-ui-tag: var(--shop-warm-soft);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 12px;
+    --pagefind-ui-font: var(--shop-sans);
+  }
+</style>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+<script src="/pagefind/pagefind-ui.js" is:inline></script>
+<script is:inline>
+  window.addEventListener('DOMContentLoaded', function () {
+    new PagefindUI({
+      element: '#search',
+      showSubResults: false,
+      showImages: false,
+      translations: {
+        placeholder: 'Tìm sofa, combo, thảm...',
+        zero_results: 'Không tìm thấy "[SEARCH_TERM]"',
+        many_results: '[COUNT] kết quả cho "[SEARCH_TERM]"',
+        one_result: '1 kết quả cho "[SEARCH_TERM]"',
+        load_more: 'Xem thêm',
+      },
+    });
+  });
+</script>

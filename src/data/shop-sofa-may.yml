@@ -218,3 +218,31 @@ reviews:
       size: "Chữ L"
       cushion: "Chắc"
       helpful: 19
+
+collectionGrid:
+  desc: "Cùng tỉ lệ, chất liệu và tông màu — dễ đặt cạnh nhau trong một phòng."
+  items:
+    - meta: "Sofa · 2 chỗ ngồi"
+      name: 'Sofa văng "Mây"'
+      nameSub: "2 chỗ"
+      price: "5.500.000đ"
+      stars: "★★★★★"
+      placeholder: "Sofa Mây 2 chỗ"
+      tone: ""
+      href: "/san-pham/"
+    - meta: "Ghế đơn · armchair"
+      name: 'Armchair "Mây Lone"'
+      nameSub: ""
+      price: "3.200.000đ"
+      stars: "★★★★★"
+      placeholder: "Ghế đơn Mây"
+      tone: "sage"
+      href: "/san-pham/"
+    - meta: "Ottoman / Đôn"
+      name: 'Ottoman "Mây Mini"'
+      nameSub: ""
+      price: "1.450.000đ"
+      stars: "★★★★☆"
+      placeholder: "Ottoman Mây"
+      tone: ""
+      href: "/san-pham/"

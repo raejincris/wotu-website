@@ -72,7 +72,7 @@ const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
   </head>
   <body class="shop" data-shop-palette="warm" data-shop-density="comfy">
     <a href="#main" class="skip-to-main">Bỏ qua điều hướng — đến nội dung chính</a>
-    <main id="main"><slot /></main>
+    <main id="main" data-pagefind-body><slot /></main>
     <CartDrawer />
 
     <script is:inline>

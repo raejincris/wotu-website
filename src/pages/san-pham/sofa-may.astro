@@ -11,6 +11,7 @@ const specsLeft = d.specsLeft as any[];
 const specsRight = d.specsRight as any[];
 const reviews = d.reviews.items as any[];
 const bundleItems = d.bundle as any[];
+const collectionItems = d.collectionGrid.items as any[];
 
 const SITE_URL = 'https://www.wotu.vn';
 const PAGE_URL = `${SITE_URL}/san-pham/sofa-may/`;
@@ -525,43 +526,27 @@ const breadcrumbSchema = {
         <span class="eyebrow">Cùng bộ sưu tập Mây</span>
         <h2>Sản phẩm cùng <em>thiết kế</em>.</h2>
       </div>
-      <div class="right">Cùng tỉ lệ, chất liệu &amp; tông màu — dễ đặt cạnh nhau trong một phòng.</div>
+      <div class="right">{d.collectionGrid.desc}</div>
     </div>
 
     <div class="coll-grid">
-      <a class="coll-card" href="#" rel="nofollow" aria-disabled="true">
-        <div class="coll-img"><div class="shop-ph"><span class="shop-ph-label">Sofa Mây 2 chỗ</span></div></div>
-        <div class="coll-body">
-          <span class="meta">Sofa · 2 chỗ ngồi</span>
-          <h4>Sofa văng <em>"Mây"</em> · 2 chỗ</h4>
-          <div class="coll-foot">
-            <div class="coll-price">5.500.000đ</div>
-            <span class="stars">★★★★★</span>
+      {collectionItems.map((item: any) => (
+        <a class="coll-card" href={item.href}>
+          <div class="coll-img">
+            <div class={`shop-ph${item.tone === 'sage' ? ' sage' : ''}`}>
+              <span class="shop-ph-label">{item.placeholder}</span>
+            </div>
           </div>
-        </div>
-      </a>
-      <a class="coll-card" href="#" rel="nofollow" aria-disabled="true">
-        <div class="coll-img"><div class="shop-ph sage"><span class="shop-ph-label">Ghế đơn Mây</span></div></div>
-        <div class="coll-body">
-          <span class="meta">Ghế đơn · armchair</span>
-          <h4>Armchair <em>"Mây Lone"</em></h4>
-          <div class="coll-foot">
-            <div class="coll-price">3.200.000đ</div>
-            <span class="stars">★★★★★</span>
+          <div class="coll-body">
+            <span class="meta">{item.meta}</span>
+            <h4 set:html={item.name + (item.nameSub ? ` <em>· ${item.nameSub}</em>` : '')} />
+            <div class="coll-foot">
+              <div class="coll-price">{item.price}</div>
+              <span class="stars">{item.stars}</span>
+            </div>
           </div>
-        </div>
-      </a>
-      <a class="coll-card" href="#" rel="nofollow" aria-disabled="true">
-        <div class="coll-img"><div class="shop-ph"><span class="shop-ph-label">Ottoman Mây</span></div></div>
-        <div class="coll-body">
-          <span class="meta">Ottoman / Đôn</span>
-          <h4>Ottoman <em>"Mây Mini"</em></h4>
-          <div class="coll-foot">
-            <div class="coll-price">1.450.000đ</div>
-            <span class="stars">★★★★☆</span>
-          </div>
-        </div>
-      </a>
+        </a>
+      ))}
     </div>
   </section>
 
