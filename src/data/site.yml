@@ -1,30 +1,19 @@
-tagline: "Studio · Thiết kế & Thi công nội thất"
-description: "Studio thiết kế kiến trúc, nội thất và thi công trọn gói tại Quy Nhơn. Một khoảng lặng, giữa đời vội."
-
+tagline: Studio · Thiết kế & Thi công nội thất
+description: Studio thiết kế kiến trúc, nội thất và thi công trọn gói tại Quy Nhơn. Một khoảng lặng, giữa đời vội.
 address:
-  line1: "02-04 Hùng Vương, Nhơn Bình"
-  city: "Quy Nhơn, Bình Định"
-
-hotline: "0933 774 708"
-email: "hello@wotu.vn"
-
+  line1: Lô 17-18 đường Hoa Lư
+  city: Quy Nhơn
+hotline: 0933 774 708
+email: hello@wotu.vn
 social:
-  instagram: "https://instagram.com/wotu.vn"
-  behance: "https://www.behance.net/wotu"
-
+  instagram: https://instagram.com/wotu.vn
+  behance: https://www.behance.net/wotu
 meta:
-  est: "2018"
-  location: "QUY NHƠN"
-  issueNumber: "014 / MMXXVI"
-
-# Form Contact backend (Web3Forms — free 250 submit/m).
-# Lấy access key tại https://web3forms.com → submit gửi tới email đã đăng ký.
+  est: '2018'
+  location: QUY NHƠN
+  issueNumber: 014 / MMXXVI
 forms:
-  contactAccessKey: "f5e8cdc8-94cb-4e5d-b892-4303b2bd6272"
-  contactSubject: "[WOTU website] Liên hệ mới từ khách hàng"
-
-# Cloudflare Web Analytics (free, no cookies, privacy-first).
-# Setup: dash.cloudflare.com → Analytics & Logs → Web Analytics → Add a site (manual JS) → copy token.
-# Khi token rỗng: script không inject (dev mode hoặc chưa setup).
+  contactAccessKey: f5e8cdc8-94cb-4e5d-b892-4303b2bd6272
+  contactSubject: '[WOTU website] Liên hệ mới từ khách hàng'
 analytics:
-  cfBeaconToken: "54a42c6c23c340f0a1b571408d637133"
+  cfBeaconToken: 54a42c6c23c340f0a1b571408d637133
