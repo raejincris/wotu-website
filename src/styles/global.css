@@ -59,6 +59,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
+  scroll-behavior: smooth;
   background: var(--bone);
   color: var(--ink);
   font-family: var(--font-sans);

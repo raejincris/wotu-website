@@ -1,0 +1,173 @@
+combos:
+  - feature: true
+    id: combo-an-cu
+    room: studio
+    cat: "Combo căn hộ · 30m²"
+    name: "Combo Studio"
+    nameEm: "An Cư"
+    nameTail: " 30m²"
+    desc: "Trọn bộ 11 món cho căn hộ studio: sofa giường, bàn trà, kệ TV, giường 1m6, tủ áo 4 cánh, bàn ăn 4 ghế, bàn làm việc, kệ bếp, đèn trang trí, thảm và rèm cửa."
+    priceOld: "59.900.000đ"
+    priceNew: "45.000.000đ"
+    price: 45000000
+    priceNote: "· trả góp 0% — 12 tháng"
+    badge: "★ Bestseller"
+    badgeStyle: "background: var(--shop-bg); color: var(--shop-ink);"
+    placeholder: "Combo Căn hộ studio 30m² — full nội thất"
+    tone: ""
+    href: /combo/to-am/
+
+  - id: combo-to-am
+    room: phong-khach
+    cat: "Phòng khách"
+    name: "Combo"
+    nameEm: "Tổ Ấm"
+    desc: "Sofa văng 3 chỗ · bàn trà gỗ sồi · kệ TV 1m8 · thảm dệt tay."
+    priceOld: "28.900.000đ"
+    priceNew: "18.900.000đ"
+    price: 18900000
+    priceNote: "· tiết kiệm 10 triệu"
+    badge: "Hot"
+    badgeClass: terra
+    placeholder: "Combo phòng khách Tổ Ấm"
+    tone: ""
+    href: /combo/to-am/
+
+  - id: combo-an-yen
+    room: phong-ngu
+    cat: "Phòng ngủ master"
+    name: "Combo"
+    nameEm: "An Yên"
+    desc: "Giường 1m8 · tủ áo 4 cánh · bàn trang điểm · 2 tab đầu giường."
+    priceOld: "32.500.000đ"
+    priceNew: "22.500.000đ"
+    price: 22500000
+    priceNote: "· tiết kiệm 10 triệu"
+    badge: "Mới"
+    badgeClass: sage
+    placeholder: "Combo phòng ngủ An Yên"
+    tone: sage
+    href: /san-pham/?room=phong-ngu
+
+  - id: combo-sum-vay
+    room: phong-an
+    cat: "Phòng ăn · 6 chỗ"
+    name: "Combo"
+    nameEm: "Sum Vầy"
+    desc: "Bàn ăn gỗ sồi 1m6 · 6 ghế bọc nệm · tủ chén 3 cánh."
+    priceOld: "18.500.000đ"
+    priceNew: "12.800.000đ"
+    price: 12800000
+    priceNote: "· tặng bộ chén Bát Tràng"
+    placeholder: "Combo phòng ăn Sum Vầy"
+    tone: ""
+    href: /san-pham/?room=phong-an
+
+  - id: combo-tap-trung
+    room: lam-viec
+    cat: "Phòng làm việc tại nhà"
+    name: "Combo"
+    nameEm: "Tập Trung"
+    desc: "Bàn làm việc 1m4 · ghế công thái học · kệ sách 5 tầng · đèn LED."
+    priceOld: "12.900.000đ"
+    priceNew: "8.900.000đ"
+    price: 8900000
+    priceNote: "· tặng đệm lưng"
+    placeholder: "Combo bàn làm việc Tập Trung"
+    tone: sage
+    href: /san-pham/?room=lam-viec
+
+  - id: combo-vuon-co-tich
+    room: tre-em
+    cat: "Phòng trẻ em · 4–10 tuổi"
+    name: "Combo"
+    nameEm: "Vườn Cổ Tích"
+    desc: "Giường tầng gỗ thông · bàn học · kệ đồ chơi · ghế nhỏ."
+    priceOld: "19.900.000đ"
+    priceNew: "14.500.000đ"
+    price: 14500000
+    priceNote: "· sơn không độc hại"
+    badge: "−28%"
+    badgeClass: terra
+    placeholder: "Combo phòng trẻ em Vườn Cổ Tích"
+    tone: ""
+    href: /san-pham/?room=tre-em
+
+bestsellers:
+  - id: p-sofa-may-3
+    meta: "Sofa · 3 chỗ ngồi"
+    name: 'Sofa văng "Mây"'
+    price: "6.900.000đ"
+    priceNum: 6900000
+    stars: "★★★★★"
+    placeholder: "Sofa văng Mây"
+    tone: ""
+    href: /san-pham/sofa-may/
+
+  - id: p-ban-doan-vien
+    meta: "Bàn ăn · gỗ sồi tự nhiên"
+    name: 'Bàn ăn "Đoàn Viên"'
+    price: "4.500.000đ"
+    priceNum: 4500000
+    stars: "★★★★★"
+    placeholder: "Bàn ăn Đoàn Viên"
+    tone: sage
+    href: /san-pham/?cat=ban
+
+  - id: p-giuong-trang-non
+    meta: "Giường · 1m6"
+    name: 'Giường "Trăng Non"'
+    price: "5.900.000đ"
+    priceNum: 5900000
+    stars: "★★★★★"
+    placeholder: "Giường ngủ Trăng Non"
+    tone: ""
+    href: /san-pham/?cat=giuong
+
+  - id: p-tu-moc
+    meta: "Tủ quần áo · 4 cánh"
+    name: 'Tủ áo "Mộc"'
+    price: "7.200.000đ"
+    priceNum: 7200000
+    stars: "★★★★☆"
+    placeholder: "Tủ quần áo Mộc"
+    tone: sage
+    href: /san-pham/?cat=tu
+
+inspo:
+  - tall: true
+    label: "Căn hộ 2PN · Vinhomes Quy Nhơn"
+    placeholder: "Phòng khách lớn · combo Tổ Ấm"
+    href: /combo/to-am/
+
+  - label: "Phòng ngủ · An Yên"
+    placeholder: "Phòng ngủ An Yên"
+    href: /san-pham/?room=phong-ngu
+
+  - label: "Bếp + phòng ăn · Sum Vầy"
+    placeholder: "Phòng ăn Sum Vầy"
+    href: /san-pham/?room=phong-an
+
+  - label: "Góc làm việc · Tập Trung"
+    placeholder: "Bàn làm việc Tập Trung"
+    href: /san-pham/?room=lam-viec
+
+  - label: "Phòng bé · Vườn Cổ Tích"
+    placeholder: "Phòng trẻ em Vườn Cổ Tích"
+    href: /san-pham/?room=tre-em
+
+reviews:
+  - quote: "Đặt nguyên combo Tổ Ấm, đội WOTU giao và lắp trong buổi sáng. Cuối ngày là đã ngồi xem TV với gia đình. Quá tiện cho người mới về nhà mới."
+    name: "Nguyễn Hà My"
+    role: "Nhơn Bình · Quy Nhơn"
+    initial: "N"
+
+  - quote: "Gỗ thật, đường ráp gọn, không có mùi sơn công nghiệp như mấy chỗ rẻ. Trẻ con nhà mình ngủ trong combo Vườn Cổ Tích từ tháng đầu vẫn ổn."
+    name: "Trần Quốc Trung"
+    role: "Trần Phú · Quy Nhơn"
+    initial: "T"
+
+  - quote: "Mình là dân thiết kế nên khá kỹ tính. WOTU tư vấn xong còn dựng 3D phòng cho xem trước. Combo An Yên hợp tông căn hộ của mình bất ngờ."
+    name: "Lê Phương Linh"
+    role: "Tuy Phước · Bình Định"
+    initial: "L"

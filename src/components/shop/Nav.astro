@@ -7,6 +7,7 @@ interface Props {
 }
 
 const { active } = Astro.props;
+const pathname = Astro.url.pathname;
 
 const links: NavLink[] = [
   { label: 'Combo nội thất', href: '/#combos' },
@@ -20,12 +21,20 @@ const links: NavLink[] = [
 <nav class="shop-nav">
   <div class="container shop-nav-inner">
     <a href="/" class="shop-brand" aria-label="WOTU — trang chủ shop">
-      <img src="/logo.svg" alt="WOTU" width="160" height="64" style="height: 40px; width: auto; display: block;" />
+      <img src="/logo.svg" alt="WOTU" width="160" height="64" style="height: 32px; width: auto; display: block;" />
     </a>
     <div class="shop-nav-links">
-      {links.map((l) => (
-        <a href={l.href} style={active === l.label ? 'color: var(--shop-accent);' : undefined}>{l.label}</a>
-      ))}
+      {links.map((l) => {
+        const isRoute = l.href.startsWith('/') && !l.href.includes('#');
+        const isCurrent = isRoute && (pathname === l.href || pathname.startsWith(l.href));
+        return (
+          <a
+            href={l.href}
+            aria-current={isCurrent ? 'page' : undefined}
+            style={active === l.label ? 'color: var(--shop-accent);' : undefined}
+          >{l.label}</a>
+        );
+      })}
     </div>
     <div class="shop-nav-cta">
       <a class="shop-icon-btn" href="/san-pham/" aria-label="Tìm sản phẩm">

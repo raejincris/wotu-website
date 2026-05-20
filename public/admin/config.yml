@@ -318,3 +318,207 @@ collections:
                   - { name: label, label: 'Nhãn', widget: string }
                   - { name: anchor, label: 'Anchor (vd services)', widget: string, required: false }
                   - { name: route, label: 'Route (vd /blog)', widget: string, required: false }
+
+  # ============================================================
+  # 6. SHOP — Trang chủ Shop / (combos, bestsellers, reviews, inspo)
+  # ============================================================
+  - name: shop_home
+    label: 'Shop — Trang chủ (/)'
+    files:
+      - name: shop_home
+        label: 'Combos · Bestsellers · Reviews · Cảm hứng'
+        file: 'src/data/shop-home.yml'
+        fields:
+          - name: combos
+            label: 'Combo nội thất (6 combo)'
+            widget: list
+            fields:
+              - { name: id, label: 'ID (không dấu, gạch nối)', widget: string }
+              - { name: name, label: 'Tên nhóm', widget: string, hint: 'VD: Combo' }
+              - { name: nameEm, label: 'Tên nổi bật (in nghiêng)', widget: string, hint: 'VD: Tổ Ấm' }
+              - { name: nameTail, label: 'Đuôi tên (tuỳ chọn)', widget: string, required: false }
+              - { name: cat, label: 'Phân loại (badge trên card)', widget: string }
+              - { name: desc, label: 'Mô tả ngắn', widget: text }
+              - { name: priceOld, label: 'Giá gốc (gạch)', widget: string, hint: 'VD: 28.900.000đ' }
+              - { name: priceNew, label: 'Giá khuyến mãi', widget: string, hint: 'VD: 18.900.000đ' }
+              - { name: price, label: 'Giá số (dùng để sort)', widget: number, value_type: int }
+              - { name: priceNote, label: 'Ghi chú giá', widget: string, hint: 'VD: · tiết kiệm 10 triệu' }
+              - { name: badge, label: 'Badge label (tuỳ chọn)', widget: string, required: false }
+              - name: badgeClass
+                label: 'Màu badge'
+                widget: select
+                options: ['', sage, terra]
+                required: false
+              - { name: href, label: 'Đường dẫn trang combo', widget: string }
+              - name: room
+                label: 'Phòng (dùng để lọc tab)'
+                widget: select
+                options: [studio, phong-khach, phong-ngu, phong-an, lam-viec, tre-em]
+              - name: tone
+                label: 'Tông màu placeholder'
+                widget: select
+                options: ['', sage]
+                default: ''
+              - { name: placeholder, label: 'Alt text ảnh placeholder', widget: string }
+
+          - name: bestsellers
+            label: 'Bestsellers (4 sản phẩm nổi bật)'
+            widget: list
+            fields:
+              - { name: id, label: 'ID sản phẩm', widget: string }
+              - { name: name, label: 'Tên sản phẩm', widget: string }
+              - { name: meta, label: 'Phân loại ngắn', widget: string, hint: 'VD: Sofa · 3 chỗ ngồi' }
+              - { name: price, label: 'Giá hiển thị', widget: string, hint: 'VD: 6.900.000đ' }
+              - { name: stars, label: 'Sao', widget: string, hint: 'VD: ★★★★★' }
+              - { name: href, label: 'Đường dẫn', widget: string }
+              - name: tone
+                label: 'Tông màu placeholder'
+                widget: select
+                options: ['', sage]
+
+          - name: inspo
+            label: 'Ảnh cảm hứng (5 ô)'
+            widget: list
+            fields:
+              - { name: label, label: 'Nhãn ảnh', widget: string }
+              - { name: href, label: 'Đường dẫn khi click', widget: string }
+              - { name: tall, label: 'Ô cao (ô đầu tiên)', widget: boolean, required: false, default: false }
+
+          - name: reviews
+            label: 'Đánh giá khách hàng (3 review trang chủ)'
+            widget: list
+            fields:
+              - { name: name, label: 'Tên khách', widget: string }
+              - { name: role, label: 'Địa chỉ', widget: string, hint: 'VD: Nhơn Bình · Quy Nhơn' }
+              - { name: initial, label: 'Chữ cái đầu (avatar)', widget: string }
+              - { name: quote, label: 'Nội dung đánh giá', widget: text }
+
+  # ============================================================
+  # 7. SHOP — Sản phẩm /san-pham/ (products, categories, filters)
+  # ============================================================
+  - name: shop_products
+    label: 'Shop — Sản phẩm (/san-pham/)'
+    files:
+      - name: shop_products
+        label: 'Danh sách 18 sản phẩm · Danh mục · Bộ lọc'
+        file: 'src/data/shop-products.yml'
+        fields:
+          - name: products
+            label: 'Sản phẩm (7 sản phẩm trước banner)'
+            widget: list
+            fields:
+              - { name: id, label: 'ID', widget: string }
+              - { name: name, label: 'Tên nhóm (VD: Sofa văng)', widget: string }
+              - { name: nameEm, label: 'Tên nổi bật (VD: "Mây")', widget: string }
+              - { name: nameTail, label: 'Đuôi tên (VD: 3 chỗ)', widget: string, required: false }
+              - { name: cat, label: 'Phân loại (tooltip card)', widget: string }
+              - { name: price, label: 'Giá hiển thị', widget: string }
+              - { name: priceOld, label: 'Giá gốc (gạch)', widget: string, required: false }
+              - { name: priceNum, label: 'Giá số (để sort)', widget: number, value_type: int }
+              - { name: rating, label: 'Rating string (VD: 4.8)', widget: string }
+              - { name: ratingNum, label: 'Rating số', widget: number, value_type: float }
+              - { name: reviews, label: 'Số lượng đánh giá', widget: number, value_type: int }
+              - { name: href, label: 'Đường dẫn trang chi tiết', widget: string }
+              - name: room
+                label: 'Phòng'
+                widget: select
+                options: [phong-khach, phong-ngu, phong-an, lam-viec, tre-em]
+              - name: catKey
+                label: 'Danh mục (category key)'
+                widget: select
+                options: [sofa, ban, ghe, giuong, tu, ke, den, tham]
+              - name: tone
+                label: 'Tông màu placeholder'
+                widget: select
+                options: ['', sage]
+
+          - name: productsAfterCta
+            label: 'Sản phẩm (11 sản phẩm sau banner)'
+            widget: list
+            fields:
+              - { name: id, label: 'ID', widget: string }
+              - { name: name, label: 'Tên nhóm', widget: string }
+              - { name: nameEm, label: 'Tên nổi bật', widget: string }
+              - { name: nameTail, label: 'Đuôi tên', widget: string, required: false }
+              - { name: cat, label: 'Phân loại', widget: string }
+              - { name: price, label: 'Giá hiển thị', widget: string }
+              - { name: priceOld, label: 'Giá gốc (gạch)', widget: string, required: false }
+              - { name: priceNum, label: 'Giá số', widget: number, value_type: int }
+              - { name: rating, label: 'Rating string', widget: string }
+              - { name: ratingNum, label: 'Rating số', widget: number, value_type: float }
+              - { name: reviews, label: 'Số đánh giá', widget: number, value_type: int }
+              - { name: href, label: 'Đường dẫn', widget: string }
+              - name: room
+                label: 'Phòng'
+                widget: select
+                options: [phong-khach, phong-ngu, phong-an, lam-viec, tre-em]
+              - name: catKey
+                label: 'Danh mục'
+                widget: select
+                options: [sofa, ban, ghe, giuong, tu, ke, den, tham]
+              - name: tone
+                label: 'Tông màu placeholder'
+                widget: select
+                options: ['', sage]
+
+          - name: categories
+            label: 'Danh mục (9 tiles)'
+            widget: list
+            fields:
+              - { name: key, label: 'Key (để lọc)', widget: string, hint: 'Để trống = Tất cả' }
+              - { name: name, label: 'Tên hiển thị', widget: string }
+              - { name: count, label: 'Số lượng', widget: number, value_type: int }
+
+  # ============================================================
+  # 8. SHOP — Combo Tổ Ấm /combo/to-am/ (giá, FAQ, reviews, related)
+  # ============================================================
+  - name: combo_to_am
+    label: 'Shop — Combo Tổ Ấm (/combo/to-am/)'
+    files:
+      - name: combo_to_am
+        label: 'Giá · FAQ · Đánh giá · Related combos'
+        file: 'src/data/combo-to-am.yml'
+        fields:
+          - { name: priceNow, label: 'Giá hiện tại', widget: string, hint: 'VD: 18.900.000đ' }
+          - { name: priceWas, label: 'Giá gốc (gạch)', widget: string, hint: 'VD: 28.900.000đ' }
+          - { name: priceDiscount, label: 'Phần trăm giảm', widget: string, hint: 'VD: − 35%' }
+          - { name: priceInstallment, label: 'Trả góp / tháng', widget: string, hint: 'VD: 1.575.000đ' }
+          - { name: description, label: 'Mô tả ngắn', widget: text }
+
+          - name: faq
+            label: 'Câu hỏi thường gặp (FAQ)'
+            widget: list
+            fields:
+              - { name: question, label: 'Câu hỏi', widget: string }
+              - { name: answer, label: 'Câu trả lời (HTML cho phép strong/)', widget: text }
+              - { name: open, label: 'Mở sẵn khi tải trang', widget: boolean, required: false, default: false }
+
+          - name: reviews
+            label: 'Đánh giá khách hàng (reviews trang Tổ Ấm)'
+            widget: object
+            fields:
+              - { name: score, label: 'Điểm TB', widget: string }
+              - { name: total, label: 'Tổng số đánh giá', widget: number, value_type: int }
+              - name: items
+                label: 'Các đánh giá hiển thị (3 review)'
+                widget: list
+                fields:
+                  - { name: name, label: 'Tên khách', widget: string }
+                  - { name: initial, label: 'Chữ cái đầu (avatar)', widget: string }
+                  - { name: when, label: 'Địa điểm · Ngày mua', widget: string }
+                  - { name: body, label: 'Nội dung đánh giá', widget: text }
+                  - { name: color, label: 'Tông màu đã chọn', widget: string }
+                  - { name: size, label: 'Kích thước đã chọn', widget: string }
+                  - { name: helpful, label: 'Số người thấy có ích', widget: number, value_type: int }
+
+          - name: related
+            label: 'Combo liên quan (3 combo)'
+            widget: list
+            fields:
+              - { name: name, label: 'Tên combo (in nghiêng)', widget: string }
+              - { name: cat, label: 'Phân loại', widget: string }
+              - { name: desc, label: 'Mô tả ngắn', widget: string }
+              - { name: priceOld, label: 'Giá gốc', widget: string }
+              - { name: priceNew, label: 'Giá khuyến mãi', widget: string }
+              - { name: discount, label: 'Phần trăm giảm', widget: string }
+              - { name: href, label: 'Đường dẫn', widget: string }

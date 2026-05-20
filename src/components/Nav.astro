@@ -9,16 +9,19 @@ interface Props {
   homeRoute?: string;
 }
 const { variant = 'home', homeRoute = '/' } = Astro.props;
+const pathname = Astro.url.pathname;
 
 interface NavLink { label: string; anchor?: string; route?: string; }
 const navLinks = footer.nav.links as NavLink[];
 const homeAnchor = variant === 'home' ? '#' : homeRoute;
 
 const links = navLinks.map((l) => {
-  if (variant === 'home') {
-    return { label: l.label, href: l.route ? l.route : `#${l.anchor}` };
-  }
-  return { label: l.label, href: l.route ? l.route : `${homeRoute}#${l.anchor}` };
+  const href = variant === 'home'
+    ? (l.route ? l.route : `#${l.anchor}`)
+    : (l.route ? l.route : `${homeRoute}#${l.anchor}`);
+  const isRoute = href.startsWith('/') && !href.includes('#');
+  const isCurrent = isRoute && (pathname === href || pathname.startsWith(href));
+  return { label: l.label, href, isCurrent };
 });
 ---
 <nav class="wotu-nav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 16px var(--pad-x); display: flex; justify-content: space-between; align-items: center; color: var(--ink);">
@@ -27,7 +30,7 @@ const links = navLinks.map((l) => {
   </a>
 
   <div class="wotu-nav-links" style="display: flex; gap: 36px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;">
-    {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    {links.map((l) => <a href={l.href} aria-current={l.isCurrent ? 'page' : undefined}>{l.label}</a>)}
   </div>
 
   <button
@@ -59,7 +62,7 @@ const links = navLinks.map((l) => {
       <button type="button" class="wotu-mobile-drawer__close" aria-label="Đóng menu">×</button>
     </div>
     <nav class="wotu-mobile-drawer__nav">
-      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      {links.map((l) => <a href={l.href} aria-current={l.isCurrent ? 'page' : undefined}>{l.label}</a>)}
     </nav>
   </div>
 </div>

@@ -2,105 +2,9 @@
 import ShopLayout from '../../layouts/ShopLayout.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
+import shopProducts from '../../data/shop-products.yml';
 
-const cats = [
-  { key: '', name: 'Tất cả', count: 184, active: true, icon: 'm3 3h18v18H3z|m3 9h18M9 21V9' },
-  { key: 'sofa', name: 'Sofa', count: 32, icon: 'M3 17v-5a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v5|M3 17h18M5 17v3M19 17v3' },
-  { key: 'ban', name: 'Bàn', count: 28, icon: 'rect:2 11 20 3 1|M5 14v6M19 14v6' },
-  { key: 'ghe', name: 'Ghế', count: 36, icon: 'M8 4h8v6a4 4 0 0 1-8 0Z|M8 12v8M16 12v8' },
-  { key: 'giuong', name: 'Giường', count: 18, icon: 'M3 18v-6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v6|M3 18h18M5 18v2M19 18v2' },
-  { key: 'tu', name: 'Tủ', count: 22, icon: 'rect:4 3 16 18 1|M12 3v18' },
-  { key: 'ke', name: 'Kệ', count: 24, icon: 'rect:4 3 16 18 1|M4 9h16M4 15h16' },
-  { key: 'den', name: 'Đèn', count: 12, icon: 'M9 2h6l2 8H7Z|M12 10v8M9 22h6' },
-  { key: 'tham', name: 'Thảm & phụ kiện', count: 12, icon: 'rect:3 6 18 12 1|M3 10h18M3 14h18' },
-];
-
-interface Product {
-  href: string;
-  placeholder: string;
-  tone: '' | 'sage';
-  badges?: { label: string; cls?: 'accent' | 'sage' | 'dark' }[];
-  cat: string;
-  catKey: 'sofa' | 'ban' | 'ghe' | 'giuong' | 'tu' | 'ke' | 'den' | 'tham';
-  room: 'phong-khach' | 'phong-ngu' | 'phong-an' | 'lam-viec' | 'tre-em';
-  id: string;
-  name: string;
-  nameEm: string;
-  nameTail?: string;
-  /** Color swatches displayed on card (hex). */
-  colors?: string[];
-  extraColors?: number;
-  priceOld?: string;
-  price: string;
-  priceNum: number;
-  rating: string;
-  ratingNum: number;
-  reviews: number;
-  /** Filter tags: union of material/color/status keys. Tag selectors xem sidebar. */
-  tags: string[];
-}
-
-const products: Product[] = [
-  { id: 'p-sofa-may-3', href: '/san-pham/sofa-may/', placeholder: 'Sofa Mây 3 chỗ', tone: '', badges: [{ label: '−19%', cls: 'accent' }, { label: 'Bestseller', cls: 'dark' }], cat: 'Sofa · 3 chỗ · BST Mây', catKey: 'sofa', room: 'phong-khach', name: 'Sofa văng', nameEm: '"Mây"', nameTail: ' 3 chỗ', colors: ['#B77452', '#E5D2B5', '#A39C92', '#7A8E73', '#fff'], extraColors: 19, priceOld: '8.500.000đ', price: '6.900.000đ', priceNum: 6_900_000, rating: '4.8', ratingNum: 4.8, reviews: 184, tags: ['go-soi', 'linen', 'nau-dat', 'be-sua', 'xam-tro', 'xanh-reu', 'trang-kem', 'in-stock', 'sale', 'bestseller'] },
-  { id: 'p-sofa-may-2', href: '/san-pham/sofa-may/', placeholder: 'Sofa Mây 2 chỗ', tone: 'sage', cat: 'Sofa · 2 chỗ · BST Mây', catKey: 'sofa', room: 'phong-khach', name: 'Sofa văng', nameEm: '"Mây"', nameTail: ' 2 chỗ', colors: ['#B77452', '#E5D2B5', '#A39C92'], price: '5.500.000đ', priceNum: 5_500_000, rating: '4.9', ratingNum: 4.9, reviews: 96, tags: ['go-soi', 'linen', 'nau-dat', 'be-sua', 'xam-tro', 'in-stock'] },
-  { id: 'p-ban-tra-nang-mai', href: '#', placeholder: 'Bàn trà Nắng Mai', tone: '', badges: [{ label: 'Mới', cls: 'sage' }], cat: 'Bàn trà · gỗ sồi', catKey: 'ban', room: 'phong-khach', name: 'Bàn trà', nameEm: '"Nắng Mai"', price: '3.800.000đ', priceNum: 3_800_000, rating: '4.7', ratingNum: 4.7, reviews: 64, tags: ['go-soi', 'nau-dat', 'in-stock', 'new'] },
-  { id: 'p-ban-doan-vien', href: '#', placeholder: 'Bàn ăn Đoàn Viên', tone: 'sage', cat: 'Bàn ăn · 6 chỗ · gỗ sồi', catKey: 'ban', room: 'phong-an', name: 'Bàn ăn', nameEm: '"Đoàn Viên"', price: '4.500.000đ', priceNum: 4_500_000, rating: '4.9', ratingNum: 4.9, reviews: 142, tags: ['go-soi', 'nau-dat', 'in-stock'] },
-  { id: 'p-ghe-sum-vay', href: '#', placeholder: 'Ghế ăn Sum Vầy', tone: '', badges: [{ label: '−25%', cls: 'accent' }], cat: 'Ghế ăn · bọc nệm', catKey: 'ghe', room: 'phong-an', name: 'Ghế ăn', nameEm: '"Sum Vầy"', priceOld: '1.150.000đ', price: '850.000đ', priceNum: 850_000, rating: '4.8', ratingNum: 4.8, reviews: 218, tags: ['go-soi', 'linen', 'be-sua', 'nau-dat', 'in-stock', 'sale'] },
-  { id: 'p-giuong-trang-non', href: '#', placeholder: 'Giường Trăng Non 1m6', tone: 'sage', badges: [{ label: 'Bestseller', cls: 'dark' }], cat: 'Giường · 1m6 · gỗ sồi', catKey: 'giuong', room: 'phong-ngu', name: 'Giường', nameEm: '"Trăng Non"', price: '5.900.000đ', priceNum: 5_900_000, rating: '4.9', ratingNum: 4.9, reviews: 156, tags: ['go-soi', 'nau-dat', 'be-sua', 'in-stock', 'bestseller'] },
-  { id: 'p-tu-moc', href: '#', placeholder: 'Tủ áo Mộc 4 cánh', tone: '', cat: 'Tủ áo · 4 cánh · 2m1', catKey: 'tu', room: 'phong-ngu', name: 'Tủ áo', nameEm: '"Mộc"', price: '7.200.000đ', priceNum: 7_200_000, rating: '4.6', ratingNum: 4.6, reviews: 88, tags: ['go-soi', 'nau-dat', 'in-stock'] },
-];
-
-const productsAfterCta: Product[] = [
-  { id: 'p-ban-tap-trung', href: '#', placeholder: 'Bàn làm việc Tập Trung', tone: 'sage', cat: 'Bàn làm việc · 1m4', catKey: 'ban', room: 'lam-viec', name: 'Bàn', nameEm: '"Tập Trung"', price: '2.900.000đ', priceNum: 2_900_000, rating: '4.8', ratingNum: 4.8, reviews: 124, tags: ['go-soi', 'be-sua', 'in-stock'] },
-  { id: 'p-ghe-tua', href: '#', placeholder: 'Ghế công thái học Tựa', tone: '', badges: [{ label: 'Mới', cls: 'sage' }], cat: 'Ghế · công thái học', catKey: 'ghe', room: 'lam-viec', name: 'Ghế', nameEm: '"Tựa"', price: '2.400.000đ', priceNum: 2_400_000, rating: '4.5', ratingNum: 4.5, reviews: 42, tags: ['kim-loai', 'linen', 'xam-tro', 'in-stock', 'new'] },
-  { id: 'p-ke-cao', href: '#', placeholder: 'Kệ sách Cao 5 tầng', tone: 'sage', cat: 'Kệ sách · 5 tầng', catKey: 'ke', room: 'lam-viec', name: 'Kệ sách', nameEm: '"Cao"', price: '3.200.000đ', priceNum: 3_200_000, rating: '4.7', ratingNum: 4.7, reviews: 56, tags: ['go-soi', 'nau-dat', 'in-stock'] },
-  { id: 'p-ke-tv-an', href: '#', placeholder: 'Kệ TV An 1m8', tone: '', cat: 'Kệ TV · 1m8 · gỗ sồi', catKey: 'ke', room: 'phong-khach', name: 'Kệ TV', nameEm: '"An"', price: '4.800.000đ', priceNum: 4_800_000, rating: '4.8', ratingNum: 4.8, reviews: 92, tags: ['go-soi', 'nau-dat', 'xanh-than', 'in-stock'] },
-  { id: 'p-den-trang', href: '#', placeholder: 'Đèn sàn Trăng', tone: 'sage', badges: [{ label: '−15%', cls: 'accent' }], cat: 'Đèn sàn · vải linen', catKey: 'den', room: 'phong-khach', name: 'Đèn', nameEm: '"Trăng"', priceOld: '2.100.000đ', price: '1.790.000đ', priceNum: 1_790_000, rating: '4.6', ratingNum: 4.6, reviews: 38, tags: ['linen', 'kim-loai', 'be-sua', 'in-stock', 'sale'] },
-  { id: 'p-tham-soi', href: '#', placeholder: 'Thảm dệt tay Sợi', tone: '', cat: 'Thảm · 2×3m · dệt tay', catKey: 'tham', room: 'phong-khach', name: 'Thảm', nameEm: '"Sợi"', price: '3.500.000đ', priceNum: 3_500_000, rating: '4.9', ratingNum: 4.9, reviews: 72, tags: ['may-tre', 'be-sua', 'nau-dat', 'in-stock'] },
-  { id: 'p-ban-dieu', href: '#', placeholder: 'Bàn trang điểm Diệu', tone: 'sage', badges: [{ label: 'Mới', cls: 'sage' }], cat: 'Bàn trang điểm · gỗ sồi', catKey: 'ban', room: 'phong-ngu', name: 'Bàn', nameEm: '"Diệu"', price: '4.200.000đ', priceNum: 4_200_000, rating: '4.7', ratingNum: 4.7, reviews: 28, tags: ['go-soi', 'be-sua', 'in-stock', 'new'] },
-  { id: 'p-tu-chen-sum', href: '#', placeholder: 'Tủ chén Sum', tone: '', cat: 'Tủ chén · 3 cánh', catKey: 'tu', room: 'phong-an', name: 'Tủ chén', nameEm: '"Sum"', price: '5.400.000đ', priceNum: 5_400_000, rating: '4.8', ratingNum: 4.8, reviews: 64, tags: ['go-soi', 'nau-dat', 'in-stock'] },
-  { id: 'p-ban-doi', href: '#', placeholder: 'Bàn console Đợi', tone: 'sage', cat: 'Bàn console · gỗ óc chó', catKey: 'ban', room: 'phong-khach', name: 'Bàn console', nameEm: '"Đợi"', price: '2.800.000đ', priceNum: 2_800_000, rating: '4.6', ratingNum: 4.6, reviews: 32, tags: ['go-oc-cho', 'nau-dat', 'den-mo', 'in-stock'] },
-  { id: 'p-ghe-ru', href: '#', placeholder: 'Ghế bành Ru', tone: '', badges: [{ label: 'Bestseller', cls: 'dark' }], cat: 'Ghế bành · 1 chỗ', catKey: 'ghe', room: 'phong-khach', name: 'Ghế bành', nameEm: '"Ru"', price: '4.900.000đ', priceNum: 4_900_000, rating: '4.9', ratingNum: 4.9, reviews: 108, tags: ['go-soi', 'linen', 'xanh-reu', 'nau-dat', 'in-stock', 'bestseller'] },
-  { id: 'p-giuong-vuon', href: '#', placeholder: 'Giường tầng Vườn', tone: 'sage', cat: 'Giường tầng · gỗ thông', catKey: 'giuong', room: 'tre-em', name: 'Giường', nameEm: '"Vườn"', price: '7.500.000đ', priceNum: 7_500_000, rating: '4.9', ratingNum: 4.9, reviews: 64, tags: ['go-thong', 'be-sua', 'nau-dat', 'in-stock'] },
-];
-
-const filters = {
-  // "Danh mục" sidebar section removed — user uses cat-tiles section ở top
-  // để chọn category (single-select, có icon). Sidebar chỉ giữ multi-select
-  // filter còn lại.
-  rooms: [
-    { key: 'phong-khach', label: 'Phòng khách', count: 52, checked: true },
-    { key: 'phong-ngu', label: 'Phòng ngủ', count: 36 },
-    { key: 'phong-an', label: 'Phòng ăn & bếp', count: 28 },
-    { key: 'lam-viec', label: 'Phòng làm việc', count: 22 },
-    { key: 'tre-em', label: 'Phòng trẻ em', count: 14 },
-  ],
-  materials: [
-    { key: 'go-soi', label: 'Gỗ sồi tự nhiên', count: 88, checked: true },
-    { key: 'go-oc-cho', label: 'Gỗ óc chó', count: 22 },
-    { key: 'go-thong', label: 'Gỗ thông sấy', count: 26 },
-    { key: 'linen', label: 'Vải bố linen', count: 42 },
-    { key: 'da-bo', label: 'Da bò Ý', count: 14 },
-    { key: 'may-tre', label: 'Mây & tre đan', count: 8 },
-    { key: 'kim-loai', label: 'Kim loại', count: 12 },
-  ],
-  colors: [
-    { key: 'nau-dat', label: 'Nâu đất', count: 42, dot: '#B77452' },
-    { key: 'be-sua', label: 'Be sữa', count: 36, dot: '#E5D2B5' },
-    { key: 'xanh-reu', label: 'Xanh rêu', count: 22, dot: '#7A8E73' },
-    { key: 'xam-tro', label: 'Xám tro', count: 28, dot: '#A39C92' },
-    { key: 'trang-kem', label: 'Trắng kem', count: 34, dot: '#F4ECDD' },
-    { key: 'xanh-than', label: 'Xanh than', count: 14, dot: '#3C4A5E' },
-    { key: 'den-mo', label: 'Đen mờ', count: 8, dot: '#2B2722' },
-  ],
-  status: [
-    { key: 'in-stock', label: 'Còn hàng (giao 48h)', count: 142 },
-    { key: 'sale', label: 'Đang giảm giá', count: 38 },
-    { key: 'new', label: 'Hàng mới về', count: 22 },
-    { key: 'bestseller', label: 'Bestseller', count: 18 },
-  ],
-};
-
+const { categories: cats, products, productsAfterCta, filters } = shopProducts as any;
 ---
 <ShopLayout title="Tất cả sản phẩm — WOTU Nội thất Việt" description="Cửa hàng nội thất WOTU — sofa, bàn ăn, giường, tủ, kệ, đèn. 184 sản phẩm gỗ tự nhiên, giao 48h tại Quy Nhơn và các tỉnh lân cận.">
   <Nav active="Sản phẩm" />
@@ -423,20 +327,20 @@ const filters = {
 
   /* Category tiles */
   .cat-tiles { padding: 16px 0 30px; }
-  .cat-tiles-track { display: grid; grid-template-columns: repeat(9, 1fr); gap: 12px; overflow-x: auto; padding-bottom: 6px; }
+  .cat-tiles-track { display: grid; grid-template-columns: repeat(9, 1fr); gap: 12px; overflow-x: auto; padding-top: 4px; padding-bottom: 6px; }
   .cat-tile {
     background: var(--shop-bg-card); border: 1px solid var(--shop-line); border-radius: var(--shop-radius);
     padding: 14px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
     text-align: center; cursor: pointer; transition: transform .2s, border-color .2s, background .2s;
     color: var(--shop-ink); font-family: inherit;
   }
-  .cat-tile:hover { transform: translateY(-2px); border-color: var(--shop-ink); }
-  .cat-tile[data-active="true"] { background: var(--shop-ink); color: var(--shop-bg); border-color: var(--shop-ink); }
+  .cat-tile:hover { border-color: var(--shop-accent); }
+  .cat-tile[data-active="true"] { background: var(--shop-accent); color: #fff; border-color: var(--shop-accent); }
   .cat-tile .ic { width: 44px; height: 44px; border-radius: 12px; background: var(--shop-warm-soft); color: var(--shop-accent); display: grid; place-items: center; flex: none; }
-  .cat-tile[data-active="true"] .ic { background: var(--shop-accent); color: var(--shop-bg); }
+  .cat-tile[data-active="true"] .ic { background: rgba(255,255,255,0.25); color: #fff; }
   .cat-tile .name { font-size: 13px; font-weight: 600; line-height: 1.1; white-space: nowrap; }
   .cat-tile .n { font-size: 10px; color: var(--shop-ink-soft); }
-  .cat-tile[data-active="true"] .n { color: color-mix(in oklab, var(--shop-bg) 70%, transparent); }
+  .cat-tile[data-active="true"] .n { color: rgba(255,255,255,0.8); }
 
   /* Toolbar */
   .toolbar {

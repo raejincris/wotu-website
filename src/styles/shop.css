@@ -100,7 +100,7 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
 }
 .shop-nav-inner {
   display: flex; align-items: center; justify-content: space-between;
-  padding-top: 32px; padding-bottom: 32px;
+  height: 64px; padding-top: 0; padding-bottom: 0;
 }
 .shop-brand {
   display: flex; align-items: center; gap: 12px;

@@ -2,6 +2,18 @@
 import ShopLayout from '../../layouts/ShopLayout.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
+import comboData from '../../data/combo-to-am.yml';
+
+const d = comboData as any;
+const priceNow = d.priceNow;
+const priceWas = d.priceWas;
+const priceDiscount = d.priceDiscount;
+const priceInstallment = d.priceInstallment;
+const comboDesc = d.description;
+const comboItems = d.items as any[];
+const faq = d.faq as any[];
+const reviews = d.reviews;
+const related = d.related as any[];
 ---
 <ShopLayout
   title="Combo Tổ Ấm — Phòng khách trọn bộ — WOTU"
@@ -62,17 +74,15 @@ import Footer from '../../components/shop/Footer.astro';
         </div>
 
         <h1>Combo <em>Tổ Ấm</em><br />Phòng khách 4 món</h1>
-        <p class="lede">
-          Bộ phòng khách trọn vẹn theo phong cách Japandi ấm áp — sofa văng vải bố mềm, bàn trà gỗ sồi tự nhiên, kệ TV 1m8 và thảm dệt tay. Mua trọn combo tiết kiệm 10 triệu so với mua lẻ.
-        </p>
+        <p class="lede">{comboDesc}</p>
 
         <div class="price-row">
           <div>
-            <span class="price-now">18.900.000đ</span>
-            <span class="price-hint">trả góp 0% — chỉ từ <b>1.575.000đ</b> / tháng</span>
+            <span class="price-now">{priceNow}</span>
+            <span class="price-hint">trả góp 0% — chỉ từ <b>{priceInstallment}</b> / tháng</span>
           </div>
-          <span class="price-was">28.900.000đ</span>
-          <span class="price-save">− 35%</span>
+          <span class="price-was">{priceWas}</span>
+          <span class="price-save">{priceDiscount}</span>
         </div>
 
         <div class="pickers">
@@ -103,7 +113,7 @@ import Footer from '../../components/shop/Footer.astro';
             <span class="v" id="qV">1</span>
             <button id="qInc" aria-label="Tăng" type="button">+</button>
           </div>
-          <a class="btn btn-primary btn-lg" href="/#contact" id="addCart">Thêm vào giỏ · 18.900.000đ</a>
+          <a class="btn btn-primary btn-lg" href="/#contact" id="addCart">Thêm vào giỏ · {priceNow}</a>
         </div>
 
         <div class="cta-row">
@@ -168,85 +178,45 @@ import Footer from '../../components/shop/Footer.astro';
     </div>
 
     <div class="items-grid">
-      <a class="item-card" href="/san-pham/sofa-may/" style="text-decoration: none;">
-        <div class="item-img">
-          <div class="shop-ph"><span class="shop-ph-label">Sofa văng Mây</span></div>
-          <span class="item-no">1</span>
-        </div>
-        <div class="item-body">
-          <div class="item-meta">Sofa · 3 chỗ ngồi · vải bố</div>
-          <h4>Sofa văng "Mây"</h4>
-          <div class="item-row">
-            <span style="color: var(--ink-soft); text-decoration: line-through;">6.900.000đ</span>
-            <span class="qty-tag">×1</span>
-          </div>
-        </div>
-      </a>
-
-      <article class="item-card">
-        <div class="item-img">
-          <div class="shop-ph sage"><span class="shop-ph-label">Bàn trà</span></div>
-          <span class="item-no">2</span>
-        </div>
-        <div class="item-body">
-          <div class="item-meta">Bàn trà · gỗ sồi tự nhiên</div>
-          <h4>Bàn trà "Nắng Mai"</h4>
-          <div class="item-row">
-            <span style="color: var(--ink-soft); text-decoration: line-through;">3.800.000đ</span>
-            <span class="qty-tag">×1</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="item-card">
-        <div class="item-img">
-          <div class="shop-ph"><span class="shop-ph-label">Kệ TV</span></div>
-          <span class="item-no">3</span>
-        </div>
-        <div class="item-body">
-          <div class="item-meta">Kệ TV · 1m8 · 3 ngăn kéo</div>
-          <h4>Kệ TV "Hạ"</h4>
-          <div class="item-row">
-            <span style="color: var(--ink-soft); text-decoration: line-through;">5.400.000đ</span>
-            <span class="qty-tag">×1</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="item-card">
-        <div class="item-img">
-          <div class="shop-ph sage"><span class="shop-ph-label">Thảm</span></div>
-          <span class="item-no">4</span>
-        </div>
-        <div class="item-body">
-          <div class="item-meta">Thảm dệt tay · 1.6 × 2.3m</div>
-          <h4>Thảm "Tổ Ấm"</h4>
-          <div class="item-row">
-            <span style="color: var(--ink-soft); text-decoration: line-through;">2.800.000đ</span>
-            <span class="qty-tag">×1</span>
-          </div>
-        </div>
-      </article>
+      {comboItems.map((item: any) => {
+        const Tag = item.href ? 'a' : 'article';
+        return (
+          <Tag class="item-card" href={item.href || undefined} style={item.href ? 'text-decoration: none;' : undefined}>
+            <div class="item-img">
+              <div class={`shop-ph${item.tone ? ' ' + item.tone : ''}`}><span class="shop-ph-label">{item.placeholder}</span></div>
+              <span class="item-no">{item.no}</span>
+            </div>
+            <div class="item-body">
+              <div class="item-meta">{item.meta}</div>
+              <h4>{item.name}</h4>
+              <div class="item-row">
+                <span style="color: var(--ink-soft); text-decoration: line-through;">{item.priceOld}</span>
+                <span class="qty-tag">×1</span>
+              </div>
+            </div>
+          </Tag>
+        );
+      })}
     </div>
 
     <div class="bundle-total">
       <div>
         <div class="bt-eyebrow">Tổng giá mua lẻ</div>
-        <div class="bt-strike">18.900.000đ</div>
+        <div class="bt-strike">{d.bundleTotalLabel}</div>
       </div>
       <div class="bt-arrow">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
       </div>
       <div>
         <div class="bt-eyebrow combo">Giá combo</div>
-        <div class="bt-now">18.900.000đ</div>
+        <div class="bt-now">{d.bundlePriceLabel}</div>
       </div>
       <div class="bt-arrow">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
       </div>
       <div>
         <div class="bt-eyebrow save">Tiết kiệm</div>
-        <div class="bt-save">10.000.000đ</div>
+        <div class="bt-save">{d.bundleSaveLabel}</div>
       </div>
     </div>
   </section>
@@ -431,90 +401,51 @@ import Footer from '../../components/shop/Footer.astro';
 
     <div class="rev-grid">
       <aside class="rev-summary">
-        <div class="rev-score">4.9<sub>/5</sub></div>
+        <div class="rev-score">{reviews.score}<sub>/5</sub></div>
         <div class="stars" style="font-size: 22px; margin-top: 4px;">★★★★★</div>
-        <div style="font-size: 13px; color: var(--ink-soft); margin-top: 4px;">trên 312 đánh giá xác thực</div>
+        <div style="font-size: 13px; color: var(--ink-soft); margin-top: 4px;">trên {reviews.total} đánh giá xác thực</div>
         <div class="rev-bars">
-          <div class="rev-bar"><span>5★</span><div class="bar-track"><div class="bar-fill" style="width: 92%;"></div></div><span style="text-align:right;">288</span></div>
-          <div class="rev-bar"><span>4★</span><div class="bar-track"><div class="bar-fill" style="width: 6%;"></div></div><span style="text-align:right;">19</span></div>
-          <div class="rev-bar"><span>3★</span><div class="bar-track"><div class="bar-fill" style="width: 1%;"></div></div><span style="text-align:right;">3</span></div>
-          <div class="rev-bar"><span>2★</span><div class="bar-track"><div class="bar-fill" style="width: 0.5%;"></div></div><span style="text-align:right;">1</span></div>
-          <div class="rev-bar"><span>1★</span><div class="bar-track"><div class="bar-fill" style="width: 0.5%;"></div></div><span style="text-align:right;">1</span></div>
+          {(reviews.distribution as any[]).map((row: any) => (
+            <div class="rev-bar">
+              <span>{row.stars}★</span>
+              <div class="bar-track"><div class="bar-fill" style={`width: ${row.pct}%;`}></div></div>
+              <span style="text-align:right;">{row.count}</span>
+            </div>
+          ))}
         </div>
         <a class="btn btn-outline" href="#" style="width: 100%; justify-content: center; margin-top: 22px;" rel="nofollow" aria-disabled="true">Viết đánh giá</a>
       </aside>
 
       <div class="review-list">
-        <article class="review-item">
-          <div class="review-head">
-            <div class="review-author">
-              <div class="avatar">N</div>
-              <div>
-                <div class="name">Nguyễn Hà My</div>
-                <div class="when">Nhơn Bình · Quy Nhơn · Mua 02/05/2026</div>
+        {(reviews.items as any[]).map((r: any) => (
+          <article class="review-item">
+            <div class="review-head">
+              <div class="review-author">
+                <div class="avatar">{r.initial}</div>
+                <div>
+                  <div class="name">{r.name}</div>
+                  <div class="when">{r.when}</div>
+                </div>
               </div>
+              <span class="stars">★★★★★</span>
             </div>
-            <span class="stars">★★★★★</span>
-          </div>
-          <div class="review-body">
-            Đặt nguyên combo Tổ Ấm, đội Wotu giao và lắp trong buổi sáng. Cuối ngày là đã ngồi xem TV với gia đình. Quá tiện cho người mới về nhà mới. Sofa ngồi êm, không có mùi hắc.
-          </div>
-          <div class="review-photos">
-            <div class="review-photo"><div class="shop-ph"><span class="shop-ph-label">ảnh KH</span></div></div>
-            <div class="review-photo"><div class="shop-ph sage"><span class="shop-ph-label">ảnh KH</span></div></div>
-            <div class="review-photo"><div class="shop-ph"><span class="shop-ph-label">ảnh KH</span></div></div>
-          </div>
-          <div class="review-meta">
-            <span>Tông màu: <b style="color: var(--ink);">Nâu đất ấm</b></span>
-            <span>Kích thước: <b style="color: var(--ink);">M · 3 chỗ</b></span>
-            <span>👍 Có ích · 42</span>
-          </div>
-        </article>
-
-        <article class="review-item">
-          <div class="review-head">
-            <div class="review-author">
-              <div class="avatar">T</div>
-              <div>
-                <div class="name">Trần Quốc Trung</div>
-                <div class="when">Tuy Phước · Bình Định · Mua 18/04/2026</div>
+            <div class="review-body">{r.body}</div>
+            {r.photos && (
+              <div class="review-photos">
+                {Array.from({ length: r.photos }).map((_: any, i: number) => (
+                  <div class="review-photo"><div class={`shop-ph${i % 2 === 1 ? ' sage' : ''}`}><span class="shop-ph-label">ảnh KH</span></div></div>
+                ))}
               </div>
+            )}
+            <div class="review-meta">
+              <span>Tông màu: <b style="color: var(--ink);">{r.color}</b></span>
+              <span>Kích thước: <b style="color: var(--ink);">{r.size}</b></span>
+              <span>👍 Có ích · {r.helpful}</span>
             </div>
-            <span class="stars">★★★★★</span>
-          </div>
-          <div class="review-body">
-            Mình so sánh 4 thương hiệu trước khi chốt Wotu. Gỗ thật, đường ráp gọn, không có mùi sơn công nghiệp. Bàn trà nguyên tấm gỗ — vân đẹp, không phải gỗ ghép.
-          </div>
-          <div class="review-meta">
-            <span>Tông màu: <b style="color: var(--ink);">Xám rêu</b></span>
-            <span>Kích thước: <b style="color: var(--ink);">L · chữ L</b></span>
-            <span>👍 Có ích · 28</span>
-          </div>
-        </article>
-
-        <article class="review-item">
-          <div class="review-head">
-            <div class="review-author">
-              <div class="avatar">L</div>
-              <div>
-                <div class="name">Lê Phương Linh</div>
-                <div class="when">Hoài Nhơn · Bình Định · Mua 28/03/2026</div>
-              </div>
-            </div>
-            <span class="stars">★★★★★</span>
-          </div>
-          <div class="review-body">
-            Mình là dân thiết kế nên kỹ tính. Wotu tư vấn xong còn dựng 3D phòng cho xem trước — hợp tông căn hộ của mình bất ngờ. Sau 2 tháng dùng, sofa vẫn nguyên form.
-          </div>
-          <div class="review-meta">
-            <span>Tông màu: <b style="color: var(--ink);">Be sữa</b></span>
-            <span>Kích thước: <b style="color: var(--ink);">M · 3 chỗ</b></span>
-            <span>👍 Có ích · 35</span>
-          </div>
-        </article>
-
+          </article>
+        ))}
         <div style="text-align: center;">
-          <a class="btn btn-outline" href="#" rel="nofollow" aria-disabled="true">Xem tất cả 312 đánh giá <span class="arr">→</span></a>
+          <a class="btn btn-outline" href="#" rel="nofollow" aria-disabled="true">Xem tất cả {reviews.total} đánh giá <span class="arr">→</span></a>
         </div>
       </div>
     </div>
@@ -531,42 +462,12 @@ import Footer from '../../components/shop/Footer.astro';
     </div>
 
     <div class="faq">
-      <details open>
-        <summary>Tôi đang ở chung cư 2PN, phòng khách 18m² — combo này có hợp không?</summary>
-        <div class="ans">
-          Cực kỳ phù hợp. Combo Tổ Ấm size M được thiết kế chuẩn cho phòng khách 16–22m². Sofa 3 chỗ dài 2.1m vừa khít tường thông thường (3.4–3.8m). Nếu phòng nhỏ hơn 16m², chọn size S. Để chắc, hãy gửi mặt bằng cho KTS Wotu — chúng tôi dựng 3D miễn phí trong 24h.
-        </div>
-      </details>
-      <details>
-        <summary>Thời gian giao hàng và lắp đặt mất bao lâu?</summary>
-        <div class="ans">
-          Trong nội thành Quy Nhơn và vùng lân cận Bình Định: <strong>48 giờ</strong> kể từ khi xác nhận đơn. Đội kỹ thuật của Wotu (không qua bên thứ ba) lắp đặt trong 2–3 giờ tại nhà bạn, kê dọn sạch và mang bao bì đi. Giao tỉnh xa: 5–7 ngày, có tính phí vận chuyển.
-        </div>
-      </details>
-      <details>
-        <summary>Nếu sau khi lắp tôi không ưng, có đổi trả được không?</summary>
-        <div class="ans">
-          Có. Wotu áp dụng chính sách <strong>đổi trả miễn phí 30 ngày</strong> kể cả combo đã lắp đặt. Chỉ cần sản phẩm chưa hư hỏng nặng, đội Wotu sẽ tháo, mang đi và hoàn lại 100% giá trị (trừ chi phí giao tỉnh, nếu có).
-        </div>
-      </details>
-      <details>
-        <summary>Bảo hành 5 năm bao gồm những gì?</summary>
-        <div class="ans">
-          Bảo hành áp dụng cho <strong>khung gỗ và cấu trúc chính</strong>: cong vênh, mục mọt, gãy mộng, hư ray ngăn kéo. Vải bọc và đệm có chế độ <strong>2 năm</strong>. Trong thời gian bảo hành, Wotu hỗ trợ sửa hoặc thay miễn phí tại nhà.
-        </div>
-      </details>
-      <details>
-        <summary>Có hỗ trợ trả góp 0% không?</summary>
-        <div class="ans">
-          Có. Wotu liên kết với Home Credit và Shinhan Bank cho gói trả góp <strong>6 / 12 / 18 / 24 tháng — lãi suất 0%</strong>. Hồ sơ chỉ cần CCCD. Combo Tổ Ấm trả góp 12 tháng = 1.575.000đ/tháng.
-        </div>
-      </details>
-      <details>
-        <summary>Tôi muốn đổi 1 món trong combo, được không?</summary>
-        <div class="ans">
-          Được. Bạn có thể thay sofa size S/M/L, hoặc đổi tông màu khác, hoặc bỏ thảm để tự chọn. Liên hệ KTS Wotu để được điều chỉnh combo theo nhu cầu — giá sẽ được tính lại tương ứng.
-        </div>
-      </details>
+      {faq.map((f: any) => (
+        <details open={f.open || undefined}>
+          <summary>{f.question}</summary>
+          <div class="ans" set:html={f.answer} />
+        </details>
+      ))}
     </div>
   </section>
 
@@ -581,42 +482,20 @@ import Footer from '../../components/shop/Footer.astro';
     </div>
 
     <div class="rel-grid">
-      <a class="rel-card" href="#" rel="nofollow" aria-disabled="true">
-        <div class="rel-img"><div class="shop-ph sage"><span class="shop-ph-label">Combo phòng ngủ An Yên</span></div></div>
-        <div class="rel-body">
-          <span class="rel-cat">Phòng ngủ master</span>
-          <h4>Combo <em>An Yên</em></h4>
-          <div style="font-size: 13px; color: var(--ink-soft);">Giường 1m8 · tủ áo · bàn trang điểm</div>
-          <div class="rel-foot">
-            <div class="rel-price"><s>32.500.000đ</s>22.500.000đ</div>
-            <span style="font-size: 12px; color: var(--accent); font-weight: 700;">−31%</span>
+      {related.map((r: any) => (
+        <a class="rel-card" href={r.href} rel="nofollow" aria-disabled="true">
+          <div class="rel-img"><div class={`shop-ph${r.tone ? ' ' + r.tone : ''}`}><span class="shop-ph-label">{r.placeholder}</span></div></div>
+          <div class="rel-body">
+            <span class="rel-cat">{r.cat}</span>
+            <h4>Combo <em>{r.name}</em></h4>
+            <div style="font-size: 13px; color: var(--ink-soft);">{r.desc}</div>
+            <div class="rel-foot">
+              <div class="rel-price"><s>{r.priceOld}</s>{r.priceNew}</div>
+              <span style="font-size: 12px; color: var(--accent); font-weight: 700;">{r.discount}</span>
+            </div>
           </div>
-        </div>
-      </a>
-      <a class="rel-card" href="#" rel="nofollow" aria-disabled="true">
-        <div class="rel-img"><div class="shop-ph"><span class="shop-ph-label">Combo phòng ăn Sum Vầy</span></div></div>
-        <div class="rel-body">
-          <span class="rel-cat">Phòng ăn · 6 chỗ</span>
-          <h4>Combo <em>Sum Vầy</em></h4>
-          <div style="font-size: 13px; color: var(--ink-soft);">Bàn ăn 1m6 · 6 ghế · tủ chén</div>
-          <div class="rel-foot">
-            <div class="rel-price"><s>18.500.000đ</s>12.800.000đ</div>
-            <span style="font-size: 12px; color: var(--accent); font-weight: 700;">−31%</span>
-          </div>
-        </div>
-      </a>
-      <a class="rel-card" href="#" rel="nofollow" aria-disabled="true">
-        <div class="rel-img"><div class="shop-ph sage"><span class="shop-ph-label">Combo làm việc Tập Trung</span></div></div>
-        <div class="rel-body">
-          <span class="rel-cat">Phòng làm việc tại nhà</span>
-          <h4>Combo <em>Tập Trung</em></h4>
-          <div style="font-size: 13px; color: var(--ink-soft);">Bàn 1m4 · ghế công thái · kệ sách</div>
-          <div class="rel-foot">
-            <div class="rel-price"><s>12.900.000đ</s>8.900.000đ</div>
-            <span style="font-size: 12px; color: var(--accent); font-weight: 700;">−31%</span>
-          </div>
-        </div>
-      </a>
+        </a>
+      ))}
     </div>
   </section>
 
@@ -625,7 +504,7 @@ import Footer from '../../components/shop/Footer.astro';
   {/* ===== STICKY CART BAR ===== */}
   <div class="sticky-bar" id="stickyBar">
     <span class="sb-title">Combo Tổ Ấm</span>
-    <span class="sb-price"><s>28.900.000đ</s>18.900.000đ</span>
+    <span class="sb-price"><s>{priceWas}</s>{priceNow}</span>
     <a class="btn btn-accent" href="/#contact">Mua ngay <span class="arr">→</span></a>
   </div>
 </ShopLayout>

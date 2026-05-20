@@ -1,0 +1,140 @@
+title: "Combo Tổ Ấm"
+subtitle: "Phòng khách 4 món"
+category: "Combo phòng khách"
+description: "Bộ phòng khách trọn vẹn theo phong cách Japandi ấm áp — sofa văng vải bố mềm, bàn trà gỗ sồi tự nhiên, kệ TV 1m8 và thảm dệt tay. Mua trọn combo tiết kiệm 10 triệu so với mua lẻ."
+priceNow: "18.900.000đ"
+priceWas: "28.900.000đ"
+priceDiscount: "− 35%"
+priceInstallment: "1.575.000đ"
+reviewScore: "4.9"
+reviewCount: 312
+
+items:
+  - no: 1
+    name: 'Sofa văng "Mây"'
+    meta: "Sofa · 3 chỗ ngồi · vải bố"
+    priceOld: "6.900.000đ"
+    placeholder: "Sofa văng Mây"
+    tone: ""
+    href: /san-pham/sofa-may/
+
+  - no: 2
+    name: 'Bàn trà "Nắng Mai"'
+    meta: "Bàn trà · gỗ sồi tự nhiên"
+    priceOld: "3.800.000đ"
+    placeholder: "Bàn trà"
+    tone: sage
+
+  - no: 3
+    name: 'Kệ TV "Hạ"'
+    meta: "Kệ TV · 1m8 · 3 ngăn kéo"
+    priceOld: "5.400.000đ"
+    placeholder: "Kệ TV"
+    tone: ""
+
+  - no: 4
+    name: 'Thảm "Tổ Ấm"'
+    meta: "Thảm dệt tay · 1.6 × 2.3m"
+    priceOld: "2.800.000đ"
+    placeholder: "Thảm"
+    tone: sage
+
+bundleTotalLabel: "18.900.000đ"
+bundlePriceLabel: "18.900.000đ"
+bundleSaveLabel: "10.000.000đ"
+
+reviews:
+  score: "4.9"
+  total: 312
+  distribution:
+    - stars: 5
+      count: 288
+      pct: 92
+    - stars: 4
+      count: 19
+      pct: 6
+    - stars: 3
+      count: 3
+      pct: 1
+    - stars: 2
+      count: 1
+      pct: 0.5
+    - stars: 1
+      count: 1
+      pct: 0.5
+  items:
+    - initial: "N"
+      name: "Nguyễn Hà My"
+      when: "Nhơn Bình · Quy Nhơn · Mua 02/05/2026"
+      body: "Đặt nguyên combo Tổ Ấm, đội Wotu giao và lắp trong buổi sáng. Cuối ngày là đã ngồi xem TV với gia đình. Quá tiện cho người mới về nhà mới. Sofa ngồi êm, không có mùi hắc."
+      color: "Nâu đất ấm"
+      size: "M · 3 chỗ"
+      helpful: 42
+      photos: 3
+
+    - initial: "T"
+      name: "Trần Quốc Trung"
+      when: "Tuy Phước · Bình Định · Mua 18/04/2026"
+      body: "Mình so sánh 4 thương hiệu trước khi chốt Wotu. Gỗ thật, đường ráp gọn, không có mùi sơn công nghiệp. Bàn trà nguyên tấm gỗ — vân đẹp, không phải gỗ ghép."
+      color: "Xám rêu"
+      size: "L · chữ L"
+      helpful: 28
+
+    - initial: "L"
+      name: "Lê Phương Linh"
+      when: "Hoài Nhơn · Bình Định · Mua 28/03/2026"
+      body: "Mình là dân thiết kế nên kỹ tính. Wotu tư vấn xong còn dựng 3D phòng cho xem trước — hợp tông căn hộ của mình bất ngờ. Sau 2 tháng dùng, sofa vẫn nguyên form."
+      color: "Be sữa"
+      size: "M · 3 chỗ"
+      helpful: 35
+
+faq:
+  - question: "Tôi đang ở chung cư 2PN, phòng khách 18m² — combo này có hợp không?"
+    answer: "Cực kỳ phù hợp. Combo Tổ Ấm size M được thiết kế chuẩn cho phòng khách 16–22m². Sofa 3 chỗ dài 2.1m vừa khít tường thông thường (3.4–3.8m). Nếu phòng nhỏ hơn 16m², chọn size S. Để chắc, hãy gửi mặt bằng cho KTS Wotu — chúng tôi dựng 3D miễn phí trong 24h."
+    open: true
+
+  - question: "Thời gian giao hàng và lắp đặt mất bao lâu?"
+    answer: "Trong nội thành Quy Nhơn và vùng lân cận Bình Định: <strong>48 giờ</strong> kể từ khi xác nhận đơn. Đội kỹ thuật của Wotu (không qua bên thứ ba) lắp đặt trong 2–3 giờ tại nhà bạn, kê dọn sạch và mang bao bì đi. Giao tỉnh xa: 5–7 ngày, có tính phí vận chuyển."
+
+  - question: "Nếu sau khi lắp tôi không ưng, có đổi trả được không?"
+    answer: "Có. Wotu áp dụng chính sách <strong>đổi trả miễn phí 30 ngày</strong> kể cả combo đã lắp đặt. Chỉ cần sản phẩm chưa hư hỏng nặng, đội Wotu sẽ tháo, mang đi và hoàn lại 100% giá trị (trừ chi phí giao tỉnh, nếu có)."
+
+  - question: "Bảo hành 5 năm bao gồm những gì?"
+    answer: "Bảo hành áp dụng cho <strong>khung gỗ và cấu trúc chính</strong>: cong vênh, mục mọt, gãy mộng, hư ray ngăn kéo. Vải bọc và đệm có chế độ <strong>2 năm</strong>. Trong thời gian bảo hành, Wotu hỗ trợ sửa hoặc thay miễn phí tại nhà."
+
+  - question: "Có hỗ trợ trả góp 0% không?"
+    answer: "Có. Wotu liên kết với Home Credit và Shinhan Bank cho gói trả góp <strong>6 / 12 / 18 / 24 tháng — lãi suất 0%</strong>. Hồ sơ chỉ cần CCCD. Combo Tổ Ấm trả góp 12 tháng = 1.575.000đ/tháng."
+
+  - question: "Tôi muốn đổi 1 món trong combo, được không?"
+    answer: "Được. Bạn có thể thay sofa size S/M/L, hoặc đổi tông màu khác, hoặc bỏ thảm để tự chọn. Liên hệ KTS Wotu để được điều chỉnh combo theo nhu cầu — giá sẽ được tính lại tương ứng."
+
+related:
+  - name: "An Yên"
+    cat: "Phòng ngủ master"
+    desc: "Giường 1m8 · tủ áo · bàn trang điểm"
+    priceOld: "32.500.000đ"
+    priceNew: "22.500.000đ"
+    discount: "−31%"
+    placeholder: "Combo phòng ngủ An Yên"
+    tone: sage
+    href: "#"
+
+  - name: "Sum Vầy"
+    cat: "Phòng ăn · 6 chỗ"
+    desc: "Bàn ăn 1m6 · 6 ghế · tủ chén"
+    priceOld: "18.500.000đ"
+    priceNew: "12.800.000đ"
+    discount: "−31%"
+    placeholder: "Combo phòng ăn Sum Vầy"
+    tone: ""
+    href: "#"
+
+  - name: "Tập Trung"
+    cat: "Phòng làm việc tại nhà"
+    desc: "Bàn 1m4 · ghế công thái · kệ sách"
+    priceOld: "12.900.000đ"
+    priceNew: "8.900.000đ"
+    discount: "−31%"
+    placeholder: "Combo làm việc Tập Trung"
+    tone: sage
+    href: "#"
