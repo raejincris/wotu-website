@@ -116,13 +116,16 @@ contact:
     - label: Họ và tên
       name: name
       type: text
+      placeholder: ''
     - label: Email
       name: email
       type: email
+      placeholder: ''
     - label: Số điện thoại
       name: phone
       type: tel
+      placeholder: ''
     - label: Mô tả dự án
       name: message
       type: textarea
-      placeholder: Một căn nhà nhỏ ở Bảo Lộc, 120m²…
+      placeholder: Một căn nhà nhỏ ở Vân Canh, 120m²…
