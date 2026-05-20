@@ -528,7 +528,8 @@ collections:
   - name: sofa_may
     label: "Shop — Sofa Mây (chi tiết sản phẩm)"
     files:
-      - file: "src/data/shop-sofa-may.yml"
+      - name: sofa_may
+        file: "src/data/shop-sofa-may.yml"
         label: "Sofa văng Mây"
         fields:
           - { name: name, label: 'Tên sản phẩm', widget: string }
