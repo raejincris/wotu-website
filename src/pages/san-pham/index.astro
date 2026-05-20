@@ -356,7 +356,7 @@ const breadcrumbSchema = {
 
   /* Toolbar */
   .toolbar {
-    position: sticky; top: 102px; z-index: 40;
+    position: sticky; top: 64px; z-index: 40;
     background: var(--shop-bg);
     border-top: 1px solid var(--shop-line); border-bottom: 1px solid var(--shop-line);
     padding: 14px 0; margin-bottom: 30px;
@@ -381,7 +381,7 @@ const breadcrumbSchema = {
     display: grid; grid-template-columns: 260px 1fr; gap: 36px; padding-bottom: 80px;
     max-width: 1400px;
   }
-  aside.filters { position: sticky; top: 180px; align-self: flex-start; max-height: calc(100vh - 200px); overflow-y: auto; padding-right: 6px; }
+  aside.filters { position: sticky; top: 136px; align-self: flex-start; max-height: calc(100vh - 150px); overflow-y: auto; padding-right: 6px; background: var(--shop-bg); z-index: 1; }
   .filters-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--shop-line); }
   .filters-head h3 { font-family: var(--shop-serif); font-size: 22px; margin: 0; font-weight: 400; }
   .filters-head a { font-size: 12px; color: var(--shop-accent); font-weight: 600; }
@@ -790,6 +790,66 @@ const breadcrumbSchema = {
   priceMinInput?.addEventListener('change', syncPriceRange);
   priceMaxInput?.addEventListener('change', syncPriceRange);
   syncPriceRange();
+
+  // ===== Price range slider drag =====
+  const PRICE_RANGE_MIN = 500_000;
+  const PRICE_RANGE_MAX = 9_500_000;
+
+  function fmtPrice(v: number): string {
+    return v.toLocaleString('vi-VN').replace(/\./g, '.') + 'đ';
+  }
+
+  function updateSliderUI(loVal: number, hiVal: number): void {
+    const track = document.querySelector<HTMLElement>('.range-track');
+    if (!track) return;
+    const loPct = ((loVal - PRICE_RANGE_MIN) / (PRICE_RANGE_MAX - PRICE_RANGE_MIN)) * 100;
+    const hiPct = ((hiVal - PRICE_RANGE_MIN) / (PRICE_RANGE_MAX - PRICE_RANGE_MIN)) * 100;
+    const fill = track.querySelector<HTMLElement>('.range-fill');
+    const lo = track.querySelector<HTMLElement>('.range-thumb.lo');
+    const hi = track.querySelector<HTMLElement>('.range-thumb.hi');
+    if (fill) { fill.style.left = loPct + '%'; fill.style.right = (100 - hiPct) + '%'; }
+    if (lo) lo.style.left = loPct + '%';
+    if (hi) hi.style.left = hiPct + '%';
+    if (priceMinInput) priceMinInput.value = fmtPrice(loVal);
+    if (priceMaxInput) priceMaxInput.value = fmtPrice(hiVal);
+  }
+
+  function setupThumbDrag(thumb: HTMLElement, isLo: boolean): void {
+    thumb.addEventListener('pointerdown', (e: PointerEvent) => {
+      e.preventDefault();
+      thumb.setPointerCapture(e.pointerId);
+      const track = thumb.closest<HTMLElement>('.range-track')!;
+
+      const onMove = (ev: PointerEvent) => {
+        const rect = track.getBoundingClientRect();
+        let pct = (ev.clientX - rect.left) / rect.width;
+        pct = Math.max(0, Math.min(1, pct));
+        const val = Math.round((PRICE_RANGE_MIN + pct * (PRICE_RANGE_MAX - PRICE_RANGE_MIN)) / 100_000) * 100_000;
+
+        const otherThumb = track.querySelector<HTMLElement>(isLo ? '.range-thumb.hi' : '.range-thumb.lo')!;
+        const otherPct = parseFloat(otherThumb.style.left || (isLo ? '75' : '10')) / 100;
+        const otherVal = Math.round((PRICE_RANGE_MIN + otherPct * (PRICE_RANGE_MAX - PRICE_RANGE_MIN)) / 100_000) * 100_000;
+
+        const loVal = isLo ? Math.min(val, otherVal) : otherVal;
+        const hiVal = isLo ? otherVal : Math.max(val, otherVal);
+        updateSliderUI(loVal, hiVal);
+      };
+
+      const onUp = () => {
+        thumb.removeEventListener('pointermove', onMove);
+        thumb.removeEventListener('pointerup', onUp);
+        syncPriceRange();
+      };
+
+      thumb.addEventListener('pointermove', onMove);
+      thumb.addEventListener('pointerup', onUp);
+    });
+  }
+
+  const loThumb = document.querySelector<HTMLElement>('.range-thumb.lo');
+  const hiThumb = document.querySelector<HTMLElement>('.range-thumb.hi');
+  if (loThumb) setupThumbDrag(loThumb, true);
+  if (hiThumb) setupThumbDrag(hiThumb, false);
 
   // ===== View toggle =====
   document.querySelectorAll<HTMLButtonElement>('.view-toggle button').forEach((b) =>
