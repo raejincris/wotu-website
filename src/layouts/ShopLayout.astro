@@ -60,6 +60,8 @@ const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
       image={ogImage}
       url={canonicalURL}
     />
+    <!-- Page-specific JSON-LD (FAQ, Product, Breadcrumb) từ page inject vào đây -->
+    <slot name="head" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

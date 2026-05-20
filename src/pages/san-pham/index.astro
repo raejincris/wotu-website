@@ -5,8 +5,20 @@ import Footer from '../../components/shop/Footer.astro';
 import shopProducts from '../../data/shop-products.yml';
 
 const { categories: cats, products, productsAfterCta, filters } = shopProducts as any;
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: 'https://www.wotu.vn/' },
+    { '@type': 'ListItem', position: 2, name: 'Sản phẩm', item: 'https://www.wotu.vn/san-pham/' },
+  ],
+};
 ---
 <ShopLayout title="Tất cả sản phẩm — WOTU Nội thất Việt" description="Cửa hàng nội thất WOTU — sofa, bàn ăn, giường, tủ, kệ, đèn. 184 sản phẩm gỗ tự nhiên, giao 48h tại Quy Nhơn và các tỉnh lân cận.">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
   <Nav active="Sản phẩm" />
 
   <!-- Crumb -->

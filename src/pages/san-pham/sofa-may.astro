@@ -11,11 +11,54 @@ const specsLeft = d.specsLeft as any[];
 const specsRight = d.specsRight as any[];
 const reviews = d.reviews.items as any[];
 const bundleItems = d.bundle as any[];
+
+const SITE_URL = 'https://www.wotu.vn';
+const PAGE_URL = `${SITE_URL}/san-pham/sofa-may/`;
+
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: `${d.name} ${d.subtitle}`,
+  description: d.lede,
+  brand: { '@type': 'Brand', name: 'WOTU' },
+  sku: 'p-sofa-may-3',
+  url: PAGE_URL,
+  offers: {
+    '@type': 'Offer',
+    price: d.priceNum,
+    priceCurrency: 'VND',
+    availability: 'https://schema.org/InStock',
+    url: PAGE_URL,
+    seller: { '@type': 'Organization', name: 'WOTU' },
+  },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: d.reviews.score,
+    reviewCount: d.reviews.total,
+    bestRating: '5',
+    worstRating: '1',
+  },
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: SITE_URL + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Sản phẩm', item: SITE_URL + '/san-pham/' },
+    { '@type': 'ListItem', position: 3, name: 'Sofa', item: SITE_URL + '/san-pham/?cat=sofa' },
+    { '@type': 'ListItem', position: 4, name: 'Sofa văng "Mây" 3 chỗ', item: PAGE_URL },
+  ],
+};
 ---
 <ShopLayout
   title="Sofa văng Mây 3 chỗ — WOTU"
   description="Sofa văng Mây — 3 chỗ ngồi, gỗ sồi tự nhiên, 24 màu vải tuỳ chọn. Bảo hành 5 năm, giao và lắp tận nơi tại Quy Nhơn."
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
   <Nav active="Sản phẩm" />
 
   <!-- BREADCRUMB -->
