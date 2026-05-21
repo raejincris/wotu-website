@@ -9,7 +9,13 @@ import shopHome from '../data/shop-home.yml';
 const phone = site.hotline;
 const email = site.email;
 
-const { combos, bestsellers, inspo, reviews } = shopHome as any;
+const { hero, sections, combos, bestsellers, inspo, reviews } = shopHome as any;
+const whyIcons: Record<string, string> = {
+  shield:  `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>`,
+  truck:   `<rect x="1" y="5" width="14" height="13" rx="1"/><polygon points="15 8 19 8 22 11 22 18 15 18"/><circle cx="6" cy="20" r="2"/><circle cx="18" cy="20" r="2"/>`,
+  refresh: `<path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/>`,
+  chat:    `<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>`,
+};
 ---
 <ShopLayout>
   <Nav />
@@ -19,40 +25,29 @@ const { combos, bestsellers, inspo, reviews } = shopHome as any;
     <div class="container hero-grid">
       <div>
         <div class="hero-eyebrow-row">
-          <span class="pill"><span class="dot"></span> Ưu đãi tháng 5 · giảm đến 35%</span>
-          <span class="eyebrow">Bộ sưu tập 2026</span>
+          <span class="pill"><span class="dot"></span> {hero.pill}</span>
+          <span class="eyebrow">{hero.eyebrow}</span>
         </div>
-        <h1>
-          Trọn bộ <em>nội thất</em><br>
-          cho <span class="stroke">tổ ấm</span> Việt
-        </h1>
-        <p class="hero-sub">
-          WOTU tuyển chọn từng gói combo phòng khách, phòng ngủ, phòng ăn — sẵn sàng dọn vào ở chỉ trong 7 ngày. Vật liệu gỗ tự nhiên, bảo hành 5 năm, giao và lắp đặt tận nơi.
-        </p>
+        <h1 set:html={hero.title} />
+        <p class="hero-sub">{hero.sub}</p>
         <div class="hero-actions">
-          <a class="shop-btn shop-btn-primary" href="#combos">Xem combo nổi bật <span class="arr">→</span></a>
-          <a class="shop-btn shop-btn-ghost" href="#inspo">Khám phá phòng mẫu</a>
+          <a class="shop-btn shop-btn-primary" href="#combos">{hero.cta1} <span class="arr">→</span></a>
+          <a class="shop-btn shop-btn-ghost" href="#inspo">{hero.cta2}</a>
         </div>
         <div class="hero-meta">
-          <div>
-            <div class="meta-num">12<sup>+</sup></div>
-            <div class="meta-label">Năm kinh nghiệm</div>
-          </div>
-          <div>
-            <div class="meta-num">8.500<sup>+</sup></div>
-            <div class="meta-label">Tổ ấm Việt tin chọn</div>
-          </div>
-          <div>
-            <div class="meta-num">5<sup>★</sup></div>
-            <div class="meta-label">Đánh giá khách hàng</div>
-          </div>
+          {hero.stats.map((s: any) => (
+            <div>
+              <div class="meta-num" set:html={s.num} />
+              <div class="meta-label">{s.label}</div>
+            </div>
+          ))}
         </div>
       </div>
 
       <div class="hero-visual">
         <div class="shop-ph"><span class="shop-ph-label">Phòng khách combo WOTU — 1600×2000</span></div>
         <div class="sticker">
-          −35%<small>combo tháng 5</small>
+          {hero.sticker}<small>{hero.stickerSub}</small>
         </div>
         <div class="hero-tag">
           <div>
@@ -74,12 +69,10 @@ const { combos, bestsellers, inspo, reviews } = shopHome as any;
     <div class="combos">
       <div class="section-head">
         <div>
-          <span class="eyebrow">Combo nội thất</span>
-          <h2>Mua trọn bộ — về <em>là ở ngay</em>.</h2>
+          <span class="eyebrow">{sections.combos.eyebrow}</span>
+          <h2 set:html={sections.combos.heading} />
         </div>
-        <div class="right">
-          Mỗi combo WOTU được thiết kế bởi đội ngũ nội thất giàu kinh nghiệm — chuẩn tỉ lệ, đồng bộ chất liệu &amp; tông màu. Bạn không phải mất hàng tuần đi chọn từng món.
-        </div>
+        <div class="right" set:html={sections.combos.desc} />
       </div>
 
       <div class="combo-tabs">
@@ -138,7 +131,7 @@ const { combos, bestsellers, inspo, reviews } = shopHome as any;
       <p class="combo-empty" id="combo-empty" hidden>Chưa có combo phù hợp danh mục này — chúng tôi đang chuẩn bị. Để lại số ở <a href="#contact">phần liên hệ</a> để được tư vấn riêng.</p>
 
       <div style="text-align: center; margin-top: 44px;">
-        <a class="shop-btn shop-btn-outline" href="/san-pham/">Xem tất cả 24 combo <span class="arr">→</span></a>
+        <a class="shop-btn shop-btn-outline" href="/san-pham/">{sections.combos.ctaAll} <span class="arr">→</span></a>
       </div>
     </div>
   </section>
@@ -148,12 +141,10 @@ const { combos, bestsellers, inspo, reviews } = shopHome as any;
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="eyebrow">Sản phẩm bán chạy</span>
-          <h2>Mua lẻ <em>cũng tinh tế</em>.</h2>
+          <span class="eyebrow">{sections.bestsellers.eyebrow}</span>
+          <h2 set:html={sections.bestsellers.heading} />
         </div>
-        <div class="right">
-          Những món được khách hàng WOTU đặt mua nhiều nhất 30 ngày qua. Có sẵn — giao trong 48 giờ tại Quy Nhơn &amp; các tỉnh lân cận.
-        </div>
+        <div class="right" set:html={sections.bestsellers.desc} />
       </div>
 
       <div class="products-grid shop-reveal-stagger">
@@ -192,12 +183,10 @@ const { combos, bestsellers, inspo, reviews } = shopHome as any;
     <div class="inspo">
       <div class="section-head">
         <div>
-          <span class="eyebrow">Phòng cảm hứng</span>
-          <h2>Trông trước, <em>hình dung sau.</em></h2>
+          <span class="eyebrow">{sections.inspo.eyebrow}</span>
+          <h2 set:html={sections.inspo.heading} />
         </div>
-        <div class="right">
-          Lướt qua những căn phòng thật của khách hàng WOTU — chụp tại các căn hộ và nhà phố ở Quy Nhơn · Bình Định.
-        </div>
+        <div class="right" set:html={sections.inspo.desc} />
       </div>
 
       <div class="inspo-grid shop-reveal-stagger">
@@ -221,43 +210,23 @@ const { combos, bestsellers, inspo, reviews } = shopHome as any;
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="eyebrow">Tại sao chọn Wotu</span>
-          <h2>Cam kết <em>vững như gỗ</em>.</h2>
+          <span class="eyebrow">{sections.whyUs.eyebrow}</span>
+          <h2 set:html={sections.whyUs.heading} />
         </div>
-        <div class="right">
-          Chúng tôi không bán đồ — chúng tôi đồng hành cùng bạn xây tổ ấm. 4 cam kết dưới đây là điều mọi khách hàng WOTU đều nhận được.
-        </div>
+        <div class="right" set:html={sections.whyUs.desc} />
       </div>
 
       <div class="why-grid shop-reveal-stagger">
-        <div class="why-card">
-          <div class="why-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+        {sections.whyUs.items.map((item: any) => (
+          <div class="why-card">
+            <div class="why-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                   set:html={whyIcons[item.icon] ?? ''} />
+            </div>
+            <h3>{item.title}</h3>
+            <p>{item.desc}</p>
           </div>
-          <h3>Bảo hành 5 năm</h3>
-          <p>Khung gỗ và cấu trúc chính được bảo hành 5 năm — gấp đôi mặt bằng thị trường nội thất Việt.</p>
-        </div>
-        <div class="why-card">
-          <div class="why-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="5" width="14" height="13" rx="1"/><polygon points="15 8 19 8 22 11 22 18 15 18"/><circle cx="6" cy="20" r="2"/><circle cx="18" cy="20" r="2"/></svg>
-          </div>
-          <h3>Giao &amp; lắp miễn phí</h3>
-          <p>Miễn phí giao và lắp đặt tận nhà tại Quy Nhơn, Bình Định và các tỉnh lân cận — đội kỹ thuật riêng, không qua bên thứ ba.</p>
-        </div>
-        <div class="why-card">
-          <div class="why-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/></svg>
-          </div>
-          <h3>Đổi trả 30 ngày</h3>
-          <p>Không vừa ý vì bất kỳ lý do gì? Đổi trả miễn phí trong 30 ngày — kể cả combo đã lắp đặt.</p>
-        </div>
-        <div class="why-card">
-          <div class="why-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>
-          </div>
-          <h3>Tư vấn 1:1</h3>
-          <p>Kiến trúc sư WOTU tư vấn miễn phí qua Zalo — đo đạc, dựng 3D phòng &amp; gợi ý combo phù hợp.</p>
-        </div>
+        ))}
       </div>
     </div>
   </section>
@@ -267,12 +236,10 @@ const { combos, bestsellers, inspo, reviews } = shopHome as any;
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="eyebrow">Khách hàng nói gì</span>
-          <h2>8.500+ tổ ấm <em>đã chọn</em>.</h2>
+          <span class="eyebrow">{sections.reviews.eyebrow}</span>
+          <h2 set:html={sections.reviews.heading} />
         </div>
-        <div class="right">
-          Trung bình 4.9/5 sao trên 2.300+ đánh giá Shopee, Google, Facebook — chúng tôi để khách hàng nói thay.
-        </div>
+        <div class="right" set:html={sections.reviews.desc} />
       </div>
 
       <div class="reviews-grid shop-reveal-stagger">
@@ -297,9 +264,9 @@ const { combos, bestsellers, inspo, reviews } = shopHome as any;
   <section id="contact" class="shop-reveal" style="padding-bottom: 0;">
     <div class="cta">
       <div>
-        <span class="eyebrow" style="color: color-mix(in oklab, var(--shop-bg) 80%, transparent);">Đặt tư vấn miễn phí</span>
-        <h2>Để chuyên gia WOTU<br>chọn combo <em>cho tổ ấm</em> của bạn.</h2>
-        <p>Để lại số điện thoại — chúng tôi gọi trong 15 phút, tặng bạn 1 buổi tư vấn 1:1 và bản dựng 3D miễn phí cho căn hộ của bạn. Hoặc gọi trực tiếp <a href={`tel:+84${phone.replace(/\s+/g, '').slice(1)}`} style="text-decoration: underline;">{phone}</a> · email <a href={`mailto:${email}`} style="text-decoration: underline;">{email}</a>.</p>
+        <span class="eyebrow" style="color: color-mix(in oklab, var(--shop-bg) 80%, transparent);">{sections.cta.eyebrow}</span>
+        <h2 set:html={sections.cta.heading} />
+        <p set:html={`${sections.cta.desc} Hoặc gọi trực tiếp <a href="tel:+84${phone.replace(/\s+/g, '').slice(1)}" style="text-decoration: underline;">${phone}</a> · email <a href="mailto:${email}" style="text-decoration: underline;">${email}</a>.`} />
       </div>
       <form
         class="cta-form"

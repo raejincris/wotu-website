@@ -60,16 +60,19 @@ function resetEditor() {
 const PANELS = [
   'panel-dashboard',
   'panel-site', 'panel-sofa', 'panel-combo', 'panel-shop-home', 'panel-home-hero',
+  'panel-shop-hero', 'panel-products',
 ];
 
 const HASH_MAP = {
-  '':           'panel-dashboard',
-  'dashboard':  'panel-dashboard',
-  'site':       'panel-site',
-  'sofa':       'panel-sofa',
-  'combo':      'panel-combo',
-  'shop-home':  'panel-shop-home',
-  'home-hero':  'panel-home-hero',
+  '':            'panel-dashboard',
+  'dashboard':   'panel-dashboard',
+  'site':        'panel-site',
+  'sofa':        'panel-sofa',
+  'combo':       'panel-combo',
+  'shop-home':   'panel-shop-home',
+  'home-hero':   'panel-home-hero',
+  'shop-hero':   'panel-shop-hero',
+  'products':    'panel-products',
 };
 
 const PANEL_META = {
@@ -79,14 +82,18 @@ const PANEL_META = {
   'panel-combo':     { title: 'Combo Tổ Ấm',              preview: 'https://www.wotu.vn/combo/to-am/' },
   'panel-shop-home': { title: 'Combo trang chủ',          preview: 'https://www.wotu.vn/' },
   'panel-home-hero': { title: 'Trang chủ Studio',         preview: 'https://www.wotu.vn/studio/' },
+  'panel-shop-hero': { title: 'Trang chủ Shop',           preview: 'https://www.wotu.vn/' },
+  'panel-products':  { title: 'Catalog sản phẩm',         preview: 'https://www.wotu.vn/san-pham/' },
 };
 
 const EDITOR_MAP = {
-  'site':      '/admin/editors/site-info.js',
-  'sofa':      '/admin/editors/sofa-may.js',
-  'combo':     '/admin/editors/combo.js',
-  'shop-home': '/admin/editors/shop-home.js',
-  'home-hero': '/admin/editors/home-hero.js',
+  'site':       '/admin/editors/site-info.js',
+  'sofa':       '/admin/editors/sofa-may.js',
+  'combo':      '/admin/editors/combo.js',
+  'shop-home':  '/admin/editors/shop-home.js',
+  'home-hero':  '/admin/editors/home-hero.js',
+  'shop-hero':  '/admin/editors/shop-hero.js',
+  'products':   '/admin/editors/products.js',
 };
 
 const FILE_STATUS_CONFIG = [
@@ -95,6 +102,8 @@ const FILE_STATUS_CONFIG = [
   { name: 'Combo Tổ Ấm',       path: 'src/data/combo-to-am.yml',     hash: 'combo' },
   { name: 'Combo trang chủ',   path: 'src/data/shop-home.yml',       hash: 'shop-home' },
   { name: 'Trang chủ Studio',  path: 'src/data/home.yml',            hash: 'home-hero' },
+  { name: 'Trang chủ Shop',    path: 'src/data/shop-home.yml',       hash: 'shop-hero' },
+  { name: 'Catalog sản phẩm',  path: 'src/data/shop-products.yml',   hash: 'products' },
 ];
 
 // ─── Panel switching ──────────────────────────────────────────────────────────

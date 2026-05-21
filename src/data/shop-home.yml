@@ -1,3 +1,60 @@
+hero:
+  pill: "Ưu đãi tháng 5 · giảm đến 35%"
+  eyebrow: "Bộ sưu tập 2026"
+  title: "Trọn bộ <em>nội thất</em><br/>cho <span class=\"stroke\">tổ ấm</span> Việt"
+  sub: "WOTU tuyển chọn từng gói combo phòng khách, phòng ngủ, phòng ăn — sẵn sàng dọn vào ở chỉ trong 7 ngày. Vật liệu gỗ tự nhiên, bảo hành 5 năm, giao và lắp đặt tận nơi."
+  cta1: "Xem combo nổi bật"
+  cta2: "Khám phá phòng mẫu"
+  stats:
+    - num: "12+"
+      label: "Năm kinh nghiệm"
+    - num: "8.500+"
+      label: "Tổ ấm Việt tin chọn"
+    - num: "5★"
+      label: "Đánh giá khách hàng"
+  sticker: "−35%"
+  stickerSub: "combo tháng 5"
+
+sections:
+  combos:
+    eyebrow: "Combo nội thất"
+    heading: "Mua trọn bộ — về <em>là ở ngay</em>."
+    desc: "Mỗi combo WOTU được thiết kế bởi đội ngũ nội thất giàu kinh nghiệm — chuẩn tỉ lệ, đồng bộ chất liệu & tông màu. Bạn không phải mất hàng tuần đi chọn từng món."
+    ctaAll: "Xem tất cả 24 combo"
+  bestsellers:
+    eyebrow: "Sản phẩm bán chạy"
+    heading: "Mua lẻ <em>cũng tinh tế</em>."
+    desc: "Những món được khách hàng WOTU đặt mua nhiều nhất 30 ngày qua. Có sẵn — giao trong 48 giờ tại Quy Nhơn & các tỉnh lân cận."
+  inspo:
+    eyebrow: "Phòng cảm hứng"
+    heading: "Trông trước, <em>hình dung sau.</em>"
+    desc: "Lướt qua những căn phòng thật của khách hàng WOTU — chụp tại các căn hộ và nhà phố ở Quy Nhơn · Bình Định."
+  whyUs:
+    eyebrow: "Tại sao chọn Wotu"
+    heading: "Cam kết <em>vững như gỗ</em>."
+    desc: "Chúng tôi không bán đồ — chúng tôi đồng hành cùng bạn xây tổ ấm. 4 cam kết dưới đây là điều mọi khách hàng WOTU đều nhận được."
+    items:
+      - icon: shield
+        title: "Bảo hành 5 năm"
+        desc: "Khung gỗ và cấu trúc chính được bảo hành 5 năm — gấp đôi mặt bằng thị trường nội thất Việt."
+      - icon: truck
+        title: "Giao & lắp miễn phí"
+        desc: "Miễn phí giao và lắp đặt tận nhà tại Quy Nhơn, Bình Định và các tỉnh lân cận — đội kỹ thuật riêng, không qua bên thứ ba."
+      - icon: refresh
+        title: "Đổi trả 30 ngày"
+        desc: "Không vừa ý vì bất kỳ lý do gì? Đổi trả miễn phí trong 30 ngày — kể cả combo đã lắp đặt."
+      - icon: chat
+        title: "Tư vấn 1:1"
+        desc: "Kiến trúc sư WOTU tư vấn miễn phí qua Zalo — đo đạc, dựng 3D phòng & gợi ý combo phù hợp."
+  reviews:
+    eyebrow: "Khách hàng nói gì"
+    heading: "8.500+ tổ ấm <em>đã chọn</em>."
+    desc: "Trung bình 4.9/5 sao trên 2.300+ đánh giá Shopee, Google, Facebook — chúng tôi để khách hàng nói thay."
+  cta:
+    eyebrow: "Đặt tư vấn miễn phí"
+    heading: "Để chuyên gia WOTU<br/>chọn combo <em>cho tổ ấm</em> của bạn."
+    desc: "Để lại số điện thoại — chúng tôi gọi trong 15 phút, tặng bạn 1 buổi tư vấn 1:1 và bản dựng 3D miễn phí cho căn hộ của bạn. Hoặc gọi trực tiếp hay email cho chúng tôi."
+
 combos:
   - feature: true
     id: combo-an-cu
