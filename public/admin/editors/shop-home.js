@@ -91,10 +91,14 @@ export async function init({ token, showToast, setLoading }) {
   inputs.forEach((inp) => origValues.set(inp, inp.value));
 
   function checkDirty() {
-    saveBtn.disabled = ![...inputs].some((i) => i.value !== origValues.get(i));
+    const dirty = [...inputs].some((i) => i.value !== origValues.get(i));
+    saveBtn.disabled = !dirty;
+    window.__adminSetDirty?.(dirty);
   }
   inputs.forEach((i) => i.addEventListener('input', checkDirty));
   checkDirty();
+
+  window.__adminSaveFn = () => { if (!saveBtn.disabled) saveBtn.click(); };
 
   saveBtn.addEventListener('click', async () => {
     setLoading(true);

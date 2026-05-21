@@ -13,12 +13,8 @@
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     Loading overlay
-════════════════════════════════════════ -->
-<div id="loading" hidden>
-  <div class="spinner"></div>
-</div>
+<!-- Loading overlay -->
+<div id="loading" hidden><div class="spinner"></div></div>
 
 <!-- Toast container -->
 <div id="toast-container"></div>
@@ -26,7 +22,7 @@
 <!-- ══════════════════════════════════════
      LOGIN SCREEN
 ════════════════════════════════════════ -->
-<div id="screen-login" class="screen">
+<div id="screen-login" class="screen-login">
   <div class="login-card">
     <img src="/logo.svg" alt="WOTU" class="login-logo" />
     <h1>Quản trị WOTU</h1>
@@ -50,129 +46,189 @@
 </div>
 
 <!-- ══════════════════════════════════════
-     DASHBOARD
+     APP SHELL
 ════════════════════════════════════════ -->
-<div id="screen-dashboard" class="screen" hidden>
+<div id="app-shell" hidden>
 
-  <header class="admin-header">
-    <div class="admin-header-inner container">
-      <a href="#dashboard" class="admin-brand">
-        <img src="/logo.svg" alt="WOTU" />
-        <span class="admin-brand-label">Admin</span>
+  <!-- Sidebar overlay (mobile) -->
+  <div id="sidebar-overlay" class="sidebar-overlay" hidden></div>
+
+  <!-- ── SIDEBAR ─────────────────────────── -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-brand">
+      <img src="/logo.svg" alt="WOTU" />
+      <span>Admin</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#dashboard" class="sidebar-link" data-panel="dashboard">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        Dashboard
       </a>
-      <div class="admin-user">
-        <img id="user-avatar" src="" alt="" class="user-avatar" />
+
+      <p class="sidebar-section-label">Cập nhật nhanh</p>
+
+      <a href="#site" class="sidebar-link" data-panel="site">
+        <span class="sidebar-icon-emoji">☎</span> Thông tin liên hệ
+      </a>
+      <a href="#sofa" class="sidebar-link" data-panel="sofa">
+        <span class="sidebar-icon-emoji">🛋</span> Sofa Mây
+      </a>
+      <a href="#combo" class="sidebar-link" data-panel="combo">
+        <span class="sidebar-icon-emoji">📦</span> Combo Tổ Ấm
+      </a>
+      <a href="#shop-home" class="sidebar-link" data-panel="shop-home">
+        <span class="sidebar-icon-emoji">🏠</span> Combo trang chủ
+      </a>
+      <a href="#home-hero" class="sidebar-link" data-panel="home-hero">
+        <span class="sidebar-icon-emoji">✏️</span> Trang chủ Studio
+      </a>
+
+      <div class="sidebar-divider"></div>
+
+      <a href="/admin/cms/" class="sidebar-link sidebar-external" target="_blank" rel="noopener">
+        <span class="sidebar-icon-emoji">⚙️</span>
+        Sveltia CMS
+        <svg class="ext-icon" viewBox="0 0 24 24" width="11" height="11"
+             stroke="currentColor" fill="none" stroke-width="2.5" aria-hidden="true">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <img id="user-avatar" src="" alt="" class="user-avatar" />
+      <div class="sidebar-user-info">
         <span id="user-name" class="user-name"></span>
-        <button id="btn-logout" class="btn btn-ghost btn-sm">Đăng xuất</button>
+        <button id="btn-logout" class="btn-logout-sm">Đăng xuất</button>
       </div>
     </div>
-  </header>
+  </aside>
 
-  <main class="container">
+  <!-- ── SHELL MAIN ──────────────────────── -->
+  <div class="shell-main">
 
-    <section class="dash-section" style="margin-top:36px;">
-      <h2>Cập nhật nhanh</h2>
-      <div class="card-grid">
-
-        <button class="dash-card" data-goto="site" type="button">
-          <span class="dash-card-icon">☎</span>
-          <span class="dash-card-title">Thông tin liên hệ</span>
-          <span class="dash-card-sub">Hotline · email · địa chỉ</span>
-        </button>
-
-        <button class="dash-card" data-goto="sofa" type="button">
-          <span class="dash-card-icon">🛋</span>
-          <span class="dash-card-title">Sofa Mây</span>
-          <span class="dash-card-sub">Giá · tồn kho · badge</span>
-        </button>
-
-        <button class="dash-card" data-goto="combo" type="button">
-          <span class="dash-card-icon">📦</span>
-          <span class="dash-card-title">Combo Tổ Ấm</span>
-          <span class="dash-card-sub">Giá · phần trăm giảm</span>
-        </button>
-
-        <button class="dash-card" data-goto="shop-home" type="button">
-          <span class="dash-card-icon">🏠</span>
-          <span class="dash-card-title">Combo trang chủ</span>
-          <span class="dash-card-sub">Giá 6 combo shop</span>
-        </button>
-
-        <a class="dash-card dash-card-link" href="/admin/cms/" target="_blank" rel="noopener">
-          <span class="dash-card-icon">⚙️</span>
-          <span class="dash-card-title">Sveltia CMS đầy đủ</span>
-          <span class="dash-card-sub">Dự án · blog · menu · nội dung sâu</span>
-          <span class="dash-card-arrow">↗</span>
-        </a>
-
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="admin-header-inner">
+        <div class="admin-header-left">
+          <button id="btn-sidebar-toggle" class="btn-hamburger"
+                  aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+          <a href="#dashboard" class="admin-brand-mobile">
+            <img src="/logo.svg" alt="WOTU" />
+          </a>
+          <span id="header-title" class="header-title"></span>
+        </div>
+        <div class="admin-header-right">
+          <a id="header-preview" href="#" target="_blank" rel="noopener"
+             class="btn btn-ghost btn-sm preview-btn" hidden>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            Xem trang
+          </a>
+        </div>
       </div>
-    </section>
+    </header>
 
-    <section class="dash-section">
-      <h2>Hoạt động gần đây</h2>
-      <div id="commits-list" class="commits-list">
-        <div class="commits-empty">Đang tải…</div>
+    <!-- Content panels -->
+    <div id="content-area">
+
+      <!-- ╔══════════════════════════════════
+           ║  DASHBOARD
+           ╚══════════════════════════════════ -->
+      <div id="panel-dashboard" class="panel" hidden>
+        <div class="panel-page-header">
+          <h2>Dashboard</h2>
+          <p class="panel-page-sub">Tổng quan trạng thái nội dung</p>
+        </div>
+        <div class="panel-container">
+          <section class="dash-section">
+            <h3 class="section-heading">Trạng thái file</h3>
+            <div id="file-status-grid" class="file-status-grid">
+              <div class="status-loading">Đang tải…</div>
+            </div>
+          </section>
+          <section class="dash-section">
+            <h3 class="section-heading">Hoạt động gần đây</h3>
+            <div id="commits-list" class="commits-list">
+              <div class="commits-empty">Đang tải…</div>
+            </div>
+          </section>
+        </div>
       </div>
-    </section>
 
-  </main>
-</div>
+      <!-- ╔══════════════════════════════════
+           ║  EDITOR: Thông tin liên hệ
+           ╚══════════════════════════════════ -->
+      <div id="panel-site" class="panel editor-panel" hidden>
+        <div class="panel-page-header">
+          <h2>Thông tin liên hệ</h2>
+          <p class="panel-page-sub">src/data/site.yml</p>
+        </div>
+        <div class="editor-body" id="editor-site-body"></div>
+        <div class="editor-footer" id="editor-site-footer" hidden></div>
+      </div>
 
-<!-- ══════════════════════════════════════
-     EDITOR: Thông tin liên hệ
-════════════════════════════════════════ -->
-<div id="editor-site" class="screen editor-screen" hidden>
-  <div class="editor-topbar">
-    <button class="btn btn-back" data-back>← Quay lại</button>
-    <h2>Thông tin liên hệ</h2>
-  </div>
-  <div class="editor-body" id="editor-site-body">
-    <div class="editor-loading"><div class="spinner"></div><span>Đang tải…</span></div>
-  </div>
-  <div class="editor-footer" id="editor-site-footer" hidden></div>
-</div>
+      <!-- ╔══════════════════════════════════
+           ║  EDITOR: Sofa Mây
+           ╚══════════════════════════════════ -->
+      <div id="panel-sofa" class="panel editor-panel" hidden>
+        <div class="panel-page-header">
+          <h2>Sofa Mây — Giá &amp; Tồn kho</h2>
+          <p class="panel-page-sub">src/data/shop-sofa-may.yml</p>
+        </div>
+        <div class="editor-body" id="editor-sofa-body"></div>
+        <div class="editor-footer" id="editor-sofa-footer" hidden></div>
+      </div>
 
-<!-- ══════════════════════════════════════
-     EDITOR: Sofa Mây
-════════════════════════════════════════ -->
-<div id="editor-sofa" class="screen editor-screen" hidden>
-  <div class="editor-topbar">
-    <button class="btn btn-back" data-back>← Quay lại</button>
-    <h2>Sofa Mây — Giá &amp; Tồn kho</h2>
-  </div>
-  <div class="editor-body" id="editor-sofa-body">
-    <div class="editor-loading"><div class="spinner"></div><span>Đang tải…</span></div>
-  </div>
-  <div class="editor-footer" id="editor-sofa-footer" hidden></div>
-</div>
+      <!-- ╔══════════════════════════════════
+           ║  EDITOR: Combo Tổ Ấm
+           ╚══════════════════════════════════ -->
+      <div id="panel-combo" class="panel editor-panel" hidden>
+        <div class="panel-page-header">
+          <h2>Combo Tổ Ấm — Giá</h2>
+          <p class="panel-page-sub">src/data/combo-to-am.yml</p>
+        </div>
+        <div class="editor-body" id="editor-combo-body"></div>
+        <div class="editor-footer" id="editor-combo-footer" hidden></div>
+      </div>
 
-<!-- ══════════════════════════════════════
-     EDITOR: Combo Tổ Ấm
-════════════════════════════════════════ -->
-<div id="editor-combo" class="screen editor-screen" hidden>
-  <div class="editor-topbar">
-    <button class="btn btn-back" data-back>← Quay lại</button>
-    <h2>Combo Tổ Ấm — Giá</h2>
-  </div>
-  <div class="editor-body" id="editor-combo-body">
-    <div class="editor-loading"><div class="spinner"></div><span>Đang tải…</span></div>
-  </div>
-  <div class="editor-footer" id="editor-combo-footer" hidden></div>
-</div>
+      <!-- ╔══════════════════════════════════
+           ║  EDITOR: Combo trang chủ
+           ╚══════════════════════════════════ -->
+      <div id="panel-shop-home" class="panel editor-panel" hidden>
+        <div class="panel-page-header">
+          <h2>Combo trang chủ</h2>
+          <p class="panel-page-sub">src/data/shop-home.yml</p>
+        </div>
+        <div class="editor-body" id="editor-shop-home-body"></div>
+        <div class="editor-footer" id="editor-shop-home-footer" hidden></div>
+      </div>
 
-<!-- ══════════════════════════════════════
-     EDITOR: Combo trang chủ
-════════════════════════════════════════ -->
-<div id="editor-shop-home" class="screen editor-screen" hidden>
-  <div class="editor-topbar">
-    <button class="btn btn-back" data-back>← Quay lại</button>
-    <h2>Combo trang chủ — Giá</h2>
-  </div>
-  <div class="editor-body" id="editor-shop-home-body">
-    <div class="editor-loading"><div class="spinner"></div><span>Đang tải…</span></div>
-  </div>
-  <div class="editor-footer" id="editor-shop-home-footer" hidden></div>
-</div>
+      <!-- ╔══════════════════════════════════
+           ║  EDITOR: Trang chủ Studio
+           ╚══════════════════════════════════ -->
+      <div id="panel-home-hero" class="panel editor-panel" hidden>
+        <div class="panel-page-header">
+          <h2>Trang chủ Studio</h2>
+          <p class="panel-page-sub">src/data/home.yml</p>
+        </div>
+        <div class="editor-body" id="editor-home-hero-body"></div>
+        <div class="editor-footer" id="editor-home-hero-footer" hidden></div>
+      </div>
+
+    </div><!-- /content-area -->
+  </div><!-- /shell-main -->
+</div><!-- /app-shell -->
 
 </body>
 </html>

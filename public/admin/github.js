@@ -81,10 +81,10 @@ export async function getUser(token) {
   return res.json();
 }
 
-/** Lấy 5 commit gần nhất */
+/** Lấy 8 commit gần nhất */
 export async function getCommits(token) {
   const res = await fetch(
-    `${API}/repos/${REPO}/commits?per_page=5&sha=${BRANCH}`,
+    `${API}/repos/${REPO}/commits?per_page=8&sha=${BRANCH}`,
     { headers: ghHeaders(token) },
   );
   if (!res.ok) return [];
@@ -95,4 +95,20 @@ export async function getCommits(token) {
     date: c.commit.author.date,
     url: c.html_url,
   }));
+}
+
+/** Lấy commit gần nhất của 1 file cụ thể → { sha, date, message } | null */
+export async function getFileLastCommit(token, path) {
+  const res = await fetch(
+    `${API}/repos/${REPO}/commits?path=${encodeURIComponent(path)}&per_page=1&sha=${BRANCH}`,
+    { headers: ghHeaders(token) },
+  );
+  if (!res.ok) return null;
+  const list = await res.json();
+  if (!list.length) return null;
+  return {
+    sha: list[0].sha.slice(0, 7),
+    date: list[0].commit.author.date,
+    message: list[0].commit.message.split('\n')[0],
+  };
 }
