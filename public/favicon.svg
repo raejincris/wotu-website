@@ -1,7 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="#F5F0E8"/>
-  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="central"
-        font-family="'Cormorant Garamond', Georgia, serif" font-weight="500"
-        font-size="40" fill="#2B231C" letter-spacing="1">W</text>
-  <circle cx="49" cy="44" r="3" fill="#B8835A"/>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_7_20)">
+<mask id="mask0_7_20" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="128" height="128">
+<path d="M92.1849 0H35.8151C16.035 0 0 16.035 0 35.8151V92.1849C0 111.965 16.035 128 35.8151 128H92.1849C111.965 128 128 111.965 128 92.1849V35.8151C128 16.035 111.965 0 92.1849 0Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_7_20)">
+<path d="M128 0H0V128H128V0Z" fill="#FBF7F0"/>
+<path d="M42.6909 94.6534V93.4973L37.3333 89.3225V99.4063H62.5335L42.6909 83.7989V72.6232L77.0187 99.4063H91.8346V86.0468L46.2625 50.6571L53.4721 45.005L91.8346 74.9996V51.2994L64.584 29.7187L55.7209 36.7838L59.7556 40.1237L64.9147 36.1415L86.477 53.2905V64.5946L53.4721 38.7749V29.3333L48.0484 33.4439V42.3717L38.2593 50.336L86.7416 89.2583V94.525H78.9368L37.3333 61.4474V85.7257L48.5775 94.6534H42.6909Z" fill="#DD2C42"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_7_20">
+<rect width="128" height="128" fill="white"/>
+</clipPath>
+</defs>
 </svg>
