@@ -36,6 +36,33 @@ const faqSchema = {
   })),
 };
 
+// Product schema cho combo (offer + aggregateRating từ reviews) — rich result giá + sao.
+const priceNum = Number(String(priceNow).replace(/[^\d]/g, '')) || undefined;
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: `${d.title} — ${d.subtitle}`,
+  description: comboDesc,
+  brand: { '@type': 'Brand', name: 'WOTU' },
+  sku: 'combo-to-am',
+  url: PAGE_URL,
+  offers: {
+    '@type': 'Offer',
+    price: priceNum,
+    priceCurrency: 'VND',
+    availability: 'https://schema.org/InStock',
+    url: PAGE_URL,
+    seller: { '@type': 'Organization', name: 'WOTU' },
+  },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: reviews.score,
+    reviewCount: reviews.total,
+    bestRating: '5',
+    worstRating: '1',
+  },
+};
+
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -51,6 +78,7 @@ const breadcrumbSchema = {
   description="Combo Tổ Ấm — phòng khách trọn 4 món: sofa văng 3 chỗ, bàn trà gỗ sồi, kệ TV 1m8, thảm dệt tay. Tiết kiệm 10 triệu so mua lẻ. Bảo hành 5 năm. Giao và lắp tận Quy Nhơn."
 >
   <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
     <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
     <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   </Fragment>

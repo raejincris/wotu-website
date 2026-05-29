@@ -5,6 +5,7 @@ import Nav from '../../../components/Nav.astro';
 import Footer from '../../../components/Footer.astro';
 import Placeholder from '../../../components/Placeholder.astro';
 import Reveal from '../../../components/Reveal.astro';
+import Breadcrumb from '../../../components/Breadcrumb.astro';
 
 export async function getStaticPaths() {
   const all = await getCollection('blog');
@@ -15,6 +16,13 @@ interface Props { entry: CollectionEntry<'blog'>; }
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const fmt = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+// Bài viết liên quan: các bài khác, mới nhất trước.
+const allPosts = await getCollection('blog');
+const related = allPosts
+  .filter((x) => x.id !== entry.id)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 2);
 ---
 <BaseLayout
   title={`${entry.data.title} — WOTU`}
@@ -23,8 +31,9 @@ const fmt = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit',
   schemaDate={entry.data.date.toISOString()}
 >
   <Nav variant="inner" homeRoute="/studio/" />
+  <Breadcrumb maxWidth="880px" items={[{ name: 'Studio', href: '/studio/' }, { name: 'Nhật ký', href: '/studio/blog' }, { name: entry.data.title }]} />
 
-  <header style="padding: 140px var(--pad-x) 64px; max-width: 880px; margin: 0 auto;">
+  <header style="padding: 40px var(--pad-x) 64px; max-width: 880px; margin: 0 auto;">
     <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">
       {fmt.format(entry.data.date)} · Nhật ký
     </div>
@@ -55,7 +64,30 @@ const fmt = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit',
     </div>
   </article>
 
-  <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 64ch; margin: 0 auto;">
+  {related.length > 0 && (
+    <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 880px; margin: 0 auto;">
+      <div style="border-top: 1px solid var(--ink); padding-top: 28px; margin-bottom: 28px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase;">
+        Đọc tiếp
+      </div>
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px;">
+        {related.map((r) => (
+          <li>
+            <a href={`/studio/blog/${r.id}`} style="display: block; padding: 20px 0; border-bottom: 1px solid var(--line); text-decoration: none;">
+              <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; color: var(--taupe); text-transform: uppercase; margin-bottom: 8px;">
+                {fmt.format(r.data.date)} · Nhật ký
+              </div>
+              <h3 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 3vw, 34px); line-height: 1.1; color: var(--bark);">{r.data.title}</h3>
+              {r.data.excerpt && (
+                <p style="margin-top: 8px; font-size: 15px; line-height: 1.5; color: var(--earth); max-width: 60ch;">{r.data.excerpt}</p>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 880px; margin: 0 auto;">
     <a href="/studio/blog" style="display: inline-flex; align-items: center; min-height: 44px; padding: 12px 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink);">← Tất cả ghi chép</a>
   </section>
 

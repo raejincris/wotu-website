@@ -1,0 +1,71 @@
+---
+/**
+ * Breadcrumb.astro — breadcrumb cho trang Studio (BaseLayout).
+ * Vừa render UI (mono editorial) vừa phát JSON-LD BreadcrumbList.
+ *
+ * Dùng: <Breadcrumb items={[{ name: 'Studio', href: '/studio/' }, { name: 'Dự án', href: '/studio/projects' }, { name: p.name }]} />
+ * Item cuối (không có href) = trang hiện tại.
+ */
+interface Crumb { name: string; href?: string; }
+interface Props { items: Crumb[]; maxWidth?: string; }
+
+const { items, maxWidth = '1280px' } = Astro.props;
+const SITE_URL = 'https://www.wotu.vn';
+const currentURL = new URL(Astro.url.pathname, SITE_URL).href;
+
+// Trang chủ studio luôn là gốc breadcrumb.
+const full: Crumb[] = [{ name: 'Trang chủ', href: '/' }, ...items];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: full.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.name,
+    item: c.href ? new URL(c.href, SITE_URL).href : currentURL,
+  })),
+};
+---
+<nav class="breadcrumb" aria-label="Breadcrumb" style={`max-width: ${maxWidth};`}>
+  <ol>
+    {full.map((c, i) => (
+      <li>
+        {c.href && i < full.length - 1
+          ? <a href={c.href}>{c.name}</a>
+          : <span aria-current="page">{c.name}</span>}
+        {i < full.length - 1 && <span class="sep" aria-hidden="true">/</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+
+<style>
+  .breadcrumb {
+    padding: 116px var(--pad-x) 0;
+    margin: 0 auto;
+  }
+  .breadcrumb ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--earth);
+  }
+  .breadcrumb li { display: inline-flex; align-items: center; gap: 8px; }
+  .breadcrumb a { color: var(--earth); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--ink); }
+  .breadcrumb [aria-current="page"] { color: var(--ink); }
+  .breadcrumb .sep { color: var(--taupe); }
+  @media (max-width: 768px) {
+    .breadcrumb { padding-top: 100px; }
+  }
+</style>
