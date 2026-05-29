@@ -169,7 +169,7 @@ bestsellers:
     stars: "★★★★★"
     placeholder: "Bàn ăn Đoàn Viên"
     tone: sage
-    href: /san-pham/?cat=ban
+    href: /san-pham/ban-doan-vien/
 
   - id: p-giuong-trang-non
     meta: "Giường · 1m6"
@@ -179,7 +179,7 @@ bestsellers:
     stars: "★★★★★"
     placeholder: "Giường ngủ Trăng Non"
     tone: ""
-    href: /san-pham/?cat=giuong
+    href: /san-pham/giuong-trang-non/
 
   - id: p-tu-moc
     meta: "Tủ quần áo · 4 cánh"
@@ -189,7 +189,7 @@ bestsellers:
     stars: "★★★★☆"
     placeholder: "Tủ quần áo Mộc"
     tone: sage
-    href: /san-pham/?cat=tu
+    href: /san-pham/tu-moc/
 
 inspo:
   - tall: true
