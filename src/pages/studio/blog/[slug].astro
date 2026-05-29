@@ -23,10 +23,18 @@ const related = allPosts
   .filter((x) => x.id !== entry.id)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 2);
+
+// OG image = ảnh bìa bài (nếu là ảnh local /uploads). Unsplash ID hoặc thiếu
+// ảnh → để default og.png của BaseLayout.
+const cover = entry.data.photo;
+const ogImage = cover && (cover.startsWith('/') || cover.startsWith('http'))
+  ? new URL(cover, Astro.site).href
+  : undefined;
 ---
 <BaseLayout
   title={`${entry.data.title} — WOTU`}
   description={entry.data.excerpt}
+  ogImage={ogImage}
   schemaType="article"
   schemaDate={entry.data.date.toISOString()}
 >

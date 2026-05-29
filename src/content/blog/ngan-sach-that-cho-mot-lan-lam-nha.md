@@ -5,7 +5,8 @@ excerpt: "Con số đầu tiên bạn nghe không bao giờ là con số cuối 
 category: "Quy trình"
 tags: ["ngân sách", "quy trình", "chi phí"]
 tone: warm
-photoAlt: "Bản vẽ kỹ thuật và bảng vật liệu trên bàn gỗ"
+photo: "/uploads/blog/ngan-sach-that-cho-mot-lan-lam-nha.png"
+photoAlt: "Ảnh bìa Nhật ký WOTU — Ngân sách thật cho một lần làm nhà"
 ---
 
 Câu hỏi đầu tiên gần như ai cũng hỏi: "Làm cái nhà này hết bao nhiêu?". Câu hỏi đúng hơn nên là: "Với ngân sách này, tôi nên ưu tiên gì?".

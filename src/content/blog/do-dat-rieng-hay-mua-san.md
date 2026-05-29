@@ -5,7 +5,8 @@ excerpt: "Không phải món nào cũng đáng đặt riêng — nhưng có vài
 category: "Vật liệu"
 tags: ["đồ gỗ", "đặt riêng", "xưởng"]
 tone: deep
-photoAlt: "Đồ gỗ đang hoàn thiện trong xưởng, mùn cưa và vân gỗ"
+photo: "/uploads/blog/do-dat-rieng-hay-mua-san.png"
+photoAlt: "Ảnh bìa Nhật ký WOTU — Đồ đặt riêng, hay mua sẵn?"
 ---
 
 Có một niềm tin phổ biến rằng đồ đặt riêng luôn tốt hơn đồ mua sẵn. Sự thật phức tạp hơn thế.
