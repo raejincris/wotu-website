@@ -1,0 +1,184 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+import Breadcrumb from '../../../components/Breadcrumb.astro';
+import ProjectItem from '../../../components/ProjectItem.astro';
+import servicesData from '../../../data/services.yml';
+
+const all = (servicesData as any).services as any[];
+
+export function getStaticPaths() {
+  const list = (servicesData as any).services as any[];
+  return list.map((s) => ({ params: { slug: s.slug }, props: { service: s } }));
+}
+
+interface Props { service: any; }
+const { service: s } = Astro.props;
+
+const others = all.filter((x) => x.slug !== s.slug);
+
+// 3 dự án làm portfolio chứng minh năng lực (sắp theo order).
+const projectEntries = await getCollection('projects');
+const related = projectEntries
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3)
+  .map((x) => ({
+    slug: x.id, name: x.data.name, id: x.data.id, loc: x.data.loc,
+    cat: x.data.cat, tone: x.data.tone, ratio: x.data.ratio,
+    photo: x.data.photo, photoAlt: x.data.photoAlt,
+  }));
+
+const SITE_URL = 'https://www.wotu.vn';
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: s.faq.map((f: any) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+// Service schema cho local SEO.
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: s.title,
+  description: s.metaDescription,
+  serviceType: s.title,
+  provider: { '@id': `${SITE_URL}/#studio` },
+  areaServed: ['Quy Nhơn', 'Gia Lai', 'Bình Định'],
+  url: `${SITE_URL}/studio/dich-vu/${s.slug}`,
+};
+---
+<BaseLayout title={s.metaTitle} description={s.metaDescription}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+  <Nav variant="inner" homeRoute="/studio/" />
+  <Breadcrumb items={[{ name: 'Studio', href: '/studio/' }, { name: 'Dịch vụ', href: '/studio/dich-vu/' }, { name: s.navName }]} />
+
+  <header style="padding: 40px var(--pad-x) 56px; max-width: 1280px; margin: 0 auto;">
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">
+      {s.eyebrow} · Quy Nhơn
+    </div>
+    <h1 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 8vw, 120px); line-height: 1.02; color: var(--bark); max-width: 16ch;">
+      {s.title}
+    </h1>
+    <p style="margin-top: 32px; font-size: 22px; line-height: 1.5; color: var(--earth); max-width: 60ch; font-weight: 300;">
+      {s.lede}
+    </p>
+  </header>
+
+  <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 1280px; margin: 0 auto;">
+    <div class="svc-grid" style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 72px; align-items: start;">
+      <div style="font-family: var(--font-sans); font-size: 17px; line-height: 1.8; color: var(--ink); max-width: 60ch;">
+        {s.intro.map((para: string) => <p style="margin-bottom: 1.4em;">{para}</p>)}
+      </div>
+      <aside>
+        <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; color: var(--earth); text-transform: uppercase; border-top: 1px solid var(--ink); padding-top: 16px; margin-bottom: 20px;">
+          {s.includesTitle}
+        </div>
+        <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px;">
+          {s.includes.map((it: string) => (
+            <li style="display: flex; gap: 12px; font-size: 15px; line-height: 1.55; color: var(--ink);">
+              <span aria-hidden="true" style="color: var(--earth);">—</span>{it}
+            </li>
+          ))}
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  {/* Quy trình */}
+  <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 1280px; margin: 0 auto;">
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; border-top: 1px solid var(--ink); padding-top: 28px; margin-bottom: 40px;">
+      Quy trình
+    </div>
+    <div class="svc-steps" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;">
+      {s.process.map((step: any, i: number) => (
+        <div>
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--taupe); margin-bottom: 12px;">/{String(i + 1).padStart(2, '0')}</div>
+          <h3 style="font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.1; color: var(--bark); margin-bottom: 8px;">{step.t}</h3>
+          <p style="font-size: 14px; line-height: 1.6; color: var(--earth);">{step.d}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {/* Dự án liên quan */}
+  {related.length > 0 && (
+    <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 1280px; margin: 0 auto;">
+      <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; border-top: 1px solid var(--ink); padding-top: 28px; margin-bottom: 48px;">
+        {s.relatedHeading}
+      </div>
+      <div class="svc-projects" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px;">
+        {related.map((r, i) => <ProjectItem p={r} delay={i * 80} />)}
+      </div>
+    </section>
+  )}
+
+  {/* FAQ */}
+  <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 880px; margin: 0 auto;">
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; border-top: 1px solid var(--ink); padding-top: 28px; margin-bottom: 8px;">
+      Câu hỏi thường gặp
+    </div>
+    {s.faq.map((f: any) => (
+      <details class="svc-faq">
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))}
+  </section>
+
+  {/* CTA + dịch vụ khác */}
+  <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 1280px; margin: 0 auto;">
+    <div style="background: var(--ink); border-radius: 6px; padding: 56px 48px; display: flex; flex-wrap: wrap; gap: 28px; align-items: center; justify-content: space-between;">
+      <div>
+        <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 4vw, 44px); line-height: 1.05; color: var(--bone); max-width: 18ch;">Bắt đầu từ một cuộc trò chuyện.</h2>
+        <p style="margin-top: 12px; font-size: 15px; color: var(--sand); max-width: 44ch;">Gọi <a href="tel:0933774708" style="color: var(--bone); border-bottom: 1px solid var(--bone);">0933 774 708</a> hoặc để lại thông tin, chúng tôi sẽ khảo sát và tư vấn miễn phí.</p>
+      </div>
+      <a href="/studio/#contact" style="display: inline-flex; align-items: center; min-height: 52px; padding: 16px 32px; background: var(--bone); color: var(--ink); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; border-radius: 4px;">Đặt tư vấn →</a>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 40px;">
+      <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; color: var(--taupe); text-transform: uppercase; align-self: center;">Dịch vụ khác:</span>
+      {others.map((o) => (
+        <a href={`/studio/dich-vu/${o.slug}`} style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px;">{o.navName} →</a>
+      ))}
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .svc-faq {
+    border-top: 1px solid var(--line);
+    padding: 20px 0;
+  }
+  .svc-faq summary {
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(19px, 2.2vw, 24px);
+    line-height: 1.3;
+    color: var(--bark);
+    list-style: none;
+  }
+  .svc-faq summary::-webkit-details-marker { display: none; }
+  .svc-faq summary::after { content: '+'; float: right; color: var(--earth); font-size: 24px; line-height: 1; }
+  .svc-faq[open] summary::after { content: '–'; }
+  .svc-faq p { margin-top: 14px; font-size: 16px; line-height: 1.7; color: var(--earth); max-width: 64ch; }
+  @media (max-width: 900px) {
+    .svc-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+    .svc-steps { grid-template-columns: 1fr 1fr !important; }
+    .svc-projects { grid-template-columns: 1fr 1fr !important; gap: 28px !important; }
+  }
+  @media (max-width: 600px) {
+    .svc-steps { grid-template-columns: 1fr !important; }
+    .svc-projects { grid-template-columns: 1fr !important; }
+  }
+</style>

@@ -24,6 +24,7 @@ export default defineConfig({
           { re: /^\/studio\/$/,                    priority: 0.9, changefreq: 'monthly' },
           { re: /^\/san-pham\/$/,                  priority: 0.9, changefreq: 'weekly'  },
           { re: /^\/combo\//,                      priority: 0.9, changefreq: 'weekly'  },
+          { re: /^\/studio\/dich-vu\//,            priority: 0.8, changefreq: 'monthly' }, // service landing (local SEO)
           { re: /^\/san-pham\/.+/,                 priority: 0.8, changefreq: 'weekly'  }, // product detail
           { re: /^\/studio\/(projects|blog)\/$/,   priority: 0.8, changefreq: 'monthly' },
           { re: /^\/studio\/(projects|blog)\/.+/,  priority: 0.7, changefreq: 'monthly' },

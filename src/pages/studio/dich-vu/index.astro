@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+import Breadcrumb from '../../../components/Breadcrumb.astro';
+import Reveal from '../../../components/Reveal.astro';
+import servicesData from '../../../data/services.yml';
+
+const services = ((servicesData as any).services as any[]).sort((a, b) => a.order - b.order);
+---
+<BaseLayout
+  title="Dịch vụ — Thiết kế, Thi công, Xây dựng tại Quy Nhơn | WOTU"
+  description="Ba dịch vụ của WOTU: thiết kế kiến trúc & nội thất, thi công nội thất hoàn thiện, xây dựng & cải tạo — trọn gói từ bản vẽ đến chìa khoá trao tay tại Quy Nhơn, Gia Lai."
+>
+  <Nav variant="inner" homeRoute="/studio/" />
+  <Breadcrumb items={[{ name: 'Studio', href: '/studio/' }, { name: 'Dịch vụ' }]} />
+
+  <header style="padding: 40px var(--pad-x) 64px; max-width: 1280px; margin: 0 auto;">
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">
+      /Dịch vụ · trọn gói tại Quy Nhơn
+    </div>
+    <h1 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(56px, 9vw, 140px); line-height: 1.0; color: var(--bark); max-width: 14ch;">
+      Ba <em style="font-style: italic; color: var(--earth);">chương</em>, một mái nhà.
+    </h1>
+    <p style="margin-top: 32px; font-size: 20px; line-height: 1.55; color: var(--earth); max-width: 60ch; font-weight: 300;">
+      Từ bản vẽ đầu tiên đến lúc bạn mở cửa bước vào — thiết kế, xây dựng và nội thất dưới cùng một đầu mối, không đùn đẩy trách nhiệm.
+    </p>
+  </header>
+
+  <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 1280px; margin: 0 auto;">
+    {services.map((s, i) => (
+      <Reveal
+        variant="reveal"
+        delay={i * 80}
+        as="a"
+        href={`/studio/dich-vu/${s.slug}`}
+        class="svc-row"
+        style="display: grid; grid-template-columns: 120px 1fr auto; gap: 40px; padding: 48px 0; border-top: 1px solid var(--line); align-items: baseline; cursor: pointer;"
+      >
+        <div style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em; color: var(--taupe); text-transform: uppercase;">{s.eyebrow}</div>
+        <div>
+          <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 4vw, 52px); line-height: 1.05; color: var(--bark);">{s.title}</h2>
+          <p style="margin-top: 12px; font-size: 15px; line-height: 1.6; color: var(--earth); max-width: 56ch;">{s.lede}</p>
+        </div>
+        <span style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; color: var(--ink); text-transform: uppercase;">Xem →</span>
+      </Reveal>
+    ))}
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  @media (max-width: 768px) {
+    .svc-row { grid-template-columns: 1fr !important; gap: 12px !important; }
+    .svc-row span { display: none; }
+  }
+</style>

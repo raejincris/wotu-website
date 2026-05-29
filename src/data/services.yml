@@ -1,0 +1,112 @@
+# 3 trang dịch vụ Studio (local SEO landing) — /studio/dich-vu/[slug]
+# Nội dung text, không phụ thuộc ảnh thật. Render qua [slug].astro.
+# Mỗi dịch vụ là dịch vụ THẬT của WOTU (xem .claude/rules/company-info.md).
+
+services:
+  - slug: thiet-ke-noi-that
+    order: 1
+    eyebrow: "Dịch vụ /01"
+    navName: "Thiết kế"
+    title: "Thiết kế kiến trúc & nội thất"
+    titleEm: "nội thất"
+    metaTitle: "Thiết kế nội thất Quy Nhơn — kiến trúc & nội thất | WOTU"
+    metaDescription: "WOTU thiết kế kiến trúc và nội thất tại Quy Nhơn, Gia Lai (Bình Định cũ) và toàn quốc — từ concept, quy hoạch không gian đến bản vẽ kỹ thuật và 3D. Đặt ánh sáng tự nhiên lên trước."
+    lede: "Chúng tôi vẽ ánh sáng trước khi vẽ đồ đạc. Một bản thiết kế tốt không bắt đầu từ catalogue nội thất — nó bắt đầu từ hướng nắng, độ sâu hiên và nhịp sống thật của gia đình bạn."
+    intro:
+      - "Tại WOTU, thiết kế là giai đoạn quyết định 80% chất lượng của ngôi nhà. Chúng tôi quy hoạch không gian dựa trên ba thứ: ánh sáng tự nhiên, công năng thực tế và thói quen sinh hoạt của người ở — không phải xu hướng trên Pinterest."
+      - "Mỗi hồ sơ thiết kế đều có bản vẽ kỹ thuật đủ để thi công chính xác và bản 3D để bạn nhìn thấy không gian trước khi đặt viên gạch đầu tiên. Studio đặt tại Quy Nhơn, nhận dự án tại Gia Lai (Bình Định cũ) và các tỉnh lân cận."
+    includesTitle: "Bao gồm trong dịch vụ thiết kế"
+    includes:
+      - "Khảo sát hiện trạng & tư vấn ý tưởng (concept design)"
+      - "Quy hoạch mặt bằng công năng theo ánh sáng và lối đi"
+      - "Bản vẽ kỹ thuật thi công (kiến trúc, điện nước, chi tiết nội thất)"
+      - "Phối cảnh 3D từng không gian để duyệt trước"
+      - "Hồ sơ vật liệu & bảng màu hoàn thiện"
+      - "Thiết kế đồ gỗ đặt riêng theo kích thước thật"
+    process:
+      - { t: "Gặp & lắng nghe", d: "Hiểu nhu cầu, ngân sách và cách bạn thật sự sống trong nhà." }
+      - { t: "Concept & mặt bằng", d: "Đề xuất ý tưởng, quy hoạch không gian, chốt phương án." }
+      - { t: "3D & vật liệu", d: "Dựng phối cảnh, chọn vật liệu, duyệt từng chi tiết." }
+      - { t: "Hồ sơ kỹ thuật", d: "Bàn giao bản vẽ đủ để thi công không sai lệch." }
+    faq:
+      - q: "Chi phí thiết kế nội thất ở Quy Nhơn tính thế nào?"
+        a: "Phí thiết kế tính theo m² sàn và mức độ chi tiết của hồ sơ. WOTU báo giá minh bạch sau buổi khảo sát đầu tiên, và phí thiết kế được khấu trừ một phần nếu bạn thi công trọn gói cùng chúng tôi."
+      - q: "Thời gian hoàn thành hồ sơ thiết kế mất bao lâu?"
+        a: "Một căn hộ thường mất 2–4 tuần cho concept và 3D, thêm 1–2 tuần cho hồ sơ kỹ thuật. Nhà phố hoặc biệt thự có thể lâu hơn tùy quy mô."
+      - q: "WOTU có nhận thiết kế ngoài Quy Nhơn không?"
+        a: "Có. Studio đặt tại Quy Nhơn (Gia Lai) nhưng nhận dự án ở Bình Định cũ, Gia Lai và các tỉnh lân cận. Phần lớn trao đổi có thể làm online, chỉ cần một vài buổi khảo sát tại công trình."
+      - q: "Tôi chỉ cần thiết kế, không thi công có được không?"
+        a: "Hoàn toàn được. Bạn nhận trọn bộ hồ sơ kỹ thuật và 3D để tự thi công hoặc thuê đội khác. Tuy vậy thiết kế và thi công cùng một nơi giúp tránh sai lệch giữa bản vẽ và thực tế."
+    relatedHeading: "Một vài không gian chúng tôi đã thiết kế"
+
+  - slug: thi-cong-noi-that
+    order: 2
+    eyebrow: "Dịch vụ /02"
+    navName: "Thi công"
+    title: "Thi công nội thất hoàn thiện"
+    titleEm: "hoàn thiện"
+    metaTitle: "Thi công nội thất Quy Nhơn — đồ gỗ đặt riêng | WOTU"
+    metaDescription: "WOTU thi công nội thất hoàn thiện tại Quy Nhơn: đồ gỗ đặt riêng từ xưởng nội bộ, ánh sáng, vải vóc và styling. Chìa khoá trao tay, bảo hành 5 năm."
+    lede: "Chìa khoá trao tay — bạn chỉ cần mở cửa và bước vào. Từ tấm ván gỗ thô đến căn nhà sẵn sàng để sống, mọi thứ làm tại xưởng nội bộ của chúng tôi ở Quy Nhơn."
+    intro:
+      - "WOTU sở hữu xưởng sản xuất riêng tại Quy Nhơn — nơi đồ gỗ được đóng theo đúng kích thước bản vẽ, không phải hàng có sẵn cắt cho vừa. Điều này cho phép kiểm soát chất lượng vân gỗ, mối nối và lớp hoàn thiện đến từng chi tiết."
+      - "Hoàn thiện nội thất không chỉ là kê đồ. Đó là ánh sáng đúng nhiệt độ màu, vải vóc đúng chất, và cách mọi thứ ăn nhập với nhau. Chúng tôi thi công trọn gói để không gian khi bàn giao đúng như bản 3D đã duyệt."
+    includesTitle: "Bao gồm trong dịch vụ thi công"
+    includes:
+      - "Đồ gỗ đặt riêng từ xưởng nội bộ (tủ, kệ, giường, bàn…)"
+      - "Hệ thống ánh sáng theo thiết kế (đèn âm, đèn trang trí)"
+      - "Vải vóc, rèm, đệm và phụ kiện mềm"
+      - "Lắp đặt thiết bị & styling hoàn thiện"
+      - "Vệ sinh, nghiệm thu và bàn giao chìa khoá trao tay"
+      - "Bảo hành 5 năm cho đồ gỗ nội thất"
+    process:
+      - { t: "Nhận bản vẽ", d: "Bóc tách khối lượng, lên kế hoạch sản xuất tại xưởng." }
+      - { t: "Sản xuất tại xưởng", d: "Đóng đồ gỗ theo kích thước thật, kiểm tra trước khi lắp." }
+      - { t: "Thi công tại nhà", d: "Lắp đặt, đi đèn, vải vóc, styling từng không gian." }
+      - { t: "Nghiệm thu & bàn giao", d: "Kiểm tra cùng bạn, vệ sinh, trao chìa khoá." }
+    faq:
+      - q: "WOTU có xưởng sản xuất riêng không?"
+        a: "Có. Chúng tôi có xưởng nội bộ tại Quy Nhơn, tự đóng đồ gỗ theo bản vẽ thay vì mua hàng có sẵn. Nhờ vậy kiểm soát được chất lượng vật liệu và độ chính xác kích thước."
+      - q: "Bảo hành nội thất bao lâu?"
+        a: "Đồ gỗ nội thất do WOTU sản xuất được bảo hành 5 năm. Kết cấu xây dựng (nếu làm trọn gói) được bảo hành theo cam kết riêng trong hợp đồng."
+      - q: "Tôi có bản vẽ từ đơn vị khác, WOTU thi công được không?"
+        a: "Được. Chúng tôi nhận thi công theo hồ sơ thiết kế có sẵn. Đội kỹ thuật sẽ kiểm tra tính khả thi và tư vấn điều chỉnh nếu bản vẽ thiếu chi tiết thi công."
+      - q: "Thời gian thi công nội thất một căn hộ mất bao lâu?"
+        a: "Tùy khối lượng, một căn hộ hoàn thiện thường mất 4–8 tuần kể từ khi chốt bản vẽ, gồm cả thời gian sản xuất đồ gỗ tại xưởng."
+    relatedHeading: "Những công trình đã hoàn thiện"
+
+  - slug: xay-dung
+    order: 3
+    eyebrow: "Dịch vụ /03"
+    navName: "Xây dựng"
+    title: "Xây dựng & cải tạo"
+    titleEm: "cải tạo"
+    metaTitle: "Xây dựng & cải tạo nhà Quy Nhơn, Bình Định | WOTU"
+    metaDescription: "WOTU thi công xây dựng phần thô và cải tạo nhà tại Quy Nhơn, Gia Lai (Bình Định cũ): quản lý dự án minh bạch theo tuần, giám sát chất lượng, bảo hành kết cấu."
+    lede: "Một ngôi nhà bền không nằm ở lớp sơn ngoài cùng. Nó nằm ở phần bạn không nhìn thấy — kết cấu, vật liệu thô và cách đội thi công làm việc khi không ai giám sát."
+    intro:
+      - "WOTU nhận thi công phần thô và cải tạo nhà tại Quy Nhơn và các tỉnh lân cận. Đội thi công làm việc tại chỗ, quản lý chất lượng vật liệu và báo cáo tiến độ minh bạch theo từng tuần — bạn luôn biết tiền và thời gian đang đi đâu."
+      - "Với nhà cũ, cải tạo đôi khi khó hơn xây mới: phải đọc được kết cấu hiện trạng và giữ lại những gì đáng giữ. Chúng tôi tiếp cận mỗi công trình cải tạo bằng sự tôn trọng với những gì ngôi nhà đã là."
+    includesTitle: "Bao gồm trong dịch vụ xây dựng"
+    includes:
+      - "Thi công phần thô (móng, kết cấu, tường, mái)"
+      - "Cải tạo nhà cũ, nâng cấp công năng"
+      - "Quản lý dự án & báo cáo tiến độ theo tuần"
+      - "Giám sát chất lượng vật liệu đầu vào"
+      - "Phối hợp liền mạch với khâu thiết kế và nội thất"
+      - "Cam kết bảo hành kết cấu theo hợp đồng"
+    process:
+      - { t: "Khảo sát & dự toán", d: "Đánh giá hiện trạng, lập dự toán vật tư và nhân công." }
+      - { t: "Ký hợp đồng minh bạch", d: "Tiến độ, hạng mục và chi phí rõ ràng từ đầu." }
+      - { t: "Thi công & giám sát", d: "Đội tại chỗ, báo cáo tiến độ theo tuần." }
+      - { t: "Nghiệm thu & bảo hành", d: "Bàn giao đúng cam kết, bảo hành kết cấu." }
+    faq:
+      - q: "WOTU có nhận cải tạo nhà cũ không?"
+        a: "Có. Cải tạo là một trong những thế mạnh của chúng tôi — từ nâng cấp công năng, mở rộng không gian đến làm mới toàn bộ. Chúng tôi khảo sát kết cấu hiện trạng trước khi đề xuất phương án."
+      - q: "Tiến độ thi công được báo cáo thế nào?"
+        a: "Chúng tôi báo cáo tiến độ minh bạch theo tuần, kèm hình ảnh thực tế tại công trình. Bạn luôn nắm được hạng mục đang làm, vật tư đang dùng và chi phí phát sinh (nếu có)."
+      - q: "Có làm trọn gói cả xây dựng, thiết kế và nội thất không?"
+        a: "Có. Đây là cách WOTU làm tốt nhất — một đầu mối từ bản vẽ đến chìa khoá trao tay, tránh đùn đẩy trách nhiệm giữa các nhà thầu và đảm bảo công trình đúng như thiết kế."
+      - q: "Khu vực nhận thi công xây dựng?"
+        a: "Chúng tôi nhận công trình tại Quy Nhơn, Gia Lai (Bình Định cũ) và các tỉnh lân cận. Liên hệ hotline 0933 774 708 để được khảo sát."
+    relatedHeading: "Công trình tiêu biểu"
