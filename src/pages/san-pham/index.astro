@@ -6,6 +6,21 @@ import shopProducts from '../../data/shop-products.yml';
 
 const { categories: cats, products, productsAfterCta, filters } = shopProducts as any;
 
+// Đếm động từ danh sách sản phẩm THẬT — số liệu luôn khớp thực tế, không drift
+// khi thêm/bớt sản phẩm (trước đây count hardcode trong YAML, lệch thực tế).
+const allProducts = [...(products ?? []), ...(productsAfterCta ?? [])];
+const TOTAL = allProducts.length;
+const catCount  = (key: string) => (key ? allProducts.filter((p: any) => p.catKey === key).length : TOTAL);
+const roomCount = (key: string) => allProducts.filter((p: any) => p.room === key).length;
+const tagCount  = (key: string) => allProducts.filter((p: any) => (p.tags ?? []).includes(key)).length;
+// Ẩn facet không có sản phẩm nào (vd "Da bò Ý") để tránh bộ lọc chết; tự hiện
+// lại khi có sản phẩm dùng tag đó.
+const roomsLive     = (filters.rooms     ?? []).filter((f: any) => roomCount(f.key) > 0);
+const materialsLive = (filters.materials ?? []).filter((f: any) => tagCount(f.key) > 0);
+const colorsLive    = (filters.colors    ?? []).filter((f: any) => tagCount(f.key) > 0);
+const statusLive    = (filters.status    ?? []).filter((f: any) => tagCount(f.key) > 0);
+const catGroupCount = (cats as any[]).filter((c: any) => c.key).length;
+
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -15,7 +30,7 @@ const breadcrumbSchema = {
   ],
 };
 ---
-<ShopLayout title="Tất cả sản phẩm — WOTU Nội thất Việt" description="Cửa hàng nội thất WOTU — sofa, bàn ăn, giường, tủ, kệ, đèn. 184 sản phẩm gỗ tự nhiên, giao 48h tại Quy Nhơn và các tỉnh lân cận.">
+<ShopLayout title="Tất cả sản phẩm — WOTU Nội thất Việt" description="Cửa hàng nội thất WOTU — sofa, bàn ăn, giường, tủ, kệ, đèn. Đồ gỗ tự nhiên, giao 48h tại Quy Nhơn và các tỉnh lân cận.">
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   </Fragment>
@@ -39,13 +54,13 @@ const breadcrumbSchema = {
       </div>
       <div>
         <p class="meta">
-          WOTU hiện có <b>184 sản phẩm</b> trải đều 9 nhóm — từ sofa, bàn ăn, giường đến phụ kiện trang trí. Xưởng tại Quy Nhơn, giao tận nhà trong vùng Bình Định &amp; các tỉnh lân cận trong 48 giờ.
+          WOTU hiện có <b>{TOTAL} sản phẩm</b> trong {catGroupCount} nhóm — từ sofa, bàn ăn, giường đến phụ kiện trang trí. Xưởng tại Quy Nhơn, giao tận nhà trong vùng Bình Định &amp; các tỉnh lân cận trong 48 giờ.
         </p>
         <div class="meta-row">
-          <div><b>184</b><span>sản phẩm</span></div>
-          <div><b>24</b><span>bộ sưu tập</span></div>
-          <div><b>9</b><span>danh mục</span></div>
-          <div><b>4.8★</b><span>đánh giá TB</span></div>
+          <div><b>{TOTAL}</b><span>sản phẩm</span></div>
+          <div><b>{catGroupCount}</b><span>nhóm hàng</span></div>
+          <div><b>5 năm</b><span>bảo hành</span></div>
+          <div><b>48h</b><span>giao tận nơi</span></div>
         </div>
       </div>
     </div>
@@ -68,7 +83,7 @@ const breadcrumbSchema = {
             </svg>
           </span>
           <span class="name">{c.name}</span>
-          <span class="n">{c.count}</span>
+          <span class="n">{catCount(c.key)}</span>
         </button>
       ))}
     </div>
@@ -82,7 +97,7 @@ const breadcrumbSchema = {
         <a href="#" style="font-size: 12px; color: var(--shop-accent); font-weight: 600;" rel="nofollow" aria-disabled="true">Xoá tất cả</a>
       </div>
       <div class="tb-controls">
-        <span style="color: var(--shop-ink-soft);"><b style="color: var(--shop-ink); font-weight: 600;">42</b> kết quả</span>
+        <span style="color: var(--shop-ink-soft);"><b style="color: var(--shop-ink); font-weight: 600;">{TOTAL}</b> kết quả</span>
         <select aria-label="Sắp xếp">
           <option>Liên quan nhất</option>
           <option>Bán chạy nhất</option>
@@ -118,10 +133,10 @@ const breadcrumbSchema = {
       <details class="fgrp" open>
         <summary>Theo phòng</summary>
         <div class="fgrp-body">
-          {filters.rooms.map((f) => (
+          {roomsLive.map((f) => (
             <label class="check-row">
-              <span><input type="checkbox" data-filter-room={f.key} checked={f.checked} />{f.label}</span>
-              <span class="count">{f.count}</span>
+              <span><input type="checkbox" data-filter-room={f.key} />{f.label}</span>
+              <span class="count">{roomCount(f.key)}</span>
             </label>
           ))}
         </div>
@@ -145,10 +160,10 @@ const breadcrumbSchema = {
       <details class="fgrp">
         <summary>Chất liệu</summary>
         <div class="fgrp-body">
-          {filters.materials.map((f) => (
+          {materialsLive.map((f) => (
             <label class="check-row">
-              <span><input type="checkbox" data-filter-tag={f.key} checked={f.checked} />{f.label}</span>
-              <span class="count">{f.count}</span>
+              <span><input type="checkbox" data-filter-tag={f.key} />{f.label}</span>
+              <span class="count">{tagCount(f.key)}</span>
             </label>
           ))}
         </div>
@@ -157,10 +172,10 @@ const breadcrumbSchema = {
       <details class="fgrp">
         <summary>Màu sắc</summary>
         <div class="fgrp-body">
-          {filters.colors.map((f) => (
+          {colorsLive.map((f) => (
             <label class="check-row">
               <span><input type="checkbox" data-filter-tag={f.key} /><span class="color-dot" style={`background:${f.dot}`}></span>{f.label}</span>
-              <span class="count">{f.count}</span>
+              <span class="count">{tagCount(f.key)}</span>
             </label>
           ))}
         </div>
@@ -169,17 +184,17 @@ const breadcrumbSchema = {
       <details class="fgrp">
         <summary>Trạng thái</summary>
         <div class="fgrp-body">
-          {filters.status.map((f) => (
+          {statusLive.map((f) => (
             <label class="check-row">
               <span><input type="checkbox" data-filter-tag={f.key} />{f.label}</span>
-              <span class="count">{f.count}</span>
+              <span class="count">{tagCount(f.key)}</span>
             </label>
           ))}
         </div>
       </details>
 
       <div style="padding-top: 20px;">
-        <a class="shop-btn shop-btn-primary" href="#" style="width: 100%; justify-content: center;" rel="nofollow" aria-disabled="true">Áp dụng (42)</a>
+        <a class="shop-btn shop-btn-primary" href="#" style="width: 100%; justify-content: center;" rel="nofollow" aria-disabled="true">Áp dụng ({TOTAL})</a>
       </div>
     </aside>
 
@@ -295,23 +310,9 @@ const breadcrumbSchema = {
 
       </div>
 
-      <!-- Pagination -->
+      <!-- Tổng kết kết quả (toàn bộ sản phẩm hiển thị trên 1 trang — chưa cần phân trang) -->
       <div class="pager">
-        <div class="info">Hiển thị <b style="color: var(--shop-ink);">1–18</b> trong tổng <b style="color: var(--shop-ink);">42</b> sản phẩm</div>
-        <nav class="pager-nums">
-          <a href="#" aria-label="Trước" rel="nofollow" aria-disabled="true">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-          </a>
-          <a href="#" class="active" rel="nofollow" aria-disabled="true">1</a>
-          <a href="#" rel="nofollow" aria-disabled="true">2</a>
-          <a href="#" rel="nofollow" aria-disabled="true">3</a>
-          <span class="dots">…</span>
-          <a href="#" rel="nofollow" aria-disabled="true">7</a>
-          <a href="#" aria-label="Sau" rel="nofollow" aria-disabled="true">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
-        </nav>
-        <a class="shop-btn shop-btn-outline" href="#" rel="nofollow" aria-disabled="true">Tải thêm 18 sản phẩm</a>
+        <div class="info">Hiển thị <b style="color: var(--shop-ink);">{TOTAL}</b> trong tổng <b style="color: var(--shop-ink);">{TOTAL}</b> sản phẩm</div>
       </div>
     </div>
   </main>

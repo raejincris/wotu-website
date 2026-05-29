@@ -1,7 +1,6 @@
 ---
 import '../styles/shop.css';
 import site from '../data/site.yml';
-import { img } from '../lib/unsplash';
 import CartDrawer from '../components/shop/CartDrawer.astro';
 import StructuredData from '../components/StructuredData.astro';
 
@@ -14,12 +13,13 @@ interface Props {
 const {
   title = `WOTU — Nội thất cho tổ ấm Việt`,
   description = 'WOTU — combo nội thất phòng khách, phòng ngủ, phòng ăn. Gỗ tự nhiên, bảo hành 5 năm, giao và lắp đặt tận nơi tại Quy Nhơn.',
-  // Default OG: cùng hero của BaseLayout (1200×630 từ Unsplash CDN) — đảm bảo
-  // link preview Facebook/Zalo có ảnh kể cả khi page không pass prop.
-  ogImage = img('1768836180164-070b4c1a8f94', 1200, '16/9'),
+  ogImage,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+// Default OG: branded 1200×630 (public/og.png) — link preview Facebook/Zalo có
+// nhận diện thương hiệu kể cả khi page không pass prop.
+const ogImageURL = ogImage ?? new URL('/og.png', Astro.site).href;
 
 const cfToken = (site.analytics?.cfBeaconToken ?? '').trim();
 const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
@@ -43,21 +43,21 @@ const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageURL} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image" content={ogImageURL} />
 
     <!-- Structured data: LocalBusiness + WebSite (cùng schema với studio) -->
     <StructuredData
       type="website"
       title={title}
       description={description}
-      image={ogImage}
+      image={ogImageURL}
       url={canonicalURL}
     />
     <!-- Page-specific JSON-LD (FAQ, Product, Breadcrumb) từ page inject vào đây -->

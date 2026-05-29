@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
 import site from '../data/site.yml';
-import { img } from '../lib/unsplash';
 import StructuredData from '../components/StructuredData.astro';
 
 interface Props {
@@ -16,14 +15,15 @@ interface Props {
 const {
   title = `WOTU — ${site.tagline}`,
   description = site.description,
-  // Default OG: hero photo cropped to 1200×630 from Unsplash CDN — no extra
-  // asset to host, no extra build time.
-  ogImage = img('1768836180164-070b4c1a8f94', 1200, '16/9'),
+  ogImage,
   schemaType = 'website',
   schemaDate,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+// Default OG: branded 1200×630 (public/og.png) — nhận diện thương hiệu khi share.
+// Page có thể override bằng ảnh riêng (vd hero dự án) qua prop ogImage.
+const ogImageURL = ogImage ?? new URL('/og.png', Astro.site).href;
 
 // Cloudflare Web Analytics — only inject if token is configured.
 const cfToken = (site.analytics?.cfBeaconToken ?? '').trim();
@@ -49,7 +49,7 @@ const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageURL} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
@@ -57,7 +57,7 @@ const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image" content={ogImageURL} />
 
     <!-- Structured data: LocalBusiness + WebSite + page-specific schema -->
     <StructuredData
@@ -65,7 +65,7 @@ const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
       title={title}
       description={description}
       datePublished={schemaDate}
-      image={ogImage}
+      image={ogImageURL}
       url={canonicalURL}
     />
 
