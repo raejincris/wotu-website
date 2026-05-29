@@ -123,6 +123,31 @@ export async function init({ token, showToast, setLoading }) {
     <div class="form-card">
       <p class="form-card-title">Section: CTA liên hệ</p>
       ${sectionFields('sec_cta', sc.cta)}
+    </div>
+
+    <!-- ── REVIEWS ── -->
+    <div class="form-card">
+      <p class="form-card-title">3 đánh giá trang chủ shop</p>
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:4px;">
+        ${(obj.reviews || []).map((r, i) => `
+          <div style="border:1px solid var(--line); border-radius:8px; padding:14px 14px 10px; background:var(--bone);">
+            <p class="form-hint" style="margin:0 0 8px; font-weight:700; color:var(--ink-soft);">Đánh giá ${i + 1}</p>
+            <div class="form-row">
+              <label class="form-label" for="rev${i}_name">Tên khách</label>
+              <input class="form-input" id="rev${i}_name" value="${escVal(r.name)}" autocomplete="off" />
+            </div>
+            <div class="form-row">
+              <label class="form-label" for="rev${i}_role">Địa điểm</label>
+              <input class="form-input" id="rev${i}_role" value="${escVal(r.role)}" autocomplete="off"
+                     placeholder="VD: Nhơn Bình · Quy Nhơn" />
+            </div>
+            <div class="form-row">
+              <label class="form-label" for="rev${i}_quote">Nội dung</label>
+              <textarea class="form-input form-textarea" id="rev${i}_quote" rows="3"
+                        autocomplete="off">${String(r.quote ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
+            </div>
+          </div>`).join('')}
+      </div>
     </div>`;
 
   const now = new Date();
@@ -135,7 +160,7 @@ export async function init({ token, showToast, setLoading }) {
     <button class="btn btn-primary" id="save-shop-hero">💾 Lưu &amp; cập nhật</button>`;
   footer.hidden = false;
 
-  const inputs = body.querySelectorAll('.form-input, .form-textarea');
+  const inputs = body.querySelectorAll('.form-input:not([readonly]), .form-textarea');
   const saveBtn = footer.querySelector('#save-shop-hero');
   const origValues = new Map();
   inputs.forEach((i) => origValues.set(i, i.value));
@@ -196,6 +221,16 @@ export async function init({ token, showToast, setLoading }) {
       });
       setSection('reviews', 'sec_reviews');
       setSection('cta',     'sec_cta');
+
+      // Reviews trang chủ
+      if (Array.isArray(obj.reviews)) {
+        obj.reviews = obj.reviews.map((r, i) => ({
+          ...r,
+          name:  g(`rev${i}_name`),
+          role:  g(`rev${i}_role`),
+          quote: g(`rev${i}_quote`),
+        }));
+      }
 
       const newYaml = yaml().dump(obj, { lineWidth: -1, noRefs: true, quotingType: '"' });
       const msg = footer.querySelector('#commit-msg-shop-hero').value.trim() || defaultMsg;
