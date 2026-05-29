@@ -178,7 +178,7 @@ products:
     tags: [go-soi, linen, nau-dat, be-sua, xam-tro, in-stock]
 
   - id: p-ban-tra-nang-mai
-    href: "#"
+    href: "/san-pham/ban-tra-nang-mai/"
     placeholder: "Bàn trà Nắng Mai"
     tone: ""
     badges:
@@ -197,7 +197,7 @@ products:
     tags: [go-soi, nau-dat, in-stock, new]
 
   - id: p-ban-doan-vien
-    href: "#"
+    href: "/san-pham/ban-doan-vien/"
     placeholder: "Bàn ăn Đoàn Viên"
     tone: sage
     cat: "Bàn ăn · 6 chỗ · gỗ sồi"
@@ -213,7 +213,7 @@ products:
     tags: [go-soi, nau-dat, in-stock]
 
   - id: p-ghe-sum-vay
-    href: "#"
+    href: "/san-pham/ghe-sum-vay/"
     placeholder: "Ghế ăn Sum Vầy"
     tone: ""
     badges:
@@ -233,7 +233,7 @@ products:
     tags: [go-soi, linen, be-sua, nau-dat, in-stock, sale]
 
   - id: p-giuong-trang-non
-    href: "#"
+    href: "/san-pham/giuong-trang-non/"
     placeholder: "Giường Trăng Non 1m6"
     tone: sage
     badges:
@@ -252,7 +252,7 @@ products:
     tags: [go-soi, nau-dat, be-sua, in-stock, bestseller]
 
   - id: p-tu-moc
-    href: "#"
+    href: "/san-pham/tu-moc/"
     placeholder: "Tủ áo Mộc 4 cánh"
     tone: ""
     cat: "Tủ áo · 4 cánh · 2m1"
@@ -270,7 +270,7 @@ products:
 # 11 sản phẩm sau CTA banner
 productsAfterCta:
   - id: p-ban-tap-trung
-    href: "#"
+    href: "/san-pham/ban-tap-trung/"
     placeholder: "Bàn làm việc Tập Trung"
     tone: sage
     cat: "Bàn làm việc · 1m4"
@@ -286,7 +286,7 @@ productsAfterCta:
     tags: [go-soi, be-sua, in-stock]
 
   - id: p-ghe-tua
-    href: "#"
+    href: "/san-pham/ghe-tua/"
     placeholder: "Ghế công thái học Tựa"
     tone: ""
     badges:
@@ -305,7 +305,7 @@ productsAfterCta:
     tags: [kim-loai, linen, xam-tro, in-stock, new]
 
   - id: p-ke-cao
-    href: "#"
+    href: "/san-pham/ke-cao/"
     placeholder: "Kệ sách Cao 5 tầng"
     tone: sage
     cat: "Kệ sách · 5 tầng"
@@ -321,7 +321,7 @@ productsAfterCta:
     tags: [go-soi, nau-dat, in-stock]
 
   - id: p-ke-tv-an
-    href: "#"
+    href: "/san-pham/ke-tv-an/"
     placeholder: "Kệ TV An 1m8"
     tone: ""
     cat: "Kệ TV · 1m8 · gỗ sồi"
@@ -337,7 +337,7 @@ productsAfterCta:
     tags: [go-soi, nau-dat, xanh-than, in-stock]
 
   - id: p-den-trang
-    href: "#"
+    href: "/san-pham/den-trang/"
     placeholder: "Đèn sàn Trăng"
     tone: sage
     badges:
@@ -357,7 +357,7 @@ productsAfterCta:
     tags: [linen, kim-loai, be-sua, in-stock, sale]
 
   - id: p-tham-soi
-    href: "#"
+    href: "/san-pham/tham-soi/"
     placeholder: "Thảm dệt tay Sợi"
     tone: ""
     cat: "Thảm · 2×3m · dệt tay"
@@ -373,7 +373,7 @@ productsAfterCta:
     tags: [may-tre, be-sua, nau-dat, in-stock]
 
   - id: p-ban-dieu
-    href: "#"
+    href: "/san-pham/ban-dieu/"
     placeholder: "Bàn trang điểm Diệu"
     tone: sage
     badges:
@@ -392,7 +392,7 @@ productsAfterCta:
     tags: [go-soi, be-sua, in-stock, new]
 
   - id: p-tu-chen-sum
-    href: "#"
+    href: "/san-pham/tu-chen-sum/"
     placeholder: "Tủ chén Sum"
     tone: ""
     cat: "Tủ chén · 3 cánh"
@@ -408,7 +408,7 @@ productsAfterCta:
     tags: [go-soi, nau-dat, in-stock]
 
   - id: p-ban-doi
-    href: "#"
+    href: "/san-pham/ban-doi/"
     placeholder: "Bàn console Đợi"
     tone: sage
     cat: "Bàn console · gỗ óc chó"
@@ -424,7 +424,7 @@ productsAfterCta:
     tags: [go-oc-cho, nau-dat, den-mo, in-stock]
 
   - id: p-ghe-ru
-    href: "#"
+    href: "/san-pham/ghe-ru/"
     placeholder: "Ghế bành Ru"
     tone: ""
     badges:
@@ -443,7 +443,7 @@ productsAfterCta:
     tags: [go-soi, linen, xanh-reu, nau-dat, in-stock, bestseller]
 
   - id: p-giuong-vuon
-    href: "#"
+    href: "/san-pham/giuong-vuon/"
     placeholder: "Giường tầng Vườn"
     tone: sage
     cat: "Giường tầng · gỗ thông"

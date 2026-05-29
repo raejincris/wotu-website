@@ -1,0 +1,269 @@
+---
+/**
+ * Trang chi tiết sản phẩm — route động sinh từ shop-products.yml.
+ * Dùng cho 16 SP chưa có trang bespoke (loại trừ p-sofa-may-* → đã có
+ * /san-pham/sofa-may/). Chỉ dùng DATA CÓ THẬT (tên, giá, rating, màu, tag) —
+ * không bịa thông số/swatch. Khi có ảnh chụp thật: thay /uploads/products/.
+ */
+import ShopLayout from '../../layouts/ShopLayout.astro';
+import Nav from '../../components/shop/Nav.astro';
+import Footer from '../../components/shop/Footer.astro';
+import shopProducts from '../../data/shop-products.yml';
+
+const data = shopProducts as any;
+const allP = [...(data.products ?? []), ...(data.productsAfterCta ?? [])];
+
+export function getStaticPaths() {
+  const d = shopProducts as any;
+  const all = [...(d.products ?? []), ...(d.productsAfterCta ?? [])];
+  return all
+    .filter((p: any) => !String(p.id).startsWith('p-sofa-may'))
+    .map((p: any) => ({ params: { id: String(p.id).replace(/^p-/, '') }, props: { p } }));
+}
+
+interface Props { p: any; }
+const { p } = Astro.props;
+const slug = String(p.id).replace(/^p-/, '');
+
+const matLabel: Record<string, string> = Object.fromEntries((data.filters?.materials ?? []).map((m: any) => [m.key, m.label]));
+const colLabel: Record<string, string> = Object.fromEntries((data.filters?.colors ?? []).map((c: any) => [c.key, c.label]));
+const materials = (p.tags ?? []).filter((t: string) => matLabel[t]).map((t: string) => matLabel[t]);
+const colorNames = (p.tags ?? []).filter((t: string) => colLabel[t]).map((t: string) => colLabel[t]);
+const inStock = (p.tags ?? []).includes('in-stock');
+
+const fullName = `${p.name} ${p.nameEm ?? ''}${p.nameTail ?? ''}`.trim();
+const illo = `/uploads/products/cat-${p.catKey}.png`;
+const catName: Record<string, string> = { sofa: 'Sofa', ban: 'Bàn', ghe: 'Ghế', giuong: 'Giường', tu: 'Tủ', ke: 'Kệ', den: 'Đèn', tham: 'Thảm' };
+const catVi = catName[p.catKey] ?? 'Sản phẩm';
+const related = allP.filter((x: any) => x.catKey === p.catKey && x.id !== p.id).slice(0, 4);
+
+const SITE_URL = 'https://www.wotu.vn';
+const PAGE_URL = `${SITE_URL}/san-pham/${slug}/`;
+const desc = `${fullName} — ${p.cat}.`
+  + (materials.length ? ` Chất liệu: ${materials.join(', ')}.` : '')
+  + ` Đặt làm tại xưởng WOTU Quy Nhơn, bảo hành 5 năm, giao và lắp tận nơi.`;
+
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: fullName,
+  description: desc,
+  category: catVi,
+  brand: { '@type': 'Brand', name: 'WOTU' },
+  sku: p.id,
+  url: PAGE_URL,
+  offers: {
+    '@type': 'Offer',
+    price: p.priceNum,
+    priceCurrency: 'VND',
+    availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+    url: PAGE_URL,
+    seller: { '@type': 'Organization', name: 'WOTU' },
+  },
+  ...(p.reviews ? {
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: String(p.rating ?? p.ratingNum ?? '5'),
+      reviewCount: p.reviews,
+      bestRating: '5', worstRating: '1',
+    },
+  } : {}),
+};
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: SITE_URL + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Sản phẩm', item: SITE_URL + '/san-pham/' },
+    { '@type': 'ListItem', position: 3, name: catVi, item: `${SITE_URL}/san-pham/?cat=${p.catKey}` },
+    { '@type': 'ListItem', position: 4, name: fullName, item: PAGE_URL },
+  ],
+};
+---
+<ShopLayout title={`${fullName} — WOTU`} description={desc}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
+  <Nav active="Sản phẩm" />
+
+  <div class="container crumb">
+    <a href="/">Trang chủ</a> / <a href="/san-pham/">Sản phẩm</a> / <span class="here">{fullName}</span>
+  </div>
+
+  <main class="pd container">
+    <section class="pd-top">
+      <div class="pd-gallery">
+        <div class="pd-main">
+          <div class={`shop-ph ${p.tone ?? ''}`}><span class="shop-ph-label">{p.placeholder ?? fullName}</span></div>
+          <img class="shop-illo" src={illo} alt={`Minh hoạ ${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" />
+          {p.badges && (
+            <div class="pd-badges">
+              {p.badges.map((b: any) => <span class={`b-tag${b.cls ? ' ' + b.cls : ''}`}>{b.label}</span>)}
+            </div>
+          )}
+        </div>
+        <p class="pd-illo-note">Ảnh minh hoạ — ảnh chụp thật đang được cập nhật.</p>
+      </div>
+
+      <div class="pd-info">
+        <span class="pd-cat">{p.cat}</span>
+        <h1>{p.name} <em>{p.nameEm}</em>{p.nameTail}</h1>
+        <div class="pd-rating"><span class="stars">★★★★★</span> {p.rating} · {p.reviews} đánh giá</div>
+
+        <div class="pd-price">
+          {p.priceOld && <s>{p.priceOld}</s>}
+          <strong>{p.price}</strong>
+        </div>
+        <div class={`pd-stock ${inStock ? 'in' : 'pre'}`}>{inStock ? '● Còn hàng · giao 48h' : '○ Đặt trước'}</div>
+
+        {p.colors && (
+          <div class="pd-block">
+            <span class="pd-label">Màu sắc{colorNames.length ? ` · ${colorNames.join(', ')}` : ''}</span>
+            <div class="pd-colors">
+              {p.colors.map((c: string) => <span style={`background:${c}`}></span>)}
+              {p.extraColors && <span class="more">+{p.extraColors}</span>}
+            </div>
+          </div>
+        )}
+
+        {materials.length > 0 && (
+          <div class="pd-block">
+            <span class="pd-label">Chất liệu</span>
+            <div class="pd-chips">{materials.map((m: string) => <span>{m}</span>)}</div>
+          </div>
+        )}
+
+        <div class="pd-actions">
+          <button class="shop-btn shop-btn-primary" type="button" id="pdAdd"
+            data-id={p.id} data-name={fullName} data-price={p.priceNum}>
+            + Thêm vào giỏ
+          </button>
+          <button class="shop-btn shop-btn-outline" type="button" id="pdFav" data-fav={p.id} aria-label="Yêu thích">♡ Lưu</button>
+        </div>
+        <a class="pd-zalo" href="https://zalo.me/0933774708" target="_blank" rel="noopener noreferrer">Cần tư vấn? Chat Zalo 0933 774 708 →</a>
+
+        <ul class="pd-trust">
+          <li>Bảo hành 5 năm</li>
+          <li>Đặt làm tại xưởng Quy Nhơn</li>
+          <li>Giao &amp; lắp tận nơi</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="pd-desc">
+      <h2>Về sản phẩm</h2>
+      <p>{desc}</p>
+      <p>Mỗi món đồ WOTU được đóng theo kích thước thật từ xưởng nội bộ, ưu tiên vật liệu tự nhiên già đẹp theo thời gian. Liên hệ để được tư vấn kích thước phù hợp với không gian của bạn.</p>
+    </section>
+
+    {related.length > 0 && (
+      <section class="pd-related">
+        <h2>Sản phẩm cùng nhóm</h2>
+        <div class="pd-rel-grid">
+          {related.map((r: any) => (
+            <a class="pd-rel-card" href={r.href}>
+              <div class="pd-rel-img">
+                <div class={`shop-ph ${r.tone ?? ''}`}></div>
+                <img class="shop-illo" src={`/uploads/products/cat-${r.catKey}.png`} alt={`Minh hoạ ${r.name} ${r.nameEm ?? ''}`} loading="lazy" decoding="async" />
+              </div>
+              <div class="pd-rel-body">
+                <span>{r.cat}</span>
+                <h3>{r.name} <em>{r.nameEm}</em>{r.nameTail}</h3>
+                <div class="pd-rel-price">{r.price}</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+
+  <Footer />
+</ShopLayout>
+
+<script>
+  import { addToCart, toggleFavorite, isFavorite, toast } from '../../lib/shop-store';
+
+  const add = document.getElementById('pdAdd');
+  add?.addEventListener('click', () => {
+    addToCart({
+      id: add.dataset.id ?? '',
+      name: add.dataset.name ?? 'Sản phẩm',
+      price: Number(add.dataset.price ?? 0),
+    });
+    toast(`✓ Đã thêm "${add.dataset.name}" vào giỏ`);
+    (window as any).__wotuOpenCart?.();
+  });
+
+  const fav = document.getElementById('pdFav');
+  function syncFav() {
+    if (!fav) return;
+    const on = isFavorite(fav.dataset.fav ?? '');
+    fav.dataset.active = on ? 'true' : 'false';
+    fav.textContent = on ? '♥ Đã lưu' : '♡ Lưu';
+  }
+  fav?.addEventListener('click', () => { toggleFavorite(fav.dataset.fav ?? ''); syncFav(); });
+  syncFav();
+</script>
+
+<style>
+  .crumb { padding: 100px 0 0; font-size: 13px; color: var(--shop-ink-soft); }
+  .crumb a { color: var(--shop-ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--shop-accent); }
+  .crumb .here { color: var(--shop-ink); }
+
+  .pd { padding: 28px 0 80px; }
+  .pd-top { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: start; }
+
+  .pd-main { position: relative; aspect-ratio: 4/3; border-radius: var(--shop-radius-lg); overflow: hidden; background: var(--shop-bg-soft); }
+  .pd-badges { position: absolute; top: 16px; left: 16px; display: flex; flex-direction: column; gap: 6px; z-index: 2; }
+  .pd-illo-note { margin-top: 12px; font-size: 12px; color: var(--shop-ink-soft); font-style: italic; }
+
+  .pd-cat { font-size: 13px; letter-spacing: .04em; color: var(--shop-ink-soft); }
+  .pd-info h1 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(34px, 5vw, 54px); line-height: 1.05; margin: 8px 0 14px; }
+  .pd-info h1 em { font-style: italic; color: var(--shop-accent); }
+  .pd-rating { font-size: 14px; color: var(--shop-ink-soft); margin-bottom: 22px; }
+  .pd-rating .stars { color: var(--shop-accent); letter-spacing: 1px; }
+  .pd-price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+  .pd-price s { color: var(--shop-ink-soft); font-size: 17px; }
+  .pd-price strong { font-family: var(--shop-serif); font-size: 34px; font-weight: 500; color: var(--shop-ink); }
+  .pd-stock { font-size: 13px; margin-bottom: 26px; }
+  .pd-stock.in { color: #4a7c4a; }
+  .pd-stock.pre { color: var(--shop-ink-soft); }
+
+  .pd-block { margin-bottom: 22px; }
+  .pd-label { display: block; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--shop-ink-soft); margin-bottom: 10px; }
+  .pd-colors { display: flex; gap: 8px; }
+  .pd-colors span { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--shop-line); }
+  .pd-colors .more { display: grid; place-items: center; font-size: 10px; color: var(--shop-ink-soft); background: var(--shop-bg-soft); }
+  .pd-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pd-chips span { font-size: 13px; padding: 6px 12px; border: 1px solid var(--shop-line); border-radius: 999px; color: var(--shop-ink); }
+
+  .pd-actions { display: flex; gap: 12px; margin: 28px 0 14px; }
+  .pd-actions .shop-btn-primary { flex: 1; justify-content: center; }
+  .pd-zalo { display: inline-block; font-size: 14px; color: var(--shop-accent); text-decoration: none; font-weight: 600; }
+  .pd-zalo:hover { text-decoration: underline; }
+
+  .pd-trust { list-style: none; margin: 26px 0 0; padding: 22px 0 0; border-top: 1px solid var(--shop-line); display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .pd-trust li { font-size: 13px; color: var(--shop-ink-soft); }
+  .pd-trust li::before { content: '✓ '; color: var(--shop-accent); }
+
+  .pd-desc { max-width: 720px; margin: 72px auto 0; }
+  .pd-desc h2, .pd-related h2 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(26px, 3.5vw, 38px); margin-bottom: 18px; }
+  .pd-desc p { font-size: 16px; line-height: 1.75; color: var(--shop-ink-soft); margin-bottom: 1em; }
+
+  .pd-related { margin-top: 80px; }
+  .pd-rel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .pd-rel-card { text-decoration: none; color: inherit; }
+  .pd-rel-img { position: relative; aspect-ratio: 4/3; border-radius: var(--shop-radius); overflow: hidden; background: var(--shop-bg-soft); }
+  .pd-rel-body span { display: block; font-size: 12px; color: var(--shop-ink-soft); margin-top: 12px; }
+  .pd-rel-body h3 { font-family: var(--shop-serif); font-weight: 400; font-size: 19px; margin: 4px 0; }
+  .pd-rel-body h3 em { font-style: italic; color: var(--shop-accent); }
+  .pd-rel-price { font-weight: 600; font-size: 15px; }
+
+  @media (max-width: 860px) {
+    .pd-top { grid-template-columns: 1fr; gap: 32px; }
+    .pd-rel-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
