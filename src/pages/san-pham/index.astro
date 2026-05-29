@@ -94,7 +94,7 @@ const breadcrumbSchema = {
     <div class="container tb-inner">
       <div class="tb-chips">
         <span style="font-size: 12px; color: var(--shop-ink-soft); font-weight: 600; letter-spacing: .04em;">Lọc đang dùng:</span>
-        <a href="#" style="font-size: 12px; color: var(--shop-accent); font-weight: 600;" rel="nofollow" aria-disabled="true">Xoá tất cả</a>
+        <a href="#" style="font-size: 12px; color: var(--shop-accent); font-weight: 600;">Xoá tất cả</a>
       </div>
       <div class="tb-controls">
         <span style="color: var(--shop-ink-soft);"><b style="color: var(--shop-ink); font-weight: 600;">{TOTAL}</b> kết quả</span>
@@ -123,7 +123,7 @@ const breadcrumbSchema = {
     <aside class="filters">
       <div class="filters-head">
         <h3>Bộ lọc</h3>
-        <a href="#" rel="nofollow" aria-disabled="true">Xoá tất cả</a>
+        <a href="#">Xoá tất cả</a>
       </div>
 
       <!-- "Danh mục" duplicate với cat tiles trên cùng (cat-tiles section).
@@ -194,7 +194,7 @@ const breadcrumbSchema = {
       </details>
 
       <div style="padding-top: 20px;">
-        <a class="shop-btn shop-btn-primary" href="#" style="width: 100%; justify-content: center;" rel="nofollow" aria-disabled="true">Áp dụng ({TOTAL})</a>
+        <button class="shop-btn shop-btn-primary" type="button" id="filterApply" style="width: 100%; justify-content: center;">Xem kết quả →</button>
       </div>
     </aside>
 
@@ -864,6 +864,11 @@ const breadcrumbSchema = {
       if (grid) grid.dataset.view = b.dataset.view ?? '3col';
     }),
   );
+
+  // ===== "Xem kết quả" (mobile): cuộn tới lưới sản phẩm sau khi lọc =====
+  document.getElementById('filterApply')?.addEventListener('click', () => {
+    grid?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 
   // Chips are now rendered dynamically by renderChips() inside applyFilter().
 

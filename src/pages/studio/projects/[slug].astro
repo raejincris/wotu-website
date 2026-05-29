@@ -7,6 +7,7 @@ import Placeholder from '../../../components/Placeholder.astro';
 import Reveal from '../../../components/Reveal.astro';
 import Breadcrumb from '../../../components/Breadcrumb.astro';
 import ProjectItem from '../../../components/ProjectItem.astro';
+import { img } from '../../../lib/unsplash';
 
 export async function getStaticPaths() {
   const all = await getCollection('projects');
@@ -37,8 +38,16 @@ const related = [
     photo: x.data.photo,
     photoAlt: x.data.photoAlt,
   }));
+
+// OG image = ảnh hero dự án (Unsplash ID → URL 1200×630, hoặc ảnh local upload).
+const heroPhoto = p.photoDetail ?? p.photo;
+const ogImage = heroPhoto
+  ? (heroPhoto.startsWith('/') || heroPhoto.startsWith('http')
+      ? new URL(heroPhoto, Astro.site).href
+      : img(heroPhoto, 1200, '16/9'))
+  : undefined;
 ---
-<BaseLayout title={`${p.name} — WOTU`} description={p.excerpt} schemaType="project">
+<BaseLayout title={`${p.name} — WOTU`} description={p.excerpt} ogImage={ogImage} schemaType="project">
   <Nav variant="inner" homeRoute="/studio/" />
   <Breadcrumb items={[{ name: 'Studio', href: '/studio/' }, { name: 'Dự án', href: '/studio/projects' }, { name: p.name }]} />
 

@@ -73,6 +73,9 @@ body.shop {
 }
 body.shop * { box-sizing: border-box; }
 body.shop img { max-width: 100%; display: block; }
+/* Smooth scroll cho anchor (#combos, #contact…) trên các trang shop. */
+html:has(body.shop) { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html:has(body.shop) { scroll-behavior: auto; } }
 body.shop a { color: inherit; text-decoration: none; }
 body.shop button { font-family: inherit; cursor: pointer; border: 0; background: none; }
 
