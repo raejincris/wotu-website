@@ -3,6 +3,7 @@ import ShopLayout from '../layouts/ShopLayout.astro';
 import Nav from '../components/shop/Nav.astro';
 import Footer from '../components/shop/Footer.astro';
 import Marquee from '../components/shop/Marquee.astro';
+import Newsletter from '../components/Newsletter.astro';
 import site from '../data/site.yml';
 import shopHome from '../data/shop-home.yml';
 
@@ -297,6 +298,7 @@ const whyIcons: Record<string, string> = {
     </div>
   </section>
 
+  <Newsletter variant="shop" heading="Nhận ưu đãi & cảm hứng nội thất" />
   <Footer />
 </ShopLayout>
 
