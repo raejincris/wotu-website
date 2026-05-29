@@ -243,6 +243,12 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
 }
 .shop-ph-label { padding: 8px 14px; border: 1px dashed currentColor; border-radius: 6px; opacity: .55; }
 
+/* Ảnh minh hoạ line-art đè lên .shop-ph (gradient giữ làm nền chờ load).
+   Dùng chung: card sản phẩm, combo, bestseller, inspo, ảnh chính trang chi tiết.
+   KHÔNG đặt z-index → để thứ tự DOM quyết định: ảnh nằm sau .shop-ph (đè lên nó)
+   nhưng trước badge/label/sticker (các overlay tự nổi lên trên ảnh). */
+.shop-illo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
 /* ============================================================
    FOOTER (shop)
    ============================================================ */

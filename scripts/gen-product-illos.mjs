@@ -33,12 +33,26 @@ const icons = {
   combo: `<rect x="60" y="150" width="150" height="40" rx="12" ${S}/><rect x="52" y="142" width="22" height="52" rx="10" ${S}/><rect x="196" y="142" width="22" height="52" rx="10" ${S}/><rect x="74" y="120" width="130" height="38" rx="12" ${S}/><line x1="70" y1="190" x2="70" y2="214" ${S}/><line x1="200" y1="190" x2="200" y2="214" ${S}/><ellipse cx="280" cy="186" rx="34" ry="12" ${S}/><line x1="280" y1="198" x2="280" y2="214" ${S}/><path d="M300 96 h44 l12 40 h-68 z" ${S}/><line x1="324" y1="136" x2="324" y2="214" ${S}/>${floor}`,
 };
 
+// Cảnh combo theo phòng — nhóm nhiều món, đọc ra "một bộ" cho từng không gian.
+const rooms = {
+  'phong-khach': icons.combo,
+  'studio': `<rect x="54" y="156" width="120" height="34" rx="11" ${S}/><rect x="46" y="148" width="20" height="46" rx="9" ${S}/><rect x="162" y="148" width="20" height="46" rx="9" ${S}/><line x1="62" y1="190" x2="62" y2="212" ${S}/><line x1="166" y1="190" x2="166" y2="212" ${S}/><rect x="250" y="96" width="96" height="116" rx="6" ${S}/><line x1="250" y1="136" x2="346" y2="136" ${S}/><line x1="250" y1="174" x2="346" y2="174" ${S}/>${floor}`,
+  'phong-ngu': `<rect x="58" y="112" width="28" height="100" rx="8" ${S}/><rect x="80" y="160" width="200" height="42" rx="12" ${S}/><rect x="96" y="150" width="54" height="24" rx="9" ${S}/><line x1="88" y1="202" x2="88" y2="226" ${S}/><line x1="272" y1="202" x2="272" y2="226" ${S}/><rect x="296" y="172" width="44" height="40" rx="7" ${S}/><line x1="318" y1="150" x2="318" y2="172" ${S}/><circle cx="318" cy="142" r="9" ${S}/>${floor}`,
+  'phong-an': `<rect x="138" y="150" width="124" height="14" rx="7" ${S}/><line x1="152" y1="164" x2="152" y2="226" ${S}/><line x1="248" y1="164" x2="248" y2="226" ${S}/><path d="M70 128 q0-8 8-8 h40 q8 0 8 8 v44 h-56 z" ${S}/><rect x="64" y="170" width="68" height="14" rx="6" ${S}/><line x1="74" y1="184" x2="74" y2="226" ${S}/><line x1="122" y1="184" x2="122" y2="226" ${S}/><path d="M282 128 q0-8 8-8 h40 q8 0 8 8 v44 h-56 z" ${S}/><rect x="276" y="170" width="68" height="14" rx="6" ${S}/><line x1="286" y1="184" x2="286" y2="226" ${S}/><line x1="334" y1="184" x2="334" y2="226" ${S}/>${floor}`,
+  'lam-viec': `<rect x="80" y="150" width="170" height="14" rx="7" ${S}/><line x1="96" y1="164" x2="96" y2="226" ${S}/><line x1="234" y1="164" x2="234" y2="226" ${S}/><path d="M150 116 q0-8 8-8 h44 q8 0 8 8 v40 h-60 z" ${S}/><rect x="142" y="178" width="76" height="14" rx="6" ${S}/><line x1="152" y1="192" x2="152" y2="230" ${S}/><line x1="208" y1="192" x2="208" y2="230" ${S}/><rect x="288" y="92" width="74" height="120" rx="5" ${S}/><line x1="288" y1="132" x2="362" y2="132" ${S}/><line x1="288" y1="172" x2="362" y2="172" ${S}/>${floor}`,
+  'tre-em': `<rect x="56" y="120" width="24" height="92" rx="7" ${S}/><rect x="76" y="166" width="150" height="36" rx="11" ${S}/><rect x="90" y="156" width="44" height="20" rx="8" ${S}/><line x1="84" y1="202" x2="84" y2="224" ${S}/><line x1="218" y1="202" x2="218" y2="224" ${S}/><rect x="262" y="118" width="86" height="94" rx="6" ${S}/><line x1="262" y1="150" x2="348" y2="150" ${S}/><line x1="262" y1="182" x2="348" y2="182" ${S}/>${floor}`,
+};
+const roomLabels = {
+  'phong-khach': 'Phòng khách', 'studio': 'Căn hộ', 'phong-ngu': 'Phòng ngủ',
+  'phong-an': 'Phòng ăn', 'lam-viec': 'Làm việc', 'tre-em': 'Phòng bé',
+};
+
 const labels = {
   sofa: 'Sofa', ban: 'Bàn', ghe: 'Ghế', giuong: 'Giường', tu: 'Tủ',
   ke: 'Kệ', den: 'Đèn', tham: 'Thảm', combo: 'Combo',
 };
 
-function template(key) {
+function template(svg, label) {
   return `<!DOCTYPE html><html><head><meta charset="utf-8" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet" />
@@ -59,8 +73,8 @@ function template(key) {
 </style></head>
 <body>
   <div class="frame"></div>
-  <div class="art"><svg viewBox="0 0 400 300">${icons[key]}</svg></div>
-  <div class="tag">${labels[key]}</div>
+  <div class="art"><svg viewBox="0 0 400 300">${svg}</svg></div>
+  <div class="tag">${label}</div>
   <div class="brand">WOTU</div>
   <svg class="grain"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
 </body></html>`;
@@ -69,11 +83,18 @@ function template(key) {
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 });
 for (const key of Object.keys(icons)) {
-  await page.setContent(template(key), { waitUntil: 'networkidle' });
+  await page.setContent(template(icons[key], labels[key]), { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(120);
   await page.screenshot({ path: resolve(outDir, `cat-${key}.png`), clip: { x: 0, y: 0, width: 1200, height: 900 } });
   console.log('✓ cat-' + key);
+}
+for (const room of Object.keys(rooms)) {
+  await page.setContent(template(rooms[room], roomLabels[room]), { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForTimeout(120);
+  await page.screenshot({ path: resolve(outDir, `combo-${room}.png`), clip: { x: 0, y: 0, width: 1200, height: 900 } });
+  console.log('✓ combo-' + room);
 }
 await browser.close();
 console.log('Done →', outDir);

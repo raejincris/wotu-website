@@ -10,6 +10,15 @@ const phone = site.hotline;
 const email = site.email;
 
 const { hero, sections, combos, bestsellers, inspo, reviews } = shopHome as any;
+
+// Map ảnh minh hoạ line-art (public/uploads/products/). Combo theo phòng,
+// bestseller theo loại suy từ id, inspo theo phòng (cùng thứ tự combo trừ khách).
+const ILLO = '/uploads/products';
+const catFromId = (id: string) => {
+  const k = (id || '').split('-')[1];
+  return ['sofa', 'ban', 'ghe', 'giuong', 'tu', 'ke', 'den', 'tham'].includes(k) ? k : 'combo';
+};
+const inspoRooms = ['studio', 'phong-ngu', 'phong-an', 'lam-viec', 'tre-em'];
 const whyIcons: Record<string, string> = {
   shield:  `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>`,
   truck:   `<rect x="1" y="5" width="14" height="13" rx="1"/><polygon points="15 8 19 8 22 11 22 18 15 18"/><circle cx="6" cy="20" r="2"/><circle cx="18" cy="20" r="2"/>`,
@@ -46,6 +55,7 @@ const whyIcons: Record<string, string> = {
 
       <div class="hero-visual">
         <div class="shop-ph"><span class="shop-ph-label">Phòng khách combo WOTU — 1600×2000</span></div>
+        <img class="shop-illo" src={`${ILLO}/combo-phong-khach.png`} alt="Minh hoạ combo phòng khách WOTU" loading="eager" fetchpriority="high" decoding="async" />
         <div class="sticker">
           {hero.sticker}<small>{hero.stickerSub}</small>
         </div>
@@ -96,6 +106,7 @@ const whyIcons: Record<string, string> = {
           >
             <div class="combo-img">
               <div class={`shop-ph ${c.tone}`}><span class="shop-ph-label">{c.placeholder}</span></div>
+              <img class="shop-illo" src={`${ILLO}/combo-${c.room}.png`} alt={`Minh hoạ ${c.placeholder}`} loading="lazy" decoding="async" />
               {c.badge && (
                 <span class={`combo-badge${c.badgeClass ? ' ' + c.badgeClass : ''}`} style={c.badgeStyle || undefined}>{c.badge}</span>
               )}
@@ -158,6 +169,7 @@ const whyIcons: Record<string, string> = {
             <a href={p.href} style="text-decoration: none; display: contents;">
               <div class="combo-img">
                 <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
+                <img class="shop-illo" src={`${ILLO}/cat-${catFromId(p.id)}.png`} alt={`Minh hoạ ${p.name}`} loading="lazy" decoding="async" />
               </div>
               <div class="product-body">
                 <span class="product-meta">{p.meta}</span>
@@ -190,9 +202,10 @@ const whyIcons: Record<string, string> = {
       </div>
 
       <div class="inspo-grid shop-reveal-stagger">
-        {inspo.map((i) => (
+        {inspo.map((i, idx) => (
           <a class={`inspo-card${i.tall ? ' tall' : ''}`} href={i.href}>
             <div class="shop-ph dark"><span class="shop-ph-label">{i.placeholder}</span></div>
+            <img class="shop-illo" src={`${ILLO}/combo-${inspoRooms[idx] ?? 'phong-khach'}.png`} alt={`Minh hoạ ${i.placeholder}`} loading="lazy" decoding="async" />
             <div class="label">
               <span>{i.label}</span>
               <span class="arrow">
