@@ -72,7 +72,7 @@ combos:
     badgeStyle: "background: var(--shop-bg); color: var(--shop-ink);"
     placeholder: "Combo Căn hộ studio 30m² — full nội thất"
     tone: ""
-    href: /combo/to-am/
+    href: /combo/an-cu/
 
   - id: combo-to-am
     room: phong-khach
@@ -104,7 +104,7 @@ combos:
     badgeClass: sage
     placeholder: "Combo phòng ngủ An Yên"
     tone: sage
-    href: /san-pham/?room=phong-ngu
+    href: /combo/an-yen/
 
   - id: combo-sum-vay
     room: phong-an
@@ -118,7 +118,7 @@ combos:
     priceNote: "· tặng bộ chén Bát Tràng"
     placeholder: "Combo phòng ăn Sum Vầy"
     tone: ""
-    href: /san-pham/?room=phong-an
+    href: /combo/sum-vay/
 
   - id: combo-tap-trung
     room: lam-viec
@@ -132,7 +132,7 @@ combos:
     priceNote: "· tặng đệm lưng"
     placeholder: "Combo bàn làm việc Tập Trung"
     tone: sage
-    href: /san-pham/?room=lam-viec
+    href: /combo/tap-trung/
 
   - id: combo-vuon-co-tich
     room: tre-em
@@ -148,7 +148,7 @@ combos:
     badgeClass: terra
     placeholder: "Combo phòng trẻ em Vườn Cổ Tích"
     tone: ""
-    href: /san-pham/?room=tre-em
+    href: /combo/vuon-co-tich/
 
 bestsellers:
   - id: p-sofa-may-3

@@ -1,0 +1,242 @@
+---
+/**
+ * Trang chi tiết combo — route động sinh từ shop-home.yml.
+ * Cho 5 combo chưa có trang bespoke (loại trừ combo-to-am → /combo/to-am/).
+ * Chỉ dùng data có thật (tên, giá, mô tả, badge). Ảnh = minh hoạ theo phòng.
+ */
+import ShopLayout from '../../layouts/ShopLayout.astro';
+import Nav from '../../components/shop/Nav.astro';
+import Footer from '../../components/shop/Footer.astro';
+import shopHome from '../../data/shop-home.yml';
+
+const data = shopHome as any;
+const combos = (data.combos ?? []) as any[];
+
+export function getStaticPaths() {
+  const d = shopHome as any;
+  return (d.combos ?? [])
+    .filter((c: any) => c.id !== 'combo-to-am')
+    .map((c: any) => ({ params: { slug: String(c.id).replace(/^combo-/, '') }, props: { c } }));
+}
+
+interface Props { c: any; }
+const { c } = Astro.props;
+const slug = String(c.id).replace(/^combo-/, '');
+const fullName = `${c.name} ${c.nameEm ?? ''}${c.nameTail ?? ''}`.trim();
+const illo = `/uploads/products/combo-${c.room}.png`;
+
+// "Combo gồm": tách desc theo " · " nếu là danh sách; ngược lại dùng làm prose.
+const parts = String(c.desc ?? '').split(' · ').map((s) => s.trim()).filter(Boolean);
+const isList = parts.length > 1;
+
+const num = (s: string) => Number(String(s ?? '').replace(/[^\d]/g, '')) || 0;
+const oldNum = num(c.priceOld);
+const discount = oldNum && c.price ? Math.round((1 - c.price / oldNum) * 100) : 0;
+
+const roomLabel: Record<string, string> = { studio: 'căn hộ', 'phong-khach': 'phòng khách', 'phong-ngu': 'phòng ngủ', 'phong-an': 'phòng ăn', 'lam-viec': 'phòng làm việc', 'tre-em': 'phòng trẻ em' };
+const related = combos.filter((x) => x.id !== c.id).slice(0, 3);
+
+const SITE_URL = 'https://www.wotu.vn';
+const PAGE_URL = `${SITE_URL}/combo/${slug}/`;
+const desc = `${fullName} — ${c.cat}. ${c.desc ?? ''} Trọn gói thiết kế, sản xuất tại xưởng WOTU Quy Nhơn và lắp đặt tận nơi. Bảo hành 5 năm.`;
+
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: fullName,
+  description: desc,
+  category: `Combo ${roomLabel[c.room] ?? 'nội thất'}`,
+  brand: { '@type': 'Brand', name: 'WOTU' },
+  sku: c.id,
+  url: PAGE_URL,
+  offers: {
+    '@type': 'Offer',
+    price: c.price,
+    priceCurrency: 'VND',
+    availability: 'https://schema.org/InStock',
+    url: PAGE_URL,
+    seller: { '@type': 'Organization', name: 'WOTU' },
+  },
+};
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: SITE_URL + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Combo nội thất', item: SITE_URL + '/#combos' },
+    { '@type': 'ListItem', position: 3, name: fullName, item: PAGE_URL },
+  ],
+};
+---
+<ShopLayout title={`${fullName} — Combo ${roomLabel[c.room] ?? 'nội thất'} — WOTU`} description={desc}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
+  <Nav active="Combo nội thất" />
+
+  <div class="container crumb">
+    <a href="/">Trang chủ</a> / <a href="/#combos">Combo nội thất</a> / <span class="here">{fullName}</span>
+  </div>
+
+  <main class="pd container">
+    <section class="pd-top">
+      <div class="pd-gallery">
+        <div class="pd-main">
+          <div class={`shop-ph ${c.tone ?? ''}`}><span class="shop-ph-label">{c.placeholder ?? fullName}</span></div>
+          <img class="shop-illo" src={illo} alt={`Minh hoạ ${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" />
+          {c.badge && <div class="pd-badges"><span class={`b-tag${c.badgeClass ? ' ' + c.badgeClass : ' dark'}`}>{c.badge}</span></div>}
+        </div>
+        <p class="pd-illo-note">Ảnh minh hoạ — ảnh chụp thật đang được cập nhật.</p>
+      </div>
+
+      <div class="pd-info">
+        <span class="pd-cat">{c.cat}</span>
+        <h1>{c.name} <em>{c.nameEm}</em>{c.nameTail}</h1>
+
+        <div class="pd-price">
+          {c.priceOld && <s>{c.priceOld}</s>}
+          <strong>{c.priceNew}</strong>
+          {discount > 0 && <span class="pd-off">−{discount}%</span>}
+        </div>
+        {c.priceNote && <div class="pd-note">{c.priceNote.replace(/^·\s*/, '')}</div>}
+
+        {isList ? (
+          <div class="pd-block">
+            <span class="pd-label">Combo gồm</span>
+            <ul class="pd-includes">{parts.map((it) => <li>{it}</li>)}</ul>
+          </div>
+        ) : (
+          <p class="pd-lead">{c.desc}</p>
+        )}
+
+        <div class="pd-actions">
+          <button class="shop-btn shop-btn-primary" type="button" id="pdAdd"
+            data-id={c.id} data-name={`Combo ${c.nameEm}`} data-price={c.price}>
+            + Thêm combo vào giỏ
+          </button>
+          <button class="shop-btn shop-btn-outline" type="button" id="pdFav" data-fav={c.id} aria-label="Yêu thích">♡ Lưu</button>
+        </div>
+        <a class="pd-zalo" href="https://zalo.me/0933774708" target="_blank" rel="noopener noreferrer">Cần tư vấn combo? Chat Zalo 0933 774 708 →</a>
+
+        <ul class="pd-trust">
+          <li>Trọn gói thiết kế + thi công</li>
+          <li>Bảo hành 5 năm</li>
+          <li>Giao &amp; lắp tận nơi</li>
+        </ul>
+        <a class="pd-room-link" href={`/san-pham/?room=${c.room}`}>Xem sản phẩm lẻ cho {roomLabel[c.room] ?? 'không gian này'} →</a>
+      </div>
+    </section>
+
+    <section class="pd-desc">
+      <h2>Về combo này</h2>
+      <p>{desc}</p>
+      <p>Mua trọn combo giúp đồng bộ tông màu và vật liệu, tiết kiệm hơn so với mua lẻ từng món. Đội WOTU khảo sát không gian thực tế trước khi chốt phương án để mọi thứ vừa vặn căn nhà của bạn.</p>
+    </section>
+
+    {related.length > 0 && (
+      <section class="pd-related">
+        <h2>Combo khác</h2>
+        <div class="pd-rel-grid">
+          {related.map((r: any) => (
+            <a class="pd-rel-card" href={r.id === 'combo-to-am' ? '/combo/to-am/' : `/combo/${String(r.id).replace(/^combo-/, '')}/`}>
+              <div class="pd-rel-img">
+                <div class={`shop-ph ${r.tone ?? ''}`}></div>
+                <img class="shop-illo" src={`/uploads/products/combo-${r.room}.png`} alt={`Minh hoạ Combo ${r.nameEm}`} loading="lazy" decoding="async" />
+              </div>
+              <div class="pd-rel-body">
+                <span>{r.cat}</span>
+                <h3>{r.name} <em>{r.nameEm}</em>{r.nameTail}</h3>
+                <div class="pd-rel-price">{r.priceNew}</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+
+  <Footer />
+</ShopLayout>
+
+<script>
+  import { addToCart, toggleFavorite, isFavorite, toast } from '../../lib/shop-store';
+
+  const add = document.getElementById('pdAdd');
+  add?.addEventListener('click', () => {
+    addToCart({
+      id: add.dataset.id ?? '',
+      name: add.dataset.name ?? 'Combo',
+      price: Number(add.dataset.price ?? 0),
+    });
+    toast(`✓ Đã thêm "${add.dataset.name}" vào giỏ`);
+    (window as any).__wotuOpenCart?.();
+  });
+
+  const fav = document.getElementById('pdFav');
+  function syncFav() {
+    if (!fav) return;
+    const on = isFavorite(fav.dataset.fav ?? '');
+    fav.dataset.active = on ? 'true' : 'false';
+    fav.textContent = on ? '♥ Đã lưu' : '♡ Lưu';
+  }
+  fav?.addEventListener('click', () => { toggleFavorite(fav.dataset.fav ?? ''); syncFav(); });
+  syncFav();
+</script>
+
+<style>
+  .crumb { padding: 100px 0 0; font-size: 13px; color: var(--shop-ink-soft); }
+  .crumb a { color: var(--shop-ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--shop-accent); }
+  .crumb .here { color: var(--shop-ink); }
+
+  .pd { padding: 28px 0 80px; }
+  .pd-top { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: start; }
+  .pd-main { position: relative; aspect-ratio: 4/3; border-radius: var(--shop-radius-lg); overflow: hidden; background: var(--shop-bg-soft); }
+  .pd-badges { position: absolute; top: 16px; left: 16px; z-index: 2; }
+  .pd-illo-note { margin-top: 12px; font-size: 12px; color: var(--shop-ink-soft); font-style: italic; }
+
+  .pd-cat { font-size: 13px; letter-spacing: .04em; color: var(--shop-ink-soft); }
+  .pd-info h1 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(34px, 5vw, 54px); line-height: 1.05; margin: 8px 0 16px; }
+  .pd-info h1 em { font-style: italic; color: var(--shop-accent); }
+  .pd-price { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .pd-price s { color: var(--shop-ink-soft); font-size: 18px; }
+  .pd-price strong { font-family: var(--shop-serif); font-size: 36px; font-weight: 500; color: var(--shop-ink); }
+  .pd-off { background: var(--shop-accent); color: #fff; font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+  .pd-note { font-size: 14px; color: var(--shop-accent); margin: 8px 0 24px; font-weight: 600; }
+
+  .pd-block { margin-bottom: 24px; }
+  .pd-label { display: block; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--shop-ink-soft); margin-bottom: 12px; }
+  .pd-includes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .pd-includes li { font-size: 15px; color: var(--shop-ink); padding-left: 22px; position: relative; }
+  .pd-includes li::before { content: '—'; position: absolute; left: 0; color: var(--shop-accent); }
+  .pd-lead { font-size: 16px; line-height: 1.7; color: var(--shop-ink-soft); margin-bottom: 24px; }
+
+  .pd-actions { display: flex; gap: 12px; margin: 28px 0 14px; }
+  .pd-actions .shop-btn-primary { flex: 1; justify-content: center; }
+  .pd-zalo { display: inline-block; font-size: 14px; color: var(--shop-accent); text-decoration: none; font-weight: 600; }
+  .pd-zalo:hover { text-decoration: underline; }
+  .pd-trust { list-style: none; margin: 26px 0 18px; padding: 22px 0 0; border-top: 1px solid var(--shop-line); display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .pd-trust li { font-size: 13px; color: var(--shop-ink-soft); }
+  .pd-trust li::before { content: '✓ '; color: var(--shop-accent); }
+  .pd-room-link { font-size: 14px; color: var(--shop-ink-soft); text-decoration: none; border-bottom: 1px solid var(--shop-line); }
+  .pd-room-link:hover { color: var(--shop-accent); }
+
+  .pd-desc { max-width: 720px; margin: 72px auto 0; }
+  .pd-desc h2, .pd-related h2 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(26px, 3.5vw, 38px); margin-bottom: 18px; }
+  .pd-desc p { font-size: 16px; line-height: 1.75; color: var(--shop-ink-soft); margin-bottom: 1em; }
+
+  .pd-related { margin-top: 80px; }
+  .pd-rel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .pd-rel-card { text-decoration: none; color: inherit; }
+  .pd-rel-img { position: relative; aspect-ratio: 4/3; border-radius: var(--shop-radius); overflow: hidden; background: var(--shop-bg-soft); }
+  .pd-rel-body span { display: block; font-size: 12px; color: var(--shop-ink-soft); margin-top: 12px; }
+  .pd-rel-body h3 { font-family: var(--shop-serif); font-weight: 400; font-size: 19px; margin: 4px 0; }
+  .pd-rel-body h3 em { font-style: italic; color: var(--shop-accent); }
+  .pd-rel-price { font-weight: 600; font-size: 15px; }
+
+  @media (max-width: 860px) {
+    .pd-top { grid-template-columns: 1fr; gap: 32px; }
+    .pd-rel-grid { grid-template-columns: 1fr; }
+  }
+</style>
