@@ -60,7 +60,7 @@ function resetEditor() {
 const PANELS = [
   'panel-dashboard',
   'panel-site', 'panel-sofa', 'panel-combo', 'panel-shop-home', 'panel-home-hero',
-  'panel-shop-hero', 'panel-products',
+  'panel-shop-hero', 'panel-products', 'panel-footer',
 ];
 
 const HASH_MAP = {
@@ -73,6 +73,7 @@ const HASH_MAP = {
   'home-hero':   'panel-home-hero',
   'shop-hero':   'panel-shop-hero',
   'products':    'panel-products',
+  'footer':      'panel-footer',
 };
 
 const PANEL_META = {
@@ -84,6 +85,7 @@ const PANEL_META = {
   'panel-home-hero': { title: 'Trang chủ Studio',         preview: 'https://www.wotu.vn/studio/' },
   'panel-shop-hero': { title: 'Trang chủ Shop',           preview: 'https://www.wotu.vn/' },
   'panel-products':  { title: 'Catalog sản phẩm',         preview: 'https://www.wotu.vn/san-pham/' },
+  'panel-footer':    { title: 'Footer & Menu',            preview: 'https://www.wotu.vn/studio/' },
 };
 
 const EDITOR_MAP = {
@@ -94,6 +96,7 @@ const EDITOR_MAP = {
   'home-hero':  '/admin/editors/home-hero.js',
   'shop-hero':  '/admin/editors/shop-hero.js',
   'products':   '/admin/editors/products.js',
+  'footer':     '/admin/editors/footer.js',
 };
 
 const FILE_STATUS_CONFIG = [
@@ -104,6 +107,7 @@ const FILE_STATUS_CONFIG = [
   { name: 'Trang chủ Studio',  path: 'src/data/home.yml',            hash: 'home-hero' },
   { name: 'Trang chủ Shop',    path: 'src/data/shop-home.yml',       hash: 'shop-hero' },
   { name: 'Catalog sản phẩm',  path: 'src/data/shop-products.yml',   hash: 'products' },
+  { name: 'Footer & Menu',     path: 'src/data/footer.yml',          hash: 'footer' },
 ];
 
 // ─── Panel switching ──────────────────────────────────────────────────────────
