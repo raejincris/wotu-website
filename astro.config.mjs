@@ -5,9 +5,12 @@ import sitemap from '@astrojs/sitemap';
 import yaml from '@rollup/plugin-yaml';
 import pagefind from 'astro-pagefind';
 
+import cloudflare from '@astrojs/cloudflare';
+
 export default defineConfig({
   site: 'https://www.wotu.vn',
   output: 'static',
+
   integrations: [
     pagefind(),
     mdx(),
@@ -17,10 +20,14 @@ export default defineConfig({
       priority: 0.7,
     }),
   ],
+
   vite: {
     plugins: [yaml()],
   },
+
   server: {
     port: 4321,
   },
+
+  adapter: cloudflare(),
 });
