@@ -25,6 +25,10 @@ const blog = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     excerpt: z.string().optional(),
+    // Phân loại bài (1 category) + tags (nhiều) — dùng cho filter + internal
+    // linking. Mặc định "Ghi chép" để bài cũ không cần sửa frontmatter.
+    category: z.string().default('Ghi chép'),
+    tags: z.array(z.string()).default([]),
     tone: z.enum(['warm', 'deep', 'light', 'dark']).default('warm'),
     photo: z.string().optional(),
     photoAlt: z.string().optional(),

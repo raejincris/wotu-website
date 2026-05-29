@@ -2,6 +2,8 @@
 title: "Vật liệu già đẹp theo thời gian"
 date: 2026-03-12
 excerpt: "Vì sao chúng tôi luôn ưu tiên vật liệu thô, không phủ và không hoàn hảo."
+category: "Vật liệu"
+tags: ["vật liệu", "gỗ", "bền vững"]
 tone: warm
 photo: "1523755231516-e43fd2e8dca5"
 photoAlt: "Bàn gỗ tự nhiên — vân gỗ và bề mặt thô qua thời gian"

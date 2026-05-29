@@ -19,6 +19,9 @@ const projects = all
     photo: p.data.photo,
     photoAlt: p.data.photoAlt,
   }));
+
+// Hạng mục cho bộ lọc chip (giữ thứ tự xuất hiện).
+const cats = [...new Set(projects.map((p) => p.cat))];
 ---
 <BaseLayout title="Dự án — WOTU" description="Tuyển tập các công trình WOTU đã thực hiện từ 2018 đến nay.">
   <Nav variant="inner" homeRoute="/studio/" />
@@ -32,22 +35,76 @@ const projects = all
     </h1>
   </header>
 
+  {cats.length > 1 && (
+    <nav class="proj-filter" aria-label="Lọc theo hạng mục" style="padding: 0 var(--pad-x) 48px;">
+      <button class="pf-chip is-active" data-cat="" type="button">Tất cả</button>
+      {cats.map((c) => (
+        <button class="pf-chip" data-cat={c} type="button">{c}</button>
+      ))}
+    </nav>
+  )}
+
   <section style="padding: 0 var(--pad-x) var(--pad-section);">
-    <div class="grid-asym" style="display: grid; grid-template-columns: 1fr 1fr; gap: 96px;">
+    <div id="proj-grid" class="grid-asym" style="display: grid; grid-template-columns: 1fr 1fr; gap: 96px;">
       {projects.map((p, i) => (
-        <div style={i % 2 === 1 ? 'margin-top: 80px;' : ''}>
+        <div class="proj-cell" data-cat={p.cat} style={i % 2 === 1 ? 'margin-top: 80px;' : ''}>
           <ProjectItem p={p} large={i % 3 === 0} delay={i * 80} />
         </div>
       ))}
     </div>
+    <p id="proj-empty" hidden style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; color: var(--earth); text-transform: uppercase;">
+      Chưa có dự án trong hạng mục này.
+    </p>
   </section>
 
   <Footer />
 </BaseLayout>
 
+<script>
+  // Lọc dự án theo hạng mục — client-side.
+  const chips = document.querySelectorAll<HTMLButtonElement>('.pf-chip');
+  const cells = document.querySelectorAll<HTMLElement>('#proj-grid .proj-cell');
+  const empty = document.getElementById('proj-empty');
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const cat = chip.dataset.cat ?? '';
+      chips.forEach((c) => c.classList.toggle('is-active', c === chip));
+      let visible = 0;
+      cells.forEach((cell) => {
+        const show = !cat || cell.dataset.cat === cat;
+        cell.hidden = !show;
+        if (show) visible++;
+      });
+      if (empty) empty.hidden = visible > 0;
+    });
+  });
+</script>
+
 <style>
+  .proj-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .pf-chip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--earth);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 16px;
+    min-height: 38px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pf-chip:hover { border-color: var(--earth); color: var(--ink); }
+  .pf-chip.is-active { background: var(--ink); border-color: var(--ink); color: var(--bone); }
+  .proj-cell[hidden] { display: none !important; }
   @media (max-width: 768px) {
-    section > div > div { margin-top: 0 !important; }
-    section > div { gap: 64px !important; }
+    .proj-cell { margin-top: 0 !important; }
+    #proj-grid { gap: 64px !important; }
   }
 </style>

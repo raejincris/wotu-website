@@ -9,11 +9,18 @@ const all = await getCollection('blog');
 const posts = all.sort((a, b) => +b.data.date - +a.data.date);
 
 const fmt = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+// Thời gian đọc ước tính (200 từ/phút) từ nội dung thô.
+const readingTime = (body?: string) =>
+  Math.max(1, Math.ceil((body?.trim().split(/\s+/).filter(Boolean).length ?? 0) / 200));
+
+// Danh sách category (giữ thứ tự xuất hiện) cho bộ lọc chip.
+const categories = [...new Set(posts.map((p) => p.data.category))];
 ---
 <BaseLayout title="Nhật ký — WOTU" description="Ghi chép về vật liệu, ánh sáng và những thứ không gấp.">
   <Nav variant="inner" homeRoute="/studio/" />
 
-  <header style="padding: 160px var(--pad-x) 80px;">
+  <header style="padding: 160px var(--pad-x) 56px;">
     <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">
       /Nhật ký · ghi chép studio
     </div>
@@ -22,11 +29,29 @@ const fmt = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit',
     </h1>
   </header>
 
-  <section style="padding: 0 var(--pad-x) var(--pad-section);">
+  {categories.length > 1 && (
+    <nav class="blog-filter" aria-label="Lọc theo chủ đề" style="padding: 0 var(--pad-x) 8px;">
+      <button class="bf-chip is-active" data-cat="" type="button">Tất cả</button>
+      {categories.map((c) => (
+        <button class="bf-chip" data-cat={c} type="button">{c}</button>
+      ))}
+    </nav>
+  )}
+
+  <section id="blog-list" style="padding: 0 var(--pad-x) var(--pad-section);">
     {posts.map((post, i) => (
-      <Reveal variant="reveal" delay={i * 80} as="a" href={`/studio/blog/${post.id}`} class="blog-row" style="display: grid; grid-template-columns: 160px 1.5fr 1fr; gap: 48px; padding: 48px 0; border-top: 1px solid var(--line); align-items: baseline; cursor: pointer;">
-        <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; color: var(--earth); text-transform: uppercase;">
+      <Reveal
+        variant="reveal"
+        delay={i * 80}
+        as="a"
+        href={`/studio/blog/${post.id}`}
+        class="blog-row"
+        data-category={post.data.category}
+        style="display: grid; grid-template-columns: 160px 1.5fr 1fr; gap: 48px; padding: 48px 0; border-top: 1px solid var(--line); align-items: baseline; cursor: pointer;"
+      >
+        <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; color: var(--earth); text-transform: uppercase; line-height: 1.7;">
           {fmt.format(post.data.date)}
+          <div style="color: var(--taupe); margin-top: 6px;">{post.data.category} · {readingTime(post.body)} phút đọc</div>
         </div>
         <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 3.4vw, 48px); line-height: 1.05; color: var(--bark);">
           {post.data.title}
@@ -36,12 +61,63 @@ const fmt = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit',
         </p>
       </Reveal>
     ))}
+    <p id="blog-empty" hidden style="padding: 48px 0; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; color: var(--earth); text-transform: uppercase;">
+      Chưa có bài viết trong chủ đề này.
+    </p>
   </section>
 
   <Footer />
 </BaseLayout>
 
+<script>
+  // Lọc bài theo category — client-side, không reload trang.
+  const chips = document.querySelectorAll<HTMLButtonElement>('.bf-chip');
+  const rows = document.querySelectorAll<HTMLElement>('#blog-list .blog-row');
+  const empty = document.getElementById('blog-empty');
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const cat = chip.dataset.cat ?? '';
+      chips.forEach((c) => c.classList.toggle('is-active', c === chip));
+      let visible = 0;
+      rows.forEach((row) => {
+        const show = !cat || row.dataset.category === cat;
+        row.hidden = !show;
+        if (show) visible++;
+      });
+      if (empty) empty.hidden = visible > 0;
+    });
+  });
+</script>
+
 <style>
+  .blog-filter {
+    max-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 0 8px;
+  }
+  .bf-chip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--earth);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 16px;
+    min-height: 38px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .bf-chip:hover { border-color: var(--earth); color: var(--ink); }
+  .bf-chip.is-active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bone);
+  }
+  .blog-row[hidden] { display: none !important; }
   @media (max-width: 768px) {
     .blog-row { grid-template-columns: 1fr !important; gap: 12px !important; }
   }

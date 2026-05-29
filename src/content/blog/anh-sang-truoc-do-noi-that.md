@@ -2,6 +2,8 @@
 title: "Ánh sáng trước, đồ nội thất sau"
 date: 2026-02-04
 excerpt: "Phần lớn các căn nhà đẹp trên Pinterest có một thứ giống nhau — và nó không phải là sofa."
+category: "Ánh sáng"
+tags: ["ánh sáng", "thiết kế", "concept"]
 tone: deep
 photo: "1567016376408-0226e4d0c1ea"
 photoAlt: "Sofa da nâu trong phòng tone trung tính, ánh sáng tự nhiên"

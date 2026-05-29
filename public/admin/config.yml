@@ -101,6 +101,14 @@ collections:
       - { name: title, label: 'Tiêu đề', widget: string }
       - { name: date, label: 'Ngày xuất bản', widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false }
       - { name: excerpt, label: 'Tóm tắt 1 dòng', widget: text, required: false }
+      - name: category
+        label: 'Chủ đề'
+        widget: select
+        create: true
+        default: 'Ghi chép'
+        options: ['Ghi chép', 'Ánh sáng', 'Vật liệu', 'Quy trình', 'Không gian', 'Câu chuyện nghề']
+        hint: 'Dùng để lọc bài trên trang Nhật ký. Có thể gõ chủ đề mới.'
+      - { name: tags, label: 'Tags (từ khoá)', widget: list, required: false, hint: 'VD: gỗ, ánh sáng, concept — giúp SEO & liên kết bài' }
       - name: tone
         label: 'Tông màu placeholder'
         widget: select
