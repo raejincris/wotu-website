@@ -1,9 +1,10 @@
 /**
  * editors/combo.js — Combo Tổ Ấm (src/data/combo-to-am.yml)
- * Fields: giá + bundle labels + reviews (3 items) + FAQ (6 items)
+ * Giá + nhãn bundle (cố định) · Đánh giá + FAQ (thêm/xoá/sắp xếp — repeatable).
  */
 
 import { getFile, putFile } from '../github.js';
+import { repeatable, rfText, rfArea, bindDirty } from '../lib/repeatable.js';
 
 const FILE = 'src/data/combo-to-am.yml';
 const BODY = 'editor-combo-body';
@@ -12,9 +13,6 @@ const FOOTER = 'editor-combo-footer';
 const yaml = () => window.jsyaml;
 
 function escVal(v) { return String(v ?? '').replace(/"/g, '&quot;'); }
-function escHtml(s) {
-  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
 
 function field(id, label, value, hint = '') {
   return `
@@ -22,16 +20,6 @@ function field(id, label, value, hint = '') {
       <label class="form-label" for="${id}">${label}</label>
       <input class="form-input" id="${id}" type="text"
              value="${escVal(value)}" autocomplete="off" />
-      ${hint ? `<p class="form-hint">${hint}</p>` : ''}
-    </div>`;
-}
-
-function textarea(id, label, value, hint = '') {
-  return `
-    <div class="form-row">
-      <label class="form-label" for="${id}">${label}</label>
-      <textarea class="form-input form-textarea" id="${id}" rows="3"
-                autocomplete="off">${escHtml(value)}</textarea>
       ${hint ? `<p class="form-hint">${hint}</p>` : ''}
     </div>`;
 }
@@ -60,23 +48,6 @@ export async function init({ token, showToast, setLoading }) {
   const reviews = obj.reviews?.items || [];
   const faq     = obj.faq || [];
 
-  const reviewCards = reviews.map((r, i) => `
-    <div style="border:1px solid var(--line); border-radius:8px; padding:14px 14px 10px; background:var(--bone);">
-      <p class="form-hint" style="margin:0 0 8px; font-weight:700; color:var(--ink-soft);">Đánh giá ${i + 1}</p>
-      ${field(`rev${i}_name`, 'Tên khách', r.name)}
-      ${field(`rev${i}_when`, 'Địa điểm · ngày mua', r.when,
-        'VD: Nhơn Bình · Quy Nhơn · Mua 02/05/2026')}
-      ${textarea(`rev${i}_body`, 'Nội dung đánh giá', r.body)}
-    </div>`).join('');
-
-  const faqCards = faq.map((f, i) => `
-    <div style="border:1px solid var(--line); border-radius:8px; padding:14px 14px 10px; background:var(--bone);">
-      <p class="form-hint" style="margin:0 0 8px; font-weight:700; color:var(--ink-soft);">FAQ ${i + 1}</p>
-      ${field(`faq${i}_q`, 'Câu hỏi', f.question)}
-      ${textarea(`faq${i}_a`, 'Trả lời', f.answer,
-        'Có thể dùng &lt;strong&gt;...&lt;/strong&gt; để in đậm')}
-    </div>`).join('');
-
   body.innerHTML = `
     <div class="form-card">
       <p class="form-card-title">Giá combo</p>
@@ -100,18 +71,14 @@ export async function init({ token, showToast, setLoading }) {
     </div>
 
     <div class="form-card">
-      <p class="form-card-title">Đánh giá khách hàng — ${reviews.length} review</p>
-      <div style="display:flex; flex-direction:column; gap:12px; margin-top:4px;">
-        ${reviewCards || '<p class="form-hint">Không có review nào.</p>'}
-      </div>
+      <p class="form-card-title">Đánh giá khách hàng</p>
+      <div id="combo-reviews"></div>
     </div>
 
     <div class="form-card">
-      <p class="form-card-title">Câu hỏi thường gặp — ${faq.length} FAQ</p>
-      <div style="display:flex; flex-direction:column; gap:12px; margin-top:4px;">
-        ${faqCards || '<p class="form-hint">Không có FAQ nào.</p>'}
-      </div>
-      <p class="form-hint" style="margin-top:12px;">
+      <p class="form-card-title">Câu hỏi thường gặp (FAQ)</p>
+      <div id="combo-faq"></div>
+      <p class="form-hint" style="margin-top:10px;">
         Trong phần trả lời, có thể dùng &lt;strong&gt;...&lt;/strong&gt; để in đậm từ khoá.
       </p>
     </div>`;
@@ -126,20 +93,38 @@ export async function init({ token, showToast, setLoading }) {
     <button class="btn btn-primary" id="save-combo">💾 Lưu &amp; cập nhật</button>`;
   footer.hidden = false;
 
-  const inputs = body.querySelectorAll('.form-input:not([readonly]), .form-textarea');
   const saveBtn = footer.querySelector('#save-combo');
-  const origValues = new Map();
-  inputs.forEach((i) => origValues.set(i, i.value));
+  const dirty = bindDirty({ scope: body, saveBtn });
 
-  function checkDirty() {
-    const dirty = [...inputs].some((i) => i.value !== origValues.get(i));
-    saveBtn.disabled = !dirty;
-    window.__adminSetDirty?.(dirty);
-  }
-  inputs.forEach((i) => i.addEventListener('input', checkDirty));
-  checkDirty();
+  const repReviews = repeatable({
+    mount: body.querySelector('#combo-reviews'),
+    items: reviews,
+    min: 0,
+    addLabel: '＋ Thêm đánh giá',
+    title: (_, i) => `Đánh giá ${i + 1}`,
+    onChange: dirty.mark,
+    makeNew: () => ({ name: '', initial: '', when: '', body: '', color: '', size: '', helpful: 0 }),
+    renderFields: (r) => `
+      <div class="form-grid-2">
+        ${rfText('name', 'Tên khách', r.name)}
+        ${rfText('initial', 'Chữ cái đầu (avatar)', r.initial)}
+      </div>
+      ${rfText('when', 'Địa điểm · ngày mua', r.when, { hint: 'VD: Nhơn Bình · Quy Nhơn · Mua 02/05/2026' })}
+      ${rfArea('body', 'Nội dung đánh giá', r.body)}`,
+  });
 
-  window.__adminSaveFn = () => { if (!saveBtn.disabled) saveBtn.click(); };
+  const repFaq = repeatable({
+    mount: body.querySelector('#combo-faq'),
+    items: faq,
+    min: 0,
+    addLabel: '＋ Thêm câu hỏi',
+    title: (_, i) => `FAQ ${i + 1}`,
+    onChange: dirty.mark,
+    makeNew: () => ({ question: '', answer: '', open: false }),
+    renderFields: (f) => `
+      ${rfText('question', 'Câu hỏi', f.question)}
+      ${rfArea('answer', 'Trả lời', f.answer, { hint: 'Cho phép &lt;strong&gt;...&lt;/strong&gt;' })}`,
+  });
 
   saveBtn.addEventListener('click', async () => {
     setLoading(true);
@@ -156,22 +141,22 @@ export async function init({ token, showToast, setLoading }) {
       obj.bundlePriceLabel = g('bundlePriceLabel');
       obj.bundleSaveLabel  = g('bundleSaveLabel');
 
-      if (obj.reviews?.items?.length) {
-        obj.reviews.items = reviews.map((r, i) => ({
-          ...r,
-          name: g(`rev${i}_name`),
-          when: g(`rev${i}_when`),
-          body: g(`rev${i}_body`),
-        }));
-      }
+      const items = repReviews.collect((f, orig) => ({
+        ...orig,
+        name: f.name.trim(),
+        initial: f.initial.trim(),
+        when: f.when.trim(),
+        body: f.body.trim(),
+      }));
+      if (!obj.reviews) obj.reviews = {};
+      obj.reviews.items = items;
+      obj.reviews.total = items.length;
 
-      if (obj.faq?.length) {
-        obj.faq = faq.map((f, i) => ({
-          ...f,
-          question: g(`faq${i}_q`),
-          answer:   g(`faq${i}_a`),
-        }));
-      }
+      obj.faq = repFaq.collect((f, orig) => ({
+        ...orig,
+        question: f.question.trim(),
+        answer: f.answer.trim(),
+      }));
 
       const newYaml = yaml().dump(obj, { lineWidth: -1, noRefs: true, quotingType: '"' });
       const msg = footer.querySelector('#commit-msg-combo').value.trim() || defaultMsg;
@@ -181,9 +166,7 @@ export async function init({ token, showToast, setLoading }) {
         `✅ Đã lưu! Website sẽ cập nhật trong ~1 phút. <a href="${commitUrl}" target="_blank">Xem commit →</a>`,
         'success',
       );
-      inputs.forEach((i) => origValues.set(i, i.value));
-      window.__adminSetDirty?.(false);
-      checkDirty();
+      dirty.reset();
     } catch (e) {
       const msg = e.message === 'FILE_CONFLICT'
         ? 'File đã được cập nhật bởi người khác. Tải lại trang và thử lại.'

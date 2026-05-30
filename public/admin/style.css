@@ -518,3 +518,31 @@ button { font-family: inherit; }
   .file-status-grid { grid-template-columns: 1fr; }
   .login-card { padding: 36px 22px; }
 }
+
+/* ── Repeatable list (thêm/xoá/sắp xếp mục) ───────────────── */
+.repeat-list { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+.repeat-row {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bone);
+  overflow: hidden;
+}
+.repeat-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; padding: 8px 10px 8px 14px;
+  background: var(--bone-dark);
+  border-bottom: 1px solid var(--line);
+}
+.repeat-title { font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+.repeat-ctrls { display: inline-flex; gap: 4px; }
+.repeat-btn {
+  width: 28px; height: 28px; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--bone);
+  color: var(--ink-soft); font-size: 13px; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .12s, color .12s, border-color .12s;
+}
+.repeat-btn:hover { background: var(--bone-dark); color: var(--ink); }
+.repeat-del:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+.repeat-fields { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.repeat-add { margin-top: 12px; align-self: flex-start; }

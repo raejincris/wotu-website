@@ -6,6 +6,7 @@
  */
 
 import { getFile, putFile } from '../github.js';
+import { repeatable, rfText, rfArea, rfSelect, bindDirty } from '../lib/repeatable.js';
 
 const FILE = 'src/data/shop-home.yml';
 const BODY = 'editor-shop-hero-body';
@@ -125,29 +126,16 @@ export async function init({ token, showToast, setLoading }) {
       ${sectionFields('sec_cta', sc.cta)}
     </div>
 
+    <!-- ── INSPO ── -->
+    <div class="form-card">
+      <p class="form-card-title">Ảnh cảm hứng (lưới "Phòng cảm hứng")</p>
+      <div id="shop-inspo"></div>
+    </div>
+
     <!-- ── REVIEWS ── -->
     <div class="form-card">
-      <p class="form-card-title">3 đánh giá trang chủ shop</p>
-      <div style="display:flex; flex-direction:column; gap:12px; margin-top:4px;">
-        ${(obj.reviews || []).map((r, i) => `
-          <div style="border:1px solid var(--line); border-radius:8px; padding:14px 14px 10px; background:var(--bone);">
-            <p class="form-hint" style="margin:0 0 8px; font-weight:700; color:var(--ink-soft);">Đánh giá ${i + 1}</p>
-            <div class="form-row">
-              <label class="form-label" for="rev${i}_name">Tên khách</label>
-              <input class="form-input" id="rev${i}_name" value="${escVal(r.name)}" autocomplete="off" />
-            </div>
-            <div class="form-row">
-              <label class="form-label" for="rev${i}_role">Địa điểm</label>
-              <input class="form-input" id="rev${i}_role" value="${escVal(r.role)}" autocomplete="off"
-                     placeholder="VD: Nhơn Bình · Quy Nhơn" />
-            </div>
-            <div class="form-row">
-              <label class="form-label" for="rev${i}_quote">Nội dung</label>
-              <textarea class="form-input form-textarea" id="rev${i}_quote" rows="3"
-                        autocomplete="off">${String(r.quote ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
-            </div>
-          </div>`).join('')}
-      </div>
+      <p class="form-card-title">Đánh giá khách hàng (trang chủ shop)</p>
+      <div id="shop-reviews"></div>
     </div>`;
 
   const now = new Date();
@@ -160,20 +148,41 @@ export async function init({ token, showToast, setLoading }) {
     <button class="btn btn-primary" id="save-shop-hero">💾 Lưu &amp; cập nhật</button>`;
   footer.hidden = false;
 
-  const inputs = body.querySelectorAll('.form-input:not([readonly]), .form-textarea');
   const saveBtn = footer.querySelector('#save-shop-hero');
-  const origValues = new Map();
-  inputs.forEach((i) => origValues.set(i, i.value));
+  const dirty = bindDirty({ scope: body, saveBtn });
 
-  function checkDirty() {
-    const dirty = [...inputs].some((i) => i.value !== origValues.get(i));
-    saveBtn.disabled = !dirty;
-    window.__adminSetDirty?.(dirty);
-  }
-  inputs.forEach((i) => i.addEventListener('input', checkDirty));
-  checkDirty();
+  const repInspo = repeatable({
+    mount: body.querySelector('#shop-inspo'),
+    items: obj.inspo || [],
+    min: 0,
+    addLabel: '＋ Thêm ô cảm hứng',
+    title: (it, i) => `${i + 1}. ${it.label || 'Ô ảnh'}`,
+    onChange: dirty.mark,
+    makeNew: () => ({ label: '', href: '/san-pham/', tall: false }),
+    renderFields: (it) => `
+      ${rfText('label', 'Nhãn ảnh', it.label)}
+      <div class="form-grid-2">
+        ${rfText('href', 'Đường dẫn khi click', it.href ?? '/san-pham/')}
+        ${rfSelect('tall', 'Kích thước ô', it.tall ? 'yes' : 'no', [{ value: 'no', label: 'Thường' }, { value: 'yes', label: 'Ô cao (nổi bật)' }])}
+      </div>`,
+  });
 
-  window.__adminSaveFn = () => { if (!saveBtn.disabled) saveBtn.click(); };
+  const repReviews = repeatable({
+    mount: body.querySelector('#shop-reviews'),
+    items: obj.reviews || [],
+    min: 0,
+    addLabel: '＋ Thêm đánh giá',
+    title: (r, i) => `${i + 1}. ${r.name || 'Khách'}`,
+    onChange: dirty.mark,
+    makeNew: () => ({ name: '', role: '', initial: '', quote: '' }),
+    renderFields: (r) => `
+      <div class="form-grid-2">
+        ${rfText('name', 'Tên khách', r.name)}
+        ${rfText('initial', 'Chữ cái đầu (avatar)', r.initial ?? '')}
+      </div>
+      ${rfText('role', 'Địa điểm', r.role ?? '', { placeholder: 'VD: Nhơn Bình · Quy Nhơn' })}
+      ${rfArea('quote', 'Nội dung', r.quote ?? '')}`,
+  });
 
   saveBtn.addEventListener('click', async () => {
     setLoading(true);
@@ -222,15 +231,21 @@ export async function init({ token, showToast, setLoading }) {
       setSection('reviews', 'sec_reviews');
       setSection('cta',     'sec_cta');
 
+      // Ảnh cảm hứng (inspo)
+      obj.inspo = repInspo.collect((f, orig) => {
+        const o = { ...orig, label: f.label.trim(), href: f.href.trim() || '/san-pham/' };
+        if (f.tall === 'yes') o.tall = true; else delete o.tall;
+        return o;
+      });
+
       // Reviews trang chủ
-      if (Array.isArray(obj.reviews)) {
-        obj.reviews = obj.reviews.map((r, i) => ({
-          ...r,
-          name:  g(`rev${i}_name`),
-          role:  g(`rev${i}_role`),
-          quote: g(`rev${i}_quote`),
-        }));
-      }
+      obj.reviews = repReviews.collect((f, orig) => ({
+        ...orig,
+        name: f.name.trim(),
+        initial: f.initial.trim() || undefined,
+        role: f.role.trim(),
+        quote: f.quote.trim(),
+      }));
 
       const newYaml = yaml().dump(obj, { lineWidth: -1, noRefs: true, quotingType: '"' });
       const msg = footer.querySelector('#commit-msg-shop-hero').value.trim() || defaultMsg;
@@ -240,9 +255,7 @@ export async function init({ token, showToast, setLoading }) {
         `✅ Đã lưu! Website cập nhật trong ~1 phút. <a href="${commitUrl}" target="_blank">Xem commit →</a>`,
         'success',
       );
-      inputs.forEach((i) => origValues.set(i, i.value));
-      window.__adminSetDirty?.(false);
-      checkDirty();
+      dirty.reset();
     } catch (e) {
       const msg = e.message === 'FILE_CONFLICT'
         ? 'File đã được cập nhật bởi người khác. Tải lại trang và thử lại.'

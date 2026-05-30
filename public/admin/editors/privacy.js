@@ -6,6 +6,7 @@
  * P1 giữ số mục cố định; thêm/xoá/sắp xếp để Phase 2.
  */
 import { getFile, putFile } from '../github.js';
+import { repeatable, rfText, rfArea, bindDirty } from '../lib/repeatable.js';
 
 const FILE = 'src/data/bao-mat.yml';
 const BODY = 'editor-privacy-body';
@@ -44,19 +45,11 @@ export async function init({ token, showToast, setLoading }) {
         <p class="form-hint">Hiển thị ở đầu trang. VD: 03/05/2026</p>
       </div>
     </div>
-    ${sections.map((s, i) => `
-      <div class="form-card">
-        <p class="form-card-title">Mục ${i + 1}</p>
-        <div class="form-row">
-          <label class="form-label" for="pv${i}_heading">Tiêu đề mục</label>
-          <input class="form-input" id="pv${i}_heading" type="text" value="${escVal(s.heading)}" autocomplete="off" />
-        </div>
-        <div class="form-row">
-          <label class="form-label" for="pv${i}_body">Nội dung (HTML)</label>
-          <textarea class="form-input form-textarea" id="pv${i}_body" rows="6" autocomplete="off">${escTxt(s.body)}</textarea>
-          <p class="form-hint">Cho phép thẻ &lt;p&gt; &lt;ul&gt; &lt;li&gt; &lt;strong&gt; &lt;a&gt; &lt;em&gt; &lt;code&gt;. Token: {{email}} {{hotline}} {{addressLine1}} {{addressCity}}.</p>
-        </div>
-      </div>`).join('')}`;
+    <div class="form-card">
+      <p class="form-card-title">Các mục chính sách</p>
+      <p class="form-hint" style="margin-bottom:12px;">Thêm/xoá/sắp xếp mục. Nội dung cho phép HTML (&lt;p&gt; &lt;ul&gt; &lt;li&gt; &lt;strong&gt; &lt;a&gt; &lt;em&gt; &lt;code&gt;). Token: {{email}} {{hotline}} {{addressLine1}} {{addressCity}}.</p>
+      <div id="pv-sections"></div>
+    </div>`;
 
   const now = new Date();
   const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} ${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}`;
@@ -67,19 +60,21 @@ export async function init({ token, showToast, setLoading }) {
     <button class="btn btn-primary" id="save-privacy">💾 Lưu &amp; cập nhật</button>`;
   footer.hidden = false;
 
-  const inputs = body.querySelectorAll('.form-input, .form-textarea');
   const saveBtn = footer.querySelector('#save-privacy');
-  const origValues = new Map();
-  inputs.forEach((i) => origValues.set(i, i.value));
+  const dirty = bindDirty({ scope: body, saveBtn });
 
-  function checkDirty() {
-    const dirty = [...inputs].some((i) => i.value !== origValues.get(i));
-    saveBtn.disabled = !dirty;
-    window.__adminSetDirty?.(dirty);
-  }
-  inputs.forEach((i) => i.addEventListener('input', checkDirty));
-  checkDirty();
-  window.__adminSaveFn = () => { if (!saveBtn.disabled) saveBtn.click(); };
+  const repSec = repeatable({
+    mount: body.querySelector('#pv-sections'),
+    items: sections,
+    min: 1,
+    addLabel: '＋ Thêm mục',
+    title: (s, i) => `Mục ${i + 1}: ${s.heading || ''}`.trim(),
+    onChange: dirty.mark,
+    makeNew: () => ({ heading: '', body: '<p></p>' }),
+    renderFields: (s) => `
+      ${rfText('heading', 'Tiêu đề mục', s.heading)}
+      ${rfArea('body', 'Nội dung (HTML)', s.body, { rows: 6 })}`,
+  });
 
   saveBtn.addEventListener('click', async () => {
     setLoading(true);
@@ -89,10 +84,10 @@ export async function init({ token, showToast, setLoading }) {
       const g = (id) => body.querySelector(`#${id}`)?.value ?? '';
 
       obj.updated = g('pv_updated').trim();
-      obj.sections = sections.map((s, i) => ({
-        ...s,
-        heading: g(`pv${i}_heading`).trim(),
-        body: g(`pv${i}_body`),
+      obj.sections = repSec.collect((f, orig) => ({
+        ...orig,
+        heading: f.heading.trim(),
+        body: f.body,
       }));
 
       const newYaml = yaml().dump(obj, { lineWidth: -1, noRefs: true, quotingType: '"' });
@@ -100,9 +95,7 @@ export async function init({ token, showToast, setLoading }) {
       const { commitUrl } = await putFile(token, FILE, newYaml, freshSha, msg);
 
       showToast(`✅ Đã lưu! Website sẽ cập nhật trong ~1 phút. <a href="${commitUrl}" target="_blank">Xem commit →</a>`, 'success');
-      inputs.forEach((i) => origValues.set(i, i.value));
-      window.__adminSetDirty?.(false);
-      checkDirty();
+      dirty.reset();
     } catch (e) {
       const msg = e.message === 'FILE_CONFLICT'
         ? 'File đã được cập nhật bởi người khác. Tải lại trang và thử lại.'

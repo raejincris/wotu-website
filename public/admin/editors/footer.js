@@ -1,9 +1,10 @@
 /**
  * editors/footer.js — Footer & Menu Studio (src/data/footer.yml)
- * Sửa: tagline, copyright, signature + 3 cột (tiêu đề + links) + menu trên cùng.
- * Thêm/bớt link → dùng Sveltia CMS (/admin/cms/). Editor này sửa nội dung sẵn có.
+ * Tagline/copyright/signature (cố định) + 3 cột (tiêu đề cố định, links động) +
+ * menu trên cùng (links động). Thêm/xoá/sắp xếp qua repeatable.
  */
 import { getFile, putFile } from '../github.js';
+import { repeatable, rfText, bindDirty } from '../lib/repeatable.js';
 
 const FILE = 'src/data/footer.yml';
 const BODY = 'editor-footer-body';
@@ -50,33 +51,6 @@ export async function init({ token, showToast, setLoading }) {
   const columns = obj.columns || [];
   const navLinks = obj.nav?.links || [];
 
-  const colCards = columns.map((c, ci) => `
-    <div class="form-card">
-      <p class="form-card-title">Cột ${ci + 1}</p>
-      ${field(`col${ci}_title`, 'Tiêu đề cột', c.title)}
-      <div style="display:flex; flex-direction:column; gap:10px; margin-top:6px;">
-        ${(c.links || []).map((l, li) => `
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-            ${field(`col${ci}_l${li}_label`, `Link ${li + 1} — nhãn`, l.label)}
-            ${field(`col${ci}_l${li}_href`, 'Đường dẫn', l.href)}
-          </div>`).join('')}
-      </div>
-    </div>`).join('');
-
-  const navCard = `
-    <div class="form-card">
-      <p class="form-card-title">Menu trên cùng (Studio)</p>
-      <div style="display:flex; flex-direction:column; gap:10px;">
-        ${navLinks.map((n, ni) => `
-          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
-            ${field(`nav${ni}_label`, `Mục ${ni + 1} — nhãn`, n.label)}
-            ${field(`nav${ni}_anchor`, 'Anchor (vd services)', n.anchor ?? '')}
-            ${field(`nav${ni}_route`, 'Route (vd /studio/blog)', n.route ?? '')}
-          </div>`).join('')}
-      </div>
-      <p class="form-hint" style="margin-top:10px;">Mỗi mục dùng <b>Anchor</b> (cuộn trong trang) HOẶC <b>Route</b> (sang trang khác). Để trống cái không dùng.</p>
-    </div>`;
-
   body.innerHTML = `
     <div class="form-card">
       <p class="form-card-title">Giới thiệu &amp; bản quyền</p>
@@ -84,8 +58,17 @@ export async function init({ token, showToast, setLoading }) {
       ${field('copyright', 'Dòng bản quyền', obj.copyright)}
       ${field('signature', 'Chữ ký (góc phải)', obj.signature)}
     </div>
-    ${colCards}
-    ${navCard}`;
+    ${columns.map((c, ci) => `
+      <div class="form-card">
+        <p class="form-card-title">Cột ${ci + 1}</p>
+        ${field(`col${ci}_title`, 'Tiêu đề cột', c.title)}
+        <div id="col${ci}-links" style="margin-top:6px;"></div>
+      </div>`).join('')}
+    <div class="form-card">
+      <p class="form-card-title">Menu trên cùng (Studio)</p>
+      <div id="nav-links"></div>
+      <p class="form-hint" style="margin-top:10px;">Mỗi mục dùng <b>Anchor</b> (cuộn trong trang) HOẶC <b>Route</b> (sang trang khác). Để trống cái không dùng.</p>
+    </div>`;
 
   const now = new Date();
   const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} ${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}`;
@@ -96,19 +79,39 @@ export async function init({ token, showToast, setLoading }) {
     <button class="btn btn-primary" id="save-footer">💾 Lưu &amp; cập nhật</button>`;
   footer.hidden = false;
 
-  const inputs = body.querySelectorAll('.form-input, .form-textarea');
   const saveBtn = footer.querySelector('#save-footer');
-  const origValues = new Map();
-  inputs.forEach((i) => origValues.set(i, i.value));
+  const dirty = bindDirty({ scope: body, saveBtn });
 
-  function checkDirty() {
-    const dirty = [...inputs].some((i) => i.value !== origValues.get(i));
-    saveBtn.disabled = !dirty;
-    window.__adminSetDirty?.(dirty);
-  }
-  inputs.forEach((i) => i.addEventListener('input', checkDirty));
-  checkDirty();
-  window.__adminSaveFn = () => { if (!saveBtn.disabled) saveBtn.click(); };
+  const colReps = columns.map((c, ci) => repeatable({
+    mount: body.querySelector(`#col${ci}-links`),
+    items: c.links || [],
+    min: 0,
+    addLabel: '＋ Thêm link',
+    title: (_, i) => `Link ${i + 1}`,
+    onChange: dirty.mark,
+    makeNew: () => ({ label: '', href: '' }),
+    renderFields: (l) => `
+      <div class="form-grid-2">
+        ${rfText('label', 'Nhãn', l.label)}
+        ${rfText('href', 'Đường dẫn', l.href)}
+      </div>`,
+  }));
+
+  const repNav = repeatable({
+    mount: body.querySelector('#nav-links'),
+    items: navLinks,
+    min: 0,
+    addLabel: '＋ Thêm mục menu',
+    title: (_, i) => `Mục ${i + 1}`,
+    onChange: dirty.mark,
+    makeNew: () => ({ label: '', anchor: '', route: '' }),
+    renderFields: (n) => `
+      ${rfText('label', 'Nhãn', n.label)}
+      <div class="form-grid-2">
+        ${rfText('anchor', 'Anchor (vd services)', n.anchor ?? '')}
+        ${rfText('route', 'Route (vd /studio/blog)', n.route ?? '')}
+      </div>`,
+  });
 
   saveBtn.addEventListener('click', async () => {
     setLoading(true);
@@ -124,32 +127,27 @@ export async function init({ token, showToast, setLoading }) {
       obj.columns = columns.map((c, ci) => ({
         ...c,
         title: g(`col${ci}_title`),
-        links: (c.links || []).map((l, li) => ({
-          ...l,
-          label: g(`col${ci}_l${li}_label`),
-          href: g(`col${ci}_l${li}_href`),
+        links: colReps[ci].collect((f, orig) => ({
+          ...orig, label: f.label.trim(), href: f.href.trim(),
         })),
       }));
 
-      if (obj.nav) {
-        obj.nav.links = navLinks.map((n, ni) => {
-          const o = { label: g(`nav${ni}_label`) };
-          const anc = g(`nav${ni}_anchor`);
-          const rt = g(`nav${ni}_route`);
-          if (anc) o.anchor = anc;
-          if (rt) o.route = rt;
-          return o;
-        });
-      }
+      if (!obj.nav) obj.nav = {};
+      obj.nav.links = repNav.collect((f, orig) => {
+        const o = { ...orig, label: f.label.trim() };
+        const anc = f.anchor.trim();
+        const rt = f.route.trim();
+        if (anc) o.anchor = anc; else delete o.anchor;
+        if (rt) o.route = rt; else delete o.route;
+        return o;
+      });
 
       const newYaml = yaml().dump(obj, { lineWidth: -1, noRefs: true, quotingType: '"' });
       const msg = footer.querySelector('#commit-msg-footer').value.trim() || defaultMsg;
       const { commitUrl } = await putFile(token, FILE, newYaml, freshSha, msg);
 
       showToast(`✅ Đã lưu! Website sẽ cập nhật trong ~1 phút. <a href="${commitUrl}" target="_blank">Xem commit →</a>`, 'success');
-      inputs.forEach((i) => origValues.set(i, i.value));
-      window.__adminSetDirty?.(false);
-      checkDirty();
+      dirty.reset();
     } catch (e) {
       const msg = e.message === 'FILE_CONFLICT'
         ? 'File đã được cập nhật bởi người khác. Tải lại trang và thử lại.'

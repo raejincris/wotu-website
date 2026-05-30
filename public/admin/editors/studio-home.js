@@ -1,11 +1,11 @@
 /**
  * editors/studio-home.js — Trang chủ Studio: các section sâu (src/data/home.yml)
- * Bổ sung cho home-hero.js (chỉ Hero + Quote). Editor này sửa:
- *   Marquee · Triết lý · Dịch vụ (3) · Khối Dự án · Quy trình (5 bước) ·
- *   About (+4 stat) · Form liên hệ (labels).
- * Cả hai editor đều load + dump TOÀN BỘ home.yml nên không ghi đè lẫn nhau.
+ * Bổ sung cho home-hero.js (Hero + Quote). Sửa: Marquee · Triết lý ·
+ * Dịch vụ (thêm/xoá) · Khối Dự án · Quy trình (thêm/xoá) · About (+stats
+ * thêm/xoá) · Form liên hệ. Cả hai editor load/dump TOÀN BỘ home.yml.
  */
 import { getFile, putFile } from '../github.js';
+import { repeatable, rfText, rfArea, bindDirty } from '../lib/repeatable.js';
 
 const FILE = 'src/data/home.yml';
 const BODY = 'editor-studio-home-body';
@@ -56,23 +56,19 @@ export async function init({ token, showToast, setLoading }) {
   const proc = obj.process || {};
   const about = obj.about || {};
   const contact = obj.contact || {};
-
-  const svcItems = svc.items || [];
-  const procSteps = proc.steps || [];
-  const stats = about.stats || [];
   const cFields = contact.fields || [];
 
   body.innerHTML = `
     <div class="form-card">
       <p class="form-card-title">Dòng chữ chạy (Marquee)</p>
       ${textarea('mq_items', 'Các từ — mỗi từ một dòng', (marquee.items || []).join('\n'), 4,
-        'Mỗi dòng là một mục chạy ngang trên trang chủ Studio.')}
+        'Mỗi dòng là một mục chạy ngang. Thêm/bớt dòng = thêm/bớt mục.')}
     </div>
 
     <div class="form-card">
       <p class="form-card-title">Triết lý</p>
       ${field('phi_label', 'Nhãn', phi.label)}
-      ${textarea('phi_heading', 'Tiêu đề', phi.heading, 3, 'Cho phép &lt;em&gt; và &lt;em class="accent"&gt; in nghiêng nhấn.')}
+      ${textarea('phi_heading', 'Tiêu đề', phi.heading, 3, 'Cho phép &lt;em&gt; và &lt;em class="accent"&gt;.')}
       ${textarea('phi_p0', 'Đoạn 1', phi.paragraphs?.[0], 4)}
       ${textarea('phi_p1', 'Đoạn 2', phi.paragraphs?.[1], 4)}
     </div>
@@ -83,14 +79,10 @@ export async function init({ token, showToast, setLoading }) {
       ${field('svc_heading', 'Tiêu đề', svc.heading, 'Cho phép &lt;em&gt;')}
       ${field('svc_meta', 'Dòng meta (phải)', svc.meta)}
     </div>
-    ${svcItems.map((it, i) => `
-      <div class="form-card">
-        <p class="form-card-title">Dịch vụ ${i + 1}</p>
-        ${field(`svc${i}_title`, 'Tên', it.title)}
-        ${field(`svc${i}_em`, 'Phụ đề (in nghiêng)', it.em)}
-        ${textarea(`svc${i}_desc`, 'Mô tả', it.desc, 3)}
-        ${field(`svc${i}_tags`, 'Tags (cách nhau bởi dấu phẩy)', (it.tags || []).join(', '))}
-      </div>`).join('')}
+    <div class="form-card">
+      <p class="form-card-title">Các dịch vụ</p>
+      <div id="svc-items"></div>
+    </div>
 
     <div class="form-card">
       <p class="form-card-title">Khối Dự án (trên trang chủ)</p>
@@ -100,17 +92,15 @@ export async function init({ token, showToast, setLoading }) {
     </div>
 
     <div class="form-card">
-      <p class="form-card-title">Quy trình</p>
+      <p class="form-card-title">Quy trình — tiêu đề</p>
       ${field('proc_label', 'Nhãn', proc.label)}
       ${textarea('proc_heading', 'Tiêu đề', proc.heading, 2, 'Cho phép &lt;em&gt; và &lt;br/&gt;')}
       ${textarea('proc_intro', 'Đoạn giới thiệu', proc.intro, 3)}
     </div>
-    ${procSteps.map((st, i) => `
-      <div class="form-card">
-        <p class="form-card-title">Bước ${st.n || i + 1}</p>
-        ${field(`proc${i}_t`, 'Tên bước', st.t)}
-        ${textarea(`proc${i}_d`, 'Mô tả', st.d, 2)}
-      </div>`).join('')}
+    <div class="form-card">
+      <p class="form-card-title">Các bước quy trình</p>
+      <div id="proc-steps"></div>
+    </div>
 
     <div class="form-card">
       <p class="form-card-title">About (Studio)</p>
@@ -118,11 +108,10 @@ export async function init({ token, showToast, setLoading }) {
       ${textarea('about_heading', 'Tiêu đề', about.heading, 2, 'Cho phép &lt;em&gt; và &lt;br/&gt;')}
       ${textarea('about_body', 'Đoạn văn', about.body, 4)}
       ${field('about_cta', 'Nút CTA', about.ctaLabel)}
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px;">
-        ${stats.map((s, i) => `
-          ${field(`about_stat${i}_n`, `Số liệu ${i + 1} — con số`, s.n)}
-          ${field(`about_stat${i}_l`, `Số liệu ${i + 1} — nhãn`, s.l)}`).join('')}
-      </div>
+    </div>
+    <div class="form-card">
+      <p class="form-card-title">Số liệu (stats)</p>
+      <div id="about-stats"></div>
     </div>
 
     <div class="form-card">
@@ -149,19 +138,57 @@ export async function init({ token, showToast, setLoading }) {
     <button class="btn btn-primary" id="save-studio-home">💾 Lưu &amp; cập nhật</button>`;
   footer.hidden = false;
 
-  const inputs = body.querySelectorAll('.form-input, .form-textarea');
   const saveBtn = footer.querySelector('#save-studio-home');
-  const origValues = new Map();
-  inputs.forEach((i) => origValues.set(i, i.value));
+  const dirty = bindDirty({ scope: body, saveBtn });
 
-  function checkDirty() {
-    const dirty = [...inputs].some((i) => i.value !== origValues.get(i));
-    saveBtn.disabled = !dirty;
-    window.__adminSetDirty?.(dirty);
-  }
-  inputs.forEach((i) => i.addEventListener('input', checkDirty));
-  checkDirty();
-  window.__adminSaveFn = () => { if (!saveBtn.disabled) saveBtn.click(); };
+  const repSvc = repeatable({
+    mount: body.querySelector('#svc-items'),
+    items: svc.items || [],
+    min: 1,
+    addLabel: '＋ Thêm dịch vụ',
+    title: (it, i) => `${it.num || '/0' + (i + 1)} ${it.title || ''}`.trim(),
+    onChange: dirty.mark,
+    makeNew: () => ({ num: '', title: '', em: '', desc: '', tags: [] }),
+    renderFields: (it) => `
+      <div class="form-grid-2">
+        ${rfText('num', 'Số (/01…)', it.num ?? '')}
+        ${rfText('title', 'Tên', it.title ?? '')}
+      </div>
+      ${rfText('em', 'Phụ đề (in nghiêng)', it.em ?? '')}
+      ${rfArea('desc', 'Mô tả', it.desc ?? '')}
+      ${rfText('tags', 'Tags (cách nhau dấu phẩy)', (it.tags || []).join(', '))}`,
+  });
+
+  const repProc = repeatable({
+    mount: body.querySelector('#proc-steps'),
+    items: proc.steps || [],
+    min: 1,
+    addLabel: '＋ Thêm bước',
+    title: (st, i) => `Bước ${st.n || i + 1}`,
+    onChange: dirty.mark,
+    makeNew: () => ({ n: '', t: '', d: '' }),
+    renderFields: (st) => `
+      <div class="form-grid-2">
+        ${rfText('n', 'Số (01…)', st.n ?? '')}
+        ${rfText('t', 'Tên bước', st.t ?? '')}
+      </div>
+      ${rfArea('d', 'Mô tả', st.d ?? '', { rows: 2 })}`,
+  });
+
+  const repStats = repeatable({
+    mount: body.querySelector('#about-stats'),
+    items: about.stats || [],
+    min: 0,
+    addLabel: '＋ Thêm số liệu',
+    title: (s, i) => `Số liệu ${i + 1}`,
+    onChange: dirty.mark,
+    makeNew: () => ({ n: '', l: '' }),
+    renderFields: (s) => `
+      <div class="form-grid-2">
+        ${rfText('n', 'Con số', s.n ?? '')}
+        ${rfText('l', 'Nhãn', s.l ?? '')}
+      </div>`,
+  });
 
   saveBtn.addEventListener('click', async () => {
     setLoading(true);
@@ -186,26 +213,24 @@ export async function init({ token, showToast, setLoading }) {
         label: g('svc_label'),
         heading: g('svc_heading'),
         meta: g('svc_meta'),
-        items: svcItems.map((it, i) => ({
-          ...it,
-          title: g(`svc${i}_title`),
-          em: g(`svc${i}_em`),
-          desc: g(`svc${i}_desc`),
-          tags: g(`svc${i}_tags`).split(',').map((s) => s.trim()).filter(Boolean),
+        items: repSvc.collect((f, orig) => ({
+          ...orig,
+          num: f.num.trim(),
+          title: f.title.trim(),
+          em: f.em.trim(),
+          desc: f.desc.trim(),
+          tags: f.tags.split(',').map((s) => s.trim()).filter(Boolean),
         })),
       };
       obj.projects = {
-        ...proj,
-        label: g('proj_label'),
-        heading: g('proj_heading'),
-        ctaLabel: g('proj_cta'),
+        ...proj, label: g('proj_label'), heading: g('proj_heading'), ctaLabel: g('proj_cta'),
       };
       obj.process = {
         ...proc,
         label: g('proc_label'),
         heading: g('proc_heading'),
         intro: g('proc_intro'),
-        steps: procSteps.map((st, i) => ({ ...st, t: g(`proc${i}_t`), d: g(`proc${i}_d`) })),
+        steps: repProc.collect((f, orig) => ({ ...orig, n: f.n.trim(), t: f.t.trim(), d: f.d.trim() })),
       };
       obj.about = {
         ...about,
@@ -213,7 +238,7 @@ export async function init({ token, showToast, setLoading }) {
         heading: g('about_heading'),
         body: g('about_body'),
         ctaLabel: g('about_cta'),
-        stats: stats.map((s, i) => ({ ...s, n: g(`about_stat${i}_n`), l: g(`about_stat${i}_l`) })),
+        stats: repStats.collect((f, orig) => ({ ...orig, n: f.n.trim(), l: f.l.trim() })),
       };
       obj.contact = {
         ...contact,
@@ -221,12 +246,7 @@ export async function init({ token, showToast, setLoading }) {
         heading: g('contact_heading'),
         successMessage: g('contact_success'),
         submitLabel: g('contact_submit'),
-        fields: cFields.map((f, i) => {
-          const o = { ...f, label: g(`cf${i}_label`) };
-          const ph = g(`cf${i}_ph`);
-          o.placeholder = ph;
-          return o;
-        }),
+        fields: cFields.map((f, i) => ({ ...f, label: g(`cf${i}_label`), placeholder: g(`cf${i}_ph`) })),
       };
 
       const newYaml = yaml().dump(obj, { lineWidth: -1, noRefs: true, quotingType: '"' });
@@ -234,9 +254,7 @@ export async function init({ token, showToast, setLoading }) {
       const { commitUrl } = await putFile(token, FILE, newYaml, freshSha, msg);
 
       showToast(`✅ Đã lưu! Website sẽ cập nhật trong ~1 phút. <a href="${commitUrl}" target="_blank">Xem commit →</a>`, 'success');
-      inputs.forEach((i) => origValues.set(i, i.value));
-      window.__adminSetDirty?.(false);
-      checkDirty();
+      dirty.reset();
     } catch (e) {
       const msg = e.message === 'FILE_CONFLICT'
         ? 'File đã được cập nhật bởi người khác. Tải lại trang và thử lại.'

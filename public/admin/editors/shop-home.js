@@ -1,25 +1,29 @@
 /**
- * editors/shop-home.js — Combo trang chủ (src/data/shop-home.yml)
- * - Nội dung 6 combo (tên, nameEm, mô tả)
- * - Giá & Badge 6 combo (priceOld, priceNew, price, badge)
- * - 4 sản phẩm nổi bật / bestsellers
+ * editors/shop-home.js — Combo trang chủ + Bestsellers (src/data/shop-home.yml)
+ * Thêm/xoá/sắp xếp combo (mỗi combo tự có trang /combo/<slug>) và bestseller.
+ * Hero + section headings + cam kết + reviews trang chủ → editor "Trang chủ Shop".
  */
-
 import { getFile, putFile } from '../github.js';
+import { repeatable, rfText, rfArea, rfSelect, bindDirty, slugify, uniqueSlug } from '../lib/repeatable.js';
 
 const FILE = 'src/data/shop-home.yml';
 const BODY = 'editor-shop-home-body';
 const FOOTER = 'editor-shop-home-footer';
 
 const yaml = () => window.jsyaml;
-
 function escVal(v) { return String(v ?? '').replace(/"/g, '&quot;'); }
-function escHtml(s) {
-  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+
+const ROOM_OPTS = [
+  { value: 'studio', label: 'Căn hộ studio' }, { value: 'phong-khach', label: 'Phòng khách' },
+  { value: 'phong-ngu', label: 'Phòng ngủ' }, { value: 'phong-an', label: 'Phòng ăn' },
+  { value: 'lam-viec', label: 'Phòng làm việc' }, { value: 'tre-em', label: 'Phòng trẻ em' },
+];
+const BADGE_OPTS = [
+  { value: '', label: '(không màu)' }, { value: 'sage', label: 'Xanh rêu' }, { value: 'terra', label: 'Đất nung' },
+];
 
 export async function init({ token, showToast, setLoading }) {
-  const body   = document.getElementById(BODY);
+  const body = document.getElementById(BODY);
   const footer = document.getElementById(FOOTER);
 
   body.innerHTML = '<div class="editor-loading"><div class="spinner"></div><span>Đang tải…</span></div>';
@@ -27,202 +31,148 @@ export async function init({ token, showToast, setLoading }) {
 
   let data, sha;
   try { ({ yamlString: data, sha } = await getFile(token, FILE)); }
-  catch (e) {
-    body.innerHTML = `<div class="editor-error">Không tải được file: ${e.message}</div>`;
-    return;
-  }
+  catch (e) { body.innerHTML = `<div class="editor-error">Không tải được file: ${e.message}</div>`; return; }
 
   let obj;
   try { obj = yaml().load(data); }
-  catch (e) {
-    body.innerHTML = `<div class="editor-error">YAML không hợp lệ: ${e.message}</div>`;
-    return;
-  }
+  catch (e) { body.innerHTML = `<div class="editor-error">YAML không hợp lệ: ${e.message}</div>`; return; }
 
-  const combos      = obj.combos      || [];
+  const combos = obj.combos || [];
   const bestsellers = obj.bestsellers || [];
 
-  // ── Cards nội dung combo ───────────────────────────────────────────────────
-  const comboCards = combos.map((c, i) => `
-    <div style="border:1px solid var(--line); border-radius:8px; padding:14px 14px 10px; background:var(--bone);">
-      <p class="form-hint" style="margin:0 0 8px; font-weight:700; color:var(--ink-soft);">${escHtml(c.cat)}</p>
-      <div class="form-row">
-        <label class="form-label" for="c${i}_name">Tên</label>
-        <input class="form-input" id="c${i}_name" value="${escVal(c.name)}" style="font-size:13px;" />
-      </div>
-      <div class="form-row">
-        <label class="form-label" for="c${i}_nameEm">Tên em (in nghiêng)</label>
-        <input class="form-input" id="c${i}_nameEm" value="${escVal(c.nameEm ?? '')}" style="font-size:13px;" />
-      </div>
-      <div class="form-row">
-        <label class="form-label" for="c${i}_desc">Mô tả ngắn</label>
-        <textarea class="form-input form-textarea" id="c${i}_desc" rows="2"
-                  style="font-size:13px;">${escHtml(c.desc ?? '')}</textarea>
-      </div>
-    </div>`).join('');
-
-  // ── Bảng giá combo ────────────────────────────────────────────────────────
-  const priceRows = combos.map((c, i) => `
-    <tr>
-      <td class="name-cell">
-        ${escHtml(c.name)} <span class="name-em">${escHtml(c.nameEm ?? '')}</span>
-        <div style="font-size:11px;color:var(--ink-soft);margin-top:2px;">${escHtml(c.cat)}</div>
-      </td>
-      <td><input class="form-input" data-ci="${i}" data-f="priceOld"
-                 value="${escVal(c.priceOld ?? '')}" style="font-size:13px; min-width:110px;" /></td>
-      <td><input class="form-input" data-ci="${i}" data-f="priceNew"
-                 value="${escVal(c.priceNew ?? '')}" style="font-size:13px; min-width:110px;" /></td>
-      <td><input class="form-input" data-ci="${i}" data-f="price" type="number"
-                 value="${escVal(c.price)}" style="font-size:13px; min-width:110px;" /></td>
-      <td><input class="form-input" data-ci="${i}" data-f="badge"
-                 value="${escVal(c.badge ?? '')}" style="font-size:13px; min-width:80px;" /></td>
-    </tr>`).join('');
-
-  // ── Bảng bestsellers ──────────────────────────────────────────────────────
-  const bsRows = bestsellers.map((b, i) => `
-    <tr>
-      <td style="min-width:160px;">
-        <input class="form-input" id="bs${i}_name" value="${escVal(b.name)}" style="font-size:13px;" />
-      </td>
-      <td style="min-width:130px;">
-        <input class="form-input" id="bs${i}_meta" value="${escVal(b.meta)}" style="font-size:13px;" />
-      </td>
-      <td>
-        <input class="form-input" id="bs${i}_price" value="${escVal(b.price)}"
-               style="font-size:13px; min-width:110px;" />
-      </td>
-      <td>
-        <input class="form-input" id="bs${i}_priceNum" type="number" value="${escVal(b.priceNum)}"
-               style="font-size:13px; min-width:100px;" />
-      </td>
-      <td>
-        <input class="form-input" id="bs${i}_stars" value="${escVal(b.stars)}"
-               style="font-size:13px; min-width:80px;" placeholder="★★★★★" />
-      </td>
-    </tr>`).join('');
-
   body.innerHTML = `
-    <!-- ── Nội dung combo ── -->
     <div class="form-card">
-      <p class="form-card-title">Nội dung 6 combo — tên &amp; mô tả</p>
-      <div style="display:flex; flex-direction:column; gap:12px; margin-top:4px;">
-        ${comboCards}
-      </div>
+      <p class="form-card-title">Combo nội thất</p>
+      <p class="form-hint" style="margin-bottom:12px;">Mỗi combo (trừ Tổ Ấm) tự có trang <code>/combo/&lt;mã&gt;</code>. "Combo gồm" tách từ Mô tả theo dấu <code> · </code>.</p>
+      <div id="combos-list"></div>
     </div>
-
-    <!-- ── Giá combo ── -->
-    <div class="form-card" style="padding-bottom:8px;">
-      <p class="form-card-title">Giá &amp; Badge 6 combo</p>
-      <div class="combo-table-wrap">
-        <table class="combo-table">
-          <thead>
-            <tr>
-              <th>Tên combo</th>
-              <th>Giá gốc</th>
-              <th>Giá KM</th>
-              <th>Giá số (VND)</th>
-              <th>Badge</th>
-            </tr>
-          </thead>
-          <tbody>${priceRows}</tbody>
-        </table>
-      </div>
-      <p class="form-hint" style="margin-top:14px;">
-        Giá số dùng để sort và lọc. Badge hiển thị trên card (để trống = không có badge).
-      </p>
-    </div>
-
-    <!-- ── Bestsellers ── -->
-    <div class="form-card" style="padding-bottom:8px;">
-      <p class="form-card-title">4 sản phẩm nổi bật (bestsellers)</p>
-      <div class="combo-table-wrap">
-        <table class="combo-table products-table">
-          <thead>
-            <tr>
-              <th>Tên sản phẩm</th>
-              <th>Danh mục</th>
-              <th>Giá hiển thị</th>
-              <th>Giá số (VND)</th>
-              <th>Sao</th>
-            </tr>
-          </thead>
-          <tbody>${bsRows}</tbody>
-        </table>
-      </div>
-      <p class="form-hint" style="margin-top:14px;">
-        Sao dùng ký tự ★ và ☆. VD: ★★★★★ hoặc ★★★★☆
-      </p>
+    <div class="form-card">
+      <p class="form-card-title">Sản phẩm nổi bật (bestsellers)</p>
+      <div id="bs-list"></div>
     </div>`;
 
   const now = new Date();
   const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} ${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}`;
-  const defaultMsg = `quan-tri: cập nhật shop-home.yml — ${ts}`;
+  const defaultMsg = `quan-tri: cập nhật combo trang chủ — ${ts}`;
 
   footer.innerHTML = `
-    <input class="form-input" id="commit-msg-shop-home" value="${escVal(defaultMsg)}"
-           style="flex:1;font-size:13px;" placeholder="Commit message…" />
+    <input class="form-input" id="commit-msg-shop-home" value="${escVal(defaultMsg)}" style="flex:1;font-size:13px;" placeholder="Commit message…" />
     <button class="btn btn-primary" id="save-shop-home">💾 Lưu &amp; cập nhật</button>`;
   footer.hidden = false;
 
-  const inputs = body.querySelectorAll('.form-input, .form-textarea');
   const saveBtn = footer.querySelector('#save-shop-home');
-  const origValues = new Map();
-  inputs.forEach((i) => origValues.set(i, i.value));
+  const dirty = bindDirty({ scope: body, saveBtn });
 
-  function checkDirty() {
-    const dirty = [...inputs].some((i) => i.value !== origValues.get(i));
-    saveBtn.disabled = !dirty;
-    window.__adminSetDirty?.(dirty);
-  }
-  inputs.forEach((i) => i.addEventListener('input', checkDirty));
-  inputs.forEach((i) => i.addEventListener('change', checkDirty));
-  checkDirty();
+  const repCombos = repeatable({
+    mount: body.querySelector('#combos-list'),
+    items: combos,
+    min: 1,
+    addLabel: '＋ Thêm combo',
+    onChange: dirty.mark,
+    title: (c, i) => `${i + 1}. ${[c.name, c.nameEm, c.nameTail].filter(Boolean).join(' ').trim() || 'Combo mới'}${c.id === 'combo-to-am' ? ' (Tổ Ấm — trang riêng)' : ''}`,
+    makeNew: () => ({ id: '', name: 'Combo', nameEm: 'Mới', nameTail: '', cat: 'Combo nội thất', desc: '', priceOld: '', priceNew: '', price: 0, priceNote: '', badge: '', badgeClass: '', room: 'phong-khach', tone: '', placeholder: 'Combo mới', href: '' }),
+    renderFields: (c) => `
+      <div class="form-grid-2">
+        ${rfText('name', 'Tên', c.name)}
+        ${rfText('nameEm', 'Tên nhấn (in nghiêng)', c.nameEm ?? '')}
+      </div>
+      <div class="form-grid-2">
+        ${rfText('nameTail', 'Đuôi tên', c.nameTail ?? '')}
+        ${rfText('cat', 'Phân loại (badge card)', c.cat ?? '')}
+      </div>
+      ${rfArea('desc', 'Mô tả / "Combo gồm" (ngăn bằng " · ")', c.desc ?? '', { rows: 2 })}
+      <div class="form-grid-2">
+        ${rfText('priceOld', 'Giá gốc (gạch)', c.priceOld ?? '')}
+        ${rfText('priceNew', 'Giá khuyến mãi', c.priceNew ?? '')}
+      </div>
+      <div class="form-grid-2">
+        ${rfText('price', 'Giá số (sort/SEO)', c.price ?? 0, { hint: 'Chỉ số, VD: 18900000' })}
+        ${rfText('priceNote', 'Ghi chú giá', c.priceNote ?? '')}
+      </div>
+      <div class="form-grid-2">
+        ${rfText('badge', 'Badge (tuỳ chọn)', c.badge ?? '')}
+        ${rfSelect('badgeClass', 'Màu badge', c.badgeClass ?? '', BADGE_OPTS)}
+      </div>
+      ${rfSelect('room', 'Phòng (ảnh minh hoạ + lọc)', c.room ?? 'phong-khach', ROOM_OPTS)}`,
+  });
 
-  window.__adminSaveFn = () => { if (!saveBtn.disabled) saveBtn.click(); };
+  const repBs = repeatable({
+    mount: body.querySelector('#bs-list'),
+    items: bestsellers,
+    min: 0,
+    addLabel: '＋ Thêm sản phẩm nổi bật',
+    onChange: dirty.mark,
+    title: (b, i) => `${i + 1}. ${b.name || 'Sản phẩm'}`,
+    makeNew: () => ({ id: '', name: 'Sản phẩm', meta: '', price: '', priceNum: 0, stars: '★★★★★', href: '#', tone: '' }),
+    renderFields: (b) => `
+      <div class="form-grid-2">
+        ${rfText('name', 'Tên', b.name)}
+        ${rfText('meta', 'Phân loại ngắn', b.meta ?? '', { placeholder: 'VD: Sofa · 3 chỗ' })}
+      </div>
+      <div class="form-grid-2">
+        ${rfText('price', 'Giá hiển thị', b.price ?? '')}
+        ${rfText('priceNum', 'Giá số', b.priceNum ?? 0, { hint: 'Chỉ số' })}
+      </div>
+      <div class="form-grid-2">
+        ${rfText('stars', 'Sao (★ ☆)', b.stars ?? '★★★★★')}
+        ${rfText('href', 'Đường dẫn', b.href ?? '#')}
+      </div>`,
+  });
 
   saveBtn.addEventListener('click', async () => {
     setLoading(true);
     saveBtn.disabled = true;
     try {
       const { sha: freshSha } = await getFile(token, FILE);
-      const g = (id) => body.querySelector(`#${id}`)?.value.trim() ?? '';
 
-      // 1. Nội dung combo (name / nameEm / desc)
-      obj.combos = combos.map((c, i) => ({
-        ...c,
-        name:   g(`c${i}_name`),
-        nameEm: g(`c${i}_nameEm`) || undefined,
-        desc:   g(`c${i}_desc`),
-      }));
-
-      // 2. Giá & Badge (từ bảng data-ci / data-f)
-      body.querySelectorAll('input[data-ci]').forEach((inp) => {
-        const idx = Number(inp.dataset.ci);
-        const f   = inp.dataset.f;
-        obj.combos[idx][f] = f === 'price' ? (Number(inp.value) || 0) : inp.value.trim();
+      const takenC = [];
+      obj.combos = repCombos.collect((f, orig) => {
+        let id = orig.id;
+        if (!id) {
+          const base = 'combo-' + (slugify([f.name, f.nameEm, f.nameTail].join(' ')) || 'combo');
+          id = uniqueSlug(base, takenC);
+        }
+        takenC.push(id);
+        const slug = String(id).replace(/^combo-/, '');
+        const href = id === 'combo-to-am' ? (orig.href || '/combo/to-am/')
+          : (orig.href && orig.id === id ? orig.href : `/combo/${slug}/`);
+        const full = [f.name, f.nameEm, f.nameTail].filter(Boolean).join(' ').trim();
+        return {
+          ...orig,
+          id,
+          href,
+          name: f.name.trim(),
+          nameEm: f.nameEm.trim() || undefined,
+          nameTail: f.nameTail || undefined,
+          cat: f.cat.trim(),
+          desc: f.desc.trim(),
+          priceOld: f.priceOld.trim() || undefined,
+          priceNew: f.priceNew.trim() || undefined,
+          price: Number(String(f.price).replace(/[^\d]/g, '')) || 0,
+          priceNote: f.priceNote.trim() || undefined,
+          badge: f.badge.trim() || undefined,
+          badgeClass: f.badgeClass || undefined,
+          room: f.room,
+          placeholder: orig.placeholder || full,
+        };
       });
 
-      // 3. Bestsellers
-      obj.bestsellers = bestsellers.map((b, i) => ({
-        ...b,
-        name:     g(`bs${i}_name`),
-        meta:     g(`bs${i}_meta`),
-        price:    g(`bs${i}_price`),
-        priceNum: Number(g(`bs${i}_priceNum`)) || b.priceNum,
-        stars:    g(`bs${i}_stars`),
+      obj.bestsellers = repBs.collect((f, orig) => ({
+        ...orig,
+        name: f.name.trim(),
+        meta: f.meta.trim(),
+        price: f.price.trim(),
+        priceNum: Number(String(f.priceNum).replace(/[^\d]/g, '')) || 0,
+        stars: f.stars.trim(),
+        href: f.href.trim() || '#',
       }));
 
       const newYaml = yaml().dump(obj, { lineWidth: -1, noRefs: true, quotingType: '"' });
       const msg = footer.querySelector('#commit-msg-shop-home').value.trim() || defaultMsg;
       const { commitUrl } = await putFile(token, FILE, newYaml, freshSha, msg);
 
-      showToast(
-        `✅ Đã lưu! Website sẽ cập nhật trong ~1 phút. <a href="${commitUrl}" target="_blank">Xem commit →</a>`,
-        'success',
-      );
-      inputs.forEach((i) => origValues.set(i, i.value));
-      window.__adminSetDirty?.(false);
-      checkDirty();
+      showToast(`✅ Đã lưu! Website sẽ cập nhật trong ~1 phút. <a href="${commitUrl}" target="_blank">Xem commit →</a>`, 'success');
+      dirty.reset();
     } catch (e) {
       const msg = e.message === 'FILE_CONFLICT'
         ? 'File đã được cập nhật bởi người khác. Tải lại trang và thử lại.'
