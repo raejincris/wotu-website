@@ -14,6 +14,12 @@ hero:
       label: Đánh giá khách hàng
   sticker: −35%
   stickerSub: Combo tháng 6
+  photo: ""
+  photoAlt: Minh hoạ combo phòng khách WOTU
+  tagLabel: Combo Phòng khách · Tổ Ấm
+  tagPriceOld: 28.900.000đ
+  tagPriceNew: 18.900.000đ
+  tagHref: /combo/to-am/
 sections:
   combos:
     eyebrow: Combo nội thất

@@ -7,6 +7,7 @@
 
 import { getFile, putFile } from '../github.js';
 import { repeatable, rfText, rfArea, rfSelect, bindDirty } from '../lib/repeatable.js';
+import { imageSlot, attachAllImages, uploadPendingImages } from '../lib/imagefield.js';
 
 const FILE = 'src/data/shop-home.yml';
 const BODY = 'editor-shop-hero-body';
@@ -85,6 +86,14 @@ export async function init({ token, showToast, setLoading }) {
       </div>
       ${field('hero_sticker',    'Sticker số',  h.sticker,    'text', 'VD: −35%')}
       ${field('hero_stickerSub', 'Sticker chú', h.stickerSub, 'text', 'VD: combo tháng 5')}
+      ${imageSlot('hero_photo', h.photo ?? '', 'Ảnh combo lớn (ghi đè minh hoạ line-art)')}
+      ${field('hero_photoAlt',    'Mô tả ảnh (alt)',     h.photoAlt,    'text', 'Cho SEO & trình đọc màn hình')}
+      ${field('hero_tagLabel',    'Thẻ giá — Tên combo', h.tagLabel,    'text', 'VD: Combo Phòng khách · Tổ Ấm')}
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px 12px;">
+        ${field('hero_tagPriceOld', 'Giá gốc (gạch)',  h.tagPriceOld, 'text', 'VD: 28.900.000đ')}
+        ${field('hero_tagPriceNew', 'Giá khuyến mãi',  h.tagPriceNew, 'text', 'VD: 18.900.000đ')}
+      </div>
+      ${field('hero_tagHref',     'Link khi bấm thẻ',    h.tagHref,     'text', 'VD: /combo/to-am/')}
     </div>
 
     <!-- ── SECTION HEADINGS ── -->
@@ -151,6 +160,9 @@ export async function init({ token, showToast, setLoading }) {
   const saveBtn = footer.querySelector('#save-shop-hero');
   const dirty = bindDirty({ scope: body, saveBtn });
 
+  // Ô ảnh hero (tĩnh trong body) — wire hành vi chọn/xoá ảnh.
+  attachAllImages(body, dirty.mark);
+
   const repInspo = repeatable({
     mount: body.querySelector('#shop-inspo'),
     items: obj.inspo || [],
@@ -188,6 +200,9 @@ export async function init({ token, showToast, setLoading }) {
     setLoading(true);
     saveBtn.disabled = true;
     try {
+      const msgUp = footer.querySelector('#commit-msg-shop-hero').value.trim() || defaultMsg;
+      await uploadPendingImages({ token, scope: body, area: 'hero', msg: msgUp, onStatus: (s) => showToast(s, 'info', 2500) });
+
       const { sha: freshSha } = await getFile(token, FILE);
 
       const g = (id) => body.querySelector(`#${id}`)?.value.trim() ?? '';
@@ -202,6 +217,13 @@ export async function init({ token, showToast, setLoading }) {
       obj.hero.cta2       = g('hero_cta2');
       obj.hero.sticker    = g('hero_sticker');
       obj.hero.stickerSub = g('hero_stickerSub');
+      // imageSlot tạo input ẩn có data-field nhưng không có id → query trực tiếp.
+      obj.hero.photo       = body.querySelector('.img-slot input[data-photo]')?.value.trim() || '';
+      obj.hero.photoAlt    = g('hero_photoAlt');
+      obj.hero.tagLabel    = g('hero_tagLabel');
+      obj.hero.tagPriceOld = g('hero_tagPriceOld');
+      obj.hero.tagPriceNew = g('hero_tagPriceNew');
+      obj.hero.tagHref     = g('hero_tagHref');
       obj.hero.stats = (obj.hero.stats || [{},{},{}]).map((_s, i) => ({
         num:   g(`stat${i}_num`),
         label: g(`stat${i}_label`),

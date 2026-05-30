@@ -56,16 +56,16 @@ const whyIcons: Record<string, string> = {
 
       <div class="hero-visual">
         <div class="shop-ph"><span class="shop-ph-label">Phòng khách combo WOTU — 1600×2000</span></div>
-        <img class="shop-illo" src={`${ILLO}/combo-phong-khach.png`} alt="Minh hoạ combo phòng khách WOTU" loading="eager" fetchpriority="high" decoding="async" />
+        <img class="shop-illo" src={hero.photo || `${ILLO}/combo-phong-khach.png`} alt={hero.photoAlt || 'Minh hoạ combo phòng khách WOTU'} loading="eager" fetchpriority="high" decoding="async" />
         <div class="sticker">
           {hero.sticker}<small>{hero.stickerSub}</small>
         </div>
         <div class="hero-tag">
           <div>
-            <div class="l">Combo Phòng khách · Tổ Ấm</div>
-            <div class="v"><s>28.900.000đ</s>18.900.000đ</div>
+            <div class="l">{hero.tagLabel || 'Combo Phòng khách · Tổ Ấm'}</div>
+            <div class="v"><s>{hero.tagPriceOld}</s>{hero.tagPriceNew}</div>
           </div>
-          <a class="combo-cta" href="/combo/to-am/" aria-label="Xem combo">
+          <a class="combo-cta" href={hero.tagHref || '/combo/to-am/'} aria-label="Xem combo">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
           </a>
         </div>
