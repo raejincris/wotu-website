@@ -18,6 +18,13 @@
   "name": "wotu-website",
   "compatibility_date": "2026-05-29",
   "compatibility_flags": ["global_fetch_strictly_public"],
+  // Tự build site tĩnh ngay trong `wrangler deploy`. Workers Builds đôi khi bỏ
+  // qua bước "npm run build" (build cache nhiễm) → ./dist không tồn tại → deploy
+  // fail ("assets.directory does not exist"). Khai báo build.command ở đây để
+  // wrangler luôn sinh dist trước khi upload, miễn nhiễm cache/cấu hình dashboard.
+  "build": {
+    "command": "npm run build"
+  },
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page"
