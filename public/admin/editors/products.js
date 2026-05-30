@@ -6,6 +6,7 @@
  */
 import { getFile, putFile } from '../github.js';
 import { repeatable, rfText, rfSelect, bindDirty, slugify, uniqueSlug } from '../lib/repeatable.js';
+import { imageSlot, attachImage, uploadPendingImages } from '../lib/imagefield.js';
 
 const FILE = 'src/data/shop-products.yml';
 const BODY = 'editor-products-body';
@@ -113,13 +114,19 @@ export async function init({ token, showToast, setLoading }) {
       <div class="form-grid-2">
         ${rfSelect('status', 'Trạng thái', statusOf(p.tags), STATUS_OPTS)}
         ${rfSelect('__pos', 'Vị trí trong trang', p.__pos ?? 'before', POS_OPTS)}
-      </div>`,
+      </div>
+      ${imageSlot('photo', p.photo ?? '', 'Ảnh chụp thật (ghi đè minh hoạ)')}`,
+    onRow: (row) => attachImage(row.querySelector('.img-slot'), dirty.mark),
   });
 
   saveBtn.addEventListener('click', async () => {
     setLoading(true);
     saveBtn.disabled = true;
     try {
+      const msgUp = footer.querySelector('#commit-msg-products').value.trim() || defaultMsg;
+      // Upload ảnh đang chờ trước (set path vào hidden input để collect đọc được).
+      await uploadPendingImages({ token, scope: body, area: 'products', msg: msgUp, onStatus: (s) => showToast(s, 'info', 2500) });
+
       const { sha: freshSha } = await getFile(token, FILE);
 
       // Thu thập + chuẩn hoá; sinh id duy nhất cho SP mới.
@@ -160,6 +167,7 @@ export async function init({ token, showToast, setLoading }) {
           priceNum: Number(String(f.priceNum).replace(/[^\d]/g, '')) || 0,
           tags,
           badges: badges.length ? badges : undefined,
+          photo: (f.photo || '').trim() || undefined,
           __pos: f.__pos,
         };
         return out;

@@ -107,7 +107,7 @@ const whyIcons: Record<string, string> = {
           >
             <div class="combo-img">
               <div class={`shop-ph ${c.tone}`}><span class="shop-ph-label">{c.placeholder}</span></div>
-              <img class="shop-illo" src={`${ILLO}/combo-${c.room}.png`} alt={`Minh hoạ ${c.placeholder}`} loading="lazy" decoding="async" />
+              <img class="shop-illo" src={c.photo || `${ILLO}/combo-${c.room}.png`} alt={`${c.photo ? '' : 'Minh hoạ '}${c.placeholder}`} loading="lazy" decoding="async" />
               {c.badge && (
                 <span class={`combo-badge${c.badgeClass ? ' ' + c.badgeClass : ''}`} style={c.badgeStyle || undefined}>{c.badge}</span>
               )}

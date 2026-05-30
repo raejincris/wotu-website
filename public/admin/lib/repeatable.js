@@ -83,7 +83,7 @@ export function uniqueSlug(base, taken) {
  */
 export function repeatable({
   mount, items = [], renderFields, makeNew, title,
-  min = 0, addLabel = '＋ Thêm mục', reorder = true, onChange,
+  min = 0, addLabel = '＋ Thêm mục', reorder = true, onChange, onRow,
 }) {
   const original = new Map(); // rowId -> object gốc (giữ key không hiển thị)
   let seq = 0;
@@ -118,7 +118,11 @@ export function repeatable({
     return row;
   }
 
-  (items || []).forEach((it, i) => list.appendChild(makeRow(it, i)));
+  (items || []).forEach((it, i) => {
+    const row = makeRow(it, i);
+    list.appendChild(row);
+    onRow?.(row, it ?? {});
+  });
 
   const addBtn = document.createElement('button');
   addBtn.type = 'button';
@@ -130,7 +134,10 @@ export function repeatable({
 
   addBtn.addEventListener('click', () => {
     const n = list.querySelectorAll('.repeat-row').length;
-    list.appendChild(makeRow(makeNew ? makeNew() : {}, n));
+    const item = makeNew ? makeNew() : {};
+    const row = makeRow(item, n);
+    list.appendChild(row);
+    onRow?.(row, item);
     renumber();
     onChange?.();
   });

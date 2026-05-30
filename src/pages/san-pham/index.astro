@@ -234,7 +234,7 @@ const breadcrumbSchema = {
             <a href={p.href} style="text-decoration: none; color: inherit; display: contents;">
               <div class="card-img">
                 <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
-                <img class="card-illo" src={`/uploads/products/cat-${p.catKey}.png`} alt={`Minh hoạ ${p.name} ${p.nameEm ?? ''}`.trim() + ' — WOTU'} loading="lazy" decoding="async" />
+                <img class="card-illo" src={p.photo || `/uploads/products/cat-${p.catKey}.png`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name} ${p.nameEm ?? ''}`.trim() + ' — WOTU'} loading="lazy" decoding="async" />
                 {p.badges && (
                   <div class="card-badges">
                     {p.badges.map((b) => <span class={`b-tag${b.cls ? ' ' + b.cls : ''}`}>{b.label}</span>)}

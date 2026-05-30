@@ -350,6 +350,7 @@ collections:
               - { name: priceNew, label: 'Giá khuyến mãi', widget: string, hint: 'VD: 18.900.000đ' }
               - { name: price, label: 'Giá số (dùng để sort)', widget: number, value_type: int }
               - { name: priceNote, label: 'Ghi chú giá', widget: string, hint: 'VD: · tiết kiệm 10 triệu' }
+              - { name: photo, label: 'Ảnh chụp thật (ghi đè minh hoạ)', widget: image, required: false }
               - { name: badge, label: 'Badge label (tuỳ chọn)', widget: string, required: false }
               - name: badgeClass
                 label: 'Màu badge'

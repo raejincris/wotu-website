@@ -74,6 +74,44 @@ export async function putFile(token, path, yamlString, sha, message) {
   return { commitUrl: data.commit.html_url };
 }
 
+/** Lấy sha hiện tại của file (null nếu chưa tồn tại) — dùng trước khi ghi đè ảnh. */
+export async function getFileMeta(token, path) {
+  const res = await fetch(
+    `${API}/repos/${REPO}/contents/${encodeURIComponent(path).replace(/%2F/g, '/')}?ref=${BRANCH}`,
+    { headers: ghHeaders(token) },
+  );
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return { sha: data.sha };
+}
+
+/**
+ * Ghi file nhị phân (ảnh) lên repo. base64 phải là base64 THÔ của bytes ảnh
+ * (KHÔNG qua b64Encode — hàm đó encode text UTF-8 sẽ làm hỏng binary).
+ * @param {string} base64 - phần base64 sau dấu phẩy của dataURL
+ */
+export async function putBinaryFile(token, path, base64, sha, message) {
+  const cleanPath = encodeURIComponent(path).replace(/%2F/g, '/');
+  const res = await fetch(`${API}/repos/${REPO}/contents/${cleanPath}`, {
+    method: 'PUT',
+    headers: { ...ghHeaders(token), 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message,
+      content: base64,
+      ...(sha ? { sha } : {}),
+      branch: BRANCH,
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    if (res.status === 409) throw new Error('FILE_CONFLICT');
+    throw new Error(err.message || `HTTP ${res.status}`);
+  }
+  const data = await res.json();
+  return { commitUrl: data.commit.html_url, path };
+}
+
 /** Lấy thông tin user hiện tại */
 export async function getUser(token) {
   const res = await fetch(`${API}/user`, { headers: ghHeaders(token) });

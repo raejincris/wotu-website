@@ -5,6 +5,7 @@
  */
 import { getFile, putFile } from '../github.js';
 import { repeatable, rfText, rfArea, rfSelect, bindDirty, slugify, uniqueSlug } from '../lib/repeatable.js';
+import { imageSlot, attachImage, uploadPendingImages } from '../lib/imagefield.js';
 
 const FILE = 'src/data/shop-home.yml';
 const BODY = 'editor-shop-home-body';
@@ -93,7 +94,9 @@ export async function init({ token, showToast, setLoading }) {
         ${rfText('badge', 'Badge (tuỳ chọn)', c.badge ?? '')}
         ${rfSelect('badgeClass', 'Màu badge', c.badgeClass ?? '', BADGE_OPTS)}
       </div>
-      ${rfSelect('room', 'Phòng (ảnh minh hoạ + lọc)', c.room ?? 'phong-khach', ROOM_OPTS)}`,
+      ${rfSelect('room', 'Phòng (ảnh minh hoạ + lọc)', c.room ?? 'phong-khach', ROOM_OPTS)}
+      ${imageSlot('photo', c.photo ?? '', 'Ảnh chụp thật (ghi đè minh hoạ)')}`,
+    onRow: (row) => attachImage(row.querySelector('.img-slot'), dirty.mark),
   });
 
   const repBs = repeatable({
@@ -123,6 +126,9 @@ export async function init({ token, showToast, setLoading }) {
     setLoading(true);
     saveBtn.disabled = true;
     try {
+      const msgUp = footer.querySelector('#commit-msg-shop-home').value.trim() || defaultMsg;
+      await uploadPendingImages({ token, scope: body, area: 'combos', msg: msgUp, onStatus: (s) => showToast(s, 'info', 2500) });
+
       const { sha: freshSha } = await getFile(token, FILE);
 
       const takenC = [];
@@ -154,6 +160,7 @@ export async function init({ token, showToast, setLoading }) {
           badgeClass: f.badgeClass || undefined,
           room: f.room,
           placeholder: orig.placeholder || full,
+          photo: (f.photo || '').trim() || undefined,
         };
       });
 

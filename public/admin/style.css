@@ -551,3 +551,16 @@ button { font-family: inherit; }
 .theme-warn { font-size: 12px; }
 .theme-warn.ok { color: #4a7c4a; }
 .theme-warn.bad { color: var(--danger); }
+
+/* ── Image field (upload ảnh) ─────────────────────────────── */
+.img-slot { display: flex; gap: 14px; align-items: flex-start; }
+.img-preview {
+  width: 110px; height: 82px; flex: 0 0 auto;
+  border: 1px solid var(--line); border-radius: 8px; overflow: hidden;
+  background: var(--bone-dark); display: grid; place-items: center;
+}
+.img-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.img-empty { font-size: 11px; color: var(--ink-soft); text-align: center; padding: 0 6px; }
+.img-controls { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.img-pick { cursor: pointer; }
+.img-status { font-size: 11px; color: var(--ink-soft); }

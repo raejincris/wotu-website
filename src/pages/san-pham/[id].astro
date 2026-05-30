@@ -32,7 +32,8 @@ const colorNames = (p.tags ?? []).filter((t: string) => colLabel[t]).map((t: str
 const inStock = (p.tags ?? []).includes('in-stock');
 
 const fullName = `${p.name} ${p.nameEm ?? ''}${p.nameTail ?? ''}`.trim();
-const illo = `/uploads/products/cat-${p.catKey}.png`;
+const hasPhoto = !!p.photo;
+const illo = p.photo || `/uploads/products/cat-${p.catKey}.png`;
 const catName: Record<string, string> = { sofa: 'Sofa', ban: 'Bàn', ghe: 'Ghế', giuong: 'Giường', tu: 'Tủ', ke: 'Kệ', den: 'Đèn', tham: 'Thảm' };
 const catVi = catName[p.catKey] ?? 'Sản phẩm';
 const related = allP.filter((x: any) => x.catKey === p.catKey && x.id !== p.id).slice(0, 4);
@@ -96,14 +97,14 @@ const breadcrumbSchema = {
       <div class="pd-gallery">
         <div class="pd-main">
           <div class={`shop-ph ${p.tone ?? ''}`}><span class="shop-ph-label">{p.placeholder ?? fullName}</span></div>
-          <img class="shop-illo" src={illo} alt={`Minh hoạ ${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" />
+          <img class="shop-illo" src={illo} alt={`${hasPhoto ? '' : 'Minh hoạ '}${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" />
           {p.badges && (
             <div class="pd-badges">
               {p.badges.map((b: any) => <span class={`b-tag${b.cls ? ' ' + b.cls : ''}`}>{b.label}</span>)}
             </div>
           )}
         </div>
-        <p class="pd-illo-note">Ảnh minh hoạ — ảnh chụp thật đang được cập nhật.</p>
+        {!hasPhoto && <p class="pd-illo-note">Ảnh minh hoạ — ảnh chụp thật đang được cập nhật.</p>}
       </div>
 
       <div class="pd-info">
@@ -165,7 +166,7 @@ const breadcrumbSchema = {
             <a class="pd-rel-card" href={r.href}>
               <div class="pd-rel-img">
                 <div class={`shop-ph ${r.tone ?? ''}`}></div>
-                <img class="shop-illo" src={`/uploads/products/cat-${r.catKey}.png`} alt={`Minh hoạ ${r.name} ${r.nameEm ?? ''}`} loading="lazy" decoding="async" />
+                <img class="shop-illo" src={r.photo || `/uploads/products/cat-${r.catKey}.png`} alt={`${r.photo ? '' : 'Minh hoạ '}${r.name} ${r.nameEm ?? ''}`} loading="lazy" decoding="async" />
               </div>
               <div class="pd-rel-body">
                 <span>{r.cat}</span>

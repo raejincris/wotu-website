@@ -23,7 +23,8 @@ interface Props { c: any; }
 const { c } = Astro.props;
 const slug = String(c.id).replace(/^combo-/, '');
 const fullName = `${c.name} ${c.nameEm ?? ''}${c.nameTail ?? ''}`.trim();
-const illo = `/uploads/products/combo-${c.room}.png`;
+const hasPhoto = !!c.photo;
+const illo = c.photo || `/uploads/products/combo-${c.room}.png`;
 
 // "Combo gồm": tách desc theo " · " nếu là danh sách; ngược lại dùng làm prose.
 const parts = String(c.desc ?? '').split(' · ').map((s) => s.trim()).filter(Boolean);
@@ -84,10 +85,10 @@ const breadcrumbSchema = {
       <div class="pd-gallery">
         <div class="pd-main">
           <div class={`shop-ph ${c.tone ?? ''}`}><span class="shop-ph-label">{c.placeholder ?? fullName}</span></div>
-          <img class="shop-illo" src={illo} alt={`Minh hoạ ${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" />
+          <img class="shop-illo" src={illo} alt={`${hasPhoto ? '' : 'Minh hoạ '}${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" />
           {c.badge && <div class="pd-badges"><span class={`b-tag${c.badgeClass ? ' ' + c.badgeClass : ' dark'}`}>{c.badge}</span></div>}
         </div>
-        <p class="pd-illo-note">Ảnh minh hoạ — ảnh chụp thật đang được cập nhật.</p>
+        {!hasPhoto && <p class="pd-illo-note">Ảnh minh hoạ — ảnh chụp thật đang được cập nhật.</p>}
       </div>
 
       <div class="pd-info">
@@ -142,7 +143,7 @@ const breadcrumbSchema = {
             <a class="pd-rel-card" href={r.id === 'combo-to-am' ? '/combo/to-am/' : `/combo/${String(r.id).replace(/^combo-/, '')}/`}>
               <div class="pd-rel-img">
                 <div class={`shop-ph ${r.tone ?? ''}`}></div>
-                <img class="shop-illo" src={`/uploads/products/combo-${r.room}.png`} alt={`Minh hoạ Combo ${r.nameEm}`} loading="lazy" decoding="async" />
+                <img class="shop-illo" src={r.photo || `/uploads/products/combo-${r.room}.png`} alt={`${r.photo ? '' : 'Minh hoạ '}Combo ${r.nameEm}`} loading="lazy" decoding="async" />
               </div>
               <div class="pd-rel-body">
                 <span>{r.cat}</span>
