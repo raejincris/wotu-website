@@ -1,0 +1,18 @@
+# Tuỳ biến giao diện (theme) — chỉnh qua Custom Admin (#theme).
+# Giá trị mặc định = đúng giao diện hiện tại → để nguyên thì KHÔNG đổi gì.
+# Token gốc vẫn ở global.css (studio) + shop.css (shop); file này chỉ override.
+
+studio:
+  # Màu nhấn editorial (chữ in nghiêng, eyebrow). Đã tối để đạt WCAG AA trên nền bone.
+  earth: "#6B5C45"
+  # Màu accent ấm (CTA, gạch chân).
+  accent: "#B8835A"
+
+shop:
+  # Bảng màu nền có sẵn: warm (mặc định) | sunny | sage | rose
+  palette: "warm"
+  # Mật độ khoảng cách: cozy (chật) | comfy (vừa) | airy (thoáng)
+  density: "comfy"
+  # Ghi đè màu nhấn shop (để trống = dùng theo palette). VD: #C97B5E
+  accent: ""
+  accentDeep: ""

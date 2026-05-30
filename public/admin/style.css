@@ -546,3 +546,8 @@ button { font-family: inherit; }
 .repeat-del:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
 .repeat-fields { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
 .repeat-add { margin-top: 12px; align-self: flex-start; }
+
+/* ── Theme editor — cảnh báo tương phản ───────────────────── */
+.theme-warn { font-size: 12px; }
+.theme-warn.ok { color: #4a7c4a; }
+.theme-warn.bad { color: var(--danger); }

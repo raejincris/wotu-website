@@ -659,3 +659,28 @@ collections:
             fields:
               - { name: heading, label: 'Tiêu đề mục', widget: string }
               - { name: body, label: 'Nội dung (HTML)', widget: text, hint: 'Cho phép thẻ p/ul/li/strong/a/em/code. Token: {{email}} {{hotline}} {{addressLine1}} {{addressCity}}' }
+
+  # ============================================================
+  # 12. GIAO DIỆN — Theme (màu & mật độ)
+  # ============================================================
+  - name: theme
+    label: 'Giao diện (Theme)'
+    files:
+      - name: theme
+        label: 'Màu & mật độ Studio + Shop'
+        file: 'src/data/theme.yml'
+        fields:
+          - name: studio
+            label: 'Studio — màu nhấn'
+            widget: object
+            fields:
+              - { name: earth, label: 'Màu nhấn editorial (--earth)', widget: color, hint: 'Nên đủ đậm để đọc rõ trên nền kem' }
+              - { name: accent, label: 'Màu accent ấm (--accent)', widget: color }
+          - name: shop
+            label: 'Shop — bảng màu & mật độ'
+            widget: object
+            fields:
+              - { name: palette, label: 'Bảng màu nền', widget: select, options: ['warm', 'sunny', 'sage', 'rose'], default: 'warm' }
+              - { name: density, label: 'Mật độ', widget: select, options: ['cozy', 'comfy', 'airy'], default: 'comfy' }
+              - { name: accent, label: 'Ghi đè màu nhấn shop (để trống = theo bảng màu)', widget: string, required: false }
+              - { name: accentDeep, label: 'Màu nhấn đậm (hover)', widget: string, required: false }

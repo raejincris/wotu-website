@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import site from '../data/site.yml';
+import theme from '../data/theme.yml';
 import StructuredData from '../components/StructuredData.astro';
 
 interface Props {
@@ -28,9 +29,15 @@ const ogImageURL = ogImage ?? new URL('/og.png', Astro.site).href;
 // Cloudflare Web Analytics — only inject if token is configured.
 const cfToken = (site.analytics?.cfBeaconToken ?? '').trim();
 const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
+
+// Theme studio (tuỳ biến qua admin). Override --earth/--accent trên html[data-theme]
+// (specificity > :root → luôn thắng, không phụ thuộc thứ tự CSS). Default = hiện tại.
+const studioEarth = (theme?.studio?.earth || '#6B5C45').trim();
+const studioAccent = (theme?.studio?.accent || '#B8835A').trim();
+const studioThemeCss = `html[data-theme]{--earth:${studioEarth};--accent:${studioAccent};}`;
 ---
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -41,6 +48,7 @@ const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style set:html={studioThemeCss} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />

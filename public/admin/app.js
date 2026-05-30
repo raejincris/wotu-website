@@ -61,7 +61,7 @@ const PANELS = [
   'panel-dashboard',
   'panel-site', 'panel-sofa', 'panel-combo', 'panel-shop-home', 'panel-home-hero',
   'panel-shop-hero', 'panel-products', 'panel-footer',
-  'panel-studio-home', 'panel-services', 'panel-privacy',
+  'panel-studio-home', 'panel-services', 'panel-privacy', 'panel-theme',
 ];
 
 const HASH_MAP = {
@@ -78,6 +78,7 @@ const HASH_MAP = {
   'studio-home': 'panel-studio-home',
   'services':    'panel-services',
   'privacy':     'panel-privacy',
+  'theme':       'panel-theme',
 };
 
 const PANEL_META = {
@@ -93,6 +94,7 @@ const PANEL_META = {
   'panel-studio-home': { title: 'Studio — Các section',   preview: 'https://www.wotu.vn/studio/' },
   'panel-services':  { title: 'Trang dịch vụ',            preview: 'https://www.wotu.vn/studio/dich-vu/' },
   'panel-privacy':   { title: 'Chính sách bảo mật',       preview: 'https://www.wotu.vn/bao-mat' },
+  'panel-theme':     { title: 'Giao diện (Theme)',        preview: 'https://www.wotu.vn/' },
 };
 
 const EDITOR_MAP = {
@@ -107,6 +109,7 @@ const EDITOR_MAP = {
   'studio-home': '/admin/editors/studio-home.js',
   'services':   '/admin/editors/services.js',
   'privacy':    '/admin/editors/privacy.js',
+  'theme':      '/admin/editors/theme.js',
 };
 
 const FILE_STATUS_CONFIG = [
@@ -121,6 +124,7 @@ const FILE_STATUS_CONFIG = [
   { name: 'Trang dịch vụ',     path: 'src/data/services.yml',        hash: 'services' },
   { name: 'Footer & Menu',     path: 'src/data/footer.yml',          hash: 'footer' },
   { name: 'Chính sách bảo mật', path: 'src/data/bao-mat.yml',        hash: 'privacy' },
+  { name: 'Giao diện (Theme)', path: 'src/data/theme.yml',           hash: 'theme' },
 ];
 
 // ─── Panel switching ──────────────────────────────────────────────────────────

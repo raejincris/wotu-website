@@ -1,6 +1,7 @@
 ---
 import '../styles/shop.css';
 import site from '../data/site.yml';
+import theme from '../data/theme.yml';
 import CartDrawer from '../components/shop/CartDrawer.astro';
 import StructuredData from '../components/StructuredData.astro';
 
@@ -23,6 +24,17 @@ const ogImageURL = ogImage ?? new URL('/og.png', Astro.site).href;
 
 const cfToken = (site.analytics?.cfBeaconToken ?? '').trim();
 const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
+
+// Theme (tuỳ biến qua admin). palette/density dùng preset có sẵn trong shop.css;
+// accent override (nếu có) đặt trên body.shop (specificity > preset → luôn thắng).
+const shopPalette = theme?.shop?.palette || 'warm';
+const shopDensity = theme?.shop?.density || 'comfy';
+const shopAccent = (theme?.shop?.accent || '').trim();
+const shopAccentDeep = (theme?.shop?.accentDeep || '').trim();
+const shopAccentCss = [
+  shopAccent ? `--shop-accent:${shopAccent};` : '',
+  shopAccentDeep ? `--shop-accent-deep:${shopAccentDeep};` : '',
+].join('');
 ---
 <!DOCTYPE html>
 <html lang="vi">
@@ -69,8 +81,9 @@ const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
+    {shopAccentCss && <style set:html={`body.shop{${shopAccentCss}}`} />}
   </head>
-  <body class="shop" data-shop-palette="warm" data-shop-density="comfy">
+  <body class="shop" data-shop-palette={shopPalette} data-shop-density={shopDensity}>
     <a href="#main" class="skip-to-main">Bỏ qua điều hướng — đến nội dung chính</a>
     <main id="main" data-pagefind-body><slot /></main>
     <CartDrawer />
