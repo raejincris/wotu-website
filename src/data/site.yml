@@ -1,26 +1,22 @@
-tagline: "Studio · Thiết kế & Thi công nội thất"
-description: "Studio thiết kế kiến trúc, nội thất và thi công trọn gói tại Quy Nhơn. Một khoảng lặng, giữa đời vội."
-slogan: "We don't sell furniture, we sell satisfaction"
-
+tagline: Studio · Thiết kế & Thi công nội thất
+description: Studio thiết kế kiến trúc, nội thất và thi công trọn gói tại Quy Nhơn. Một khoảng lặng, giữa đời vội.
+slogan: We don't sell furniture, we sell satisfaction
 address:
-  line1: "Lô 17-18 Hoa Lư"
-  city: "Quy Nhơn, Gia Lai"
-  mapsUrl: "https://maps.app.goo.gl/eovTsyCiwiSP5YAA6"
-
-hotline: "0933 774 708"
-email: "hello@wotu.vn"
-
+  line1: Lô 17-18 Hoa Lư
+  city: Quy Nhơn, Gia Lai
+  mapsUrl: https://maps.app.goo.gl/eovTsyCiwiSP5YAA6
+hotline: 0933 774 708
+email: hello@wotu.vn
 social:
-  facebook: "https://www.facebook.com/wotudecor1"
-  facebookWorkshop: "https://www.facebook.com/wotudecor22"
-  maps: "https://maps.app.goo.gl/eovTsyCiwiSP5YAA6"
-
+  facebook: https://www.facebook.com/wotuani
+  facebookWorkshop: https://www.facebook.com/wotudecor22
+  maps: https://maps.app.goo.gl/eovTsyCiwiSP5YAA6
 meta:
-  est: '2018'
+  est: "2018"
   location: QUY NHƠN
   issueNumber: 014 / MMXXVI
 forms:
   contactAccessKey: f5e8cdc8-94cb-4e5d-b892-4303b2bd6272
-  contactSubject: '[WOTU website] Liên hệ mới từ khách hàng'
+  contactSubject: "[WOTU website] Liên hệ mới từ khách hàng"
 analytics:
   cfBeaconToken: 54a42c6c23c340f0a1b571408d637133
