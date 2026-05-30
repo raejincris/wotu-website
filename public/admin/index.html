@@ -96,6 +96,18 @@
         <span class="sidebar-icon-emoji">🔗</span> Footer &amp; Menu
       </a>
 
+      <p class="sidebar-section-label">Nội dung Studio</p>
+
+      <a href="#studio-home" class="sidebar-link" data-panel="studio-home">
+        <span class="sidebar-icon-emoji">📰</span> Studio — các section
+      </a>
+      <a href="#services" class="sidebar-link" data-panel="services">
+        <span class="sidebar-icon-emoji">🧰</span> Trang dịch vụ
+      </a>
+      <a href="#privacy" class="sidebar-link" data-panel="privacy">
+        <span class="sidebar-icon-emoji">🔒</span> Chính sách bảo mật
+      </a>
+
       <div class="sidebar-divider"></div>
 
       <a href="/admin/cms/" class="sidebar-link sidebar-external" target="_blank" rel="noopener">
@@ -266,6 +278,42 @@
         </div>
         <div class="editor-body" id="editor-footer-body"></div>
         <div class="editor-footer" id="editor-footer-footer" hidden></div>
+      </div>
+
+      <!-- ╔══════════════════════════════════
+           ║  EDITOR: Studio — các section
+           ╚══════════════════════════════════ -->
+      <div id="panel-studio-home" class="panel editor-panel" hidden>
+        <div class="panel-page-header">
+          <h2>Studio — các section</h2>
+          <p class="panel-page-sub">src/data/home.yml → Triết lý · Dịch vụ · Quy trình · About · Liên hệ</p>
+        </div>
+        <div class="editor-body" id="editor-studio-home-body"></div>
+        <div class="editor-footer" id="editor-studio-home-footer" hidden></div>
+      </div>
+
+      <!-- ╔══════════════════════════════════
+           ║  EDITOR: Trang dịch vụ
+           ╚══════════════════════════════════ -->
+      <div id="panel-services" class="panel editor-panel" hidden>
+        <div class="panel-page-header">
+          <h2>Trang dịch vụ</h2>
+          <p class="panel-page-sub">src/data/services.yml → 3 trang /studio/dich-vu/</p>
+        </div>
+        <div class="editor-body" id="editor-services-body"></div>
+        <div class="editor-footer" id="editor-services-footer" hidden></div>
+      </div>
+
+      <!-- ╔══════════════════════════════════
+           ║  EDITOR: Chính sách bảo mật
+           ╚══════════════════════════════════ -->
+      <div id="panel-privacy" class="panel editor-panel" hidden>
+        <div class="panel-page-header">
+          <h2>Chính sách bảo mật</h2>
+          <p class="panel-page-sub">src/data/bao-mat.yml → /bao-mat</p>
+        </div>
+        <div class="editor-body" id="editor-privacy-body"></div>
+        <div class="editor-footer" id="editor-privacy-footer" hidden></div>
       </div>
 
     </div><!-- /content-area -->

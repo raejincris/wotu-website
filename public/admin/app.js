@@ -61,6 +61,7 @@ const PANELS = [
   'panel-dashboard',
   'panel-site', 'panel-sofa', 'panel-combo', 'panel-shop-home', 'panel-home-hero',
   'panel-shop-hero', 'panel-products', 'panel-footer',
+  'panel-studio-home', 'panel-services', 'panel-privacy',
 ];
 
 const HASH_MAP = {
@@ -74,6 +75,9 @@ const HASH_MAP = {
   'shop-hero':   'panel-shop-hero',
   'products':    'panel-products',
   'footer':      'panel-footer',
+  'studio-home': 'panel-studio-home',
+  'services':    'panel-services',
+  'privacy':     'panel-privacy',
 };
 
 const PANEL_META = {
@@ -86,6 +90,9 @@ const PANEL_META = {
   'panel-shop-hero': { title: 'Trang chủ Shop',           preview: 'https://www.wotu.vn/' },
   'panel-products':  { title: 'Catalog sản phẩm',         preview: 'https://www.wotu.vn/san-pham/' },
   'panel-footer':    { title: 'Footer & Menu',            preview: 'https://www.wotu.vn/studio/' },
+  'panel-studio-home': { title: 'Studio — Các section',   preview: 'https://www.wotu.vn/studio/' },
+  'panel-services':  { title: 'Trang dịch vụ',            preview: 'https://www.wotu.vn/studio/dich-vu/' },
+  'panel-privacy':   { title: 'Chính sách bảo mật',       preview: 'https://www.wotu.vn/bao-mat' },
 };
 
 const EDITOR_MAP = {
@@ -97,6 +104,9 @@ const EDITOR_MAP = {
   'shop-hero':  '/admin/editors/shop-hero.js',
   'products':   '/admin/editors/products.js',
   'footer':     '/admin/editors/footer.js',
+  'studio-home': '/admin/editors/studio-home.js',
+  'services':   '/admin/editors/services.js',
+  'privacy':    '/admin/editors/privacy.js',
 };
 
 const FILE_STATUS_CONFIG = [
@@ -105,9 +115,12 @@ const FILE_STATUS_CONFIG = [
   { name: 'Combo Tổ Ấm',       path: 'src/data/combo-to-am.yml',     hash: 'combo' },
   { name: 'Combo trang chủ',   path: 'src/data/shop-home.yml',       hash: 'shop-home' },
   { name: 'Trang chủ Studio',  path: 'src/data/home.yml',            hash: 'home-hero' },
+  { name: 'Studio — section',  path: 'src/data/home.yml',            hash: 'studio-home' },
   { name: 'Trang chủ Shop',    path: 'src/data/shop-home.yml',       hash: 'shop-hero' },
   { name: 'Catalog sản phẩm',  path: 'src/data/shop-products.yml',   hash: 'products' },
+  { name: 'Trang dịch vụ',     path: 'src/data/services.yml',        hash: 'services' },
   { name: 'Footer & Menu',     path: 'src/data/footer.yml',          hash: 'footer' },
+  { name: 'Chính sách bảo mật', path: 'src/data/bao-mat.yml',        hash: 'privacy' },
 ];
 
 // ─── Panel switching ──────────────────────────────────────────────────────────

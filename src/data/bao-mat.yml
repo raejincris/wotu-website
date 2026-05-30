@@ -1,0 +1,77 @@
+# Nội dung trang Chính sách bảo mật (/bao-mat).
+# Render qua src/pages/bao-mat.astro — mỗi section là { heading, body }.
+# body cho phép HTML (p, ul, li, strong, code, a, em).
+# Token động (thay từ site.yml lúc build): {{email}} {{hotline}} {{hotlineTel}}
+#   {{addressLine1}} {{addressCity}}. Đừng sửa tên token.
+updated: "03/05/2026"
+sections:
+  - heading: "Nguyên tắc"
+    body: |
+      <p>WOTU ("chúng tôi", "studio") tôn trọng quyền riêng tư của bạn. Chúng tôi chỉ thu thập dữ liệu tối thiểu cần thiết để liên hệ và tư vấn khi bạn chủ động gửi yêu cầu, không bán hay chia sẻ thông tin cá nhân với bên thứ ba vì mục đích thương mại.</p>
+      <p>Tài liệu này tuân thủ <strong>Nghị định 13/2023/NĐ-CP</strong> về bảo vệ dữ liệu cá nhân của Việt Nam, đồng thời tham chiếu các tiêu chuẩn GDPR (EU) đối với khách hàng quốc tế.</p>
+
+  - heading: "1. Dữ liệu chúng tôi thu thập"
+    body: |
+      <p>Khi bạn gửi form liên hệ trên website, chúng tôi nhận:</p>
+      <ul>
+        <li><strong>Họ và tên</strong> — để xưng hô.</li>
+        <li><strong>Email</strong> — để phản hồi.</li>
+        <li><strong>Số điện thoại</strong> (tùy chọn) — để gọi tư vấn nếu bạn ưu tiên.</li>
+        <li><strong>Mô tả dự án</strong> — để chúng tôi hiểu nhu cầu trước khi gặp mặt.</li>
+      </ul>
+      <p>Khi bạn duyệt website, hệ thống tự động ghi nhận một số thông tin kỹ thuật ẩn danh: trình duyệt, hệ điều hành, quốc gia (chỉ cấp quốc gia, không định vị chính xác), trang đã xem. Dữ liệu này <strong>không gắn với danh tính cá nhân</strong>, không sử dụng cookie tracking, và được cung cấp bởi Cloudflare Web Analytics.</p>
+
+  - heading: "2. Mục đích sử dụng"
+    body: |
+      <ul>
+        <li>Liên hệ phản hồi yêu cầu của bạn (tư vấn, báo giá, gặp mặt).</li>
+        <li>Lưu trữ trong CRM nội bộ phục vụ giai đoạn dự án (nếu bạn trở thành khách hàng).</li>
+        <li>Phân tích lưu lượng tổng hợp để cải thiện trải nghiệm website.</li>
+      </ul>
+      <p>Chúng tôi <strong>không</strong> dùng dữ liệu của bạn cho quảng cáo, retargeting, hay gửi email marketing trừ khi bạn đăng ký.</p>
+
+  - heading: "3. Bên thứ ba xử lý dữ liệu"
+    body: |
+      <p>Form liên hệ chuyển dữ liệu qua các dịch vụ sau:</p>
+      <ul>
+        <li><strong>Web3Forms</strong> (web3forms.com) — chuyển nội dung form từ website đến hộp thư email của studio. Dữ liệu lưu tạm trên server Web3Forms ≤ 7 ngày.</li>
+        <li><strong>Cloudflare</strong> (cloudflare.com) — hosting, CDN, và Web Analytics ẩn danh.</li>
+        <li><strong>GitHub</strong> (github.com) — lưu trữ source code website (không chứa dữ liệu khách hàng).</li>
+      </ul>
+      <p>Tất cả các bên trên đều có chính sách bảo mật riêng và tuân thủ tiêu chuẩn quốc tế.</p>
+
+  - heading: "4. Lưu trữ và bảo mật"
+    body: |
+      <ul>
+        <li>Email liên hệ của khách lưu trong hộp thư <code>{{email}}</code> — chỉ thành viên studio truy cập được.</li>
+        <li>Sau khi dự án kết thúc, chúng tôi giữ thông tin liên hệ của khách hàng tối đa <strong>3 năm</strong> để liên lạc bảo hành / chăm sóc, sau đó xoá.</li>
+        <li>Chúng tôi áp dụng các biện pháp kỹ thuật hợp lý (mật khẩu mạnh, two-factor auth, mã hoá trên đường truyền) để bảo vệ dữ liệu.</li>
+      </ul>
+
+  - heading: "5. Quyền của bạn"
+    body: |
+      <p>Theo Nghị định 13/2023, bạn có các quyền sau với dữ liệu cá nhân:</p>
+      <ul>
+        <li><strong>Quyền truy cập</strong> — yêu cầu xem dữ liệu chúng tôi đang giữ về bạn.</li>
+        <li><strong>Quyền chỉnh sửa</strong> — yêu cầu cập nhật thông tin sai/lỗi thời.</li>
+        <li><strong>Quyền xoá</strong> — yêu cầu xoá toàn bộ dữ liệu (ngoại trừ những gì pháp luật bắt buộc lưu giữ).</li>
+        <li><strong>Quyền rút lại đồng ý</strong> — bất cứ lúc nào.</li>
+      </ul>
+      <p>Để thực hiện các quyền trên, gửi email tới <a href="mailto:{{email}}" style="color: var(--accent); text-decoration: underline;">{{email}}</a> với tiêu đề <em>"Yêu cầu dữ liệu cá nhân"</em>. Chúng tôi sẽ phản hồi trong vòng 7 ngày làm việc.</p>
+
+  - heading: "6. Cookie"
+    body: |
+      <p>Website không sử dụng cookie cho mục đích tracking hay quảng cáo. Một số cookie kỹ thuật có thể được tạo bởi trình duyệt để lưu lựa chọn hiển thị (ví dụ: density preference của bạn) — các cookie này không gửi về server và bạn có thể xoá bất kỳ lúc nào trong cài đặt trình duyệt.</p>
+
+  - heading: "7. Thay đổi chính sách"
+    body: |
+      <p>Chúng tôi có thể cập nhật chính sách này định kỳ. Phiên bản mới sẽ được đăng tại trang này với ngày cập nhật ở đầu. Sửa đổi quan trọng sẽ được thông báo qua email tới khách hàng đang trong dự án.</p>
+
+  - heading: "8. Liên hệ"
+    body: |
+      <p>Bất kỳ câu hỏi nào về chính sách bảo mật:</p>
+      <ul>
+        <li>Email: <a href="mailto:{{email}}" style="color: var(--accent); text-decoration: underline;">{{email}}</a></li>
+        <li>Hotline: <a href="tel:{{hotlineTel}}" style="color: var(--accent); text-decoration: underline;">{{hotline}}</a></li>
+        <li>Địa chỉ: {{addressLine1}}, {{addressCity}}</li>
+      </ul>

@@ -599,3 +599,63 @@ collections:
                   - { name: size, label: 'Kích thước đã chọn', widget: string }
                   - { name: cushion, label: 'Độ êm đã chọn', widget: string }
                   - { name: helpful, label: 'Số người thấy hữu ích', widget: number, value_type: int }
+
+  # ============================================================
+  # 10. STUDIO — Trang dịch vụ (/studio/dich-vu/[slug])
+  # ============================================================
+  - name: services
+    label: 'Studio — Trang dịch vụ'
+    files:
+      - name: services
+        label: '3 trang dịch vụ (thiết kế · thi công · xây dựng)'
+        file: 'src/data/services.yml'
+        fields:
+          - name: services
+            label: 'Các dịch vụ'
+            widget: list
+            summary: '{{fields.title}}'
+            fields:
+              - { name: slug, label: 'Slug (URL, không dấu)', widget: string, hint: 'VD: thiet-ke-noi-that — đổi sẽ đổi đường dẫn trang' }
+              - { name: order, label: 'Thứ tự', widget: number, value_type: int, default: 0 }
+              - { name: eyebrow, label: 'Eyebrow', widget: string }
+              - { name: navName, label: 'Tên ngắn (menu)', widget: string }
+              - { name: title, label: 'Tiêu đề trang', widget: string }
+              - { name: titleEm, label: 'Phần in nghiêng trong tiêu đề', widget: string, hint: 'Phải là cụm có trong Tiêu đề' }
+              - { name: metaTitle, label: 'Meta title (SEO)', widget: string }
+              - { name: metaDescription, label: 'Meta description (SEO)', widget: text }
+              - { name: lede, label: 'Lede (câu mở đầu)', widget: text }
+              - { name: intro, label: 'Đoạn intro', widget: list, field: { name: para, widget: text } }
+              - { name: includesTitle, label: 'Tiêu đề mục "Bao gồm"', widget: string }
+              - { name: includes, label: 'Bao gồm trong dịch vụ', widget: list, field: { name: item, widget: string } }
+              - name: process
+                label: 'Quy trình'
+                widget: list
+                fields:
+                  - { name: t, label: 'Tên bước', widget: string }
+                  - { name: d, label: 'Mô tả', widget: text }
+              - name: faq
+                label: 'Câu hỏi thường gặp'
+                widget: list
+                fields:
+                  - { name: q, label: 'Câu hỏi', widget: string }
+                  - { name: a, label: 'Trả lời', widget: text }
+              - { name: relatedHeading, label: 'Tiêu đề khối dự án liên quan', widget: string }
+
+  # ============================================================
+  # 11. CHUNG — Chính sách bảo mật (/bao-mat)
+  # ============================================================
+  - name: bao_mat
+    label: 'Chính sách bảo mật'
+    files:
+      - name: bao_mat
+        label: 'Nội dung /bao-mat'
+        file: 'src/data/bao-mat.yml'
+        fields:
+          - { name: updated, label: 'Ngày cập nhật', widget: string, hint: 'VD: 03/05/2026' }
+          - name: sections
+            label: 'Các mục'
+            widget: list
+            summary: '{{fields.heading}}'
+            fields:
+              - { name: heading, label: 'Tiêu đề mục', widget: string }
+              - { name: body, label: 'Nội dung (HTML)', widget: text, hint: 'Cho phép thẻ p/ul/li/strong/a/em/code. Token: {{email}} {{hotline}} {{addressLine1}} {{addressCity}}' }
