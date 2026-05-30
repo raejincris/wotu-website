@@ -1,0 +1,25 @@
+{
+  // Config deploy tường minh cho Cloudflare Worker phục vụ site tĩnh.
+  //
+  // LÝ DO TỒN TẠI: nếu repo KHÔNG có file này, lệnh `npx wrangler deploy`
+  // trong Workers Builds sẽ tự chạy `astro add cloudflare` (CI auto chọn "yes"),
+  // cài adapter @astrojs/cloudflare → tự bật Sessions → tạo KV binding `SESSION`
+  // → mỗi deploy lại thử CREATE namespace `wotu-website-session` → trùng →
+  // lỗi `already exists [code: 10014]` → deploy fail (xảy ra 30/05/2026).
+  //
+  // Site là static thuần (output: 'static', không dùng astro:assets/<Image>/
+  // sessions), nên KHÔNG cần adapter. Khai báo Worker assets-only ở đây để
+  // wrangler dùng config này thẳng, bỏ qua auto-setup, hết tạo KV thừa.
+  //
+  // `_headers` (CSP, cache) và `404.html` nằm sẵn trong ./dist → Workers static
+  // assets tự tôn trọng. Custom domain wotu.vn/www gắn ở tab Domains của Worker,
+  // KHÔNG khai báo `routes` ở đây để deploy không đụng tới chúng.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "wotu-website",
+  "compatibility_date": "2026-05-29",
+  "compatibility_flags": ["global_fetch_strictly_public"],
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
