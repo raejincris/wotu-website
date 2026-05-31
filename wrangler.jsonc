@@ -15,7 +15,7 @@
   // assets tự tôn trọng. Custom domain wotu.vn/www gắn ở tab Domains của Worker,
   // KHÔNG khai báo `routes` ở đây để deploy không đụng tới chúng.
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "wotu-website",
+  "name": "wotu-cms-auth",
   "compatibility_date": "2026-05-29",
   "compatibility_flags": ["global_fetch_strictly_public"],
   // Lưu ý: dist được sinh bởi `postinstall` (scripts/postinstall-ci.mjs) trong
