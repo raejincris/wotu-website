@@ -57,12 +57,19 @@ const WEBP_OK = (() => {
 })();
 
 function loadImage(file) {
+  // Decode qua data: URL chứ KHÔNG dùng URL.createObjectURL → blob: URL.
+  // CSP của site (img-src 'self' data: …) không cho phép blob: nên ảnh blob
+  // bị chặn → img.onerror → "không đọc được ảnh". data: nằm trong allowlist.
   return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Trình duyệt không decode được ảnh')); };
-    img.src = url;
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Không đọc được file ảnh'));
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Trình duyệt không decode được ảnh'));
+      img.src = String(reader.result);
+    };
+    reader.readAsDataURL(file);
   });
 }
 
