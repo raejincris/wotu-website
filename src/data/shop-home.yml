@@ -93,7 +93,7 @@ combos:
     placeholder: Combo phòng khách Tổ Ấm
     tone: ""
     href: /combo/to-am/
-    photo: /uploads/combos/combos-1780206222169-zbfzp.webp
+    photo: /uploads/combos/combos-1780206358790-trsvv.webp
   - id: combo-an-yen
     room: phong-ngu
     cat: Phòng ngủ master
@@ -135,7 +135,7 @@ combos:
     placeholder: Combo bàn làm việc Tập Trung
     tone: sage
     href: /combo/tap-trung/
-    photo: /uploads/combos/combos-1780206225097-0qjrq.webp
+    photo: /uploads/combos/combos-1780206360760-ezlv3.webp
   - id: combo-vuon-co-tich
     room: tre-em
     cat: Phòng trẻ em · 4–10 tuổi
