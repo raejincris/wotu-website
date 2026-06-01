@@ -1,0 +1,826 @@
+---
+import ShopLayout from '../../layouts/ShopLayout.astro';
+import Nav from '../../components/shop/Nav.astro';
+import Footer from '../../components/shop/Footer.astro';
+import shopHome from '../../data/shop-home.yml';
+
+const combos = (shopHome as any).combos ?? [];
+const TOTAL = combos.length;
+
+// Phân loại trạng thái từ badge → key lọc (không có block filters: như shop-products.yml,
+// nên derive ngay tại đây để facet luôn khớp data thật).
+function badgeTag(c: any): string {
+  const b = String(c.badge ?? '').toLowerCase();
+  if (b.includes('bestseller')) return 'bestseller';
+  if (b.includes('hot')) return 'hot';
+  if (b.includes('mới')) return 'moi';
+  if (b.includes('%') || b.includes('−') || b.includes('-') || b.includes('giảm')) return 'sale';
+  return '';
+}
+// priceOld dạng "59.900.000đ" → số, để tính mức tiết kiệm cho sort.
+function priceNum(s: string): number {
+  return Number(String(s ?? '').replace(/[^\d]/g, '')) || 0;
+}
+
+const roomCount = (key: string) => (key ? combos.filter((c: any) => c.room === key).length : TOTAL);
+const tagCount = (key: string) => combos.filter((c: any) => badgeTag(c) === key).length;
+
+// Tiles theo PHÒNG (khớp tab trang chủ). "" = Tất cả.
+const rooms = [
+  { key: '', name: 'Tất cả', icon: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z|M9 22V12h6v10' },
+  { key: 'phong-khach', name: 'Phòng khách', icon: 'M3 11v6a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-6|M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3|M5 18v2M19 18v2' },
+  { key: 'phong-ngu', name: 'Phòng ngủ', icon: 'M3 18v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5|M3 18v2M21 18v2|M7 11V8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v3' },
+  { key: 'phong-an', name: 'Phòng ăn & bếp', icon: 'M3 2v7c0 1.1.9 2 2 2h0a2 2 0 0 0 2-2V2|M5 2v9M5 11v11|M19 2v20|M19 2c-2 0-3 2-3 5s1 5 3 5' },
+  { key: 'lam-viec', name: 'Làm việc', icon: 'M3 6h18v9H3z|M3 15l-1 4M21 15l1 4|M9 19h6' },
+  { key: 'studio', name: 'Căn hộ studio', icon: 'rect:3 3 18 18 2|M3 9h18M9 21V9' },
+  { key: 'tre-em', name: 'Phòng trẻ em', icon: 'M9 11a3 3 0 1 0 6 0|M5 19v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2|M12 2v3' },
+];
+const roomsLive = rooms.filter((r) => r.key === '' || roomCount(r.key) > 0);
+
+const statusFilters = [
+  { key: 'bestseller', label: 'Bestseller' },
+  { key: 'hot', label: 'Đang hot' },
+  { key: 'moi', label: 'Mới về' },
+  { key: 'sale', label: 'Đang giảm' },
+];
+const statusLive = statusFilters.filter((f) => tagCount(f.key) > 0);
+
+const feature = combos.find((c: any) => c.feature);
+const rest = combos.filter((c: any) => !c.feature);
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: 'https://www.wotu.vn/' },
+    { '@type': 'ListItem', position: 2, name: 'Combo nội thất', item: 'https://www.wotu.vn/combo/' },
+  ],
+};
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Combo nội thất WOTU',
+  numberOfItems: TOTAL,
+  itemListElement: combos.map((c: any, i: number) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: `Combo ${c.nameEm}${c.nameTail ?? ''}`.trim(),
+    url: `https://www.wotu.vn${c.href}`,
+  })),
+};
+---
+<ShopLayout title="Tất cả combo nội thất — WOTU Nội thất Việt" description="Combo nội thất trọn bộ WOTU — phòng khách, phòng ngủ, phòng ăn, làm việc, căn hộ studio, phòng trẻ em. Mua trọn bộ tiết kiệm tới 35% so với mua lẻ, giao 48h tại Quy Nhơn và lân cận.">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+  </Fragment>
+  <Nav active="Combo nội thất" />
+
+  <!-- Crumb -->
+  <div class="container crumb">
+    <div class="crumb-list">
+      <a href="/">Trang chủ</a>
+      <span class="sep">/</span>
+      <span class="here">Combo nội thất</span>
+    </div>
+  </div>
+
+  <!-- Page header -->
+  <header class="ph-head container shop-reveal">
+    <div class="ph-head-grid">
+      <div>
+        <span class="eyebrow">Cửa hàng — combo trọn bộ 2026</span>
+        <h1>Tất cả <em>combo</em>.</h1>
+      </div>
+      <div>
+        <p class="meta">
+          WOTU có <b>{TOTAL} combo nội thất trọn bộ</b> cho từng không gian — từ phòng khách, phòng ngủ đến căn hộ studio. Mua trọn combo <b>tiết kiệm tới 35%</b> so với sắm lẻ. Xưởng tại Quy Nhơn, giao tận nhà trong vùng Bình Định &amp; các tỉnh lân cận trong 48 giờ.
+        </p>
+        <div class="meta-row">
+          <div><b>{TOTAL}</b><span>combo</span></div>
+          <div><b>{roomsLive.length - 1}</b><span>không gian</span></div>
+          <div><b>5 năm</b><span>bảo hành</span></div>
+          <div><b>48h</b><span>giao tận nơi</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Room tiles (single-select) -->
+  <section class="cat-tiles container shop-reveal">
+    <div class="cat-tiles-track">
+      {roomsLive.map((r) => (
+        <button class="cat-tile" type="button" data-active={r.key === '' ? 'true' : 'false'} data-cat={r.key}>
+          <span class="ic">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              {r.icon.split('|').map((part) => {
+                if (part.startsWith('rect:')) {
+                  const [x, y, w, h, rx] = part.slice(5).split(' ');
+                  return <rect x={x} y={y} width={w} height={h} rx={rx} />;
+                }
+                return <path d={part} />;
+              })}
+            </svg>
+          </span>
+          <span class="name">{r.name}</span>
+          <span class="n">{roomCount(r.key)}</span>
+        </button>
+      ))}
+    </div>
+  </section>
+
+  <!-- Toolbar sticky -->
+  <div class="toolbar">
+    <div class="container tb-inner">
+      <div class="tb-chips">
+        <span style="font-size: 12px; color: var(--shop-ink-soft); font-weight: 600; letter-spacing: .04em;">Lọc đang dùng:</span>
+        <a href="#" style="font-size: 12px; color: var(--shop-accent); font-weight: 600;">Xoá tất cả</a>
+      </div>
+      <div class="tb-controls">
+        <span style="color: var(--shop-ink-soft);"><b style="color: var(--shop-ink); font-weight: 600;">{TOTAL}</b> kết quả</span>
+        <select aria-label="Sắp xếp">
+          <option>Liên quan nhất</option>
+          <option>Tiết kiệm nhiều nhất</option>
+          <option>Giá thấp → cao</option>
+          <option>Giá cao → thấp</option>
+        </select>
+        <div class="view-toggle">
+          <button class="active" type="button" data-view="3col" aria-label="3 cột">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="6" height="18"/><rect x="9.5" y="3" width="5" height="18"/><rect x="15" y="3" width="6" height="18"/></svg>
+          </button>
+          <button type="button" data-view="4col" aria-label="4 cột">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="4" height="18"/><rect x="8" y="3" width="4" height="18"/><rect x="13" y="3" width="4" height="18"/><rect x="18" y="3" width="3" height="18"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shop layout: filters + grid -->
+  <main class="shop container">
+    <aside class="filters">
+      <div class="filters-head">
+        <h3>Bộ lọc</h3>
+        <a href="#">Xoá tất cả</a>
+      </div>
+
+      <!-- "Không gian" đã có ở cat-tiles trên cùng (single-select). Sidebar chỉ giữ
+           giá + trạng thái để tránh state desync (theo bài học san-pham). -->
+
+      <details class="fgrp" open>
+        <summary>Khoảng giá</summary>
+        <div class="fgrp-body range">
+          <div class="range-track">
+            <div class="range-fill"></div>
+            <div class="range-thumb lo"></div>
+            <div class="range-thumb hi"></div>
+          </div>
+          <div class="range-inputs">
+            <input type="text" value="8.900.000đ" />
+            <input type="text" value="45.000.000đ" />
+          </div>
+        </div>
+      </details>
+
+      <details class="fgrp" open>
+        <summary>Trạng thái</summary>
+        <div class="fgrp-body">
+          {statusLive.map((f) => (
+            <label class="check-row">
+              <span><input type="checkbox" data-filter-tag={f.key} />{f.label}</span>
+              <span class="count">{tagCount(f.key)}</span>
+            </label>
+          ))}
+        </div>
+      </details>
+
+      <div style="padding-top: 20px;">
+        <button class="shop-btn shop-btn-primary" type="button" id="filterApply" style="width: 100%; justify-content: center;">Xem kết quả →</button>
+      </div>
+    </aside>
+
+    <!-- GRID -->
+    <div>
+      <div class="grid shop-reveal-stagger" id="grid" data-view="3col">
+
+        <!-- Feature combo (span 2 cột) -->
+        {feature && (
+          <a
+            class="card feature product-card-item"
+            href={feature.href}
+            data-id={feature.id}
+            data-cat={feature.room}
+            data-price={feature.price}
+            data-save={priceNum(feature.priceOld) - feature.price}
+            data-name={`Combo ${feature.nameEm}${feature.nameTail ?? ''}`}
+            data-tags={badgeTag(feature)}
+          >
+            <div class="card-img">
+              <div class="shop-ph"><span class="shop-ph-label">{feature.placeholder}</span></div>
+              <img class="card-illo" src={feature.photo || '/uploads/products/cat-combo.png'} alt={`${feature.photo ? '' : 'Minh hoạ '}${feature.placeholder} — WOTU`} loading="lazy" decoding="async" />
+              {feature.badge && (
+                <div class="card-badges"><span class={`b-tag${feature.badgeClass ? ' ' + feature.badgeClass : ''}`} style={feature.badgeStyle || undefined}>{feature.badge}</span></div>
+              )}
+            </div>
+            <div class="card-body">
+              <span class="card-meta">{feature.cat}</span>
+              <h4>{feature.name} <em>{feature.nameEm}</em>{feature.nameTail}</h4>
+              <p class="desc">{feature.desc}</p>
+              <div class="card-foot">
+                <div class="card-price"><s>{feature.priceOld}</s>{feature.priceNew}</div>
+              </div>
+              <span class="shop-btn" style="margin-top: 6px; padding: 14px 22px; font-size: 14px;">Xem combo {feature.nameEm} <span class="arr">→</span></span>
+            </div>
+          </a>
+        )}
+
+        {rest.map((c: any) => (
+          <article
+            class="card product-card-item"
+            data-id={c.id}
+            data-cat={c.room}
+            data-price={c.price}
+            data-save={priceNum(c.priceOld) - c.price}
+            data-name={`Combo ${c.nameEm}${c.nameTail ?? ''}`}
+            data-tags={badgeTag(c)}
+          >
+            <a href={c.href} style="text-decoration: none; color: inherit; display: contents;">
+              <div class="card-img">
+                <div class={`shop-ph ${c.tone ?? ''}`}><span class="shop-ph-label">{c.placeholder}</span></div>
+                <img class="card-illo" src={c.photo || `/uploads/products/cat-combo.png`} alt={`${c.photo ? '' : 'Minh hoạ '}${c.placeholder} — WOTU`} loading="lazy" decoding="async" />
+                {c.badge && (
+                  <div class="card-badges"><span class={`b-tag${c.badgeClass ? ' ' + c.badgeClass : ''}`} style={c.badgeStyle || undefined}>{c.badge}</span></div>
+                )}
+              </div>
+              <div class="card-body">
+                <span class="card-meta">{c.cat}</span>
+                <h4>{c.name} <em>{c.nameEm}</em>{c.nameTail}</h4>
+                <p class="includes">{c.desc}</p>
+                <div class="card-foot">
+                  <div class="card-price"><s>{c.priceOld}</s>{c.priceNew}</div>
+                </div>
+              </div>
+            </a>
+            <button class="card-fav" type="button" data-fav={c.id} aria-label="Yêu thích">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3 5.97 5.97 0 0 0 12 5a5.97 5.97 0 0 0-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
+            </button>
+            <button class="card-quick" type="button" data-add>+ Thêm nhanh vào giỏ</button>
+          </article>
+        ))}
+
+        <!-- CTA row -->
+        <div class="cta-row grid-span">
+          <div>
+            <span class="eyebrow">Tư vấn KTS · miễn phí</span>
+            <h4>Chưa biết chọn combo nào? <em>KTS WOTU</em> dựng 3D cho bạn xem trước.</h4>
+            <p>Gửi mặt bằng phòng — chúng tôi gợi ý combo phù hợp, dựng phòng 3D trong 24h. Hoàn toàn miễn phí, không ràng buộc.</p>
+          </div>
+          <div class="actions">
+            <a class="shop-btn shop-btn-primary" style="padding: 14px 22px; font-size: 14px;" href="/#contact">Đặt KTS tư vấn <span class="arr">→</span></a>
+            <a class="shop-btn shop-btn-outline" style="padding: 14px 22px; font-size: 14px;" href="https://zalo.me/0933774708" target="_blank" rel="noopener noreferrer">Chat Zalo</a>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="combo-empty" id="combo-empty" hidden>Chưa có combo phù hợp bộ lọc này — chúng tôi đang chuẩn bị thêm. Để lại số ở <a href="/#contact">phần liên hệ</a> để được tư vấn riêng.</p>
+
+      <!-- Tổng kết (toàn bộ combo trên 1 trang — chưa cần phân trang) -->
+      <div class="pager">
+        <div class="info">Hiển thị <b style="color: var(--shop-ink);">{TOTAL}</b> trong tổng <b style="color: var(--shop-ink);">{TOTAL}</b> combo</div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</ShopLayout>
+
+<style>
+  .crumb { padding: 22px 0 6px; }
+  .crumb-list { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--shop-ink-soft); align-items: center; }
+  .crumb-list a:hover { color: var(--shop-accent); }
+  .crumb-list .sep { opacity: .5; }
+  .crumb-list .here { color: var(--shop-ink); font-weight: 600; }
+
+  /* Page header */
+  .ph-head { padding: 14px 0 28px; }
+  .ph-head-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 50px; align-items: end; }
+  .ph-head h1 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(48px, 6.5vw, 88px); line-height: 0.96; letter-spacing: -.02em; margin: 14px 0 0; }
+  .ph-head h1 em { font-style: italic; color: var(--shop-accent); }
+  .ph-head .meta { color: var(--shop-ink-soft); font-size: 15px; max-width: 460px; margin: 0; line-height: 1.55; }
+  .ph-head .meta b { color: var(--shop-ink); font-weight: 600; }
+  .ph-head .meta-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--shop-line); font-size: 13px; }
+  .ph-head .meta-row b { font-family: var(--shop-serif); font-size: 24px; display: block; font-weight: 400; color: var(--shop-ink); line-height: 1; }
+  .ph-head .meta-row span { color: var(--shop-ink-soft); }
+
+  /* Room tiles */
+  .cat-tiles { padding: 16px 0 30px; }
+  .cat-tiles-track { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; overflow-x: auto; padding-top: 4px; padding-bottom: 6px; }
+  .cat-tile {
+    background: var(--shop-bg-card); border: 1px solid var(--shop-line); border-radius: var(--shop-radius);
+    padding: 14px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    text-align: center; cursor: pointer; transition: transform .2s, border-color .2s, background .2s;
+    color: var(--shop-ink); font-family: inherit;
+  }
+  .cat-tile:hover { border-color: var(--shop-accent); }
+  .cat-tile[data-active="true"] { background: var(--shop-accent); color: #fff; border-color: var(--shop-accent); }
+  .cat-tile .ic { width: 44px; height: 44px; border-radius: 12px; background: var(--shop-warm-soft); color: var(--shop-accent); display: grid; place-items: center; flex: none; }
+  .cat-tile[data-active="true"] .ic { background: rgba(255,255,255,0.25); color: #fff; }
+  .cat-tile .name { font-size: 13px; font-weight: 600; line-height: 1.1; white-space: nowrap; }
+  .cat-tile .n { font-size: 10px; color: var(--shop-ink-soft); }
+  .cat-tile[data-active="true"] .n { color: rgba(255,255,255,0.8); }
+
+  /* Toolbar */
+  .toolbar {
+    position: sticky; top: 64px; z-index: 40;
+    background: var(--shop-bg);
+    border-top: 1px solid var(--shop-line); border-bottom: 1px solid var(--shop-line);
+    padding: 14px 0; margin-bottom: 30px;
+  }
+  .tb-inner { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .tb-chips { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; align-items: center; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; background: var(--shop-bg-card); border: 1px solid var(--shop-line); padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .chip.active { background: var(--shop-ink); color: var(--shop-bg); border-color: var(--shop-ink); }
+  .chip .x { width: 14px; height: 14px; border-radius: 50%; background: color-mix(in oklab, var(--shop-bg) 30%, transparent); display: grid; place-items: center; font-size: 10px; cursor: pointer; border: 0; color: inherit; }
+  .tb-controls { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+  .tb-controls select {
+    padding: 8px 36px 8px 14px; border-radius: 999px; border: 1px solid var(--shop-line);
+    background: var(--shop-bg-card) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232A2520' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 12px center;
+    font: inherit; appearance: none; cursor: pointer; color: var(--shop-ink);
+  }
+  .view-toggle { display: inline-flex; background: var(--shop-bg-card); border: 1px solid var(--shop-line); border-radius: 999px; padding: 3px; }
+  .view-toggle button { padding: 6px 10px; border-radius: 999px; color: var(--shop-ink-soft); display: grid; place-items: center; border: 0; cursor: pointer; }
+  .view-toggle button.active { background: var(--shop-ink); color: var(--shop-bg); }
+
+  /* Main shop layout */
+  .shop {
+    display: grid; grid-template-columns: 260px 1fr; gap: 36px; padding-bottom: 80px;
+    max-width: 1400px;
+  }
+  aside.filters { position: sticky; top: 136px; align-self: flex-start; max-height: calc(100vh - 150px); overflow-y: auto; padding-right: 6px; background: var(--shop-bg); z-index: 1; }
+  .filters-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--shop-line); }
+  .filters-head h3 { font-family: var(--shop-serif); font-size: 22px; margin: 0; font-weight: 400; }
+  .filters-head a { font-size: 12px; color: var(--shop-accent); font-weight: 600; }
+
+  .fgrp { border-bottom: 1px solid var(--shop-line); padding: 16px 0; }
+  .fgrp summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--shop-ink); padding: 4px 0; }
+  .fgrp summary::-webkit-details-marker { display: none; }
+  .fgrp summary::after { content: "−"; width: 20px; height: 20px; display: grid; place-items: center; color: var(--shop-ink-soft); font-weight: 400; font-size: 16px; }
+  .fgrp:not([open]) summary::after { content: "+"; }
+  .fgrp-body { padding-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .check-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 14px; cursor: pointer; }
+  .check-row input { width: 16px; height: 16px; accent-color: var(--shop-ink); cursor: pointer; }
+  .check-row .count { color: var(--shop-ink-soft); font-size: 12px; }
+  .check-row > span:first-of-type { display: flex; align-items: center; gap: 10px; }
+
+  .range { padding: 4px 0; }
+  .range-track { position: relative; height: 4px; background: var(--shop-bg-soft); border-radius: 999px; margin: 18px 4px 12px; }
+  .range-fill { position: absolute; top: 0; bottom: 0; background: var(--shop-ink); border-radius: 999px; left: 0%; right: 0%; }
+  .range-thumb { position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%; background: var(--shop-bg-card); border: 2px solid var(--shop-ink); transform: translate(-50%, -50%); cursor: pointer; }
+  .range-thumb.lo { left: 0%; }
+  .range-thumb.hi { left: 100%; }
+  .range-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .range-inputs input { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--shop-line); font: inherit; font-size: 13px; background: var(--shop-bg-card); color: var(--shop-ink); }
+
+  /* Grid */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: stretch; }
+  .grid[data-view="4col"] { grid-template-columns: repeat(4, 1fr); }
+
+  .card {
+    background: var(--shop-bg-card); border: 1px solid color-mix(in oklab, var(--shop-line) 60%, transparent);
+    border-radius: var(--shop-radius-lg); overflow: hidden; display: flex; flex-direction: column;
+    transition: transform .25s, box-shadow .25s;
+    text-decoration: none; color: var(--shop-ink);
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 22px 44px -22px rgba(58,42,30,.18); }
+
+  .card-img { aspect-ratio: 4/3; background: var(--shop-bg-soft); position: relative; overflow: hidden; }
+  .card-illo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+  .card-badges { position: absolute; top: 12px; left: 12px; display: flex; flex-direction: column; gap: 6px; z-index: 2; }
+  .b-tag { background: var(--shop-bg-card); padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--shop-ink); display: inline-block; width: fit-content; }
+  .b-tag.accent { background: var(--shop-accent); color: white; }
+  .b-tag.terra { background: var(--shop-accent); color: white; }
+  .b-tag.sage { background: var(--shop-accent-2); color: white; }
+  .b-tag.dark { background: var(--shop-ink); color: var(--shop-bg); }
+  .card-fav {
+    position: absolute; top: 12px; right: 12px; z-index: 2;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--shop-bg-card); display: grid; place-items: center;
+    transition: transform .2s, color .2s; border: 0; cursor: pointer; color: var(--shop-ink-soft);
+  }
+  .card-fav:hover { transform: scale(1.1); color: var(--shop-accent); }
+  .card-quick {
+    position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 3;
+    background: var(--shop-ink); color: var(--shop-bg);
+    padding: 10px; border-radius: 999px; text-align: center;
+    font: 700 12px/1 var(--shop-sans);
+    border: 0; cursor: pointer;
+    transform: translateY(150%); opacity: 0;
+    transition: transform .25s, opacity .25s, background .2s;
+  }
+  .card:hover .card-quick,
+  .card:focus-within .card-quick { transform: none; opacity: 1; }
+  .card-quick:hover { background: var(--shop-accent); }
+
+  .product-card-item { position: relative; }
+  .product-card-item[hidden] { display: none !important; }
+
+  .card-fav[data-active="true"],
+  .card-fav[data-active="true"]:hover { color: var(--shop-accent); }
+  .card-fav[data-active="true"] svg { fill: currentColor; }
+
+  .card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .card-meta { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--shop-ink-soft); font-weight: 600; }
+  .card-body h4 { font-family: var(--shop-serif); font-size: 22px; margin: 0; line-height: 1.1; letter-spacing: -.005em; font-weight: 400; }
+  .card-body h4 em { font-style: italic; color: var(--shop-accent); }
+  .card-body .includes { font-size: 13px; color: var(--shop-ink-soft); line-height: 1.5; margin: 2px 0 0; }
+  .card-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; gap: 8px; flex-wrap: wrap; }
+  .card-price { font-family: var(--shop-serif); font-size: 19px; color: var(--shop-ink); }
+  .card-price s { font-size: 12px; color: var(--shop-ink-soft); font-family: var(--shop-sans); margin-right: 6px; }
+
+  /* Feature card */
+  .card.feature {
+    grid-column: span 2;
+    background: linear-gradient(135deg, var(--shop-accent), var(--shop-accent-deep));
+    color: var(--shop-bg); flex-direction: row;
+    border: 0;
+  }
+  .card.feature .card-img { width: 48%; aspect-ratio: auto; }
+  .card.feature .card-body { width: 52%; padding: 30px; gap: 14px; justify-content: center; }
+  .card.feature .card-meta { color: color-mix(in oklab, var(--shop-bg) 80%, transparent); }
+  .card.feature .card-body h4 { font-size: 32px; color: var(--shop-bg); }
+  .card.feature .card-body h4 em { color: var(--shop-warm-soft); }
+  .card.feature .card-price { color: var(--shop-bg); }
+  .card.feature .card-price s { color: color-mix(in oklab, var(--shop-bg) 70%, transparent); }
+  .card.feature .desc { font-size: 14px; color: color-mix(in oklab, var(--shop-bg) 85%, transparent); margin: 4px 0 8px; }
+  .card.feature .shop-btn { background: var(--shop-bg); color: var(--shop-ink); align-self: flex-start; }
+  .card.feature .shop-btn:hover { background: var(--shop-ink); color: var(--shop-bg); }
+
+  /* CTA row */
+  .cta-row {
+    background: var(--shop-ink); color: var(--shop-bg);
+    border-radius: var(--shop-radius-lg);
+    padding: 32px; display: grid; grid-template-columns: 1.5fr 1fr;
+    gap: 30px; align-items: center; margin: 12px 0;
+  }
+  .cta-row.grid-span { grid-column: 1 / -1; }
+  .cta-row h4 { font-family: var(--shop-serif); font-weight: 400; font-size: 30px; line-height: 1.05; margin: 6px 0 6px; color: var(--shop-bg); }
+  .cta-row h4 em { color: var(--shop-accent); font-style: italic; }
+  .cta-row p { color: color-mix(in oklab, var(--shop-bg) 75%, transparent); font-size: 14px; margin: 0; }
+  .cta-row .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .cta-row .eyebrow { color: color-mix(in oklab, var(--shop-bg) 70%, transparent); }
+  .cta-row .shop-btn-primary { background: var(--shop-accent); color: var(--shop-bg); }
+  .cta-row .shop-btn-primary:hover { background: var(--shop-bg); color: var(--shop-ink); }
+  .cta-row .shop-btn-outline { background: transparent; border-color: color-mix(in oklab, var(--shop-bg) 40%, transparent); color: var(--shop-bg); }
+  .cta-row .shop-btn-outline:hover { background: var(--shop-bg); color: var(--shop-ink); border-color: var(--shop-bg); }
+
+  .combo-empty { text-align: center; color: var(--shop-ink-soft); font-size: 15px; padding: 40px 0; }
+  .combo-empty a { color: var(--shop-accent); font-weight: 600; }
+
+  /* Footer summary */
+  .pager { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 40px 0 0; flex-wrap: wrap; }
+  .pager .info { color: var(--shop-ink-soft); font-size: 13px; }
+
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .shop { grid-template-columns: 220px 1fr; }
+    .cat-tiles-track { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 980px) {
+    .shop { grid-template-columns: 1fr; }
+    aside.filters { position: static; max-height: none; }
+    .ph-head-grid { grid-template-columns: 1fr; }
+    .grid, .grid[data-view="4col"] { grid-template-columns: repeat(2, 1fr); }
+    .card.feature { grid-column: span 2; flex-direction: column; }
+    .card.feature .card-img, .card.feature .card-body { width: 100%; }
+    .card.feature .card-img { aspect-ratio: 4/3; }
+    .cta-row { grid-template-columns: 1fr; }
+    .cat-tiles-track { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .grid, .grid[data-view="4col"] { grid-template-columns: 1fr; }
+    .card.feature { grid-column: span 1; }
+    .cat-tiles-track { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+
+<script>
+  import { addToCart, toggleFavorite, isFavorite, onChange, toast } from '../../lib/shop-store';
+
+  const ROOM_LABELS: Record<string, string> = {
+    'phong-khach': 'Phòng khách',
+    'phong-ngu': 'Phòng ngủ',
+    'phong-an': 'Phòng ăn & bếp',
+    'lam-viec': 'Làm việc',
+    'studio': 'Căn hộ studio',
+    'tre-em': 'Phòng trẻ em',
+  };
+  const TAG_LABELS: Record<string, string> = {
+    bestseller: 'Bestseller',
+    hot: 'Đang hot',
+    moi: 'Mới về',
+    sale: 'Đang giảm',
+  };
+
+  // ===== State =====
+  const state = {
+    cat: '', // room key (dimension chính)
+    tags: new Set<string>(), // trạng thái (badge)
+    sort: 'relevant',
+    priceMin: 0,
+    priceMax: Number.POSITIVE_INFINITY,
+  };
+
+  const url = new URL(window.location.href);
+  const qRoom = url.searchParams.get('room');
+  if (qRoom) state.cat = qRoom;
+
+  const grid = document.getElementById('grid');
+  const resultCount = document.querySelector<HTMLElement>('.tb-controls span b');
+  const sortSel = document.querySelector<HTMLSelectElement>('.tb-controls select');
+  const priceMinInput = document.querySelector<HTMLInputElement>('.range-inputs input:first-child');
+  const priceMaxInput = document.querySelector<HTMLInputElement>('.range-inputs input:last-child');
+  const chipsBox = document.querySelector<HTMLElement>('.tb-chips');
+  const pagerInfo = document.querySelector<HTMLElement>('.pager .info');
+  const emptyMsg = document.getElementById('combo-empty');
+  const TOTAL = grid?.querySelectorAll('.product-card-item').length ?? 0;
+
+  function parsePrice(s: string): number {
+    return Number(s.replace(/[^\d]/g, '')) || 0;
+  }
+
+  function escapeHtml(s: string): string {
+    return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  }
+
+  function renderChips(): void {
+    if (!chipsBox) return;
+    chipsBox.querySelectorAll<HTMLElement>('.chip').forEach((c) => c.remove());
+    const label = chipsBox.querySelector('span');
+    const clearLink = chipsBox.querySelector('a');
+
+    const items: { label: string; remove: () => void }[] = [];
+    if (state.cat) items.push({ label: ROOM_LABELS[state.cat] ?? state.cat, remove: () => setActiveCat('') });
+    state.tags.forEach((t) => items.push({ label: TAG_LABELS[t] ?? t, remove: () => { state.tags.delete(t); syncCheckbox(t, false); applyFilter(); } }));
+    if (state.priceMin > 0 || state.priceMax < Number.POSITIVE_INFINITY) {
+      const fmt = (n: number) => new Intl.NumberFormat('vi-VN').format(n);
+      const lbl =
+        state.priceMin > 0 && state.priceMax < Number.POSITIVE_INFINITY
+          ? `${fmt(state.priceMin)} – ${fmt(state.priceMax)}đ`
+          : state.priceMin > 0
+            ? `Từ ${fmt(state.priceMin)}đ`
+            : `Dưới ${fmt(state.priceMax)}đ`;
+      items.push({
+        label: lbl,
+        remove: () => {
+          state.priceMin = 0; state.priceMax = Number.POSITIVE_INFINITY;
+          if (priceMinInput) priceMinInput.value = '';
+          if (priceMaxInput) priceMaxInput.value = '';
+          applyFilter();
+        },
+      });
+    }
+
+    items.forEach((it) => {
+      const chip = document.createElement('span');
+      chip.className = 'chip active';
+      chip.innerHTML = `${escapeHtml(it.label)} <button class="x" type="button" aria-label="Bỏ">×</button>`;
+      chip.querySelector<HTMLButtonElement>('.x')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        it.remove();
+      });
+      if (clearLink) chipsBox.insertBefore(chip, clearLink);
+      else chipsBox.appendChild(chip);
+    });
+
+    const hasAny = items.length > 0;
+    if (label) label.style.display = hasAny ? '' : 'none';
+    if (clearLink) (clearLink as HTMLAnchorElement).style.display = hasAny ? '' : 'none';
+  }
+
+  function syncCheckbox(key: string, checked: boolean): void {
+    const cb = document.querySelector<HTMLInputElement>(`[data-filter-tag="${key}"]`);
+    if (cb) cb.checked = checked;
+  }
+
+  function clearAll(): void {
+    state.cat = '';
+    state.tags.clear();
+    state.priceMin = 0;
+    state.priceMax = Number.POSITIVE_INFINITY;
+    document.querySelectorAll<HTMLInputElement>('[data-filter-tag]').forEach((cb) => (cb.checked = false));
+    if (priceMinInput) priceMinInput.value = '';
+    if (priceMaxInput) priceMaxInput.value = '';
+    document.querySelectorAll<HTMLButtonElement>('.cat-tile').forEach((b) => (b.dataset.active = b.dataset.cat === '' ? 'true' : 'false'));
+    applyFilter();
+  }
+
+  function applyFilter(): void {
+    if (!grid) return;
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>('.product-card-item'));
+    let visible = 0;
+    cards.forEach((card) => {
+      const room = card.dataset.cat ?? '';
+      const price = Number(card.dataset.price ?? 0);
+      const tags = (card.dataset.tags ?? '').split(/\s+/).filter(Boolean);
+      const matchRoom = !state.cat || room === state.cat;
+      const matchPrice = price >= state.priceMin && price <= state.priceMax;
+      const matchTags = state.tags.size === 0 || Array.from(state.tags).every((t) => tags.includes(t));
+      const show = matchRoom && matchPrice && matchTags;
+      card.hidden = !show;
+      if (show) visible++;
+    });
+    if (resultCount) resultCount.textContent = String(visible);
+    if (pagerInfo) {
+      pagerInfo.innerHTML = `Hiển thị <b style="color: var(--shop-ink);">${visible}</b> trong tổng <b style="color: var(--shop-ink);">${TOTAL}</b> combo`;
+    }
+    if (emptyMsg) emptyMsg.hidden = visible > 0;
+    renderChips();
+
+    // Sort — giữ feature card cố định, chỉ reorder card thường.
+    const visCards = cards.filter((c) => !c.hidden && !c.classList.contains('feature'));
+    visCards.sort((a, b) => {
+      const pa = Number(a.dataset.price ?? 0);
+      const pb = Number(b.dataset.price ?? 0);
+      const sa = Number(a.dataset.save ?? 0);
+      const sb = Number(b.dataset.save ?? 0);
+      switch (state.sort) {
+        case 'price-asc': return pa - pb;
+        case 'price-desc': return pb - pa;
+        case 'save': return sb - sa;
+        default: return 0;
+      }
+    });
+    if (state.sort !== 'relevant') {
+      const ctaRow = grid.querySelector('.cta-row');
+      visCards.forEach((c) => grid.insertBefore(c, ctaRow));
+    }
+  }
+
+  // ===== Room tile single-select =====
+  const catTiles = document.querySelectorAll<HTMLButtonElement>('.cat-tile');
+  function setActiveCat(key: string): void {
+    state.cat = key;
+    catTiles.forEach((x) => (x.dataset.active = x.dataset.cat === key ? 'true' : 'false'));
+    applyFilter();
+  }
+  catTiles.forEach((t) => {
+    t.addEventListener('click', () => setActiveCat(t.dataset.cat ?? ''));
+  });
+  if (qRoom) setActiveCat(qRoom);
+
+  // ===== Status (badge) checkboxes =====
+  document.querySelectorAll<HTMLInputElement>('[data-filter-tag]').forEach((cb) => {
+    const key = cb.dataset.filterTag ?? '';
+    if (cb.checked) state.tags.add(key);
+    cb.addEventListener('change', () => {
+      if (cb.checked) state.tags.add(key);
+      else state.tags.delete(key);
+      applyFilter();
+    });
+  });
+
+  // ===== "Xoá tất cả" links =====
+  document.querySelectorAll<HTMLAnchorElement>('.filters-head a, .tb-chips a').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      clearAll();
+    });
+  });
+
+  // ===== Sort dropdown =====
+  sortSel?.addEventListener('change', () => {
+    const opt = sortSel.selectedOptions[0]?.text ?? '';
+    if (opt.includes('thấp')) state.sort = 'price-asc';
+    else if (opt.includes('cao →')) state.sort = 'price-desc';
+    else if (opt.includes('Tiết kiệm')) state.sort = 'save';
+    else state.sort = 'relevant';
+    applyFilter();
+  });
+
+  // ===== Price range inputs =====
+  function syncPriceRange(): void {
+    if (priceMinInput) state.priceMin = parsePrice(priceMinInput.value);
+    if (priceMaxInput) state.priceMax = parsePrice(priceMaxInput.value) || Number.POSITIVE_INFINITY;
+    applyFilter();
+  }
+  priceMinInput?.addEventListener('change', syncPriceRange);
+  priceMaxInput?.addEventListener('change', syncPriceRange);
+
+  // ===== Price range slider drag =====
+  const PRICE_RANGE_MIN = 8_900_000;
+  const PRICE_RANGE_MAX = 45_000_000;
+
+  function fmtPrice(v: number): string {
+    return v.toLocaleString('vi-VN') + 'đ';
+  }
+
+  function updateSliderUI(loVal: number, hiVal: number): void {
+    const track = document.querySelector<HTMLElement>('.range-track');
+    if (!track) return;
+    const loPct = ((loVal - PRICE_RANGE_MIN) / (PRICE_RANGE_MAX - PRICE_RANGE_MIN)) * 100;
+    const hiPct = ((hiVal - PRICE_RANGE_MIN) / (PRICE_RANGE_MAX - PRICE_RANGE_MIN)) * 100;
+    const fill = track.querySelector<HTMLElement>('.range-fill');
+    const lo = track.querySelector<HTMLElement>('.range-thumb.lo');
+    const hi = track.querySelector<HTMLElement>('.range-thumb.hi');
+    if (fill) { fill.style.left = loPct + '%'; fill.style.right = (100 - hiPct) + '%'; }
+    if (lo) lo.style.left = loPct + '%';
+    if (hi) hi.style.left = hiPct + '%';
+    if (priceMinInput) priceMinInput.value = fmtPrice(loVal);
+    if (priceMaxInput) priceMaxInput.value = fmtPrice(hiVal);
+  }
+
+  function setupThumbDrag(thumb: HTMLElement, isLo: boolean): void {
+    thumb.addEventListener('pointerdown', (e: PointerEvent) => {
+      e.preventDefault();
+      thumb.setPointerCapture(e.pointerId);
+      const track = thumb.closest<HTMLElement>('.range-track')!;
+
+      const onMove = (ev: PointerEvent) => {
+        const rect = track.getBoundingClientRect();
+        let pct = (ev.clientX - rect.left) / rect.width;
+        pct = Math.max(0, Math.min(1, pct));
+        const val = Math.round((PRICE_RANGE_MIN + pct * (PRICE_RANGE_MAX - PRICE_RANGE_MIN)) / 100_000) * 100_000;
+
+        const otherThumb = track.querySelector<HTMLElement>(isLo ? '.range-thumb.hi' : '.range-thumb.lo')!;
+        const otherPct = parseFloat(otherThumb.style.left || (isLo ? '100' : '0')) / 100;
+        const otherVal = Math.round((PRICE_RANGE_MIN + otherPct * (PRICE_RANGE_MAX - PRICE_RANGE_MIN)) / 100_000) * 100_000;
+
+        const loVal = isLo ? Math.min(val, otherVal) : otherVal;
+        const hiVal = isLo ? otherVal : Math.max(val, otherVal);
+        updateSliderUI(loVal, hiVal);
+      };
+
+      const onUp = () => {
+        thumb.removeEventListener('pointermove', onMove);
+        thumb.removeEventListener('pointerup', onUp);
+        syncPriceRange();
+      };
+
+      thumb.addEventListener('pointermove', onMove);
+      thumb.addEventListener('pointerup', onUp);
+    });
+  }
+
+  const loThumb = document.querySelector<HTMLElement>('.range-thumb.lo');
+  const hiThumb = document.querySelector<HTMLElement>('.range-thumb.hi');
+  if (loThumb) setupThumbDrag(loThumb, true);
+  if (hiThumb) setupThumbDrag(hiThumb, false);
+
+  // ===== View toggle =====
+  document.querySelectorAll<HTMLButtonElement>('.view-toggle button').forEach((b) =>
+    b.addEventListener('click', () => {
+      document.querySelectorAll<HTMLButtonElement>('.view-toggle button').forEach((x) => x.classList.remove('active'));
+      b.classList.add('active');
+      if (grid) grid.dataset.view = b.dataset.view ?? '3col';
+    }),
+  );
+
+  // ===== "Xem kết quả" (mobile): cuộn tới lưới =====
+  document.getElementById('filterApply')?.addEventListener('click', () => {
+    grid?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // ===== Add to cart =====
+  document.querySelectorAll<HTMLButtonElement>('[data-add]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const card = btn.closest<HTMLElement>('[data-id]');
+      if (!card) return;
+      addToCart(
+        {
+          id: card.dataset.id ?? '',
+          name: card.dataset.name ?? 'Combo',
+          price: Number(card.dataset.price ?? 0),
+        },
+        1,
+      );
+      toast(`✓ Đã thêm "${card.dataset.name}" vào giỏ`);
+    });
+  });
+
+  // ===== Favorite toggle =====
+  function syncFavUi(): void {
+    document.querySelectorAll<HTMLButtonElement>('[data-fav]').forEach((b) => {
+      const id = b.dataset.fav ?? '';
+      b.dataset.active = isFavorite(id) ? 'true' : 'false';
+    });
+  }
+  document.querySelectorAll<HTMLButtonElement>('[data-fav]').forEach((b) => {
+    b.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const id = b.dataset.fav ?? '';
+      const nowOn = toggleFavorite(id);
+      b.dataset.active = nowOn ? 'true' : 'false';
+      toast(nowOn ? '♥ Đã lưu vào yêu thích' : 'Đã bỏ yêu thích', { type: 'info' });
+    });
+  });
+  syncFavUi();
+  onChange(syncFavUi);
+
+  // Initial render
+  applyFilter();
+</script>

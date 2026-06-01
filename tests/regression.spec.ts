@@ -35,6 +35,7 @@ test.describe('1 · Routing — all routes return 200', () => {
     '/',
     '/san-pham/',
     '/san-pham/sofa-may/',
+    '/combo/',
     '/combo/to-am/',
     '/yeu-thich/',
     '/studio/',
@@ -762,5 +763,94 @@ test.describe('17 · Filter — cat tile filter', () => {
     // không có card cat khác sofa đang visible
     const nonSofa = visibleCards.filter((c) => c !== 'sofa' && c !== '');
     expect(nonSofa.length).toBe(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 18. /combo/ — catalog combo smoke + filter + cart
+// ---------------------------------------------------------------------------
+test.describe('18 · /combo/ — catalog combo', () => {
+  test('h1 chứa "combo"', async ({ page }) => {
+    await page.goto('/combo/');
+    await expect(page.locator('h1').first()).toContainText('combo');
+  });
+
+  test('room tiles hiển thị đủ 7 tiles (Tất cả + 6 phòng)', async ({ page }) => {
+    await page.goto('/combo/');
+    await expect(page.locator('.cat-tile')).toHaveCount(7);
+  });
+
+  test('grid có đủ 6 combo (product-card-item)', async ({ page }) => {
+    await page.goto('/combo/');
+    await expect(page.locator('.product-card-item')).toHaveCount(6);
+  });
+
+  test('feature card dẫn đến /combo/an-cu/', async ({ page }) => {
+    await page.goto('/combo/');
+    const featureCard = page.locator('.card.feature[href="/combo/an-cu/"]');
+    await expect(featureCard).toBeVisible();
+  });
+
+  test('filter sidebar có nhóm Khoảng giá + Trạng thái', async ({ page }) => {
+    await page.goto('/combo/');
+    const groups = page.locator('.filters .fgrp');
+    expect(await groups.count()).toBeGreaterThanOrEqual(2);
+    await expect(page.locator('input[data-filter-tag="bestseller"]')).toBeAttached();
+  });
+
+  test('Nav "Combo nội thất" trỏ tới /combo/ và active highlight', async ({ page }) => {
+    await page.goto('/combo/');
+    const link = page.locator('.shop-nav-links a[href="/combo/"]');
+    await expect(link).toBeAttached();
+    await expect(link).toHaveAttribute('aria-current', 'page');
+  });
+
+  test('nút "Xem tất cả combo" trên trang chủ trỏ /combo/', async ({ page }) => {
+    await page.goto('/');
+    const cta = page.locator('a.shop-btn-outline[href="/combo/"]');
+    await expect(cta.first()).toBeAttached();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 19. /combo/ — room tile filter + cart (desktop only)
+// ---------------------------------------------------------------------------
+test.describe('19 · /combo/ — room filter & cart', () => {
+  test.beforeEach(async ({}, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'desktop only — layout phụ thuộc viewport');
+  });
+
+  test('click tile "Phòng ngủ" → chỉ còn combo data-cat="phong-ngu" visible', async ({ page }) => {
+    await page.goto('/combo/');
+    await page.waitForLoadState('domcontentloaded');
+    await page.evaluate(() => new Promise((r) => setTimeout(r, 200)));
+
+    await page.locator('.cat-tile[data-cat="phong-ngu"]').click();
+    await page.waitForTimeout(300);
+
+    const visible = await page.evaluate(() => {
+      return Array.from(document.querySelectorAll<HTMLElement>('.product-card-item'))
+        .filter((el) => !el.hidden && el.offsetParent !== null)
+        .map((el) => el.dataset.cat ?? '');
+    });
+    expect(visible.length).toBeGreaterThanOrEqual(1);
+    expect(visible.every((c) => c === 'phong-ngu')).toBe(true);
+  });
+
+  test('click "Thêm nhanh vào giỏ" → badge increment', async ({ page }) => {
+    await page.goto('/combo/');
+    await clearStorage(page);
+    await page.reload();
+    await page.waitForLoadState('domcontentloaded');
+
+    const badge = page.locator('#wotu-cart-badge');
+    await expect(badge).toHaveAttribute('hidden', '');
+
+    const addBtn = page.locator('.product-card-item:not(.feature) [data-add]').first();
+    await addBtn.scrollIntoViewIfNeeded();
+    await addBtn.click();
+
+    await expect(badge).not.toHaveAttribute('hidden');
+    await expect(badge).toHaveText('1');
   });
 });
