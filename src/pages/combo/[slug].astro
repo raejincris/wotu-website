@@ -145,34 +145,34 @@ const breadcrumbSchema = {
         <h2>Bảng giá đồ rời</h2>
         <p class="pd-quote-sub">{c.name} <em>{c.nameEm}</em>{c.nameTail} · {c.cat}</p>
 
-        <div class="pd-quote-table" role="table" aria-label="Bảng giá đồ rời">
-          <div class="pq-row pq-head" role="row">
-            <span class="pq-no" role="columnheader">#</span>
-            <span role="columnheader">Tên món</span>
-            <span class="pq-dim" role="columnheader">Kích thước</span>
-            <span class="pq-price" role="columnheader">Đơn giá</span>
-          </div>
+        <div class="pq-grid">
           {items.map((it, i) => (
-            <div class="pq-row" role="row">
-              <span class="pq-no" role="cell">{String(i + 1).padStart(2, '0')}</span>
-              <span class="pq-name" role="cell">{it.name}</span>
-              <span class="pq-dim" role="cell">{it.dim ? it.dim : '—'}</span>
-              <span class="pq-price" role="cell">{fmtVND(it.price)}</span>
-            </div>
+            <article class="pq-card">
+              <div class="pq-img">
+                <div class={`shop-ph ${c.tone ?? ''}`}><span class="shop-ph-label">{it.name}</span></div>
+                {it.photo && <img class="shop-illo" src={it.photo} alt={`${it.name} — ${fullName}`} loading="lazy" decoding="async" />}
+                <span class="pq-no">{String(i + 1).padStart(2, '0')}</span>
+              </div>
+              <div class="pq-body">
+                <h4>{it.name}</h4>
+                {it.dim && <div class="pq-dim">KT: {it.dim}</div>}
+                <div class="pq-price">{fmtVND(it.price)}</div>
+              </div>
+            </article>
           ))}
-          <div class="pq-row pq-total" role="row">
-            <span class="pq-no" aria-hidden="true"></span>
-            <span class="pq-name" role="cell">Tổng giá trị đồ rời</span>
-            <span class="pq-dim" aria-hidden="true"></span>
-            <span class="pq-price" role="cell">{fmtVND(itemsTotal)}</span>
-          </div>
         </div>
 
-        <ul class="pq-notes">
-          <li>Báo giá có hiệu lực trong 15 ngày kể từ ngày cập nhật.</li>
-          <li>Giá đã bao gồm VAT.</li>
-          <li>Chưa bao gồm phí vận chuyển &amp; lắp đặt ngoài khu vực Quy Nhơn.</li>
-        </ul>
+        <div class="pq-footer">
+          <div class="pq-total">
+            <span class="pq-total-label">Tổng giá trị đồ rời</span>
+            <span class="pq-total-val">{fmtVND(itemsTotal)}</span>
+          </div>
+          <ul class="pq-notes">
+            <li>Báo giá có hiệu lực trong 15 ngày kể từ ngày cập nhật.</li>
+            <li>Giá đã bao gồm VAT.</li>
+            <li>Chưa bao gồm phí vận chuyển &amp; lắp đặt ngoài khu vực Quy Nhơn.</li>
+          </ul>
+        </div>
       </section>
     )}
 
@@ -265,25 +265,30 @@ const breadcrumbSchema = {
   .pd-room-link:hover { color: var(--shop-accent); }
 
   .pd-desc { max-width: 720px; margin: 72px auto 0; }
-  .pd-desc h2, .pd-related h2 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(26px, 3.5vw, 38px); margin-bottom: 18px; }
+  .pd-desc h2, .pd-related h2, .pd-quote h2 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(26px, 3.5vw, 38px); margin-bottom: 18px; }
   .pd-desc p { font-size: 16px; line-height: 1.75; color: var(--shop-ink-soft); margin-bottom: 1em; }
 
-  .pd-quote { max-width: 860px; margin: 72px auto 0; }
-  .pd-quote-sub { font-size: 14px; color: var(--shop-ink-soft); margin: -8px 0 24px; }
+  .pd-quote { margin: 80px 0 0; }
+  .pd-quote-sub { font-size: 14px; color: var(--shop-ink-soft); margin: 0 0 28px; }
   .pd-quote-sub em { font-style: italic; color: var(--shop-accent); }
-  .pd-quote-table { border-top: 1px solid var(--shop-line); }
-  .pq-row { display: grid; grid-template-columns: 40px 1fr auto auto; gap: 16px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--shop-line); }
-  .pq-head { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--shop-ink-soft); padding: 14px 0; }
-  .pq-no { color: var(--shop-ink-soft); font-size: 13px; font-variant-numeric: tabular-nums; }
-  .pq-name { color: var(--shop-ink); font-size: 15px; }
-  .pq-dim { color: var(--shop-ink-soft); font-size: 13px; text-align: right; }
-  .pq-price { color: var(--shop-ink); font-size: 15px; font-weight: 600; text-align: right; white-space: nowrap; }
-  .pq-total { background: var(--shop-bg-soft); border-bottom: none; margin-top: 4px; padding: 20px 16px; border-radius: var(--shop-radius); }
-  .pq-total .pq-name { font-family: var(--shop-serif); font-size: 20px; }
-  .pq-total .pq-price { font-family: var(--shop-serif); font-size: 26px; font-weight: 500; color: var(--shop-accent); }
-  .pq-notes { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-  .pq-notes li { font-size: 13px; color: var(--shop-ink-soft); padding-left: 16px; position: relative; }
-  .pq-notes li::before { content: '–'; position: absolute; left: 0; color: var(--shop-ink-soft); }
+
+  .pq-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .pq-card { background: var(--shop-bg-card); border: 1px solid var(--shop-line); border-radius: var(--shop-radius-lg); padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .pq-img { position: relative; aspect-ratio: 1/1; border-radius: var(--shop-radius); overflow: hidden; background: var(--shop-bg-soft); }
+  .pq-img .shop-ph { position: absolute; inset: 0; }
+  .pq-no { position: absolute; top: 10px; left: 10px; z-index: 2; background: var(--shop-ink); color: var(--shop-bg); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-family: var(--shop-serif); }
+  .pq-body { padding: 0 4px 4px; display: flex; flex-direction: column; gap: 4px; }
+  .pq-body h4 { font-family: var(--shop-serif); font-weight: 400; font-size: 19px; line-height: 1.1; margin: 0; }
+  .pq-dim { font-size: 12px; color: var(--shop-ink-soft); }
+  .pq-price { font-size: 15px; font-weight: 600; color: var(--shop-ink); margin-top: 2px; }
+
+  .pq-footer { display: grid; grid-template-columns: minmax(280px, 1fr) 1.2fr; gap: 28px; align-items: center; margin-top: 28px; padding: 24px 28px; background: var(--shop-bg-soft); border-radius: var(--shop-radius-lg); }
+  .pq-total { display: flex; flex-direction: column; gap: 4px; }
+  .pq-total-label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--shop-ink-soft); }
+  .pq-total-val { font-family: var(--shop-serif); font-size: clamp(30px, 4vw, 40px); font-weight: 500; color: var(--shop-accent); line-height: 1; }
+  .pq-notes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+  .pq-notes li { font-size: 13px; color: var(--shop-ink-soft); padding-left: 16px; position: relative; line-height: 1.5; }
+  .pq-notes li::before { content: '–'; position: absolute; left: 0; }
 
   .pd-related { margin-top: 80px; }
   .pd-rel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
@@ -298,11 +303,11 @@ const breadcrumbSchema = {
     .pd-top { grid-template-columns: 1fr; gap: 32px; }
     .pd-rel-grid { grid-template-columns: 1fr; }
 
-    .pq-row { grid-template-columns: 1fr auto; gap: 2px 16px; }
-    .pq-no { display: none; }
-    .pq-head .pq-dim { display: none; }
-    .pq-name { grid-column: 1; grid-row: 1; }
-    .pq-dim { grid-column: 1; grid-row: 2; text-align: left; }
-    .pq-price { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+    .pq-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .pq-footer { grid-template-columns: 1fr; gap: 18px; padding: 22px; }
+  }
+  @media (max-width: 520px) {
+    .pq-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .pq-body h4 { font-size: 17px; }
   }
 </style>

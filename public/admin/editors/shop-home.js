@@ -115,13 +115,15 @@ export async function init({ token, showToast, setLoading }) {
         addLabel: '＋ Thêm dòng giá',
         onChange: dirty.mark,
         title: (it, i) => `${i + 1}. ${it.name || 'Món'}`,
-        makeNew: () => ({ name: '', dim: '', price: 0 }),
+        makeNew: () => ({ name: '', dim: '', price: 0, photo: '' }),
         renderFields: (it) => `
           ${rfText('name', 'Tên món', it.name ?? '')}
           <div class="form-grid-2">
             ${rfText('dim', 'Kích thước (KT)', it.dim ?? '', { placeholder: 'VD: 2650 x 1600 x 750mm' })}
             ${rfText('price', 'Đơn giá (số)', it.price ?? 0, { hint: 'Chỉ số, VD: 18900000' })}
-          </div>`,
+          </div>
+          ${imageSlot('photo', it.photo ?? '', 'Ảnh món (tuỳ chọn)')}`,
+        onRow: (r) => attachImage(r.querySelector('.img-slot'), dirty.mark),
       });
       itemsRepByOrig.set(combo, rep);
     },
@@ -177,6 +179,7 @@ export async function init({ token, showToast, setLoading }) {
               name: g.name.trim(),
               dim: (g.dim || '').trim() || undefined,
               price: Number(String(g.price).replace(/[^\d]/g, '')) || 0,
+              photo: (g.photo || '').trim() || undefined,
             })).filter((it) => it.name)
           : orig.items;
         return {
