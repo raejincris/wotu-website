@@ -239,6 +239,9 @@ const breadcrumbSchema = {
   .crumb .here { color: var(--shop-ink); }
 
   .pd { padding: 28px 0 80px; }
+  /* Huỷ padding 100px của global `.shop section` cho các khối trang chi tiết —
+     nhịp dọc do margin riêng (.pd-desc/.pd-quote/.pd-related) quyết định. */
+  .pd > section { padding-top: 0; padding-bottom: 0; }
   .pd-top { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: start; }
   .pd-main { position: relative; aspect-ratio: 4/3; border-radius: var(--shop-radius-lg); overflow: hidden; background: var(--shop-bg-soft); }
   .pd-badges { position: absolute; top: 16px; left: 16px; z-index: 2; }
