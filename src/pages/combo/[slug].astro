@@ -37,6 +37,11 @@ const discount = oldNum && c.price ? Math.round((1 - c.price / oldNum) * 100) : 
 const roomLabel: Record<string, string> = { studio: 'căn hộ', 'phong-khach': 'phòng khách', 'phong-ngu': 'phòng ngủ', 'phong-an': 'phòng ăn', 'lam-viec': 'phòng làm việc', 'tre-em': 'phòng trẻ em' };
 const related = combos.filter((x) => x.id !== c.id).slice(0, 3);
 
+// Bảng giá đồ rời — chỉ render khi combo có items (dữ liệu thật do user nhập qua admin).
+const items = ((c.items ?? []) as any[]).filter((it) => it?.name);
+const itemsTotal = items.reduce((s, it) => s + (Number(it.price) || 0), 0);
+const fmtVND = (n: number) => (Number(n) > 0 ? Number(n).toLocaleString('vi-VN') + 'đ' : 'Liên hệ');
+
 const SITE_URL = 'https://www.wotu.vn';
 const PAGE_URL = `${SITE_URL}/combo/${slug}/`;
 const desc = `${fullName} — ${c.cat}. ${c.desc ?? ''} Trọn gói thiết kế, sản xuất tại xưởng WOTU Quy Nhơn và lắp đặt tận nơi. Bảo hành 5 năm.`;
@@ -135,6 +140,42 @@ const breadcrumbSchema = {
       <p>Mua trọn combo giúp đồng bộ tông màu và vật liệu, tiết kiệm hơn so với mua lẻ từng món. Đội WOTU khảo sát không gian thực tế trước khi chốt phương án để mọi thứ vừa vặn căn nhà của bạn.</p>
     </section>
 
+    {items.length > 0 && (
+      <section class="pd-quote">
+        <h2>Bảng giá đồ rời</h2>
+        <p class="pd-quote-sub">{c.name} <em>{c.nameEm}</em>{c.nameTail} · {c.cat}</p>
+
+        <div class="pd-quote-table" role="table" aria-label="Bảng giá đồ rời">
+          <div class="pq-row pq-head" role="row">
+            <span class="pq-no" role="columnheader">#</span>
+            <span role="columnheader">Tên món</span>
+            <span class="pq-dim" role="columnheader">Kích thước</span>
+            <span class="pq-price" role="columnheader">Đơn giá</span>
+          </div>
+          {items.map((it, i) => (
+            <div class="pq-row" role="row">
+              <span class="pq-no" role="cell">{String(i + 1).padStart(2, '0')}</span>
+              <span class="pq-name" role="cell">{it.name}</span>
+              <span class="pq-dim" role="cell">{it.dim ? it.dim : '—'}</span>
+              <span class="pq-price" role="cell">{fmtVND(it.price)}</span>
+            </div>
+          ))}
+          <div class="pq-row pq-total" role="row">
+            <span class="pq-no" aria-hidden="true"></span>
+            <span class="pq-name" role="cell">Tổng giá trị đồ rời</span>
+            <span class="pq-dim" aria-hidden="true"></span>
+            <span class="pq-price" role="cell">{fmtVND(itemsTotal)}</span>
+          </div>
+        </div>
+
+        <ul class="pq-notes">
+          <li>Báo giá có hiệu lực trong 15 ngày kể từ ngày cập nhật.</li>
+          <li>Giá đã bao gồm VAT.</li>
+          <li>Chưa bao gồm phí vận chuyển &amp; lắp đặt ngoài khu vực Quy Nhơn.</li>
+        </ul>
+      </section>
+    )}
+
     {related.length > 0 && (
       <section class="pd-related">
         <h2>Combo khác</h2>
@@ -227,6 +268,23 @@ const breadcrumbSchema = {
   .pd-desc h2, .pd-related h2 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(26px, 3.5vw, 38px); margin-bottom: 18px; }
   .pd-desc p { font-size: 16px; line-height: 1.75; color: var(--shop-ink-soft); margin-bottom: 1em; }
 
+  .pd-quote { max-width: 860px; margin: 72px auto 0; }
+  .pd-quote-sub { font-size: 14px; color: var(--shop-ink-soft); margin: -8px 0 24px; }
+  .pd-quote-sub em { font-style: italic; color: var(--shop-accent); }
+  .pd-quote-table { border-top: 1px solid var(--shop-line); }
+  .pq-row { display: grid; grid-template-columns: 40px 1fr auto auto; gap: 16px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--shop-line); }
+  .pq-head { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--shop-ink-soft); padding: 14px 0; }
+  .pq-no { color: var(--shop-ink-soft); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .pq-name { color: var(--shop-ink); font-size: 15px; }
+  .pq-dim { color: var(--shop-ink-soft); font-size: 13px; text-align: right; }
+  .pq-price { color: var(--shop-ink); font-size: 15px; font-weight: 600; text-align: right; white-space: nowrap; }
+  .pq-total { background: var(--shop-bg-soft); border-bottom: none; margin-top: 4px; padding: 20px 16px; border-radius: var(--shop-radius); }
+  .pq-total .pq-name { font-family: var(--shop-serif); font-size: 20px; }
+  .pq-total .pq-price { font-family: var(--shop-serif); font-size: 26px; font-weight: 500; color: var(--shop-accent); }
+  .pq-notes { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .pq-notes li { font-size: 13px; color: var(--shop-ink-soft); padding-left: 16px; position: relative; }
+  .pq-notes li::before { content: '–'; position: absolute; left: 0; color: var(--shop-ink-soft); }
+
   .pd-related { margin-top: 80px; }
   .pd-rel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
   .pd-rel-card { text-decoration: none; color: inherit; }
@@ -239,5 +297,12 @@ const breadcrumbSchema = {
   @media (max-width: 860px) {
     .pd-top { grid-template-columns: 1fr; gap: 32px; }
     .pd-rel-grid { grid-template-columns: 1fr; }
+
+    .pq-row { grid-template-columns: 1fr auto; gap: 2px 16px; }
+    .pq-no { display: none; }
+    .pq-head .pq-dim { display: none; }
+    .pq-name { grid-column: 1; grid-row: 1; }
+    .pq-dim { grid-column: 1; grid-row: 2; text-align: left; }
+    .pq-price { grid-column: 2; grid-row: 1 / 3; align-self: center; }
   }
 </style>

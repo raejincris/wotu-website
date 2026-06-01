@@ -256,6 +256,19 @@ test.describe('5 · /combo/to-am/ — combo detail', () => {
     await expect(crumb).toBeVisible();
     await expect(crumb.locator('a[href="/"]')).toBeVisible();
   });
+
+  test('combo động /combo/an-cu/ có bảng giá đồ rời + tổng', async ({ page }) => {
+    await page.goto('/combo/an-cu/');
+    const quote = page.locator('.pd-quote');
+    await expect(quote).toBeVisible();
+    await expect(quote.getByRole('heading', { level: 2 })).toContainText('Bảng giá đồ rời');
+    await expect(quote.locator('.pq-total')).toContainText('Tổng giá trị đồ rời');
+  });
+
+  test('combo động chưa có items thì KHÔNG hiện bảng giá', async ({ page }) => {
+    await page.goto('/combo/an-yen/');
+    await expect(page.locator('.pd-quote')).toHaveCount(0);
+  });
 });
 
 // ---------------------------------------------------------------------------

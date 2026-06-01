@@ -78,6 +78,40 @@ combos:
     tone: ""
     href: /combo/an-cu/
     photo: /uploads/combos/combos-1780205697249-y4ewy.webp
+    items:
+      - name: Sofa giường
+        dim: ""
+        price: 0
+      - name: Bàn trà
+        dim: ""
+        price: 0
+      - name: Kệ TV
+        dim: ""
+        price: 0
+      - name: Giường 1m6
+        dim: ""
+        price: 0
+      - name: Tủ áo 4 cánh
+        dim: ""
+        price: 0
+      - name: Bàn ăn 4 ghế
+        dim: ""
+        price: 0
+      - name: Bàn làm việc
+        dim: ""
+        price: 0
+      - name: Kệ bếp
+        dim: ""
+        price: 0
+      - name: Đèn trang trí
+        dim: ""
+        price: 0
+      - name: Thảm
+        dim: ""
+        price: 0
+      - name: Rèm cửa
+        dim: ""
+        price: 0
   - id: combo-to-am
     room: phong-khach
     cat: Phòng khách

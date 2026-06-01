@@ -93,7 +93,7 @@ export function repeatable({
 
   function renumber() {
     if (!title) return;
-    [...list.querySelectorAll('.repeat-row')].forEach((row, i) => {
+    [...list.querySelectorAll(':scope > .repeat-row')].forEach((row, i) => {
       const t = row.querySelector('.repeat-title');
       if (t) t.textContent = title(original.get(row.dataset.rowId) ?? {}, i);
     });
@@ -133,7 +133,7 @@ export function repeatable({
   mount.appendChild(addBtn);
 
   addBtn.addEventListener('click', () => {
-    const n = list.querySelectorAll('.repeat-row').length;
+    const n = list.querySelectorAll(':scope > .repeat-row').length;
     const item = makeNew ? makeNew() : {};
     const row = makeRow(item, n);
     list.appendChild(row);
@@ -146,9 +146,10 @@ export function repeatable({
     const btn = e.target.closest('.repeat-btn');
     if (!btn) return;
     const row = btn.closest('.repeat-row');
+    if (row.parentElement !== list) return; // bỏ qua click của repeatable lồng — nested list tự xử lý
     const act = btn.dataset.act;
     if (act === 'del') {
-      if (list.querySelectorAll('.repeat-row').length <= min) return;
+      if (list.querySelectorAll(':scope > .repeat-row').length <= min) return;
       original.delete(row.dataset.rowId);
       row.remove();
     } else if (act === 'up' && row.previousElementSibling) {
@@ -162,13 +163,14 @@ export function repeatable({
 
   return {
     list,
-    count: () => list.querySelectorAll('.repeat-row').length,
+    count: () => list.querySelectorAll(':scope > .repeat-row').length,
     getInputs: () => list.querySelectorAll('.repeat-fields input, .repeat-fields textarea, .repeat-fields select'),
     collect(build) {
-      return [...list.querySelectorAll('.repeat-row')].map((row) => {
+      return [...list.querySelectorAll(':scope > .repeat-row')].map((row) => {
         const orig = original.get(row.dataset.rowId) ?? {};
         const fields = {};
         row.querySelectorAll('[data-field]').forEach((el) => {
+          if (el.closest('.repeat-row') !== row) return; // bỏ qua field của row lồng (tránh ghi đè field cha)
           fields[el.dataset.field] = el.value;
         });
         return build ? build(fields, orig) : { ...orig, ...fields };

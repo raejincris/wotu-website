@@ -64,6 +64,9 @@ export async function init({ token, showToast, setLoading }) {
   const saveBtn = footer.querySelector('#save-shop-home');
   const dirty = bindDirty({ scope: body, saveBtn });
 
+  // map object combo gốc → instance nested rep "Bảng giá đồ rời" (collect() truyền đúng orig object mà onRow nhận)
+  const itemsRepByOrig = new WeakMap();
+
   const repCombos = repeatable({
     mount: body.querySelector('#combos-list'),
     items: combos,
@@ -71,7 +74,7 @@ export async function init({ token, showToast, setLoading }) {
     addLabel: '＋ Thêm combo',
     onChange: dirty.mark,
     title: (c, i) => `${i + 1}. ${[c.name, c.nameEm, c.nameTail].filter(Boolean).join(' ').trim() || 'Combo mới'}${c.id === 'combo-to-am' ? ' (Tổ Ấm — trang riêng)' : ''}`,
-    makeNew: () => ({ id: '', name: 'Combo', nameEm: 'Mới', nameTail: '', cat: 'Combo nội thất', desc: '', priceOld: '', priceNew: '', price: 0, priceNote: '', badge: '', badgeClass: '', room: 'phong-khach', tone: '', placeholder: 'Combo mới', href: '' }),
+    makeNew: () => ({ id: '', name: 'Combo', nameEm: 'Mới', nameTail: '', cat: 'Combo nội thất', desc: '', priceOld: '', priceNew: '', price: 0, priceNote: '', badge: '', badgeClass: '', room: 'phong-khach', tone: '', placeholder: 'Combo mới', href: '', items: [] }),
     renderFields: (c) => `
       <div class="form-grid-2">
         ${rfText('name', 'Tên', c.name)}
@@ -95,8 +98,33 @@ export async function init({ token, showToast, setLoading }) {
         ${rfSelect('badgeClass', 'Màu badge', c.badgeClass ?? '', BADGE_OPTS)}
       </div>
       ${rfSelect('room', 'Phòng (ảnh minh hoạ + lọc)', c.room ?? 'phong-khach', ROOM_OPTS)}
-      ${imageSlot('photo', c.photo ?? '', 'Ảnh chụp thật (ghi đè minh hoạ)')}`,
-    onRow: (row) => attachImage(row.querySelector('.img-slot'), dirty.mark),
+      ${imageSlot('photo', c.photo ?? '', 'Ảnh chụp thật (ghi đè minh hoạ)')}
+      <div class="form-row">
+        <label class="form-label">Bảng giá đồ rời (hiện dưới trang combo)</label>
+        <p class="form-hint" style="margin-bottom:8px;">Mỗi dòng = 1 món. Để trống đơn giá → hiện "Liên hệ". Không có dòng nào → trang combo ẩn bảng giá.</p>
+        <div class="combo-items"></div>
+      </div>`,
+    onRow: (row, combo) => {
+      attachImage(row.querySelector('.img-slot'), dirty.mark);
+      const mountEl = row.querySelector('.combo-items');
+      if (!mountEl) return;
+      const rep = repeatable({
+        mount: mountEl,
+        items: combo.items || [],
+        min: 0,
+        addLabel: '＋ Thêm dòng giá',
+        onChange: dirty.mark,
+        title: (it, i) => `${i + 1}. ${it.name || 'Món'}`,
+        makeNew: () => ({ name: '', dim: '', price: 0 }),
+        renderFields: (it) => `
+          ${rfText('name', 'Tên món', it.name ?? '')}
+          <div class="form-grid-2">
+            ${rfText('dim', 'Kích thước (KT)', it.dim ?? '', { placeholder: 'VD: 2650 x 1600 x 750mm' })}
+            ${rfText('price', 'Đơn giá (số)', it.price ?? 0, { hint: 'Chỉ số, VD: 18900000' })}
+          </div>`,
+      });
+      itemsRepByOrig.set(combo, rep);
+    },
   });
 
   const repBs = repeatable({
@@ -143,10 +171,19 @@ export async function init({ token, showToast, setLoading }) {
         const href = id === 'combo-to-am' ? (orig.href || '/combo/to-am/')
           : (orig.href && orig.id === id ? orig.href : `/combo/${slug}/`);
         const full = [f.name, f.nameEm, f.nameTail].filter(Boolean).join(' ').trim();
+        const itemsRep = itemsRepByOrig.get(orig);
+        const items = itemsRep
+          ? itemsRep.collect((g) => ({
+              name: g.name.trim(),
+              dim: (g.dim || '').trim() || undefined,
+              price: Number(String(g.price).replace(/[^\d]/g, '')) || 0,
+            })).filter((it) => it.name)
+          : orig.items;
         return {
           ...orig,
           id,
           href,
+          items: items && items.length ? items : undefined,
           name: f.name.trim(),
           nameEm: f.nameEm.trim() || undefined,
           nameTail: f.nameTail || undefined,
