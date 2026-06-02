@@ -345,8 +345,10 @@ const whyIcons: Record<string, string> = {
     font-size: clamp(48px, 7vw, 96px); line-height: 0.98; letter-spacing: -0.02em;
     margin: 0 0 26px;
   }
-  .hero h1 em { font-style: italic; color: var(--shop-accent); }
-  .hero h1 .stroke {
+  /* em / .stroke đến từ set:html (hero.title) + live-patch → không có cid scope
+     của Astro, nên phải :global() mới khớp. */
+  .hero h1 :global(em) { font-style: italic; color: var(--shop-accent); }
+  .hero h1 :global(.stroke) {
     -webkit-text-stroke: 1.5px var(--shop-ink); color: transparent;
     font-style: italic;
   }
@@ -360,7 +362,7 @@ const whyIcons: Record<string, string> = {
     padding-top: 28px; border-top: 1px solid var(--shop-line);
   }
   .meta-num { font-family: var(--shop-serif); font-size: 36px; color: var(--shop-ink); line-height: 1; }
-  .meta-num sup { font-size: 18px; color: var(--shop-accent); margin-left: 2px; }
+  .meta-num :global(sup) { font-size: 18px; color: var(--shop-accent); margin-left: 2px; }
   .meta-label { font-size: 12px; color: var(--shop-ink-soft); margin-top: 6px; letter-spacing: 0.04em; }
 
   .hero-visual {
