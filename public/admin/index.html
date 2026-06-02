@@ -119,6 +119,9 @@
       <a href="#blocks" class="sidebar-link" data-panel="blocks">
         <span class="sidebar-icon-emoji">➕</span> Khối nội dung
       </a>
+      <a href="#pages" class="sidebar-link" data-panel="pages">
+        <span class="sidebar-icon-emoji">📄</span> Trang tuỳ chỉnh
+      </a>
       <a href="#theme" class="sidebar-link" data-panel="theme">
         <span class="sidebar-icon-emoji">🎨</span> Tuỳ biến giao diện
       </a>
@@ -360,10 +363,22 @@
       <div id="panel-blocks" class="panel editor-panel" hidden>
         <div class="panel-page-header">
           <h2>Khối nội dung</h2>
-          <p class="panel-page-sub">Thêm/sửa/xoá khối nội dung cho trang chủ Shop</p>
+          <p class="panel-page-sub">Thêm/sửa/xoá khối — chọn trang (Shop / Studio / trang tuỳ chỉnh) ở đầu</p>
         </div>
         <div class="editor-body" id="editor-blocks-body"></div>
         <div class="editor-footer" id="editor-blocks-footer" hidden></div>
+      </div>
+
+      <!-- ╔══════════════════════════════════
+           ║  EDITOR: Trang tuỳ chỉnh (page-builder Phase 3)
+           ╚══════════════════════════════════ -->
+      <div id="panel-pages" class="panel editor-panel" hidden>
+        <div class="panel-page-header">
+          <h2>Trang tuỳ chỉnh</h2>
+          <p class="panel-page-sub">Tạo/xoá trang đứng riêng (src/data/pages/*.yml → /&lt;slug&gt;/)</p>
+        </div>
+        <div class="editor-body" id="editor-pages-body"></div>
+        <div class="editor-footer" id="editor-pages-footer" hidden></div>
       </div>
 
       <!-- ╔══════════════════════════════════

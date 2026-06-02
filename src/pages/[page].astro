@@ -1,0 +1,57 @@
+---
+/**
+ * [page].astro — route động cho trang tuỳ chỉnh (page-builder Phase 3).
+ * Build mỗi file src/data/pages/<slug>.yml thành 1 trang đứng riêng, dùng
+ * ShopLayout (template:shop) hoặc BaseLayout+studio-block (template:studio),
+ * render blocks qua BlockRenderer + Nav/Footer tương ứng. Tự vào sitemap.
+ */
+import ShopLayout from '../layouts/ShopLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ShopNav from '../components/shop/Nav.astro';
+import ShopFooter from '../components/shop/Footer.astro';
+import StudioNav from '../components/Nav.astro';
+import StudioFooter from '../components/Footer.astro';
+import BlockRenderer from '../components/shop/blocks/BlockRenderer.astro';
+import { resolveLayout } from '../lib/section-layout';
+
+export function getStaticPaths() {
+  const mods = import.meta.glob('../data/pages/*.yml', { eager: true });
+  return Object.entries(mods).map(([path, mod]) => {
+    const slug = path.split('/').pop()!.replace(/\.yml$/, '');
+    return { params: { page: slug }, props: { data: (mod as any).default ?? {} } };
+  });
+}
+
+const { data } = Astro.props;
+const blocks = (Array.isArray(data.blocks) ? data.blocks : []) as any[];
+const L = resolveLayout(data.layout, blocks.map((b: any) => b.id));
+const secStyle = (id: string) => `order:${L.order(id)};${L.on(id) ? '' : 'display:none;'}`;
+const isStudio = data.template === 'studio';
+const title = data.title ? `${data.title} — WOTU` : undefined;
+const description = data.description || undefined;
+---
+{isStudio ? (
+  <BaseLayout title={title} description={description}>
+    <StudioNav variant="inner" homeRoute="/studio/" />
+    <div class="cms-sections" style="display:flex; flex-direction:column; padding-top:72px;">
+      {blocks.map((b: any) => (
+        <section class="studio-block" data-reveal data-cms-section={b.id} style={secStyle(b.id)}>
+          <BlockRenderer block={b} />
+        </section>
+      ))}
+    </div>
+    <StudioFooter />
+  </BaseLayout>
+) : (
+  <ShopLayout title={title} description={description}>
+    <ShopNav />
+    <div class="cms-sections" style="display:flex; flex-direction:column;">
+      {blocks.map((b: any) => (
+        <section class="shop-reveal blk-section" data-cms-section={b.id} style={secStyle(b.id)}>
+          <BlockRenderer block={b} />
+        </section>
+      ))}
+    </div>
+    <ShopFooter />
+  </ShopLayout>
+)}

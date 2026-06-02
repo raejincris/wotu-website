@@ -1,4 +1,6 @@
 ---
+import { navPages } from '../../lib/custom-pages';
+
 interface NavLink { label: string; href: string; }
 
 interface Props {
@@ -14,6 +16,8 @@ const links: NavLink[] = [
   { label: 'Sản phẩm', href: '/san-pham/' },
   { label: 'Cảm hứng', href: '/#inspo' },
   { label: 'Bảo hành', href: '/#why' },
+  // Trang tuỳ chỉnh (admin) gắn cờ nav:true cho phần Shop — chèn trước link Studio.
+  ...navPages('shop').map((p) => ({ label: p.title, href: `/${p.slug}/` })),
   { label: 'Studio ↗', href: '/studio/' },
   { label: 'Tư vấn', href: '/#contact' },
 ];

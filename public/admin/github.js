@@ -112,6 +112,40 @@ export async function putBinaryFile(token, path, base64, sha, message) {
   return { commitUrl: data.commit.html_url, path };
 }
 
+/**
+ * Liệt kê nội dung 1 thư mục trong repo → [{ name, path, sha, type }].
+ * type: 'file' | 'dir'. Trả [] nếu thư mục chưa tồn tại (404).
+ */
+export async function listDir(token, path) {
+  const cleanPath = encodeURIComponent(path).replace(/%2F/g, '/');
+  const res = await fetch(
+    `${API}/repos/${REPO}/contents/${cleanPath}?ref=${BRANCH}`,
+    { headers: ghHeaders(token) },
+  );
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  if (!Array.isArray(data)) return [];
+  return data.map((it) => ({ name: it.name, path: it.path, sha: it.sha, type: it.type }));
+}
+
+/** Xoá 1 file khỏi repo (tạo commit). @returns {{ commitUrl: string }} */
+export async function deleteFile(token, path, sha, message) {
+  const cleanPath = encodeURIComponent(path).replace(/%2F/g, '/');
+  const res = await fetch(`${API}/repos/${REPO}/contents/${cleanPath}`, {
+    method: 'DELETE',
+    headers: { ...ghHeaders(token), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, sha, branch: BRANCH }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    if (res.status === 409) throw new Error('FILE_CONFLICT');
+    throw new Error(err.message || `HTTP ${res.status}`);
+  }
+  const data = await res.json();
+  return { commitUrl: data.commit.html_url };
+}
+
 /** Lấy thông tin user hiện tại */
 export async function getUser(token) {
   const res = await fetch(`${API}/user`, { headers: ghHeaders(token) });

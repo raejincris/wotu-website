@@ -4,12 +4,13 @@
  * Vị trí & bật/tắt khối quản lý ở "Bố cục trang". Sửa nội dung khối hiện có
  * → xem trước trực tiếp (data-cms-key="blk.<id>.<field>").
  */
-import { getFile, putFile } from '../github.js';
+import { getFile, putFile, listDir } from '../github.js';
 import { slugify, uniqueSlug } from '../lib/repeatable.js';
 import { connectBody } from '../lib/preview-bus.js';
 import { imageSlot, attachAllImages, uploadPendingImages } from '../lib/imagefield.js';
 import { BLOCK_TYPES, blockSummary } from '../lib/block-types.js';
 
+const CUSTOM_DIR = 'src/data/pages';
 const PAGES = {
   shop:   { label: 'Trang chủ Shop',   file: 'src/data/shop-home.yml', preview: 'https://www.wotu.vn/' },
   studio: { label: 'Trang chủ Studio', file: 'src/data/home.yml',      preview: 'https://www.wotu.vn/studio/' },
@@ -197,7 +198,27 @@ export async function init({ token, showToast, setLoading }) {
     setDirty(false);
   }
 
-  // Page selector (Shop / Studio)
+  // Nạp thêm nút cho từng trang tuỳ chỉnh (src/data/pages/*.yml) vào page switcher.
+  async function loadCustomPageButtons() {
+    let files = [];
+    try {
+      files = (await listDir(token, CUSTOM_DIR)).filter((f) => f.type === 'file' && f.name.endsWith('.yml'));
+    } catch { /* thư mục trống/chưa có → bỏ qua */ }
+    const sel = body.querySelector('.lay-pagesel');
+    files.map((f) => f.name.replace(/\.yml$/, '')).sort().forEach((slug) => {
+      const key = 'page:' + slug;
+      PAGES[key] = { label: 'Trang ' + slug, file: `${CUSTOM_DIR}/${slug}.yml`, preview: `https://www.wotu.vn/${slug}/` };
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'lay-page';
+      btn.dataset.page = key;
+      btn.textContent = `/${slug}/`;
+      sel.appendChild(btn);
+    });
+  }
+  await loadCustomPageButtons();
+
+  // Page selector (Shop / Studio / trang tuỳ chỉnh)
   body.querySelectorAll('.lay-page').forEach((btn) => {
     btn.addEventListener('click', async () => {
       if (btn.dataset.page === pageKey) return;

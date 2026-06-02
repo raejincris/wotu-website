@@ -1,5 +1,6 @@
 ---
 import footer from '../data/footer.yml';
+import { navPages } from '../lib/custom-pages';
 
 interface Props {
   variant?: 'home' | 'inner';
@@ -22,6 +23,12 @@ const links = navLinks.map((l) => {
   const isRoute = href.startsWith('/') && !href.includes('#');
   const isCurrent = isRoute && (pathname === href || pathname.startsWith(href));
   return { label: l.label, href, isCurrent };
+});
+
+// Trang tuỳ chỉnh (admin) gắn cờ nav:true cho phần Studio → thêm vào cuối menu.
+navPages('studio').forEach((p) => {
+  const href = `/${p.slug}/`;
+  links.push({ label: p.title, href, isCurrent: pathname === href || pathname.startsWith(href) });
 });
 ---
 <nav class="wotu-nav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 16px var(--pad-x); display: flex; justify-content: space-between; align-items: center; color: var(--ink);">

@@ -155,7 +155,7 @@ const PANELS = [
   'panel-site', 'panel-sofa', 'panel-combo', 'panel-shop-home', 'panel-home-hero',
   'panel-shop-hero', 'panel-products', 'panel-footer',
   'panel-studio-home', 'panel-services', 'panel-privacy', 'panel-theme',
-  'panel-layout', 'panel-blocks',
+  'panel-layout', 'panel-blocks', 'panel-pages',
 ];
 
 const HASH_MAP = {
@@ -175,6 +175,7 @@ const HASH_MAP = {
   'theme':       'panel-theme',
   'layout':      'panel-layout',
   'blocks':      'panel-blocks',
+  'pages':       'panel-pages',
 };
 
 const PANEL_META = {
@@ -193,6 +194,7 @@ const PANEL_META = {
   'panel-theme':     { title: 'Giao diện (Theme)',        preview: 'https://www.wotu.vn/' },
   'panel-layout':    { title: 'Bố cục trang',             preview: 'https://www.wotu.vn/' },
   'panel-blocks':    { title: 'Khối nội dung',            preview: 'https://www.wotu.vn/' },
+  'panel-pages':     { title: 'Trang tuỳ chỉnh',          preview: null },
 };
 
 const EDITOR_MAP = {
@@ -210,6 +212,7 @@ const EDITOR_MAP = {
   'theme':      '/admin/editors/theme.js',
   'layout':     '/admin/editors/layout.js',
   'blocks':     '/admin/editors/blocks.js',
+  'pages':      '/admin/editors/pages.js',
 };
 
 const FILE_STATUS_CONFIG = [
