@@ -99,6 +99,13 @@ export async function init({ token, showToast, setLoading }) {
       ${field('hero_tagHref',     'Link khi bấm thẻ',    h.tagHref,     'text', 'VD: /combo/to-am/')}
     </div>
 
+    <!-- ── MARQUEE ── -->
+    <div class="form-card">
+      <p class="form-card-title">Dải chữ chạy (Marquee)</p>
+      <p class="form-hint" style="margin-top:0;">Dải chữ chạy ngang ngay dưới hero. Mỗi mục cách nhau bằng dấu ★.</p>
+      <div id="shop-marquee"></div>
+    </div>
+
     <!-- ── SECTION HEADINGS ── -->
     <div class="form-card">
       <p class="form-card-title">Section: Combo nội thất</p>
@@ -169,6 +176,19 @@ export async function init({ token, showToast, setLoading }) {
 
   // Xem trước trực tiếp: field có data-cms-key sẽ patch vào iframe khi gõ.
   connectBody(body);
+
+  const repMarquee = repeatable({
+    mount: body.querySelector('#shop-marquee'),
+    items: obj.marquee || [],
+    min: 0,
+    addLabel: '＋ Thêm mục',
+    title: (it, i) => `${i + 1}. ${it.text || 'Mục'}`,
+    onChange: dirty.mark,
+    makeNew: () => ({ text: '', italic: false }),
+    renderFields: (it) => `
+      ${rfText('text', 'Nội dung', it.text)}
+      ${rfSelect('italic', 'Kiểu chữ', it.italic ? 'yes' : 'no', [{ value: 'no', label: 'Bình thường' }, { value: 'yes', label: 'In nghiêng (nhấn)' }])}`,
+  });
 
   const repInspo = repeatable({
     mount: body.querySelector('#shop-inspo'),
@@ -260,6 +280,13 @@ export async function init({ token, showToast, setLoading }) {
       });
       setSection('reviews', 'sec_reviews');
       setSection('cta',     'sec_cta');
+
+      // Dải chữ chạy (marquee) — bỏ mục rỗng
+      obj.marquee = repMarquee.collect((f, orig) => {
+        const o = { ...orig, text: f.text.trim() };
+        if (f.italic === 'yes') o.italic = true; else delete o.italic;
+        return o;
+      }).filter((m) => m.text);
 
       // Ảnh cảm hứng (inspo)
       obj.inspo = repInspo.collect((f, orig) => {

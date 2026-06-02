@@ -20,6 +20,14 @@ hero:
   tagPriceOld: 28.900.000đ
   tagPriceNew: 18.900.000đ
   tagHref: /combo/to-am/
+# Dải chữ chạy ngang dưới hero (Marquee). italic:true → in nghiêng (Cormorant).
+marquee:
+  - { text: Gỗ tự nhiên 100% }
+  - { text: Bảo hành 5 năm }
+  - { text: Miễn phí giao & lắp đặt }
+  - { text: Đổi trả trong 30 ngày }
+  - { text: Combo trọn gói — 7 ngày dọn vào ở, italic: true }
+  - { text: Tư vấn 1:1 miễn phí }
 sections:
   combos:
     eyebrow: Combo nội thất

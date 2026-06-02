@@ -1,31 +1,34 @@
 ---
-const items = [
-  'Gỗ tự nhiên 100%',
-  'Bảo hành 5 năm',
-  'Miễn phí giao & lắp đặt',
-  'Đổi trả trong 30 ngày',
-  { italic: 'Combo trọn gói — 7 ngày dọn vào ở' },
-  'Tư vấn 1:1 miễn phí',
+import shopHome from '../../data/shop-home.yml';
+
+// Sửa qua admin → "Trang chủ Shop" → mục "Dải chữ chạy (Marquee)".
+const DEFAULTS = [
+  { text: 'Gỗ tự nhiên 100%' },
+  { text: 'Bảo hành 5 năm' },
+  { text: 'Miễn phí giao & lắp đặt' },
+  { text: 'Đổi trả trong 30 ngày' },
+  { text: 'Combo trọn gói — 7 ngày dọn vào ở', italic: true },
+  { text: 'Tư vấn 1:1 miễn phí' },
 ];
+const raw = (shopHome as any).marquee;
+const items = (Array.isArray(raw) && raw.length ? raw : DEFAULTS)
+  .map((it: any) => ({ text: String(it?.text ?? '').trim(), italic: !!it?.italic }))
+  .filter((it: any) => it.text);
 ---
 <div class="shop-marquee">
   <div class="shop-marquee-track">
     <span>
-      {items.map((item) => (
+      {items.map((item: any) => (
         <>
-          {typeof item === 'string'
-            ? <span>{item}</span>
-            : <i>{item.italic}</i>}
+          {item.italic ? <i>{item.text}</i> : <span>{item.text}</span>}
           <span class="star" aria-hidden="true"></span>
         </>
       ))}
     </span>
     <span aria-hidden="true">
-      {items.map((item) => (
+      {items.map((item: any) => (
         <>
-          {typeof item === 'string'
-            ? <span>{item}</span>
-            : <i>{item.italic}</i>}
+          {item.italic ? <i>{item.text}</i> : <span>{item.text}</span>}
           <span class="star" aria-hidden="true"></span>
         </>
       ))}
