@@ -107,7 +107,7 @@ const whyIcons: Record<string, string> = {
       </div>
 
       <div class="combo-grid shop-reveal-stagger" id="combo-grid">
-        {combos.map((c) => (
+        {combos.map((c, i) => (
           <article
             class={`combo-card${c.feature ? ' feature' : ''}`}
             data-room={c.room}
@@ -128,13 +128,13 @@ const whyIcons: Record<string, string> = {
               )}
             </div>
             <div class="combo-body">
-              <span class="combo-cat">{c.cat}</span>
+              <span class="combo-cat" data-cms={`combos.${i}.cat`}>{c.cat}</span>
               <h3 class="combo-title">
-                {c.name}{c.feature && <br/>} <em>{c.nameEm}</em>{c.nameTail}
+                <span data-cms={`combos.${i}.name`}>{c.name}</span>{c.feature && <br/>} <em data-cms={`combos.${i}.nameEm`}>{c.nameEm}</em><span data-cms={`combos.${i}.nameTail`}>{c.nameTail}</span>
               </h3>
-              <p class="combo-includes">{c.desc}</p>
+              <p class="combo-includes" data-cms={`combos.${i}.desc`}>{c.desc}</p>
               <div class="combo-foot">
-                <div class="price"><s>{c.priceOld}</s>{c.priceNew}<small>{c.priceNote}</small></div>
+                <div class="price"><s data-cms={`combos.${i}.priceOld`}>{c.priceOld}</s><span data-cms={`combos.${i}.priceNew`}>{c.priceNew}</span><small data-cms={`combos.${i}.priceNote`}>{c.priceNote}</small></div>
                 <div class="combo-foot-actions">
                   <button class="combo-add" type="button" data-add aria-label="Thêm vào giỏ">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
@@ -170,7 +170,7 @@ const whyIcons: Record<string, string> = {
       </div>
 
       <div class="products-grid shop-reveal-stagger">
-        {bestsellers.map((p) => (
+        {bestsellers.map((p, i) => (
           <article
             class="product-card"
             data-id={p.id}
@@ -183,11 +183,11 @@ const whyIcons: Record<string, string> = {
                 <img class="shop-illo" src={`${ILLO}/cat-${catFromId(p.id)}.png`} alt={`Minh hoạ ${p.name}`} loading="lazy" decoding="async" />
               </div>
               <div class="product-body">
-                <span class="product-meta">{p.meta}</span>
-                <h4>{p.name}</h4>
+                <span class="product-meta" data-cms={`bestsellers.${i}.meta`}>{p.meta}</span>
+                <h4 data-cms={`bestsellers.${i}.name`}>{p.name}</h4>
                 <div class="product-foot">
-                  <div class="price">{p.price}</div>
-                  <span class="stars">{p.stars}</span>
+                  <div class="price" data-cms={`bestsellers.${i}.price`}>{p.price}</div>
+                  <span class="stars" data-cms={`bestsellers.${i}.stars`}>{p.stars}</span>
                 </div>
               </div>
             </a>
@@ -267,15 +267,15 @@ const whyIcons: Record<string, string> = {
       </div>
 
       <div class="reviews-grid shop-reveal-stagger">
-        {reviews.map((r) => (
+        {reviews.map((r, i) => (
           <div class="review">
             <span class="stars">★★★★★</span>
-            <p>"{r.quote}"</p>
+            <p>"<span data-cms={`reviews.${i}.quote`}>{r.quote}</span>"</p>
             <div class="author">
-              <div class="avatar">{r.initial}</div>
+              <div class="avatar" data-cms={`reviews.${i}.initial`}>{r.initial}</div>
               <div>
-                <div class="name">{r.name}</div>
-                <div class="role">{r.role}</div>
+                <div class="name" data-cms={`reviews.${i}.name`}>{r.name}</div>
+                <div class="role" data-cms={`reviews.${i}.role`}>{r.role}</div>
               </div>
             </div>
           </div>

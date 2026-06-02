@@ -27,23 +27,25 @@ function escTxt(s) {
 
 /** Field builders — đều gắn data-field để collect() đọc lại. */
 export function rfText(field, label, value, opts = {}) {
-  const { hint = '', placeholder = '', cmsKey = '' } = opts;
+  const { hint = '', placeholder = '', cmsKey = '', cmsField = '' } = opts;
   const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
+  const cmsF = cmsField ? ` data-cms-field="${escVal(cmsField)}"` : '';
   return `
     <div class="form-row">
       <label class="form-label">${label}</label>
-      <input class="form-input" type="text" data-field="${field}"${cms}
+      <input class="form-input" type="text" data-field="${field}"${cms}${cmsF}
              value="${escVal(value)}" placeholder="${escVal(placeholder)}" autocomplete="off" />
       ${hint ? `<p class="form-hint">${hint}</p>` : ''}
     </div>`;
 }
 export function rfArea(field, label, value, opts = {}) {
-  const { hint = '', rows = 3, cmsKey = '' } = opts;
+  const { hint = '', rows = 3, cmsKey = '', cmsField = '' } = opts;
   const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
+  const cmsF = cmsField ? ` data-cms-field="${escVal(cmsField)}"` : '';
   return `
     <div class="form-row">
       <label class="form-label">${label}</label>
-      <textarea class="form-input form-textarea" data-field="${field}"${cms} rows="${rows}" autocomplete="off">${escTxt(value)}</textarea>
+      <textarea class="form-input form-textarea" data-field="${field}"${cms}${cmsF} rows="${rows}" autocomplete="off">${escTxt(value)}</textarea>
       ${hint ? `<p class="form-hint">${hint}</p>` : ''}
     </div>`;
 }
@@ -85,7 +87,7 @@ export function uniqueSlug(base, taken) {
  */
 export function repeatable({
   mount, items = [], renderFields, makeNew, title,
-  min = 0, addLabel = '＋ Thêm mục', reorder = true, onChange, onRow,
+  min = 0, addLabel = '＋ Thêm mục', reorder = true, onChange, onRow, cmsRow = '',
 }) {
   const original = new Map(); // rowId -> object gốc (giữ key không hiển thị)
   let seq = 0;
@@ -107,6 +109,7 @@ export function repeatable({
     const row = document.createElement('div');
     row.className = 'repeat-row';
     row.dataset.rowId = id;
+    if (cmsRow) row.dataset.cmsRow = cmsRow;
     row.innerHTML = `
       <div class="repeat-head">
         ${title ? `<span class="repeat-title">${escTxt(title(item ?? {}, index))}</span>` : '<span></span>'}

@@ -6,6 +6,7 @@
 import { getFile, putFile } from '../github.js';
 import { repeatable, rfText, rfArea, rfSelect, bindDirty, slugify, uniqueSlug } from '../lib/repeatable.js';
 import { imageSlot, attachImage, uploadPendingImages } from '../lib/imagefield.js';
+import { connectBody } from '../lib/preview-bus.js';
 
 const FILE = 'src/data/shop-home.yml';
 const BODY = 'editor-shop-home-body';
@@ -73,25 +74,26 @@ export async function init({ token, showToast, setLoading }) {
     min: 1,
     addLabel: '＋ Thêm combo',
     onChange: dirty.mark,
+    cmsRow: 'combos',
     title: (c, i) => `${i + 1}. ${[c.name, c.nameEm, c.nameTail].filter(Boolean).join(' ').trim() || 'Combo mới'}${c.id === 'combo-to-am' ? ' (Tổ Ấm — trang riêng)' : ''}`,
     makeNew: () => ({ id: '', name: 'Combo', nameEm: 'Mới', nameTail: '', cat: 'Combo nội thất', desc: '', priceOld: '', priceNew: '', price: 0, priceNote: '', badge: '', badgeClass: '', room: 'phong-khach', tone: '', placeholder: 'Combo mới', href: '', items: [] }),
     renderFields: (c) => `
       <div class="form-grid-2">
-        ${rfText('name', 'Tên', c.name)}
-        ${rfText('nameEm', 'Tên nhấn (in nghiêng)', c.nameEm ?? '')}
+        ${rfText('name', 'Tên', c.name, { cmsField: 'name' })}
+        ${rfText('nameEm', 'Tên nhấn (in nghiêng)', c.nameEm ?? '', { cmsField: 'nameEm' })}
       </div>
       <div class="form-grid-2">
-        ${rfText('nameTail', 'Đuôi tên', c.nameTail ?? '')}
-        ${rfText('cat', 'Phân loại (badge card)', c.cat ?? '')}
+        ${rfText('nameTail', 'Đuôi tên', c.nameTail ?? '', { cmsField: 'nameTail' })}
+        ${rfText('cat', 'Phân loại (badge card)', c.cat ?? '', { cmsField: 'cat' })}
       </div>
-      ${rfArea('desc', 'Mô tả / "Combo gồm" (ngăn bằng " · ")', c.desc ?? '', { rows: 2 })}
+      ${rfArea('desc', 'Mô tả / "Combo gồm" (ngăn bằng " · ")', c.desc ?? '', { rows: 2, cmsField: 'desc' })}
       <div class="form-grid-2">
-        ${rfText('priceOld', 'Giá gốc (gạch)', c.priceOld ?? '')}
-        ${rfText('priceNew', 'Giá khuyến mãi', c.priceNew ?? '')}
+        ${rfText('priceOld', 'Giá gốc (gạch)', c.priceOld ?? '', { cmsField: 'priceOld' })}
+        ${rfText('priceNew', 'Giá khuyến mãi', c.priceNew ?? '', { cmsField: 'priceNew' })}
       </div>
       <div class="form-grid-2">
         ${rfText('price', 'Giá số (sort/SEO)', c.price ?? 0, { hint: 'Chỉ số, VD: 18900000' })}
-        ${rfText('priceNote', 'Ghi chú giá', c.priceNote ?? '')}
+        ${rfText('priceNote', 'Ghi chú giá', c.priceNote ?? '', { cmsField: 'priceNote' })}
       </div>
       <div class="form-grid-2">
         ${rfText('badge', 'Badge (tuỳ chọn)', c.badge ?? '')}
@@ -135,22 +137,26 @@ export async function init({ token, showToast, setLoading }) {
     min: 0,
     addLabel: '＋ Thêm sản phẩm nổi bật',
     onChange: dirty.mark,
+    cmsRow: 'bestsellers',
     title: (b, i) => `${i + 1}. ${b.name || 'Sản phẩm'}`,
     makeNew: () => ({ id: '', name: 'Sản phẩm', meta: '', price: '', priceNum: 0, stars: '★★★★★', href: '#', tone: '' }),
     renderFields: (b) => `
       <div class="form-grid-2">
-        ${rfText('name', 'Tên', b.name)}
-        ${rfText('meta', 'Phân loại ngắn', b.meta ?? '', { placeholder: 'VD: Sofa · 3 chỗ' })}
+        ${rfText('name', 'Tên', b.name, { cmsField: 'name' })}
+        ${rfText('meta', 'Phân loại ngắn', b.meta ?? '', { placeholder: 'VD: Sofa · 3 chỗ', cmsField: 'meta' })}
       </div>
       <div class="form-grid-2">
-        ${rfText('price', 'Giá hiển thị', b.price ?? '')}
+        ${rfText('price', 'Giá hiển thị', b.price ?? '', { cmsField: 'price' })}
         ${rfText('priceNum', 'Giá số', b.priceNum ?? 0, { hint: 'Chỉ số' })}
       </div>
       <div class="form-grid-2">
-        ${rfText('stars', 'Sao (★ ☆)', b.stars ?? '★★★★★')}
+        ${rfText('stars', 'Sao (★ ☆)', b.stars ?? '★★★★★', { cmsField: 'stars' })}
         ${rfText('href', 'Đường dẫn', b.href ?? '#')}
       </div>`,
   });
+
+  // Xem trước trực tiếp (sửa tại chỗ combo/bestseller hiện có → iframe đổi ngay)
+  connectBody(body);
 
   saveBtn.addEventListener('click', async () => {
     setLoading(true);

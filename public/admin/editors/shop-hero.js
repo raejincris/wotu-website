@@ -193,14 +193,15 @@ export async function init({ token, showToast, setLoading }) {
     addLabel: '＋ Thêm đánh giá',
     title: (r, i) => `${i + 1}. ${r.name || 'Khách'}`,
     onChange: dirty.mark,
+    cmsRow: 'reviews',
     makeNew: () => ({ name: '', role: '', initial: '', quote: '' }),
     renderFields: (r) => `
       <div class="form-grid-2">
-        ${rfText('name', 'Tên khách', r.name)}
-        ${rfText('initial', 'Chữ cái đầu (avatar)', r.initial ?? '')}
+        ${rfText('name', 'Tên khách', r.name, { cmsField: 'name' })}
+        ${rfText('initial', 'Chữ cái đầu (avatar)', r.initial ?? '', { cmsField: 'initial' })}
       </div>
-      ${rfText('role', 'Địa điểm', r.role ?? '', { placeholder: 'VD: Nhơn Bình · Quy Nhơn' })}
-      ${rfArea('quote', 'Nội dung', r.quote ?? '')}`,
+      ${rfText('role', 'Địa điểm', r.role ?? '', { placeholder: 'VD: Nhơn Bình · Quy Nhơn', cmsField: 'role' })}
+      ${rfArea('quote', 'Nội dung', r.quote ?? '', { cmsField: 'quote' })}`,
   });
 
   saveBtn.addEventListener('click', async () => {

@@ -137,6 +137,11 @@ test.describe('2 · Shop homepage — smoke', () => {
     await page.evaluate((src) =>
       window.postMessage({ type: 'img', key: 'hero.photo', src }, location.origin), px);
     await expect(page.locator('[data-cms-img="hero.photo"]')).toHaveAttribute('src', px);
+
+    // patch theo hàng (combo đầu tiên — giá khuyến mãi)
+    await page.evaluate(() =>
+      window.postMessage({ type: 'patch', key: 'combos.0.priceNew', value: '9.999.999đ' }, location.origin));
+    await expect(page.locator('[data-cms="combos.0.priceNew"]')).toContainText('9.999.999đ');
   });
 
   test('hero CTA "Xem combo nổi bật" tồn tại và dẫn đến #combos', async ({ page }) => {

@@ -30,6 +30,16 @@ export function section(id, on)   { if (id)  post({ type: 'section', id, on: !!o
 export function reorder(order)    { if (Array.isArray(order)) post({ type: 'reorder', order }); }
 export function scrollTo(target)  { post({ type: 'scrollTo', ...target }); }
 
+/** Field trong danh sách động: key = "<row>.<index>.<field>" theo vị trí DOM. */
+function rowScopedKey(fieldEl) {
+  const rowEl = fieldEl.closest('[data-cms-row]');
+  if (!rowEl) return null;
+  const rowKey = rowEl.dataset.cmsRow;
+  const sibs = [...rowEl.parentElement.children].filter((c) => c.matches?.(`[data-cms-row="${rowKey}"]`));
+  const idx = sibs.indexOf(rowEl);
+  return `${rowKey}.${idx}.${fieldEl.dataset.cmsField}`;
+}
+
 export function resync() {
   if (!currentBody) return;
   currentBody.querySelectorAll('[data-cms-key]').forEach((el) => {
@@ -39,11 +49,20 @@ export function resync() {
     const v = el.dataset.cmsImgSrc || el.value || '';
     if (v) img(el.dataset.cmsImgKey, v);
   });
+  currentBody.querySelectorAll('[data-cms-field]').forEach((el) => {
+    const key = rowScopedKey(el);
+    if (key) patch(key, el.value);
+  });
 }
 
 function onInput(e) {
-  const el = e.target.closest?.('[data-cms-key]');
-  if (el) patch(el.dataset.cmsKey, el.value);
+  const direct = e.target.closest?.('[data-cms-key]');
+  if (direct) { patch(direct.dataset.cmsKey, direct.value); return; }
+  const fieldEl = e.target.closest?.('[data-cms-field]');
+  if (fieldEl) {
+    const key = rowScopedKey(fieldEl);
+    if (key) patch(key, fieldEl.value);
+  }
 }
 
 export function connectBody(body) {
