@@ -73,7 +73,7 @@ test.describe('2 · Shop homepage — smoke', () => {
     // On mobile, .shop-nav-links is CSS-hidden — use toBeAttached instead of toBeVisible.
     const navLinks = page.locator('.shop-nav-links');
     const checkFn = testInfo.project.name === 'desktop' ? 'toBeVisible' : 'toBeAttached';
-    for (const href of ['/#combos', '/san-pham/', '/#inspo', '/#why', '/studio/', '/#contact']) {
+    for (const href of ['/combo/', '/san-pham/', '/#inspo', '/#why', '/studio/', '/#contact']) {
       const link = navLinks.locator(`a[href="${href}"]`);
       if (checkFn === 'toBeVisible') {
         await expect(link).toBeVisible();
@@ -246,14 +246,14 @@ test.describe('5 · /combo/to-am/ — combo detail', () => {
 
   test('"Thêm vào giỏ" button tồn tại', async ({ page }) => {
     await page.goto('/combo/to-am/');
-    const addBtn = page.locator('#addCart');
+    const addBtn = page.locator('#pdAdd');
     await expect(addBtn).toBeVisible();
-    await expect(addBtn).toContainText('Thêm vào giỏ');
+    await expect(addBtn).toContainText('Thêm combo vào giỏ');
   });
 
   test('breadcrumb hiển thị đường dẫn đúng', async ({ page }) => {
     await page.goto('/combo/to-am/');
-    const crumb = page.locator('.crumb-list');
+    const crumb = page.locator('.crumb');
     await expect(crumb).toBeVisible();
     await expect(crumb.locator('a[href="/"]')).toBeVisible();
   });

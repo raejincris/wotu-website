@@ -43,6 +43,149 @@ bundleTotalLabel: "28.900.000đ"
 bundlePriceLabel: "18.900.000đ"
 bundleSaveLabel: "10.000.000đ"
 
+# ── Section giàu (optional) — chỉ Tổ Ấm có; template động render khi tồn tại ──
+heroBadges:
+  - "−35% · Tháng 5"
+  - "★ Bestseller phòng khách"
+
+gallery:
+  - label: "Tổng thể"
+    tone: ""
+  - label: "Sofa"
+    tone: sage
+  - label: "Bàn trà"
+    tone: ""
+  - label: "Kệ TV"
+    tone: sage
+  - label: "Thảm"
+    tone: ""
+
+colorLabel: "Nâu đất ấm"
+colors:
+  - label: "Nâu đất ấm"
+    from: "#C97B5E"
+    to: "#A35E45"
+    active: true
+  - label: "Be sữa"
+    from: "#E8D4B6"
+    to: "#C9A77E"
+  - label: "Xám rêu"
+    from: "#8FA796"
+    to: "#5F7B6A"
+  - label: "Xanh than"
+    from: "#3C4A5E"
+    to: "#25303D"
+  - label: "Trắng kem"
+    from: "#F4ECDD"
+    to: "#D9CDB6"
+
+sizeLabel: "Sofa văng 3 chỗ · phù hợp 16–22m²"
+sizes:
+  - b: "S"
+    small: "2 chỗ · 12m²"
+  - b: "M"
+    small: "3 chỗ · 16–22m²"
+    active: true
+  - b: "L"
+    small: "chữ L · 25m²+"
+
+descBlocks:
+  - eyebrowSection: "Vì sao là Tổ Ấm"
+    headingHtml: "Phòng khách — <em>nơi tổ ấm bắt đầu</em>."
+    headingRight: "Từng món được chọn theo nguyên tắc Japandi — gỗ thật, đường nét gọn gàng, tông màu trầm ấm không kén nhà."
+    flip: false
+    imgLabel: "Chi tiết tay sofa & gỗ sồi"
+    imgTone: ""
+    eyebrow: "01 · Chất liệu"
+    h3: "Gỗ sồi tự nhiên, vải bố nhập khẩu"
+    body: "Khung sofa & bàn trà làm từ <strong>gỗ sồi (oak) tự nhiên</strong>, sấy kỹ tránh cong vênh trong khí hậu Việt Nam. Vải bọc là vải bố linen Hàn Quốc — bền, mát tay, không bám bụi."
+    list:
+      - "Gỗ sồi sấy 2 lần · độ ẩm < 12%"
+      - "Vải bố linen nhập khẩu Hàn Quốc"
+      - "Mút D40 cao cấp · không xẹp sau 5 năm"
+      - "Sơn PU gốc nước · an toàn cho trẻ em"
+  - flip: true
+    imgLabel: "Phòng khách tổng thể"
+    imgTone: sage
+    eyebrow: "02 · Tỉ lệ phòng"
+    h3: "Đo bằng mét, ngắm bằng mắt KTS"
+    body: "Sofa cao 80cm — vừa tầm ngồi cho người Việt 1m55–1m75. Bàn trà thấp hơn mép sofa 6cm — đúng nguyên tắc nhân trắc học. Kệ TV dài 1m8, đặt vừa khít TV 55\"–65\" để lại 18cm hai bên cho loa hoặc cây cảnh nhỏ."
+    list:
+      - "Phù hợp phòng 16–22m² · trần > 2.6m"
+      - "Sofa cao 80cm · ghế ngồi 42cm"
+      - "Bàn trà cao 36cm · phù hợp tầm rót trà"
+      - "Kệ TV 1m8 — phù hợp TV 55\"–65\""
+
+specs:
+  - title: 'Sofa văng "Mây"'
+    rows:
+      - { k: "Kích thước (D × R × C)", v: "210 × 92 × 80 cm" }
+      - { k: "Khung", v: "Gỗ sồi tự nhiên" }
+      - { k: "Vải bọc", v: "Vải bố linen Hàn Quốc" }
+      - { k: "Đệm", v: "Mút D40 · 14cm" }
+      - { k: "Trọng lượng", v: "52 kg" }
+      - { k: "Tải trọng", v: "320 kg" }
+  - title: 'Bàn trà "Nắng Mai"'
+    rows:
+      - { k: "Kích thước (D × R × C)", v: "110 × 60 × 36 cm" }
+      - { k: "Mặt bàn", v: "Gỗ sồi nguyên tấm 25mm" }
+      - { k: "Chân", v: "Gỗ sồi · ghép mộng" }
+      - { k: "Hoàn thiện", v: "Sơn PU gốc nước" }
+      - { k: "Trọng lượng", v: "22 kg" }
+      - { k: "Tải trọng mặt bàn", v: "80 kg" }
+  - title: 'Kệ TV "Hạ"'
+    rows:
+      - { k: "Kích thước (D × R × C)", v: "180 × 40 × 45 cm" }
+      - { k: "Khung", v: "Gỗ sồi tự nhiên" }
+      - { k: "Ngăn kéo", v: "3 ngăn · ray giảm chấn" }
+      - { k: "Hỗ trợ TV", v: '55"–65" (~40 kg)' }
+      - { k: "Trọng lượng", v: "38 kg" }
+      - { k: "Tải trọng mặt kệ", v: "60 kg" }
+  - title: 'Thảm "Tổ Ấm"'
+    rows:
+      - { k: "Kích thước", v: "160 × 230 cm" }
+      - { k: "Chất liệu", v: "100% bông + len New Zealand" }
+      - { k: "Kỹ thuật", v: "Dệt tay · 8mm pile" }
+      - { k: "Vệ sinh", v: "Giặt khô hoặc hút bụi" }
+      - { k: "Chứng nhận", v: "OEKO-TEX Standard 100" }
+      - { k: "Trọng lượng", v: "7 kg" }
+
+dimensions:
+  caption: "Sơ đồ phòng khách điển hình cho căn hộ 2PN — bạn có thể tải bản vẽ DWG để in."
+  headingHtml: "Bố trí trên <em>16–22m²</em>."
+  svg: |
+    <svg class="dim-svg" viewBox="0 0 540 340" preserveAspectRatio="xMidYMid meet">
+      <rect class="room" x="40" y="40" width="460" height="260" rx="2" />
+      <rect class="obj" x="120" y="200" width="210" height="60" rx="6" />
+      <text x="225" y="234" text-anchor="middle">SOFA · 210×92</text>
+      <rect class="obj-2" x="170" y="130" width="110" height="55" rx="6" />
+      <text x="225" y="162" text-anchor="middle">BÀN TRÀ</text>
+      <rect class="obj" x="140" y="60" width="180" height="36" rx="4" />
+      <text x="230" y="83" text-anchor="middle">KỆ TV · 180×40</text>
+      <rect class="obj-2" x="110" y="115" width="230" height="155" rx="6" fill="none" stroke-dasharray="4 3" opacity=".75" />
+      <text x="225" y="270" text-anchor="middle" class="label">thảm 160 × 230</text>
+      <line class="dim-line" x1="40" y1="22" x2="500" y2="22" />
+      <line class="dim-line" x1="40" y1="18" x2="40" y2="26" />
+      <line class="dim-line" x1="500" y1="18" x2="500" y2="26" />
+      <text x="270" y="16" text-anchor="middle">4.6 m</text>
+      <line class="dim-line" x1="22" y1="40" x2="22" y2="300" />
+      <line class="dim-line" x1="18" y1="40" x2="26" y2="40" />
+      <line class="dim-line" x1="18" y1="300" x2="26" y2="300" />
+      <text x="14" y="170" text-anchor="middle" transform="rotate(-90 14 170)">3.8 m</text>
+      <text x="430" y="170" text-anchor="middle" class="label">phòng khách</text>
+      <text x="430" y="186" text-anchor="middle" class="label">~17.5 m²</text>
+    </svg>
+  legend:
+    - title: "Khung gỗ sồi"
+      sub: "Sofa & kệ TV"
+      kind: warm
+    - title: "Bàn trà & thảm"
+      sub: "Đặt giữa, làm tâm phòng"
+      kind: accent2
+    - title: "Lối đi tối thiểu"
+      sub: "75 cm giữa sofa và bàn"
+      kind: line
+
 reviews:
   score: "4.9"
   total: 312
