@@ -117,6 +117,11 @@ test.describe('2 · Shop homepage — smoke', () => {
       window.postMessage({ type: 'patch', key: 'hero.title', value: 'WOTU TEST PATCH' }, location.origin));
     await expect(page.locator('[data-cms="hero.title"]')).toContainText('WOTU TEST PATCH');
 
+    // patch tiêu đề section (combos)
+    await page.evaluate(() =>
+      window.postMessage({ type: 'patch', key: 'sections.combos.heading', value: 'TIÊU ĐỀ COMBO TEST' }, location.origin));
+    await expect(page.locator('[data-cms="sections.combos.heading"]')).toContainText('TIÊU ĐỀ COMBO TEST');
+
     // tắt section combos → ẩn
     await page.evaluate(() =>
       window.postMessage({ type: 'section', id: 'combos', on: false }, location.origin));

@@ -10,9 +10,9 @@ const stats = a.stats as Stat[];
 <section id="about" style="padding: var(--pad-section) var(--pad-x);">
   <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); align-items: start;">
     <Reveal variant="reveal" delay={0}>
-      <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">{a.number} · {a.label}</div>
-      <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 6vw, 88px); line-height: 1.0; color: var(--bark); margin-bottom: 32px;" set:html={a.heading.replace(/<em>/g, '<em style="font-style: italic; color: var(--earth);">')}></h2>
-      <p style="font-size: 17px; line-height: 1.7; color: var(--ink); max-width: 42ch; margin-bottom: 32px;">
+      <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">{a.number} · <span data-cms="about.label">{a.label}</span></div>
+      <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 6vw, 88px); line-height: 1.0; color: var(--bark); margin-bottom: 32px;" data-cms="about.heading" set:html={a.heading.replace(/<em>/g, '<em style="font-style: italic; color: var(--earth);">')}></h2>
+      <p style="font-size: 17px; line-height: 1.7; color: var(--ink); max-width: 42ch; margin-bottom: 32px;" data-cms="about.body">
         {a.body}
       </p>
       <a href="#contact" style="display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 12px 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink);">{a.ctaLabel} <span>→</span></a>

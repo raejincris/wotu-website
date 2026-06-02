@@ -62,7 +62,7 @@ export async function init({ token, showToast, setLoading }) {
       ${field('hero_eyebrow', 'Dòng nhỏ (eyebrow)', h.eyebrow, 'text',
         'VD: Studio · Thiết kế &amp; Thi công nội thất Quy Nhơn', 'hero.eyebrow')}
       ${field('hero_title', 'Tiêu đề chính', h.title, 'text',
-        'Có thể dùng &lt;em&gt; để in nghiêng. VD: Một &lt;em&gt;khoảng&lt;/em&gt; lặng,&lt;br/&gt;giữa đời &lt;em&gt;vội&lt;/em&gt;.')}
+        'Có thể dùng &lt;em&gt; để in nghiêng. VD: Một &lt;em&gt;khoảng&lt;/em&gt; lặng,&lt;br/&gt;giữa đời &lt;em&gt;vội&lt;/em&gt;.', 'hero.title')}
       ${field('hero_intro', 'Mô tả ngắn (intro)', h.intro, 'textarea', '', 'hero.intro')}
       ${field('hero_cta', 'Nút CTA', h.cta, 'text', 'VD: Khám phá studio', 'hero.cta')}
     </div>

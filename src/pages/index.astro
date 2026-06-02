@@ -90,10 +90,10 @@ const whyIcons: Record<string, string> = {
     <div class="combos">
       <div class="section-head">
         <div>
-          <span class="eyebrow">{sections.combos.eyebrow}</span>
-          <h2 set:html={sections.combos.heading} />
+          <span class="eyebrow" data-cms="sections.combos.eyebrow">{sections.combos.eyebrow}</span>
+          <h2 set:html={sections.combos.heading} data-cms="sections.combos.heading" />
         </div>
-        <div class="right" set:html={sections.combos.desc} />
+        <div class="right" set:html={sections.combos.desc} data-cms="sections.combos.desc" />
       </div>
 
       <div class="combo-tabs">
@@ -153,7 +153,7 @@ const whyIcons: Record<string, string> = {
       <p class="combo-empty" id="combo-empty" hidden>Chưa có combo phù hợp danh mục này — chúng tôi đang chuẩn bị. Để lại số ở <a href="#contact">phần liên hệ</a> để được tư vấn riêng.</p>
 
       <div style="text-align: center; margin-top: 44px;">
-        <a class="shop-btn shop-btn-outline" href="/combo/">{sections.combos.ctaAll} <span class="arr">→</span></a>
+        <a class="shop-btn shop-btn-outline" href="/combo/"><span data-cms="sections.combos.ctaAll">{sections.combos.ctaAll}</span> <span class="arr">→</span></a>
       </div>
     </div>
   </section>
@@ -163,10 +163,10 @@ const whyIcons: Record<string, string> = {
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="eyebrow">{sections.bestsellers.eyebrow}</span>
-          <h2 set:html={sections.bestsellers.heading} />
+          <span class="eyebrow" data-cms="sections.bestsellers.eyebrow">{sections.bestsellers.eyebrow}</span>
+          <h2 set:html={sections.bestsellers.heading} data-cms="sections.bestsellers.heading" />
         </div>
-        <div class="right" set:html={sections.bestsellers.desc} />
+        <div class="right" set:html={sections.bestsellers.desc} data-cms="sections.bestsellers.desc" />
       </div>
 
       <div class="products-grid shop-reveal-stagger">
@@ -206,10 +206,10 @@ const whyIcons: Record<string, string> = {
     <div class="inspo">
       <div class="section-head">
         <div>
-          <span class="eyebrow">{sections.inspo.eyebrow}</span>
-          <h2 set:html={sections.inspo.heading} />
+          <span class="eyebrow" data-cms="sections.inspo.eyebrow">{sections.inspo.eyebrow}</span>
+          <h2 set:html={sections.inspo.heading} data-cms="sections.inspo.heading" />
         </div>
-        <div class="right" set:html={sections.inspo.desc} />
+        <div class="right" set:html={sections.inspo.desc} data-cms="sections.inspo.desc" />
       </div>
 
       <div class="inspo-grid shop-reveal-stagger">
@@ -234,10 +234,10 @@ const whyIcons: Record<string, string> = {
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="eyebrow">{sections.whyUs.eyebrow}</span>
-          <h2 set:html={sections.whyUs.heading} />
+          <span class="eyebrow" data-cms="sections.whyUs.eyebrow">{sections.whyUs.eyebrow}</span>
+          <h2 set:html={sections.whyUs.heading} data-cms="sections.whyUs.heading" />
         </div>
-        <div class="right" set:html={sections.whyUs.desc} />
+        <div class="right" set:html={sections.whyUs.desc} data-cms="sections.whyUs.desc" />
       </div>
 
       <div class="why-grid shop-reveal-stagger">
@@ -260,10 +260,10 @@ const whyIcons: Record<string, string> = {
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="eyebrow">{sections.reviews.eyebrow}</span>
-          <h2 set:html={sections.reviews.heading} />
+          <span class="eyebrow" data-cms="sections.reviews.eyebrow">{sections.reviews.eyebrow}</span>
+          <h2 set:html={sections.reviews.heading} data-cms="sections.reviews.heading" />
         </div>
-        <div class="right" set:html={sections.reviews.desc} />
+        <div class="right" set:html={sections.reviews.desc} data-cms="sections.reviews.desc" />
       </div>
 
       <div class="reviews-grid shop-reveal-stagger">
@@ -288,8 +288,8 @@ const whyIcons: Record<string, string> = {
   <section id="contact" class="shop-reveal" data-cms-section="cta" style={`order:${L.order('cta')};${L.on('cta') ? '' : 'display:none;'} padding-bottom: 0;`}>
     <div class="cta">
       <div>
-        <span class="eyebrow" style="color: color-mix(in oklab, var(--shop-bg) 80%, transparent);">{sections.cta.eyebrow}</span>
-        <h2 set:html={sections.cta.heading} />
+        <span class="eyebrow" style="color: color-mix(in oklab, var(--shop-bg) 80%, transparent);" data-cms="sections.cta.eyebrow">{sections.cta.eyebrow}</span>
+        <h2 set:html={sections.cta.heading} data-cms="sections.cta.heading" />
         <p set:html={`${sections.cta.desc} Hoặc gọi trực tiếp <a href="tel:+84${phone.replace(/\s+/g, '').slice(1)}" style="text-decoration: underline;">${phone}</a> · email <a href="mailto:${email}" style="text-decoration: underline;">${email}</a>.`} />
       </div>
       <form

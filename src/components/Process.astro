@@ -10,10 +10,10 @@ const steps = pr.steps as Step[];
 <section id="process" style="padding: var(--pad-section) var(--pad-x); background: var(--cocoa); color: var(--bone);">
   <div class="process-head grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); align-items: end; padding-bottom: 64px; border-bottom: 1px solid rgba(245,240,232,0.15); margin-bottom: 64px;">
     <div>
-      <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--clay); text-transform: uppercase; margin-bottom: 16px;">{pr.number} · {pr.label}</div>
-      <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 6vw, 96px); line-height: 1.0; color: var(--bone);" set:html={pr.heading.replace(/<em>/g, '<em style="font-style: italic; color: var(--accent);">')}></h2>
+      <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--clay); text-transform: uppercase; margin-bottom: 16px;">{pr.number} · <span data-cms="process.label">{pr.label}</span></div>
+      <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 6vw, 96px); line-height: 1.0; color: var(--bone);" data-cms="process.heading" set:html={pr.heading.replace(/<em>/g, '<em style="font-style: italic; color: var(--accent);">')}></h2>
     </div>
-    <p style="font-size: 18px; line-height: 1.65; color: var(--clay); max-width: 44ch; justify-self: end;">
+    <p style="font-size: 18px; line-height: 1.65; color: var(--clay); max-width: 44ch; justify-self: end;" data-cms="process.intro">
       {pr.intro}
     </p>
   </div>

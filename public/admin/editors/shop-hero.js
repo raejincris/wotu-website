@@ -32,11 +32,12 @@ function field(id, label, value, type = 'text', hint = '', cmsKey = '') {
   </div>`;
 }
 
-function sectionFields(prefix, s, showDesc = true, extraFields = '') {
+function sectionFields(prefix, s, showDesc = true, extraFields = '', cmsBase = '') {
+  const ck = (k) => (cmsBase ? `${cmsBase}.${k}` : '');
   return `
-    ${field(`${prefix}_eyebrow`, 'Eyebrow', s?.eyebrow)}
-    ${field(`${prefix}_heading`, 'Tiêu đề', s?.heading, 'text', 'Dùng &lt;em&gt; để in nghiêng')}
-    ${showDesc ? field(`${prefix}_desc`, 'Mô tả', s?.desc, 'textarea') : ''}
+    ${field(`${prefix}_eyebrow`, 'Eyebrow', s?.eyebrow, 'text', '', ck('eyebrow'))}
+    ${field(`${prefix}_heading`, 'Tiêu đề', s?.heading, 'text', 'Dùng &lt;em&gt; để in nghiêng', ck('heading'))}
+    ${showDesc ? field(`${prefix}_desc`, 'Mô tả', s?.desc, 'textarea', '', ck('desc')) : ''}
     ${extraFields}`;
 }
 
@@ -102,19 +103,20 @@ export async function init({ token, showToast, setLoading }) {
     <div class="form-card">
       <p class="form-card-title">Section: Combo nội thất</p>
       ${sectionFields('sec_combos', sc.combos, true,
-        field('sec_combos_ctaAll', 'Nút "Xem tất cả"', sc.combos?.ctaAll))}
+        field('sec_combos_ctaAll', 'Nút "Xem tất cả"', sc.combos?.ctaAll, 'text', '', 'sections.combos.ctaAll'),
+        'sections.combos')}
     </div>
     <div class="form-card">
       <p class="form-card-title">Section: Sản phẩm bán chạy</p>
-      ${sectionFields('sec_bestsellers', sc.bestsellers)}
+      ${sectionFields('sec_bestsellers', sc.bestsellers, true, '', 'sections.bestsellers')}
     </div>
     <div class="form-card">
       <p class="form-card-title">Section: Phòng cảm hứng</p>
-      ${sectionFields('sec_inspo', sc.inspo)}
+      ${sectionFields('sec_inspo', sc.inspo, true, '', 'sections.inspo')}
     </div>
     <div class="form-card">
       <p class="form-card-title">Section: Cam kết (Why Us)</p>
-      ${sectionFields('sec_why', sc.whyUs)}
+      ${sectionFields('sec_why', sc.whyUs, true, '', 'sections.whyUs')}
       <div class="form-row">
         <label class="form-label">4 cam kết</label>
         <div style="display:flex; flex-direction:column; gap:12px; margin-top:4px;">
@@ -130,11 +132,11 @@ export async function init({ token, showToast, setLoading }) {
     </div>
     <div class="form-card">
       <p class="form-card-title">Section: Đánh giá khách hàng</p>
-      ${sectionFields('sec_reviews', sc.reviews)}
+      ${sectionFields('sec_reviews', sc.reviews, true, '', 'sections.reviews')}
     </div>
     <div class="form-card">
       <p class="form-card-title">Section: CTA liên hệ</p>
-      ${sectionFields('sec_cta', sc.cta)}
+      ${sectionFields('sec_cta', sc.cta, true, '', 'sections.cta')}
     </div>
 
     <!-- ── INSPO ── -->

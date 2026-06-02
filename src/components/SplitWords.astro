@@ -15,6 +15,8 @@ interface Props {
   tag?: keyof HTMLElementTagNameMap;
   class?: string;
   style?: string;
+  /** data-cms key cho xem trước trực tiếp (admin live-patch innerHTML). */
+  cms?: string;
 }
 
 const {
@@ -24,6 +26,7 @@ const {
   tag = 'h1',
   class: className = '',
   style = '',
+  cms,
 } = Astro.props;
 
 // Tokenise the input string. We split on whitespace at the top level (depth 0
@@ -104,7 +107,7 @@ flushWord();
 let wi = 0;
 const Tag = tag;
 ---
-<Tag class={className} style={style}>
+<Tag class={className} style={style} data-cms={cms || undefined}>
   {tokens.map((t) => {
     if (t.kind === 'space') return t.value;
     if (t.kind === 'html') {

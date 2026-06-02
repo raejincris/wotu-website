@@ -6,6 +6,7 @@
  */
 import { getFile, putFile } from '../github.js';
 import { repeatable, rfText, rfArea, bindDirty } from '../lib/repeatable.js';
+import { connectBody } from '../lib/preview-bus.js';
 
 const FILE = 'src/data/home.yml';
 const BODY = 'editor-studio-home-body';
@@ -17,19 +18,21 @@ function escVal(v) { return String(v ?? '').replace(/"/g, '&quot;'); }
 function escTxt(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
-function field(id, label, value, hint = '') {
+function field(id, label, value, hint = '', cmsKey = '') {
+  const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
   return `
     <div class="form-row">
       <label class="form-label" for="${id}">${label}</label>
-      <input class="form-input" id="${id}" type="text" value="${escVal(value)}" autocomplete="off" />
+      <input class="form-input" id="${id}" type="text"${cms} value="${escVal(value)}" autocomplete="off" />
       ${hint ? `<p class="form-hint">${hint}</p>` : ''}
     </div>`;
 }
-function textarea(id, label, value, rows = 3, hint = '') {
+function textarea(id, label, value, rows = 3, hint = '', cmsKey = '') {
+  const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
   return `
     <div class="form-row">
       <label class="form-label" for="${id}">${label}</label>
-      <textarea class="form-input form-textarea" id="${id}" rows="${rows}" autocomplete="off">${escTxt(value)}</textarea>
+      <textarea class="form-input form-textarea" id="${id}"${cms} rows="${rows}" autocomplete="off">${escTxt(value)}</textarea>
       ${hint ? `<p class="form-hint">${hint}</p>` : ''}
     </div>`;
 }
@@ -67,17 +70,17 @@ export async function init({ token, showToast, setLoading }) {
 
     <div class="form-card">
       <p class="form-card-title">Triết lý</p>
-      ${field('phi_label', 'Nhãn', phi.label)}
-      ${textarea('phi_heading', 'Tiêu đề', phi.heading, 3, 'Cho phép &lt;em&gt; và &lt;em class="accent"&gt;.')}
+      ${field('phi_label', 'Nhãn', phi.label, '', 'philosophy.label')}
+      ${textarea('phi_heading', 'Tiêu đề', phi.heading, 3, 'Cho phép &lt;em&gt; và &lt;em class="accent"&gt;.', 'philosophy.heading')}
       ${textarea('phi_p0', 'Đoạn 1', phi.paragraphs?.[0], 4)}
       ${textarea('phi_p1', 'Đoạn 2', phi.paragraphs?.[1], 4)}
     </div>
 
     <div class="form-card">
       <p class="form-card-title">Dịch vụ — tiêu đề khối</p>
-      ${field('svc_label', 'Nhãn', svc.label)}
-      ${field('svc_heading', 'Tiêu đề', svc.heading, 'Cho phép &lt;em&gt;')}
-      ${field('svc_meta', 'Dòng meta (phải)', svc.meta)}
+      ${field('svc_label', 'Nhãn', svc.label, '', 'services.label')}
+      ${field('svc_heading', 'Tiêu đề', svc.heading, 'Cho phép &lt;em&gt;', 'services.heading')}
+      ${field('svc_meta', 'Dòng meta (phải)', svc.meta, '', 'services.meta')}
     </div>
     <div class="form-card">
       <p class="form-card-title">Các dịch vụ</p>
@@ -93,9 +96,9 @@ export async function init({ token, showToast, setLoading }) {
 
     <div class="form-card">
       <p class="form-card-title">Quy trình — tiêu đề</p>
-      ${field('proc_label', 'Nhãn', proc.label)}
-      ${textarea('proc_heading', 'Tiêu đề', proc.heading, 2, 'Cho phép &lt;em&gt; và &lt;br/&gt;')}
-      ${textarea('proc_intro', 'Đoạn giới thiệu', proc.intro, 3)}
+      ${field('proc_label', 'Nhãn', proc.label, '', 'process.label')}
+      ${textarea('proc_heading', 'Tiêu đề', proc.heading, 2, 'Cho phép &lt;em&gt; và &lt;br/&gt;', 'process.heading')}
+      ${textarea('proc_intro', 'Đoạn giới thiệu', proc.intro, 3, '', 'process.intro')}
     </div>
     <div class="form-card">
       <p class="form-card-title">Các bước quy trình</p>
@@ -104,9 +107,9 @@ export async function init({ token, showToast, setLoading }) {
 
     <div class="form-card">
       <p class="form-card-title">About (Studio)</p>
-      ${field('about_label', 'Nhãn', about.label)}
-      ${textarea('about_heading', 'Tiêu đề', about.heading, 2, 'Cho phép &lt;em&gt; và &lt;br/&gt;')}
-      ${textarea('about_body', 'Đoạn văn', about.body, 4)}
+      ${field('about_label', 'Nhãn', about.label, '', 'about.label')}
+      ${textarea('about_heading', 'Tiêu đề', about.heading, 2, 'Cho phép &lt;em&gt; và &lt;br/&gt;', 'about.heading')}
+      ${textarea('about_body', 'Đoạn văn', about.body, 4, '', 'about.body')}
       ${field('about_cta', 'Nút CTA', about.ctaLabel)}
     </div>
     <div class="form-card">
@@ -140,6 +143,9 @@ export async function init({ token, showToast, setLoading }) {
 
   const saveBtn = footer.querySelector('#save-studio-home');
   const dirty = bindDirty({ scope: body, saveBtn });
+
+  // Xem trước trực tiếp (label/heading các section)
+  connectBody(body);
 
   const repSvc = repeatable({
     mount: body.querySelector('#svc-items'),

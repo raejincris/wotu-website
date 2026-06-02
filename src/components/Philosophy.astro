@@ -8,7 +8,7 @@ const p = home.philosophy;
 <section style="padding: var(--pad-section) var(--pad-x);">
   <div class="grid-2col" style="display: grid; grid-template-columns: 240px 1fr; gap: var(--gap); align-items: start;">
     <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--taupe); text-transform: uppercase; padding-top: 14px;">
-      {p.number} · {p.label}
+      {p.number} · <span data-cms="philosophy.label">{p.label}</span>
     </div>
     <div>
       <SplitWords
@@ -16,6 +16,7 @@ const p = home.philosophy;
         base={0}
         step={50}
         text={p.heading}
+        cms="philosophy.heading"
         style="font-family: var(--font-display); font-weight: 300; font-size: clamp(40px, 5vw, 84px); line-height: 1.05; color: var(--bark); max-width: 16ch;"
       />
       <Reveal variant="reveal" delay={400} class="grid-2col" style="margin-top: 64px; display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap);">
