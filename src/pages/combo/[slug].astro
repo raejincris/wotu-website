@@ -74,7 +74,7 @@ const breadcrumbSchema = {
   ],
 };
 ---
-<ShopLayout title={`${fullName} — Combo ${roomLabel[c.room] ?? 'nội thất'} — WOTU`} description={desc}>
+<ShopLayout title={`${fullName} — Combo ${roomLabel[c.room] ?? 'nội thất'} — WOTU`} description={desc} ogType="product">
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
     <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />

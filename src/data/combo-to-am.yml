@@ -39,7 +39,7 @@ items:
     placeholder: "Thảm"
     tone: sage
 
-bundleTotalLabel: "18.900.000đ"
+bundleTotalLabel: "28.900.000đ"
 bundlePriceLabel: "18.900.000đ"
 bundleSaveLabel: "10.000.000đ"
 
@@ -117,7 +117,7 @@ related:
     discount: "−31%"
     placeholder: "Combo phòng ngủ An Yên"
     tone: sage
-    href: "#"
+    href: "/combo/an-yen/"
 
   - name: "Sum Vầy"
     cat: "Phòng ăn · 6 chỗ"
@@ -127,7 +127,7 @@ related:
     discount: "−31%"
     placeholder: "Combo phòng ăn Sum Vầy"
     tone: ""
-    href: "#"
+    href: "/combo/sum-vay/"
 
   - name: "Tập Trung"
     cat: "Phòng làm việc tại nhà"
@@ -137,4 +137,4 @@ related:
     discount: "−31%"
     placeholder: "Combo làm việc Tập Trung"
     tone: sage
-    href: "#"
+    href: "/combo/tap-trung/"

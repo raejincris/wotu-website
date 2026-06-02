@@ -9,12 +9,14 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  ogType?: string;
 }
 
 const {
   title = `WOTU — Nội thất cho tổ ấm Việt`,
   description = 'WOTU — combo nội thất phòng khách, phòng ngủ, phòng ăn. Gỗ tự nhiên, bảo hành 5 năm, giao và lắp đặt tận nơi tại Quy Nhơn.',
   ogImage,
+  ogType = 'website',
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
@@ -49,7 +51,7 @@ const shopAccentCss = [
     <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:locale" content="vi_VN" />
     <meta property="og:site_name" content="WOTU" />
     <meta property="og:url" content={canonicalURL} />
