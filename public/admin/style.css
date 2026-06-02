@@ -304,9 +304,58 @@ button { font-family: inherit; }
 }
 .preview-btn[hidden] { display: none !important; }
 
-/* ─── CONTENT AREA + PANELS ─────────────────────────────────── */
+/* ─── SPLIT: FORM + PREVIEW ─────────────────────────────────── */
 
-#content-area { flex: 1; }
+.shell-split { flex: 1; display: flex; align-items: flex-start; min-width: 0; }
+#content-area { flex: 1; min-width: 0; }
+
+.preview-pane {
+  position: sticky; top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+  width: 44%; min-width: 360px; max-width: 760px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  border-left: 1px solid var(--line); background: var(--bone-dark);
+}
+.preview-pane[hidden] { display: none; }
+
+.preview-toolbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-bottom: 1px solid var(--line);
+  background: var(--bg-card); flex-shrink: 0;
+}
+.pv-devs { display: inline-flex; gap: 2px; background: var(--bone-dark); border-radius: 8px; padding: 2px; }
+.pv-dev {
+  border: 0; background: none; cursor: pointer; font-size: 14px;
+  padding: 4px 8px; border-radius: 6px; line-height: 1;
+}
+.pv-dev.active { background: var(--bg-card); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.pv-url { flex: 1; min-width: 0; font-size: 11px; color: var(--ink-soft);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pv-actions { display: inline-flex; gap: 4px; }
+.pv-icon {
+  border: 0; background: none; cursor: pointer; color: var(--ink-soft);
+  width: 28px; height: 28px; border-radius: 6px; font-size: 14px;
+  display: inline-grid; place-items: center; text-decoration: none;
+}
+.pv-icon:hover { background: var(--bone-dark); color: var(--ink); }
+
+.preview-frame-wrap {
+  flex: 1; min-height: 0; overflow: auto;
+  display: flex; justify-content: center; align-items: flex-start;
+  background: #efe9df;
+}
+.preview-frame { width: 100%; height: 100%; border: 0; background: #fff; }
+.preview-frame-wrap.mobile { padding: 16px; }
+.preview-frame-wrap.mobile .preview-frame {
+  width: 390px; min-height: 760px; height: 100%;
+  border-radius: 14px; box-shadow: 0 10px 34px -10px rgba(0,0,0,.3); background: #fff;
+}
+.pv-hint {
+  margin: 0; padding: 7px 12px; font-size: 11px; color: var(--ink-soft);
+  background: var(--bg-card); border-top: 1px solid var(--line); flex-shrink: 0;
+}
+
+/* ─── CONTENT AREA + PANELS ─────────────────────────────────── */
 
 .panel { display: none; }
 .panel.active { display: block; }
@@ -498,6 +547,15 @@ button { font-family: inherit; }
   }
 
   .shell-main { width: 100%; }
+
+  /* Preview pane → overlay toàn màn hình khi bật (mobile) */
+  .shell-split { display: block; }
+  .preview-pane {
+    position: fixed; inset: var(--header-h) 0 0 0;
+    width: auto; max-width: none; min-width: 0; height: auto;
+    z-index: 90; border-left: 0;
+  }
+
   .btn-hamburger { display: inline-flex; }
   .admin-brand-mobile { display: flex; }
   .admin-header-inner { padding: 0 16px; }
@@ -546,6 +604,29 @@ button { font-family: inherit; }
 .repeat-del:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
 .repeat-fields { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
 .repeat-add { margin-top: 12px; align-self: flex-start; }
+
+/* ── Bố cục trang (section layout) ────────────────────────── */
+.lay-pagesel { display: inline-flex; gap: 2px; background: var(--bone-dark); border-radius: 8px; padding: 3px; }
+.lay-page {
+  border: 0; background: none; cursor: pointer; font-size: 13px; font-weight: 600;
+  color: var(--ink-soft); padding: 7px 16px; border-radius: 6px; transition: background .12s, color .12s;
+}
+.lay-page.active { background: var(--bg-card); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+
+.lay-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.lay-row {
+  display: flex; align-items: center; gap: 12px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--bone); padding: 10px 12px;
+}
+.lay-ord {
+  width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%;
+  background: var(--bone-dark); color: var(--ink-soft);
+  display: grid; place-items: center; font-size: 12px; font-weight: 700;
+}
+.lay-name { flex: 1; display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; }
+.lay-name input { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; }
+.lay-ctrls { display: inline-flex; gap: 4px; }
 
 /* ── Theme editor — cảnh báo tương phản ───────────────────── */
 .theme-warn { font-size: 12px; }

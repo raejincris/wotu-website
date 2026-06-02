@@ -5,6 +5,7 @@
  */
 
 import { getFile, putFile } from '../github.js';
+import { connectBody } from '../lib/preview-bus.js';
 
 const FILE = 'src/data/home.yml';
 const BODY = 'editor-home-hero-body';
@@ -14,12 +15,13 @@ const yaml = () => window.jsyaml;
 
 function escVal(v) { return String(v ?? '').replace(/"/g, '&quot;'); }
 
-function field(id, label, value, type = 'text', hint = '') {
+function field(id, label, value, type = 'text', hint = '', cmsKey = '') {
   const isTextarea = type === 'textarea';
+  const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
   const content = isTextarea
-    ? `<textarea class="form-input form-textarea" id="${id}" name="${id}"
+    ? `<textarea class="form-input form-textarea" id="${id}" name="${id}"${cms}
                  autocomplete="off" rows="3">${String(value ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>`
-    : `<input class="form-input" id="${id}" name="${id}" type="${type}"
+    : `<input class="form-input" id="${id}" name="${id}" type="${type}"${cms}
               value="${escVal(value)}" autocomplete="off" />`;
   return `
     <div class="form-row">
@@ -58,18 +60,18 @@ export async function init({ token, showToast, setLoading }) {
     <div class="form-card">
       <p class="form-card-title">Hero — phần đầu trang Studio</p>
       ${field('hero_eyebrow', 'Dòng nhỏ (eyebrow)', h.eyebrow, 'text',
-        'VD: Studio · Thiết kế &amp; Thi công nội thất Quy Nhơn')}
+        'VD: Studio · Thiết kế &amp; Thi công nội thất Quy Nhơn', 'hero.eyebrow')}
       ${field('hero_title', 'Tiêu đề chính', h.title, 'text',
         'Có thể dùng &lt;em&gt; để in nghiêng. VD: Một &lt;em&gt;khoảng&lt;/em&gt; lặng,&lt;br/&gt;giữa đời &lt;em&gt;vội&lt;/em&gt;.')}
-      ${field('hero_intro', 'Mô tả ngắn (intro)', h.intro, 'textarea')}
-      ${field('hero_cta', 'Nút CTA', h.cta, 'text', 'VD: Khám phá studio')}
+      ${field('hero_intro', 'Mô tả ngắn (intro)', h.intro, 'textarea', '', 'hero.intro')}
+      ${field('hero_cta', 'Nút CTA', h.cta, 'text', 'VD: Khám phá studio', 'hero.cta')}
     </div>
     <div class="form-card">
       <p class="form-card-title">Quote khách hàng</p>
-      ${field('quote_text', 'Nội dung trích dẫn', q.text, 'textarea')}
+      ${field('quote_text', 'Nội dung trích dẫn', q.text, 'textarea', '', 'quote.text')}
       ${field('quote_author', 'Tên / ký hiệu', q.author, 'text',
-        'VD: NGUYỄN ANH M. — gia chủ dự án 014, Quy Nhon.')}
-      ${field('quote_year', 'Năm', q.year, 'text', 'VD: 2025')}
+        'VD: NGUYỄN ANH M. — gia chủ dự án 014, Quy Nhon.', 'quote.author')}
+      ${field('quote_year', 'Năm', q.year, 'text', 'VD: 2025', 'quote.year')}
     </div>
     <div class="form-card">
       <p class="form-card-title">Thông tin chỉ đọc</p>
@@ -104,6 +106,9 @@ export async function init({ token, showToast, setLoading }) {
   }
   inputs.forEach((i) => i.addEventListener('input', checkDirty));
   checkDirty();
+
+  // Xem trước trực tiếp
+  connectBody(body);
 
   window.__adminSaveFn = () => { if (!saveBtn.disabled) saveBtn.click(); };
 

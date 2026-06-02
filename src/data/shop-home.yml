@@ -59,6 +59,17 @@ sections:
     eyebrow: Đặt tư vấn miễn phí
     heading: Để chuyên gia WOTU<br/>chọn combo <em>cho tổ ấm</em> của bạn.
     desc: Để lại số điện thoại — chúng tôi gọi trong 15 phút, tặng bạn 1 buổi tư vấn 1:1 và bản dựng 3D miễn phí cho căn hộ của bạn khi bạn đặt cọc. Hoặc gọi trực tiếp hay email cho chúng tôi.
+# Bố cục trang chủ Shop — bật/tắt + sắp xếp section (sửa qua admin "Bố cục trang").
+# Hero + Marquee cố định, không nằm trong danh sách này.
+layout:
+  - { id: combos, on: true }
+  - { id: bestsellers, on: true }
+  - { id: inspo, on: true }
+  - { id: whyUs, on: true }
+  - { id: reviews, on: true }
+  - { id: cta, on: true }
+  - { id: newsletter, on: true }
+
 combos:
   - feature: true
     id: combo-an-cu

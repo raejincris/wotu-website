@@ -124,13 +124,21 @@ const shopAccentCss = [
       })();
     </script>
 
+    {/* Xem trước trực tiếp cho admin — tự gate ?cms=1, no-op trên trang công khai */}
+    <script>
+      import '../scripts/cms-preview.ts';
+    </script>
+
     {cfToken && (
-      <script
-        is:inline
-        defer
-        src="https://static.cloudflareinsights.com/beacon.min.js"
-        data-cf-beacon={cfBeaconConfig}
-      />
+      <script is:inline set:html={`
+        if (location.search.indexOf('cms=1') < 0) {
+          var s = document.createElement('script');
+          s.defer = true;
+          s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+          s.setAttribute('data-cf-beacon', ${JSON.stringify(cfBeaconConfig)});
+          document.head.appendChild(s);
+        }
+      `} />
     )}
   </body>
 </html>

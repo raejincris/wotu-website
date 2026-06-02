@@ -8,6 +8,7 @@
 import { getFile, putFile } from '../github.js';
 import { repeatable, rfText, rfArea, rfSelect, bindDirty } from '../lib/repeatable.js';
 import { imageSlot, attachAllImages, uploadPendingImages } from '../lib/imagefield.js';
+import { connectBody } from '../lib/preview-bus.js';
 
 const FILE = 'src/data/shop-home.yml';
 const BODY = 'editor-shop-hero-body';
@@ -17,12 +18,13 @@ const yaml = () => window.jsyaml;
 
 function escVal(v) { return String(v ?? '').replace(/"/g, '&quot;'); }
 
-function field(id, label, value, type = 'text', hint = '') {
+function field(id, label, value, type = 'text', hint = '', cmsKey = '') {
   const isTextarea = type === 'textarea';
+  const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
   const ctrl = isTextarea
-    ? `<textarea class="form-input form-textarea" id="${id}" rows="3"
+    ? `<textarea class="form-input form-textarea" id="${id}"${cms} rows="3"
                  autocomplete="off">${String(value ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>`
-    : `<input class="form-input" id="${id}" type="text" value="${escVal(value)}" autocomplete="off" />`;
+    : `<input class="form-input" id="${id}" type="text"${cms} value="${escVal(value)}" autocomplete="off" />`;
   return `<div class="form-row">
     <label class="form-label" for="${id}">${label}</label>
     ${ctrl}
@@ -68,12 +70,12 @@ export async function init({ token, showToast, setLoading }) {
     <!-- ── HERO ── -->
     <div class="form-card">
       <p class="form-card-title">Hero — phần đầu trang Shop</p>
-      ${field('hero_pill',   'Badge ưu đãi (pill)',  h.pill,   'text', 'VD: Ưu đãi tháng 5 · giảm đến 35%')}
-      ${field('hero_eyebrow','Eyebrow',              h.eyebrow,'text', 'VD: Bộ sưu tập 2026')}
-      ${field('hero_title',  'Tiêu đề h1',           h.title,  'text', 'Dùng &lt;em&gt; / &lt;span class="stroke"&gt; để định dạng')}
-      ${field('hero_sub',    'Mô tả ngắn',           h.sub,    'textarea')}
-      ${field('hero_cta1',   'Nút chính (CTA 1)',    h.cta1)}
-      ${field('hero_cta2',   'Nút phụ (CTA 2)',      h.cta2)}
+      ${field('hero_pill',   'Badge ưu đãi (pill)',  h.pill,   'text', 'VD: Ưu đãi tháng 5 · giảm đến 35%', 'hero.pill')}
+      ${field('hero_eyebrow','Eyebrow',              h.eyebrow,'text', 'VD: Bộ sưu tập 2026', 'hero.eyebrow')}
+      ${field('hero_title',  'Tiêu đề h1',           h.title,  'text', 'Dùng &lt;em&gt; / &lt;span class="stroke"&gt; để định dạng', 'hero.title')}
+      ${field('hero_sub',    'Mô tả ngắn',           h.sub,    'textarea', '', 'hero.sub')}
+      ${field('hero_cta1',   'Nút chính (CTA 1)',    h.cta1,   'text', '', 'hero.cta1')}
+      ${field('hero_cta2',   'Nút phụ (CTA 2)',      h.cta2,   'text', '', 'hero.cta2')}
       <div class="form-row">
         <label class="form-label">Số liệu thống kê (3 ô)</label>
         <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 8px 12px; align-items: center;">
@@ -162,6 +164,9 @@ export async function init({ token, showToast, setLoading }) {
 
   // Ô ảnh hero (tĩnh trong body) — wire hành vi chọn/xoá ảnh.
   attachAllImages(body, dirty.mark);
+
+  // Xem trước trực tiếp: field có data-cms-key sẽ patch vào iframe khi gõ.
+  connectBody(body);
 
   const repInspo = repeatable({
     mount: body.querySelector('#shop-inspo'),

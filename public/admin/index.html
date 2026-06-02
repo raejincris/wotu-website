@@ -113,6 +113,9 @@
 
       <p class="sidebar-section-label">Giao diện</p>
 
+      <a href="#layout" class="sidebar-link" data-panel="layout">
+        <span class="sidebar-icon-emoji">🧩</span> Bố cục trang
+      </a>
       <a href="#theme" class="sidebar-link" data-panel="theme">
         <span class="sidebar-icon-emoji">🎨</span> Tuỳ biến giao diện
       </a>
@@ -156,6 +159,14 @@
           <span id="header-title" class="header-title"></span>
         </div>
         <div class="admin-header-right">
+          <button id="btn-preview-toggle" class="btn btn-ghost btn-sm preview-btn" hidden
+                  aria-pressed="false" title="Bật/tắt khung xem trước">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+            </svg>
+            Xem trước
+          </button>
           <a id="header-preview" href="#" target="_blank" rel="noopener"
              class="btn btn-ghost btn-sm preview-btn" hidden>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
@@ -168,6 +179,9 @@
         </div>
       </div>
     </header>
+
+    <!-- Split: form (trái) + xem trước trực tiếp (phải) -->
+    <div class="shell-split" id="shell-split">
 
     <!-- Content panels -->
     <div id="content-area">
@@ -326,6 +340,18 @@
       </div>
 
       <!-- ╔══════════════════════════════════
+           ║  EDITOR: Bố cục trang (section layout)
+           ╚══════════════════════════════════ -->
+      <div id="panel-layout" class="panel editor-panel" hidden>
+        <div class="panel-page-header">
+          <h2>Bố cục trang</h2>
+          <p class="panel-page-sub">Bật/tắt &amp; sắp xếp section trên trang chủ Shop / Studio</p>
+        </div>
+        <div class="editor-body" id="editor-layout-body"></div>
+        <div class="editor-footer" id="editor-layout-footer" hidden></div>
+      </div>
+
+      <!-- ╔══════════════════════════════════
            ║  EDITOR: Giao diện (Theme)
            ╚══════════════════════════════════ -->
       <div id="panel-theme" class="panel editor-panel" hidden>
@@ -338,6 +364,29 @@
       </div>
 
     </div><!-- /content-area -->
+
+      <!-- ── PREVIEW PANE (xem trước trực tiếp) ──────────── -->
+      <aside id="preview-pane" class="preview-pane" hidden>
+        <div class="preview-toolbar">
+          <div class="pv-devs">
+            <button type="button" class="pv-dev active" data-w="desktop" title="Máy tính" aria-label="Máy tính">🖥</button>
+            <button type="button" class="pv-dev" data-w="mobile" title="Điện thoại" aria-label="Điện thoại">📱</button>
+          </div>
+          <span class="pv-url" id="pv-url" title=""></span>
+          <div class="pv-actions">
+            <button type="button" id="pv-reload" class="pv-icon" title="Tải lại" aria-label="Tải lại">⟳</button>
+            <a id="pv-open" class="pv-icon" href="#" target="_blank" rel="noopener" title="Mở tab mới" aria-label="Mở tab mới">↗</a>
+            <button type="button" id="pv-close" class="pv-icon" title="Đóng khung xem trước" aria-label="Đóng">✕</button>
+          </div>
+        </div>
+        <div class="preview-frame-wrap" id="pv-wrap">
+          <iframe id="pv-iframe" class="preview-frame" title="Xem trước trang"
+                  loading="lazy" referrerpolicy="same-origin"></iframe>
+        </div>
+        <p class="pv-hint" id="pv-hint">Trường chưa hỗ trợ xem trước trực tiếp sẽ hiện sau khi bấm Lưu (~1 phút).</p>
+      </aside>
+
+    </div><!-- /shell-split -->
   </div><!-- /shell-main -->
 </div><!-- /app-shell -->
 

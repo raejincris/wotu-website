@@ -6,6 +6,7 @@
 
 import { getSession, clearSession, openAuthPopup } from './auth.js';
 import { getCommits, getFileLastCommit } from './github.js';
+import * as previewBus from './lib/preview-bus.js';
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
 
@@ -53,6 +54,98 @@ function resetEditor() {
   isDirty = false;
   window.__adminSetDirty(false);
   window.__adminSaveFn = null;
+  previewBus.disconnect();
+  previewOverrideUrl = '';
+}
+
+// ─── Live preview pane ──────────────────────────────────────────────────────────
+
+const PREVIEW_KEY = 'wotu-admin-preview-open';
+let previewOpen = localStorage.getItem(PREVIEW_KEY) !== '0' && window.innerWidth >= 1100;
+let currentPreviewUrl = '';
+let previewOverrideUrl = '';
+
+// Editor (vd Bố cục trang) đổi trang đang xem trước.
+window.__previewSetUrl = (url) => {
+  previewOverrideUrl = url || '';
+  updatePreview(currentPanelPreview());
+};
+
+function previewEls() {
+  return {
+    pane:   document.getElementById('preview-pane'),
+    iframe: document.getElementById('pv-iframe'),
+    wrap:   document.getElementById('pv-wrap'),
+    url:    document.getElementById('pv-url'),
+    open:   document.getElementById('pv-open'),
+    toggle: document.getElementById('btn-preview-toggle'),
+  };
+}
+
+/** Gọi từ showPanel — bật/tắt pane theo panel hiện tại + nạp iframe ?cms=1. */
+function updatePreview(previewUrl) {
+  const { pane, iframe, url, open, toggle } = previewEls();
+  if (!pane) return;
+
+  const effective = previewOverrideUrl || previewUrl;
+
+  // Nút "Xem trước" chỉ hiện khi panel có URL preview.
+  toggle.hidden = !effective;
+  toggle.setAttribute('aria-pressed', String(!!effective && previewOpen));
+
+  if (!effective || !previewOpen) {
+    pane.hidden = true;
+    currentPreviewUrl = '';
+    previewBus.setIframe(null);
+    return;
+  }
+
+  pane.hidden = false;
+  previewBus.setIframe(iframe);
+  if (effective !== currentPreviewUrl) {
+    currentPreviewUrl = effective;
+    const sep = effective.includes('?') ? '&' : '?';
+    iframe.src = effective + sep + 'cms=1';
+    url.textContent = effective.replace(/^https?:\/\//, '');
+    url.title = effective;
+    open.href = effective;
+  }
+}
+
+function currentPanelPreview() {
+  const hash = location.hash.replace(/^#/, '');
+  const panelId = HASH_MAP[hash] ?? 'panel-dashboard';
+  return (PANEL_META[panelId] || {}).preview || '';
+}
+
+function setupPreview() {
+  const { pane, iframe, wrap, toggle } = previewEls();
+  if (!pane) return;
+
+  toggle.addEventListener('click', () => {
+    previewOpen = !previewOpen;
+    localStorage.setItem(PREVIEW_KEY, previewOpen ? '1' : '0');
+    updatePreview(currentPanelPreview());
+    if (previewOpen) previewBus.resync();
+  });
+
+  document.getElementById('pv-close').addEventListener('click', () => {
+    previewOpen = false;
+    localStorage.setItem(PREVIEW_KEY, '0');
+    updatePreview(currentPanelPreview());
+  });
+
+  document.getElementById('pv-reload').addEventListener('click', () => {
+    if (iframe.src) iframe.src = iframe.src; // reload → cms-ready → resync
+  });
+
+  pane.querySelectorAll('.pv-dev').forEach((b) => {
+    b.addEventListener('click', () => {
+      pane.querySelectorAll('.pv-dev').forEach((x) => x.classList.remove('active'));
+      b.classList.add('active');
+      wrap.classList.toggle('mobile', b.dataset.w === 'mobile');
+    });
+  });
 }
 
 // ─── Panel map ────────────────────────────────────────────────────────────────
@@ -62,6 +155,7 @@ const PANELS = [
   'panel-site', 'panel-sofa', 'panel-combo', 'panel-shop-home', 'panel-home-hero',
   'panel-shop-hero', 'panel-products', 'panel-footer',
   'panel-studio-home', 'panel-services', 'panel-privacy', 'panel-theme',
+  'panel-layout',
 ];
 
 const HASH_MAP = {
@@ -79,6 +173,7 @@ const HASH_MAP = {
   'services':    'panel-services',
   'privacy':     'panel-privacy',
   'theme':       'panel-theme',
+  'layout':      'panel-layout',
 };
 
 const PANEL_META = {
@@ -95,6 +190,7 @@ const PANEL_META = {
   'panel-services':  { title: 'Trang dịch vụ',            preview: 'https://www.wotu.vn/studio/dich-vu/' },
   'panel-privacy':   { title: 'Chính sách bảo mật',       preview: 'https://www.wotu.vn/bao-mat' },
   'panel-theme':     { title: 'Giao diện (Theme)',        preview: 'https://www.wotu.vn/' },
+  'panel-layout':    { title: 'Bố cục trang',             preview: 'https://www.wotu.vn/' },
 };
 
 const EDITOR_MAP = {
@@ -110,6 +206,7 @@ const EDITOR_MAP = {
   'services':   '/admin/editors/services.js',
   'privacy':    '/admin/editors/privacy.js',
   'theme':      '/admin/editors/theme.js',
+  'layout':     '/admin/editors/layout.js',
 };
 
 const FILE_STATUS_CONFIG = [
@@ -159,6 +256,9 @@ function showPanel(id) {
   } else {
     previewBtn.hidden = true;
   }
+
+  // Khung xem trước trực tiếp
+  updatePreview(meta.preview || '');
 }
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
@@ -328,6 +428,7 @@ async function navigate() {
 document.addEventListener('DOMContentLoaded', () => {
 
   setupSidebar();
+  setupPreview();
 
   // Sidebar link click → dirty guard
   document.addEventListener('click', (e) => {

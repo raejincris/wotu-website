@@ -27,21 +27,23 @@ function escTxt(s) {
 
 /** Field builders — đều gắn data-field để collect() đọc lại. */
 export function rfText(field, label, value, opts = {}) {
-  const { hint = '', placeholder = '' } = opts;
+  const { hint = '', placeholder = '', cmsKey = '' } = opts;
+  const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
   return `
     <div class="form-row">
       <label class="form-label">${label}</label>
-      <input class="form-input" type="text" data-field="${field}"
+      <input class="form-input" type="text" data-field="${field}"${cms}
              value="${escVal(value)}" placeholder="${escVal(placeholder)}" autocomplete="off" />
       ${hint ? `<p class="form-hint">${hint}</p>` : ''}
     </div>`;
 }
 export function rfArea(field, label, value, opts = {}) {
-  const { hint = '', rows = 3 } = opts;
+  const { hint = '', rows = 3, cmsKey = '' } = opts;
+  const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
   return `
     <div class="form-row">
       <label class="form-label">${label}</label>
-      <textarea class="form-input form-textarea" data-field="${field}" rows="${rows}" autocomplete="off">${escTxt(value)}</textarea>
+      <textarea class="form-input form-textarea" data-field="${field}"${cms} rows="${rows}" autocomplete="off">${escTxt(value)}</textarea>
       ${hint ? `<p class="form-hint">${hint}</p>` : ''}
     </div>`;
 }

@@ -13,6 +13,12 @@ import Quote from '../../components/Quote.astro';
 import Contact from '../../components/Contact.astro';
 import Footer from '../../components/Footer.astro';
 import TweaksPanel from '../../components/TweaksPanel.astro';
+import home from '../../data/home.yml';
+import { resolveLayout } from '../../lib/section-layout';
+
+const L = resolveLayout((home as any).layout, [
+  'philosophy', 'services', 'projects', 'process', 'about', 'quote', 'contact',
+]);
 
 const all = await getCollection('projects');
 const projects = all
@@ -34,13 +40,15 @@ const projects = all
   <Nav variant="home" />
   <Hero />
   <Marquee />
-  <Philosophy />
-  <Services />
-  <ProjectsGrid projects={projects} />
-  <Process />
-  <About />
-  <Quote />
-  <Contact />
+  <div class="cms-sections" style="display:flex; flex-direction:column;">
+    {L.on('philosophy') && <div data-cms-section="philosophy" style={`order:${L.order('philosophy')}`}><Philosophy /></div>}
+    {L.on('services')   && <div data-cms-section="services"   style={`order:${L.order('services')}`}><Services /></div>}
+    {L.on('projects')   && <div data-cms-section="projects"   style={`order:${L.order('projects')}`}><ProjectsGrid projects={projects} /></div>}
+    {L.on('process')    && <div data-cms-section="process"    style={`order:${L.order('process')}`}><Process /></div>}
+    {L.on('about')      && <div data-cms-section="about"      style={`order:${L.order('about')}`}><About /></div>}
+    {L.on('quote')      && <div data-cms-section="quote"      style={`order:${L.order('quote')}`}><Quote /></div>}
+    {L.on('contact')    && <div data-cms-section="contact"    style={`order:${L.order('contact')}`}><Contact /></div>}
+  </div>
   <Footer />
   <TweaksPanel />
 </BaseLayout>

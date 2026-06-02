@@ -96,6 +96,38 @@ test.describe('2 · Shop homepage — smoke', () => {
     await expect(cards).toHaveCount(4);
   });
 
+  test('section layout: các section bọc data-cms-section trong .cms-sections + có order', async ({ page }) => {
+    await page.goto('/');
+    const wrap = page.locator('.cms-sections');
+    await expect(wrap).toBeAttached();
+    for (const id of ['combos', 'bestsellers', 'inspo', 'whyUs', 'reviews', 'cta', 'newsletter']) {
+      await expect(page.locator(`.cms-sections [data-cms-section="${id}"]`)).toHaveCount(1);
+    }
+    // combos là section đầu tiên (order 0 theo layout mặc định)
+    const order = await page.locator('[data-cms-section="combos"]').evaluate((el) => getComputedStyle(el).order);
+    expect(order).toBe('0');
+  });
+
+  test('cms-preview: ?cms=1 patch text + toggle + reorder section', async ({ page }) => {
+    await page.goto('/?cms=1');
+    await expect(page.locator('html')).toHaveAttribute('data-cms-preview', '1');
+
+    // patch nội dung hero
+    await page.evaluate(() =>
+      window.postMessage({ type: 'patch', key: 'hero.title', value: 'WOTU TEST PATCH' }, location.origin));
+    await expect(page.locator('[data-cms="hero.title"]')).toContainText('WOTU TEST PATCH');
+
+    // tắt section combos → ẩn
+    await page.evaluate(() =>
+      window.postMessage({ type: 'section', id: 'combos', on: false }, location.origin));
+    await expect(page.locator('[data-cms-section="combos"]')).toBeHidden();
+
+    // sắp xếp lại: newsletter lên đầu (order 0)
+    await page.evaluate(() =>
+      window.postMessage({ type: 'reorder', order: ['newsletter', 'combos'] }, location.origin));
+    await expect(page.locator('[data-cms-section="newsletter"]')).toHaveCSS('order', '0');
+  });
+
   test('hero CTA "Xem combo nổi bật" tồn tại và dẫn đến #combos', async ({ page }) => {
     await page.goto('/');
     const cta = page.locator('a[href="#combos"]').first();
@@ -339,6 +371,14 @@ test.describe('8 · /studio/ — studio homepage', () => {
     // TweaksPanel renders #wotu-tweaks panel
     const tweaks = page.locator('#wotu-tweaks');
     await expect(tweaks).toBeAttached();
+  });
+
+  test('section layout: sections bọc data-cms-section trong .cms-sections', async ({ page }) => {
+    await page.goto('/studio/');
+    await expect(page.locator('.cms-sections')).toBeAttached();
+    for (const id of ['philosophy', 'services', 'projects', 'process', 'about', 'quote', 'contact']) {
+      await expect(page.locator(`.cms-sections [data-cms-section="${id}"]`)).toHaveCount(1);
+    }
   });
 
   test('anchor nav desktop: #services, #about, #contact tồn tại', async ({}, testInfo) => {

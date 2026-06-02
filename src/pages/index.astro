@@ -6,11 +6,18 @@ import Marquee from '../components/shop/Marquee.astro';
 import Newsletter from '../components/Newsletter.astro';
 import site from '../data/site.yml';
 import shopHome from '../data/shop-home.yml';
+import { resolveLayout } from '../lib/section-layout';
 
 const phone = site.hotline;
 const email = site.email;
 
 const { hero, sections, combos, bestsellers, inspo, reviews } = shopHome as any;
+
+// Bố cục: bật/tắt + thứ tự section (sửa qua admin "Bố cục trang").
+const L = resolveLayout((shopHome as any).layout, [
+  'combos', 'bestsellers', 'inspo', 'whyUs', 'reviews', 'cta', 'newsletter',
+]);
+const secStyle = (id: string) => `order:${L.order(id)};${L.on(id) ? '' : 'display:none;'}`;
 
 // Map ảnh minh hoạ line-art (public/uploads/products/). Combo theo phòng,
 // bestseller theo loại suy từ id, inspo theo phòng (cùng thứ tự combo trừ khách).
@@ -35,14 +42,14 @@ const whyIcons: Record<string, string> = {
     <div class="container hero-grid">
       <div>
         <div class="hero-eyebrow-row">
-          <span class="pill"><span class="dot"></span> {hero.pill}</span>
-          <span class="eyebrow">{hero.eyebrow}</span>
+          <span class="pill"><span class="dot"></span> <span data-cms="hero.pill">{hero.pill}</span></span>
+          <span class="eyebrow" data-cms="hero.eyebrow">{hero.eyebrow}</span>
         </div>
-        <h1 set:html={hero.title} />
-        <p class="hero-sub">{hero.sub}</p>
+        <h1 set:html={hero.title} data-cms="hero.title" />
+        <p class="hero-sub" data-cms="hero.sub">{hero.sub}</p>
         <div class="hero-actions">
-          <a class="shop-btn shop-btn-primary" href="#combos">{hero.cta1} <span class="arr">→</span></a>
-          <a class="shop-btn shop-btn-ghost" href="#inspo">{hero.cta2}</a>
+          <a class="shop-btn shop-btn-primary" href="#combos"><span data-cms="hero.cta1">{hero.cta1}</span> <span class="arr">→</span></a>
+          <a class="shop-btn shop-btn-ghost" href="#inspo" data-cms="hero.cta2">{hero.cta2}</a>
         </div>
         <div class="hero-meta">
           {hero.stats.map((s: any) => (
@@ -56,7 +63,7 @@ const whyIcons: Record<string, string> = {
 
       <div class="hero-visual">
         <div class="shop-ph"><span class="shop-ph-label">Phòng khách combo WOTU — 1600×2000</span></div>
-        <img class="shop-illo" src={hero.photo || `${ILLO}/combo-phong-khach.png`} alt={hero.photoAlt || 'Minh hoạ combo phòng khách WOTU'} loading="eager" fetchpriority="high" decoding="async" />
+        <img class="shop-illo" data-cms-img="hero.photo" src={hero.photo || `${ILLO}/combo-phong-khach.png`} alt={hero.photoAlt || 'Minh hoạ combo phòng khách WOTU'} loading="eager" fetchpriority="high" decoding="async" />
         <div class="sticker">
           {hero.sticker}<small>{hero.stickerSub}</small>
         </div>
@@ -75,8 +82,11 @@ const whyIcons: Record<string, string> = {
 
   <Marquee />
 
+  <!-- Bố cục động: flex + CSS order cho bật/tắt & sắp xếp section -->
+  <div class="cms-sections" style="display:flex; flex-direction:column;">
+
   <!-- ====== COMBOS ====== -->
-  <section id="combos" class="shop-reveal">
+  <section id="combos" class="shop-reveal" data-cms-section="combos" style={secStyle('combos')}>
     <div class="combos">
       <div class="section-head">
         <div>
@@ -149,7 +159,7 @@ const whyIcons: Record<string, string> = {
   </section>
 
   <!-- ====== BESTSELLERS ====== -->
-  <section id="shop" class="shop-reveal">
+  <section id="shop" class="shop-reveal" data-cms-section="bestsellers" style={secStyle('bestsellers')}>
     <div class="container">
       <div class="section-head">
         <div>
@@ -192,7 +202,7 @@ const whyIcons: Record<string, string> = {
   </section>
 
   <!-- ====== INSPIRATION ====== -->
-  <section id="inspo" class="shop-reveal">
+  <section id="inspo" class="shop-reveal" data-cms-section="inspo" style={secStyle('inspo')}>
     <div class="inspo">
       <div class="section-head">
         <div>
@@ -220,7 +230,7 @@ const whyIcons: Record<string, string> = {
   </section>
 
   <!-- ====== WHY US ====== -->
-  <section id="why" class="shop-reveal">
+  <section id="why" class="shop-reveal" data-cms-section="whyUs" style={secStyle('whyUs')}>
     <div class="container">
       <div class="section-head">
         <div>
@@ -246,7 +256,7 @@ const whyIcons: Record<string, string> = {
   </section>
 
   <!-- ====== REVIEWS ====== -->
-  <section class="shop-reveal">
+  <section class="shop-reveal" data-cms-section="reviews" style={secStyle('reviews')}>
     <div class="container">
       <div class="section-head">
         <div>
@@ -275,7 +285,7 @@ const whyIcons: Record<string, string> = {
   </section>
 
   <!-- ====== CTA ====== -->
-  <section id="contact" class="shop-reveal" style="padding-bottom: 0;">
+  <section id="contact" class="shop-reveal" data-cms-section="cta" style={`order:${L.order('cta')};${L.on('cta') ? '' : 'display:none;'} padding-bottom: 0;`}>
     <div class="cta">
       <div>
         <span class="eyebrow" style="color: color-mix(in oklab, var(--shop-bg) 80%, transparent);">{sections.cta.eyebrow}</span>
@@ -298,7 +308,11 @@ const whyIcons: Record<string, string> = {
     </div>
   </section>
 
-  <Newsletter variant="shop" heading="Nhận ưu đãi & cảm hứng nội thất" />
+  <div data-cms-section="newsletter" style={secStyle('newsletter')}>
+    <Newsletter variant="shop" heading="Nhận ưu đãi & cảm hứng nội thất" />
+  </div>
+
+  </div><!-- /cms-sections -->
   <Footer />
 </ShopLayout>
 

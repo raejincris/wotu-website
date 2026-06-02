@@ -1,3 +1,14 @@
+# Bố cục trang chủ Studio — bật/tắt + sắp xếp section (sửa qua admin "Bố cục trang").
+# Hero + Marquee + Footer cố định, không nằm trong danh sách này.
+layout:
+  - { id: philosophy, on: true }
+  - { id: services, on: true }
+  - { id: projects, on: true }
+  - { id: process, on: true }
+  - { id: about, on: true }
+  - { id: quote, on: true }
+  - { id: contact, on: true }
+
 hero:
   eyebrow: Studio · Thiết kế & Thi công nội thất Quy Nhơn
   title: Một <em>khoảng</em> lặng,<br/>giữa đời <em>vội</em>.
