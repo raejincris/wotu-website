@@ -70,6 +70,10 @@ layout:
   - { id: cta, on: true }
   - { id: newsletter, on: true }
 
+# Khối nội dung động (thêm qua admin "Khối nội dung"). Mỗi khối có id riêng (b-…)
+# + type (richText|bannerCta) + các field theo loại. Vị trí/bật-tắt nằm trong `layout`.
+blocks: []
+
 combos:
   - feature: true
     id: combo-an-cu

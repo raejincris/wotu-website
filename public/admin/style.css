@@ -627,6 +627,12 @@ button { font-family: inherit; }
 .lay-name { flex: 1; display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; }
 .lay-name input { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; }
 .lay-ctrls { display: inline-flex; gap: 4px; }
+.lay-tag { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  background: var(--accent); color: #fff; padding: 1px 6px; border-radius: 999px; margin-left: 6px; }
+
+/* ── Khối nội dung (page-builder) ─────────────────────────── */
+.blk-add-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.blk-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
 
 /* ── Theme editor — cảnh báo tương phản ───────────────────── */
 .theme-warn { font-size: 12px; }

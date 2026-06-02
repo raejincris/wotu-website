@@ -1,0 +1,51 @@
+---
+/** Khối banner kêu gọi hành động: tiêu đề + phụ đề + nút. tone: accent|dark|soft. */
+interface Props { block: any; }
+const { block } = Astro.props;
+const id = block.id;
+const tone = ['accent', 'dark', 'soft'].includes(block.tone) ? block.tone : 'accent';
+const href = block.btnHref || '#';
+---
+<div class="container">
+  <div class="blk-banner" data-tone={tone}>
+    <div class="blk-banner-text">
+      {block.heading && <h2 data-cms={`blk.${id}.heading`} set:html={block.heading} />}
+      {block.sub && <p data-cms={`blk.${id}.sub`}>{block.sub}</p>}
+    </div>
+    {block.btnLabel && (
+      <a class="blk-banner-btn" href={href}>
+        <span data-cms={`blk.${id}.btnLabel`}>{block.btnLabel}</span> <span class="arr">→</span>
+      </a>
+    )}
+  </div>
+</div>
+
+<style>
+  .blk-banner {
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+    flex-wrap: wrap; padding: 48px 56px; border-radius: var(--shop-radius-xl);
+    max-width: var(--shop-maxw); margin-inline: auto;
+  }
+  .blk-banner[data-tone="accent"] { background: var(--shop-accent); color: #fff; }
+  .blk-banner[data-tone="dark"]   { background: var(--shop-ink); color: var(--shop-bg); }
+  .blk-banner[data-tone="soft"]   { background: var(--shop-warm-soft); color: var(--shop-ink); }
+  .blk-banner h2 {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(28px, 3.6vw, 44px); line-height: 1.1; margin: 0 0 8px;
+  }
+  .blk-banner :global(h2 em) { font-style: italic; }
+  .blk-banner p { margin: 0; font-size: 16px; opacity: .9; max-width: 52ch; }
+  .blk-banner-btn {
+    display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0;
+    background: var(--shop-bg-card); color: var(--shop-ink);
+    padding: 16px 28px; border-radius: 999px; font-weight: 600; font-size: 15px;
+    transition: transform .2s;
+  }
+  .blk-banner-btn:hover { transform: translateY(-2px); }
+  .blk-banner-btn .arr { transition: transform .2s; }
+  .blk-banner-btn:hover .arr { transform: translateX(4px); }
+
+  @media (max-width: 680px) {
+    .blk-banner { padding: 32px 24px; }
+  }
+</style>

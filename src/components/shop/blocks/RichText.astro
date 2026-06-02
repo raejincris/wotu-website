@@ -1,0 +1,30 @@
+---
+/** Khối nội dung: eyebrow + tiêu đề + đoạn văn (HTML cho phép <em>, <br/>). */
+interface Props { block: any; }
+const { block } = Astro.props;
+const id = block.id;
+const align = block.align === 'center' ? 'center' : 'left';
+---
+<div class="container blk-richtext" data-align={align}>
+  {block.eyebrow && <span class="eyebrow" data-cms={`blk.${id}.eyebrow`}>{block.eyebrow}</span>}
+  {block.heading && <h2 data-cms={`blk.${id}.heading`} set:html={block.heading} />}
+  {block.body && <div class="blk-body" data-cms={`blk.${id}.body`} set:html={block.body} />}
+</div>
+
+<style>
+  .blk-richtext { display: flex; flex-direction: column; gap: 14px; max-width: var(--shop-maxw); }
+  .blk-richtext[data-align="center"] { align-items: center; text-align: center; }
+  .blk-richtext .eyebrow {
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--shop-ink-soft); font-weight: 600;
+  }
+  .blk-richtext h2 {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(30px, 4.2vw, 52px); line-height: 1.05; letter-spacing: -0.01em;
+    color: var(--shop-ink); margin: 0;
+  }
+  .blk-richtext :global(h2 em) { font-style: italic; color: var(--shop-accent); }
+  .blk-body { font-size: 17px; line-height: 1.7; color: var(--shop-ink-soft); max-width: 720px; }
+  .blk-richtext[data-align="center"] .blk-body { margin-inline: auto; }
+  .blk-body :global(a) { color: var(--shop-accent); text-decoration: underline; }
+</style>

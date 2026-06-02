@@ -4,6 +4,7 @@ import Nav from '../components/shop/Nav.astro';
 import Footer from '../components/shop/Footer.astro';
 import Marquee from '../components/shop/Marquee.astro';
 import Newsletter from '../components/Newsletter.astro';
+import BlockRenderer from '../components/shop/blocks/BlockRenderer.astro';
 import site from '../data/site.yml';
 import shopHome from '../data/shop-home.yml';
 import { resolveLayout } from '../lib/section-layout';
@@ -12,6 +13,7 @@ const phone = site.hotline;
 const email = site.email;
 
 const { hero, sections, combos, bestsellers, inspo, reviews } = shopHome as any;
+const blocks = ((shopHome as any).blocks ?? []) as any[];
 
 // Bố cục: bật/tắt + thứ tự section (sửa qua admin "Bố cục trang").
 const L = resolveLayout((shopHome as any).layout, [
@@ -311,6 +313,13 @@ const whyIcons: Record<string, string> = {
   <div data-cms-section="newsletter" style={secStyle('newsletter')}>
     <Newsletter variant="shop" heading="Nhận ưu đãi & cảm hứng nội thất" />
   </div>
+
+  {/* Khối nội dung động — vị trí/bật-tắt theo layout (CSS order) */}
+  {blocks.map((b) => (
+    <section class="shop-reveal blk-section" data-cms-section={b.id} style={secStyle(b.id)}>
+      <BlockRenderer block={b} />
+    </section>
+  ))}
 
   </div><!-- /cms-sections -->
   <Footer />

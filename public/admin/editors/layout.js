@@ -6,6 +6,7 @@
 
 import { getFile, putFile } from '../github.js';
 import { section as pvSection, reorder as pvReorder, setReadyHook } from '../lib/preview-bus.js';
+import { blockSummary } from '../lib/block-types.js';
 
 const BODY = 'editor-layout-body';
 const FOOTER = 'editor-layout-footer';
@@ -37,13 +38,23 @@ const PAGES = {
   },
 };
 
-/** Hợp nhất layout đã lưu với defaults (bổ sung id thiếu, bỏ id lạ). */
-function resolveRows(savedLayout, page) {
-  const saved = Array.isArray(savedLayout) ? savedLayout.filter((s) => s && page.labels[s.id]) : [];
+/** Hợp nhất layout đã lưu với defaults (section cố định) + khối động (blocks[]). */
+function resolveRows(savedLayout, page, blockMap) {
+  const valid = (id) => !!page.labels[id] || !!blockMap[id];
+  const saved = Array.isArray(savedLayout) ? savedLayout.filter((s) => s && valid(s.id)) : [];
   const seen = new Set(saved.map((s) => s.id));
   const rows = saved.map((s) => ({ id: s.id, on: s.on !== false }));
+  // bổ sung section cố định còn thiếu
   page.defaults.forEach((id) => { if (!seen.has(id)) rows.push({ id, on: true }); });
+  // bổ sung khối chưa có trong layout
+  Object.keys(blockMap).forEach((id) => { if (!seen.has(id)) rows.push({ id, on: true }); });
   return rows;
+}
+
+function labelOf(id, page, blockMap) {
+  if (page.labels[id]) return page.labels[id];
+  if (blockMap[id]) return blockSummary(blockMap[id]);
+  return id;
 }
 
 export async function init({ token, showToast, setLoading }) {
@@ -71,13 +82,14 @@ export async function init({ token, showToast, setLoading }) {
   // Khi iframe (re)load xong → đẩy lại trạng thái.
   setReadyHook(pushPreview);
 
-  function rowHtml(r, page, i) {
+  function rowHtml(r, page, i, blockMap) {
+    const isBlock = !!blockMap[r.id];
     return `
       <div class="lay-row" data-id="${escVal(r.id)}">
         <span class="lay-ord">${i + 1}</span>
         <label class="lay-name">
           <input type="checkbox" class="lay-toggle" ${r.on ? 'checked' : ''} />
-          <span>${escTxt(page.labels[r.id] || r.id)}</span>
+          <span>${escTxt(labelOf(r.id, page, blockMap))}${isBlock ? ' <span class="lay-tag">khối</span>' : ''}</span>
         </label>
         <span class="lay-ctrls">
           <button type="button" class="repeat-btn" data-act="up" title="Lên" aria-label="Lên">↑</button>
@@ -86,10 +98,17 @@ export async function init({ token, showToast, setLoading }) {
       </div>`;
   }
 
+  function blockMapOf() {
+    const m = {};
+    (Array.isArray(obj.blocks) ? obj.blocks : []).forEach((b) => { if (b?.id) m[b.id] = b; });
+    return m;
+  }
+
   function renderRows() {
     const page = PAGES[pageKey];
-    const rows = resolveRows(obj.layout, page);
-    body.querySelector('#lay-list').innerHTML = rows.map((r, i) => rowHtml(r, page, i)).join('');
+    const blockMap = blockMapOf();
+    const rows = resolveRows(obj.layout, page, blockMap);
+    body.querySelector('#lay-list').innerHTML = rows.map((r, i) => rowHtml(r, page, i, blockMap)).join('');
   }
 
   function renumber() {
