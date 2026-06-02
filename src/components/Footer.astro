@@ -1,5 +1,6 @@
 ---
 import footer from '../data/footer.yml';
+import { SITE_VERSION } from '../lib/version';
 
 interface Link { label: string; href: string; }
 interface Column { title: string; links: Link[]; }
@@ -32,7 +33,7 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
     ))}
   </div>
   <div class="footer-bottom" style="padding-top: 24px; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; color: var(--earth); text-transform: uppercase;">
-    <div>{footer.copyright}</div>
+    <div>{footer.copyright} <span style="opacity: 0.6;">· v{SITE_VERSION}</span></div>
     <div>{footer.signature}</div>
   </div>
 </footer>

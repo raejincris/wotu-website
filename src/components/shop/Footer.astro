@@ -1,5 +1,6 @@
 ---
 import site from '../../data/site.yml';
+import { SITE_VERSION } from '../../lib/version';
 ---
 <footer class="shop-footer">
   <div class="container">
@@ -49,8 +50,16 @@ import site from '../../data/site.yml';
       </div>
     </div>
     <div class="shop-foot-bottom">
-      <span>© 2026 WOTU — Thiết kế &amp; thi công nội thất.</span>
+      <span>© 2026 WOTU — Thiết kế &amp; thi công nội thất. <span class="shop-foot-version">v{SITE_VERSION}</span></span>
       <span>Studio + Xưởng tại Quy Nhơn, Gia Lai</span>
     </div>
   </div>
 </footer>
+
+<style>
+  .shop-foot-version {
+    opacity: 0.5;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+</style>
