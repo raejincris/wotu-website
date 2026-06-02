@@ -7,12 +7,12 @@ import yaml from '@rollup/plugin-yaml';
 import pagefind from 'astro-pagefind';
 
 // Version tự động lúc build — KHÔNG bump tay.
-// Major.minor cố định ('1.0'); build number = số commit (mỗi push +1).
-// Tính lúc build trên Cloudflare (repo có git). Local folder này không phải git
-// → rơi về '1.0'. Shallow clone → dùng short SHA (vẫn đổi mỗi push) thay vì
-// commit count sai.
+// Quy ước: commit đầu tiên = v0.0.1. Số thứ tự commit (n) tách thành 3 chữ số,
+// roll khi quá 9: patch = n%10, minor = (n/10)%10, major = n/100.
+//   n=1   → 0.0.1     n=10  → 0.1.0     n=100 → 1.0.0     n=200 → 2.0.0
+// Tính lúc build trên Cloudflare (repo có git). Shallow clone / không git
+// → fallback short SHA (vẫn đổi mỗi push).
 const SITE_VERSION = (() => {
-  const BASE = '1.0';
   const git = (cmd) => {
     try {
       return execSync(cmd, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
@@ -21,15 +21,20 @@ const SITE_VERSION = (() => {
     }
   };
   const shallow = git('git rev-parse --is-shallow-repository') === 'true';
-  const count = git('git rev-list --count HEAD');
-  if (count && !shallow) return `${BASE}.${count}`;
+  const n = parseInt(git('git rev-list --count HEAD'), 10);
+  if (n > 0 && !shallow) {
+    const patch = n % 10;
+    const minor = Math.floor(n / 10) % 10;
+    const major = Math.floor(n / 100);
+    return `${major}.${minor}.${patch}`;
+  }
   const sha = (
     git('git rev-parse --short HEAD') ||
     process.env.WORKERS_CI_COMMIT_SHA ||
     process.env.CF_PAGES_COMMIT_SHA ||
     ''
   ).slice(0, 7);
-  return sha ? `${BASE}+${sha}` : BASE;
+  return sha ? `0.0.0+${sha}` : '0.0.0';
 })();
 
 export default defineConfig({

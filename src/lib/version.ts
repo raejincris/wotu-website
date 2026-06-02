@@ -1,6 +1,6 @@
 // Version của marketing site WOTU — TỰ ĐỘNG, không bump tay.
-// Giá trị được tính lúc build trong astro.config.mjs (số commit = build number,
-// mỗi push +1) và inject qua Vite `define` thành hằng `__SITE_VERSION__`.
+// Tính lúc build trong astro.config.mjs từ số thứ tự commit (commit đầu = 0.0.1,
+// roll mỗi 9: n=100 → 1.0.0), inject qua Vite `define` thành `__SITE_VERSION__`.
 // Hiển thị dạng `v{SITE_VERSION}` ở footer.
 declare const __SITE_VERSION__: string;
 
