@@ -113,17 +113,21 @@ const EDITOR_MAP = {
 };
 
 const FILE_STATUS_CONFIG = [
-  { name: 'Thông tin liên hệ', path: 'src/data/site.yml',           hash: 'site' },
-  { name: 'Sofa Mây',          path: 'src/data/shop-sofa-may.yml',   hash: 'sofa' },
-  { name: 'Combo Tổ Ấm',       path: 'src/data/combo-to-am.yml',     hash: 'combo' },
+  // Shop · Trang bán hàng
+  { name: 'Trang chủ Shop',    path: 'src/data/shop-home.yml',       hash: 'shop-hero' },
   { name: 'Combo trang chủ',   path: 'src/data/shop-home.yml',       hash: 'shop-home' },
+  { name: 'Catalog sản phẩm',  path: 'src/data/shop-products.yml',   hash: 'products' },
+  { name: 'Combo Tổ Ấm',       path: 'src/data/combo-to-am.yml',     hash: 'combo' },
+  { name: 'Sofa Mây',          path: 'src/data/shop-sofa-may.yml',   hash: 'sofa' },
+  // Studio · Trang thiết kế
   { name: 'Trang chủ Studio',  path: 'src/data/home.yml',            hash: 'home-hero' },
   { name: 'Studio — section',  path: 'src/data/home.yml',            hash: 'studio-home' },
-  { name: 'Trang chủ Shop',    path: 'src/data/shop-home.yml',       hash: 'shop-hero' },
-  { name: 'Catalog sản phẩm',  path: 'src/data/shop-products.yml',   hash: 'products' },
   { name: 'Trang dịch vụ',     path: 'src/data/services.yml',        hash: 'services' },
+  // Chung · Toàn site
+  { name: 'Thông tin liên hệ', path: 'src/data/site.yml',           hash: 'site' },
   { name: 'Footer & Menu',     path: 'src/data/footer.yml',          hash: 'footer' },
   { name: 'Chính sách bảo mật', path: 'src/data/bao-mat.yml',        hash: 'privacy' },
+  // Giao diện
   { name: 'Giao diện (Theme)', path: 'src/data/theme.yml',           hash: 'theme' },
 ];
 
