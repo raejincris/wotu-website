@@ -10,14 +10,19 @@
  * Path tương đối /uploads/… ghi vào hidden input.
  */
 import { putBinaryFile, getFileMeta } from '../github.js';
+import { img as previewImg } from './preview-bus.js';
 
-/** HTML cho 1 ô ảnh — nhúng vào renderFields. */
-export function imageSlot(field, value, label = 'Ảnh') {
+/** HTML cho 1 ô ảnh — nhúng vào renderFields. cmsKey: bật xem trước trực tiếp. */
+export function imageSlot(field, value, label = 'Ảnh', cmsKey = '') {
+  const v = String(value ?? '').replace(/"/g, '&quot;');
+  const cms = cmsKey
+    ? ` data-cms-img-key="${cmsKey.replace(/"/g, '&quot;')}" data-cms-img-src="${v}"`
+    : '';
   return `
     <div class="form-row">
       <label class="form-label">${label}</label>
       <div class="img-slot">
-        <input type="hidden" data-field="${field}" data-photo value="${String(value ?? '').replace(/"/g, '&quot;')}" />
+        <input type="hidden" data-field="${field}" data-photo${cms} value="${v}" />
         <div class="img-preview"></div>
         <div class="img-controls">
           <label class="btn btn-ghost btn-sm img-pick">Chọn ảnh<input type="file" accept="image/*" hidden class="img-input" /></label>
@@ -216,6 +221,11 @@ export function attachImage(slot, onChange) {
       const saved = r.savedPct > 0 ? ` (−${r.savedPct}%)` : '';
       status.textContent = `✓ ${fmtSize(r.srcSize)} → ${fmtSize(r.outSize)}${saved} · tải lên khi Lưu`;
       render(r.dataUrl);
+      // Xem trước trực tiếp: đẩy ảnh (data URL) sang iframe ngay khi chọn.
+      if (hidden.dataset.cmsImgKey) {
+        hidden.dataset.cmsImgSrc = r.dataUrl;
+        previewImg(hidden.dataset.cmsImgKey, r.dataUrl);
+      }
       onChange?.();
     } catch (err) {
       console.error('[imagefield] nén ảnh lỗi:', err, 'file:', file.name, file.type, file.size);

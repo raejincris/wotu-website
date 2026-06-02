@@ -36,7 +36,7 @@ export function resync() {
     patch(el.dataset.cmsKey, el.value);
   });
   currentBody.querySelectorAll('[data-cms-img-key]').forEach((el) => {
-    const v = el.value || el.dataset.cmsImgSrc || '';
+    const v = el.dataset.cmsImgSrc || el.value || '';
     if (v) img(el.dataset.cmsImgKey, v);
   });
 }

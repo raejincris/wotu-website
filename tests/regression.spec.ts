@@ -131,6 +131,12 @@ test.describe('2 · Shop homepage — smoke', () => {
     await page.evaluate(() =>
       window.postMessage({ type: 'reorder', order: ['newsletter', 'combos'] }, location.origin));
     await expect(page.locator('[data-cms-section="newsletter"]')).toHaveCSS('order', '0');
+
+    // đổi ảnh hero (data URL 1px)
+    const px = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    await page.evaluate((src) =>
+      window.postMessage({ type: 'img', key: 'hero.photo', src }, location.origin), px);
+    await expect(page.locator('[data-cms-img="hero.photo"]')).toHaveAttribute('src', px);
   });
 
   test('hero CTA "Xem combo nổi bật" tồn tại và dẫn đến #combos', async ({ page }) => {

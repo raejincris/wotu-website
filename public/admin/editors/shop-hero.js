@@ -89,7 +89,7 @@ export async function init({ token, showToast, setLoading }) {
       </div>
       ${field('hero_sticker',    'Sticker số',  h.sticker,    'text', 'VD: −35%')}
       ${field('hero_stickerSub', 'Sticker chú', h.stickerSub, 'text', 'VD: combo tháng 5')}
-      ${imageSlot('hero_photo', h.photo ?? '', 'Ảnh combo lớn (ghi đè minh hoạ line-art)')}
+      ${imageSlot('hero_photo', h.photo ?? '', 'Ảnh combo lớn (ghi đè minh hoạ line-art)', 'hero.photo')}
       ${field('hero_photoAlt',    'Mô tả ảnh (alt)',     h.photoAlt,    'text', 'Cho SEO & trình đọc màn hình')}
       ${field('hero_tagLabel',    'Thẻ giá — Tên combo', h.tagLabel,    'text', 'VD: Combo Phòng khách · Tổ Ấm')}
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px 12px;">
