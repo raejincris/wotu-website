@@ -9,6 +9,10 @@ layout:
   - { id: quote, on: true }
   - { id: contact, on: true }
 
+# Khối nội dung động trang Studio (thêm qua admin "Khối nội dung" → chọn Studio).
+# type: richText|bannerCta|quote|imageText|gallery|stats|features|spacer. Vị trí/bật-tắt ở `layout`.
+blocks: []
+
 hero:
   eyebrow: Studio · Thiết kế & Thi công nội thất Quy Nhơn
   title: Một <em>khoảng</em> lặng,<br/>giữa đời <em>vội</em>.

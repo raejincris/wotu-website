@@ -13,12 +13,14 @@ import Quote from '../../components/Quote.astro';
 import Contact from '../../components/Contact.astro';
 import Footer from '../../components/Footer.astro';
 import TweaksPanel from '../../components/TweaksPanel.astro';
+import BlockRenderer from '../../components/shop/blocks/BlockRenderer.astro';
 import home from '../../data/home.yml';
 import { resolveLayout } from '../../lib/section-layout';
 
 const L = resolveLayout((home as any).layout, [
   'philosophy', 'services', 'projects', 'process', 'about', 'quote', 'contact',
 ]);
+const blocks = ((home as any).blocks ?? []) as any[];
 
 const all = await getCollection('projects');
 const projects = all
@@ -48,6 +50,15 @@ const projects = all
     {L.on('about')      && <div data-cms-section="about"      style={`order:${L.order('about')}`}><About /></div>}
     {L.on('quote')      && <div data-cms-section="quote"      style={`order:${L.order('quote')}`}><Quote /></div>}
     {L.on('contact')    && <div data-cms-section="contact"    style={`order:${L.order('contact')}`}><Contact /></div>}
+
+    {/* Khối nội dung động (thêm qua admin "Khối nội dung" → trang Studio) */}
+    {blocks.map((b) => (
+      L.on(b.id) && (
+        <section class="studio-block" data-reveal data-cms-section={b.id} style={`order:${L.order(b.id)}`}>
+          <BlockRenderer block={b} />
+        </section>
+      )
+    ))}
   </div>
   <Footer />
   <TweaksPanel />

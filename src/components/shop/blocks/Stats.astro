@@ -1,0 +1,49 @@
+---
+/** Khối số liệu nổi bật: tiêu đề (tuỳ chọn) + lưới các con số (value + label). */
+interface Props { block: any; }
+const { block } = Astro.props;
+const id = block.id;
+const items = (Array.isArray(block.items) ? block.items : []).filter((it: any) => it && (it.value || it.label));
+---
+<div class="container blk-stats">
+  {block.heading && <h2 data-cms={`blk.${id}.heading`} set:html={block.heading} />}
+  {items.length > 0 && (
+    <div class="blk-stats-grid" style={`--n:${items.length}`}>
+      {items.map((it: any) => (
+        <div class="blk-stat">
+          <div class="blk-stat-value" set:html={it.value} />
+          {it.label && <div class="blk-stat-label">{it.label}</div>}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
+<style>
+  .blk-stats { max-width: var(--shop-maxw); display: flex; flex-direction: column; gap: 28px; }
+  .blk-stats h2 {
+    font-family: var(--shop-serif); font-weight: 400; text-align: center;
+    font-size: clamp(28px, 3.6vw, 46px); line-height: 1.08; letter-spacing: -0.01em;
+    color: var(--shop-ink); margin: 0;
+  }
+  .blk-stats :global(h2 em) { font-style: italic; color: var(--shop-accent); }
+  .blk-stats-grid {
+    display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 24px;
+    border-top: 1px solid var(--shop-line); border-bottom: 1px solid var(--shop-line);
+    padding: 36px 0;
+  }
+  .blk-stat { text-align: center; }
+  .blk-stat-value {
+    font-family: var(--shop-serif); font-weight: 400; color: var(--shop-accent);
+    font-size: clamp(34px, 5vw, 58px); line-height: 1; letter-spacing: -0.02em;
+  }
+  .blk-stat-label {
+    margin-top: 10px; font-size: 14px; letter-spacing: 0.04em; color: var(--shop-ink-soft);
+  }
+  @media (max-width: 720px) {
+    .blk-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 28px 16px; }
+  }
+  @media (max-width: 420px) {
+    .blk-stats-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,45 @@
+---
+/** Khối điểm nổi bật: tiêu đề (tuỳ chọn) + lưới các mục (icon + tiêu đề + mô tả). */
+interface Props { block: any; }
+const { block } = Astro.props;
+const id = block.id;
+const items = (Array.isArray(block.items) ? block.items : []).filter((it: any) => it && (it.heading || it.text));
+---
+<div class="container blk-features">
+  {block.heading && <h2 data-cms={`blk.${id}.heading`} set:html={block.heading} />}
+  {items.length > 0 && (
+    <div class="blk-features-grid" style={`--n:${Math.min(items.length, 4)}`}>
+      {items.map((it: any) => (
+        <div class="blk-feature">
+          {it.icon && <div class="blk-feature-icon">{it.icon}</div>}
+          {it.heading && <h3>{it.heading}</h3>}
+          {it.text && <p>{it.text}</p>}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
+<style>
+  .blk-features { max-width: var(--shop-maxw); display: flex; flex-direction: column; gap: 32px; }
+  .blk-features h2 {
+    font-family: var(--shop-serif); font-weight: 400; text-align: center;
+    font-size: clamp(28px, 3.6vw, 46px); line-height: 1.08; letter-spacing: -0.01em;
+    color: var(--shop-ink); margin: 0;
+  }
+  .blk-features :global(h2 em) { font-style: italic; color: var(--shop-accent); }
+  .blk-features-grid { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 24px; }
+  .blk-feature {
+    background: var(--shop-bg-card); border: 1px solid var(--shop-line);
+    border-radius: var(--shop-radius-lg, 18px); padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .blk-feature-icon { font-size: 30px; line-height: 1; }
+  .blk-feature h3 {
+    font-family: var(--shop-serif); font-weight: 500; font-size: 22px; line-height: 1.2;
+    color: var(--shop-ink); margin: 0;
+  }
+  .blk-feature p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--shop-ink-soft); }
+  @media (max-width: 860px) { .blk-features-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .blk-features-grid { grid-template-columns: 1fr; } }
+</style>

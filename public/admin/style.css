@@ -634,6 +634,25 @@ button { font-family: inherit; }
 .blk-add-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
 .blk-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
 
+/* Bộ sưu tập ảnh (field imageList) */
+.blk-imglist { display: flex; flex-direction: column; gap: 12px; margin-bottom: 10px; }
+.blk-imglist-row {
+  display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap;
+  padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bone-dark);
+}
+.blk-imglist-row .form-row { flex: 0 0 auto; margin: 0; }
+.blk-imglist-meta { flex: 1 1 220px; display: flex; flex-direction: column; gap: 8px; min-width: 200px; }
+.blk-imglist-del { margin-left: auto; align-self: flex-start; }
+
+/* Danh sách nhóm field (field list — stats/features) */
+.blk-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 10px; }
+.blk-list-row {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bone-dark);
+}
+.blk-list-fields { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.blk-list-del { flex: 0 0 auto; align-self: flex-start; }
+
 /* ── Theme editor — cảnh báo tương phản ───────────────────── */
 .theme-warn { font-size: 12px; }
 .theme-warn.ok { color: #4a7c4a; }

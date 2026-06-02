@@ -1,0 +1,50 @@
+---
+/** Khối bộ sưu tập ảnh: tiêu đề (tuỳ chọn) + lưới ảnh (2/3/4 cột). */
+interface Props { block: any; }
+const { block } = Astro.props;
+const id = block.id;
+const cols = ['2', '3', '4'].includes(String(block.columns)) ? String(block.columns) : '3';
+const items = (Array.isArray(block.items) ? block.items : []).filter((it: any) => it && it.image);
+---
+<div class="container blk-gallery">
+  {block.heading && <h2 data-cms={`blk.${id}.heading`} set:html={block.heading} />}
+  {items.length > 0 && (
+    <div class="blk-gallery-grid" data-cols={cols}>
+      {items.map((it: any) => (
+        <figure>
+          <img src={it.image} alt={it.alt || ''} loading="lazy" />
+          {it.caption && <figcaption>{it.caption}</figcaption>}
+        </figure>
+      ))}
+    </div>
+  )}
+</div>
+
+<style>
+  .blk-gallery { max-width: var(--shop-maxw); display: flex; flex-direction: column; gap: 28px; }
+  .blk-gallery h2 {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(28px, 3.6vw, 46px); line-height: 1.08; letter-spacing: -0.01em;
+    color: var(--shop-ink); margin: 0; text-align: center;
+  }
+  .blk-gallery :global(h2 em) { font-style: italic; color: var(--shop-accent); }
+  .blk-gallery-grid { display: grid; gap: 16px; }
+  .blk-gallery-grid[data-cols="2"] { grid-template-columns: repeat(2, 1fr); }
+  .blk-gallery-grid[data-cols="3"] { grid-template-columns: repeat(3, 1fr); }
+  .blk-gallery-grid[data-cols="4"] { grid-template-columns: repeat(4, 1fr); }
+  .blk-gallery figure {
+    margin: 0; border-radius: var(--shop-radius-lg, 18px); overflow: hidden;
+    background: var(--shop-warm-soft); aspect-ratio: 4 / 3;
+    display: flex; flex-direction: column;
+  }
+  .blk-gallery figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .blk-gallery figcaption {
+    font-size: 13px; color: var(--shop-ink-soft); padding: 8px 10px; background: var(--shop-bg-card);
+  }
+  @media (max-width: 860px) {
+    .blk-gallery-grid[data-cols="3"], .blk-gallery-grid[data-cols="4"] { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 520px) {
+    .blk-gallery-grid { grid-template-columns: 1fr !important; }
+  }
+</style>

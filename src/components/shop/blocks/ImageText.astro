@@ -1,0 +1,69 @@
+---
+/** Khối ảnh + văn bản: ảnh một bên (trái/phải) + eyebrow/tiêu đề/nội dung/nút. */
+interface Props { block: any; }
+const { block } = Astro.props;
+const id = block.id;
+const side = block.imageSide === 'right' ? 'right' : 'left';
+const href = block.btnHref || '';
+---
+<div class="container blk-imgtext" data-side={side}>
+  <div class="blk-imgtext-media">
+    {block.image
+      ? <img src={block.image} alt={block.imageAlt || ''} loading="lazy" data-cms-img={`blk.${id}.image`} />
+      : <div class="blk-imgtext-ph" data-cms-img={`blk.${id}.image`}><span>Ảnh minh hoạ</span></div>}
+  </div>
+  <div class="blk-imgtext-text">
+    {block.eyebrow && <span class="eyebrow" data-cms={`blk.${id}.eyebrow`}>{block.eyebrow}</span>}
+    {block.heading && <h2 data-cms={`blk.${id}.heading`} set:html={block.heading} />}
+    {block.body && <div class="blk-body" data-cms={`blk.${id}.body`} set:html={block.body} />}
+    {block.btnLabel && href && (
+      <a class="blk-imgtext-btn" href={href}>
+        <span data-cms={`blk.${id}.btnLabel`}>{block.btnLabel}</span> <span class="arr">→</span>
+      </a>
+    )}
+  </div>
+</div>
+
+<style>
+  .blk-imgtext {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+    max-width: var(--shop-maxw);
+  }
+  .blk-imgtext[data-side="right"] .blk-imgtext-media { order: 2; }
+  .blk-imgtext-media {
+    border-radius: var(--shop-radius-xl); overflow: hidden; aspect-ratio: 4 / 3;
+    background: var(--shop-warm-soft);
+  }
+  .blk-imgtext-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .blk-imgtext-ph {
+    width: 100%; height: 100%; display: grid; place-items: center;
+    color: var(--shop-ink-soft); font-size: 13px; letter-spacing: 0.04em;
+  }
+  .blk-imgtext-text { display: flex; flex-direction: column; gap: 16px; }
+  .blk-imgtext .eyebrow {
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--shop-ink-soft); font-weight: 600;
+  }
+  .blk-imgtext h2 {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(28px, 3.6vw, 46px); line-height: 1.08; letter-spacing: -0.01em;
+    color: var(--shop-ink); margin: 0;
+  }
+  .blk-imgtext :global(h2 em) { font-style: italic; color: var(--shop-accent); }
+  .blk-imgtext .blk-body { font-size: 17px; line-height: 1.7; color: var(--shop-ink-soft); }
+  .blk-imgtext .blk-body :global(a) { color: var(--shop-accent); text-decoration: underline; }
+  .blk-imgtext-btn {
+    align-self: flex-start; display: inline-flex; align-items: center; gap: 10px;
+    background: var(--shop-ink); color: var(--shop-bg);
+    padding: 14px 26px; border-radius: 999px; font-weight: 600; font-size: 15px;
+    transition: transform .2s; margin-top: 4px;
+  }
+  .blk-imgtext-btn:hover { transform: translateY(-2px); }
+  .blk-imgtext-btn .arr { transition: transform .2s; }
+  .blk-imgtext-btn:hover .arr { transform: translateX(4px); }
+
+  @media (max-width: 860px) {
+    .blk-imgtext { grid-template-columns: 1fr; gap: 28px; }
+    .blk-imgtext[data-side="right"] .blk-imgtext-media { order: 0; }
+  }
+</style>

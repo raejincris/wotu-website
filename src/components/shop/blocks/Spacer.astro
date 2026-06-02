@@ -1,0 +1,25 @@
+---
+/** Khối giãn cách: chèn khoảng trống (nhỏ/vừa/lớn), tuỳ chọn đường kẻ mảnh. */
+interface Props { block: any; }
+const { block } = Astro.props;
+const size = ['small', 'medium', 'large'].includes(block.size) ? block.size : 'medium';
+const line = block.line === 'yes';
+---
+<div class="blk-spacer" data-size={size} data-line={line ? 'yes' : 'no'}>
+  {line && <span class="blk-spacer-line"></span>}
+</div>
+
+<style>
+  .blk-spacer { display: flex; align-items: center; justify-content: center; }
+  .blk-spacer[data-size="small"]  { height: 32px; }
+  .blk-spacer[data-size="medium"] { height: 64px; }
+  .blk-spacer[data-size="large"]  { height: 104px; }
+  .blk-spacer-line {
+    display: block; width: min(120px, 40%); height: 1px;
+    background: var(--shop-line);
+  }
+  @media (max-width: 680px) {
+    .blk-spacer[data-size="large"]  { height: 72px; }
+    .blk-spacer[data-size="medium"] { height: 44px; }
+  }
+</style>

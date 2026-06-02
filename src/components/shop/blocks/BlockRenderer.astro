@@ -5,6 +5,12 @@
  */
 import RichText from './RichText.astro';
 import BannerCta from './BannerCta.astro';
+import Quote from './Quote.astro';
+import Spacer from './Spacer.astro';
+import ImageText from './ImageText.astro';
+import Gallery from './Gallery.astro';
+import Stats from './Stats.astro';
+import Features from './Features.astro';
 
 interface Props { block: any; }
 const { block } = Astro.props;
@@ -12,6 +18,12 @@ const { block } = Astro.props;
 const REGISTRY: Record<string, any> = {
   richText: RichText,
   bannerCta: BannerCta,
+  quote: Quote,
+  spacer: Spacer,
+  imageText: ImageText,
+  gallery: Gallery,
+  stats: Stats,
+  features: Features,
 };
 const C = REGISTRY[block?.type];
 ---

@@ -1,0 +1,41 @@
+---
+/** Khối trích dẫn: câu trích (HTML cho <em>) + tên người + vai trò. */
+interface Props { block: any; }
+const { block } = Astro.props;
+const id = block.id;
+---
+<div class="container blk-quote">
+  <figure>
+    {block.text && <blockquote data-cms={`blk.${id}.text`} set:html={block.text} />}
+    {(block.author || block.role) && (
+      <figcaption>
+        {block.author && <span class="q-author" data-cms={`blk.${id}.author`}>{block.author}</span>}
+        {block.role && <span class="q-role" data-cms={`blk.${id}.role`}>{block.role}</span>}
+      </figcaption>
+    )}
+  </figure>
+</div>
+
+<style>
+  .blk-quote { max-width: var(--shop-maxw); }
+  .blk-quote figure {
+    max-width: 880px; margin-inline: auto; text-align: center;
+    display: flex; flex-direction: column; gap: 22px; align-items: center;
+  }
+  .blk-quote blockquote {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(26px, 3.4vw, 40px); line-height: 1.28; letter-spacing: -0.01em;
+    color: var(--shop-ink); margin: 0; position: relative;
+  }
+  .blk-quote :global(blockquote em) { font-style: italic; color: var(--shop-accent); }
+  .blk-quote blockquote::before {
+    content: "“"; font-family: var(--shop-serif); color: var(--shop-accent);
+    font-size: 1.4em; line-height: 0; vertical-align: -0.2em; margin-right: 0.05em;
+  }
+  .blk-quote figcaption { display: flex; flex-direction: column; gap: 4px; }
+  .blk-quote .q-author {
+    font-weight: 600; font-size: 15px; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--shop-ink);
+  }
+  .blk-quote .q-role { font-size: 14px; color: var(--shop-ink-soft); }
+</style>
