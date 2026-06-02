@@ -10,8 +10,9 @@ import pagefind from 'astro-pagefind';
 // Quy ước: commit đầu tiên = v0.0.1. Số thứ tự commit (n) tách thành 3 chữ số,
 // roll khi quá 9: patch = n%10, minor = (n/10)%10, major = n/100.
 //   n=1   → 0.0.1     n=10  → 0.1.0     n=100 → 1.0.0     n=200 → 2.0.0
-// Tính lúc build trên Cloudflare (repo có git). Shallow clone / không git
-// → fallback short SHA (vẫn đổi mỗi push).
+// Tính lúc build (repo có git). Cloudflare clone SHALLOW → count thiếu, nên
+// nếu phát hiện shallow thì tự `git fetch --unshallow` để lấy đủ lịch sử rồi
+// đếm. Không git / unshallow thất bại → fallback short SHA (vẫn đổi mỗi push).
 const SITE_VERSION = (() => {
   const git = (cmd) => {
     try {
@@ -20,7 +21,11 @@ const SITE_VERSION = (() => {
       return '';
     }
   };
-  const shallow = git('git rev-parse --is-shallow-repository') === 'true';
+  let shallow = git('git rev-parse --is-shallow-repository') === 'true';
+  if (shallow) {
+    git('git fetch --unshallow --quiet');
+    shallow = git('git rev-parse --is-shallow-repository') === 'true';
+  }
   const n = parseInt(git('git rev-list --count HEAD'), 10);
   if (n > 0 && !shallow) {
     const patch = n % 10;
