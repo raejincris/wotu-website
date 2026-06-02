@@ -6,6 +6,7 @@
 
 import { getFile, putFile } from '../github.js';
 import { connectBody } from '../lib/preview-bus.js';
+import { imageSlot, attachAllImages, uploadPendingImages } from '../lib/imagefield.js';
 
 const FILE = 'src/data/home.yml';
 const BODY = 'editor-home-hero-body';
@@ -65,6 +66,7 @@ export async function init({ token, showToast, setLoading }) {
         'Có thể dùng &lt;em&gt; để in nghiêng. VD: Một &lt;em&gt;khoảng&lt;/em&gt; lặng,&lt;br/&gt;giữa đời &lt;em&gt;vội&lt;/em&gt;.', 'hero.title')}
       ${field('hero_intro', 'Mô tả ngắn (intro)', h.intro, 'textarea', '', 'hero.intro')}
       ${field('hero_cta', 'Nút CTA', h.cta, 'text', 'VD: Khám phá studio', 'hero.cta')}
+      ${imageSlot('heroPhoto', h.heroPhoto ?? '', 'Ảnh hero (thay ảnh mặc định — cần Lưu mới hiện)')}
     </div>
     <div class="form-card">
       <p class="form-card-title">Quote khách hàng</p>
@@ -99,13 +101,17 @@ export async function init({ token, showToast, setLoading }) {
   const origValues = new Map();
   inputs.forEach((inp) => origValues.set(inp, inp.value));
 
+  let imgDirty = false; // ảnh đổi không qua input text → cờ riêng
   function checkDirty() {
-    const dirty = [...inputs].some((i) => i.value !== origValues.get(i));
+    const dirty = imgDirty || [...inputs].some((i) => i.value !== origValues.get(i));
     saveBtn.disabled = !dirty;
     window.__adminSetDirty?.(dirty);
   }
   inputs.forEach((i) => i.addEventListener('input', checkDirty));
   checkDirty();
+
+  // Ô ảnh hero — chọn/xoá ảnh → đánh dấu dirty
+  attachAllImages(body, () => { imgDirty = true; checkDirty(); });
 
   // Xem trước trực tiếp
   connectBody(body);
@@ -116,6 +122,9 @@ export async function init({ token, showToast, setLoading }) {
     setLoading(true);
     saveBtn.disabled = true;
     try {
+      const msgUp = footer.querySelector('#commit-msg-home-hero').value.trim() || defaultMsg;
+      await uploadPendingImages({ token, scope: body, area: 'hero', msg: msgUp, onStatus: (s) => showToast(s, 'info', 2500) });
+
       const { sha: freshSha } = await getFile(token, FILE);
 
       obj.hero = obj.hero || {};
@@ -123,6 +132,8 @@ export async function init({ token, showToast, setLoading }) {
       obj.hero.title   = body.querySelector('#hero_title').value.trim();
       obj.hero.intro   = body.querySelector('#hero_intro').value.trim();
       obj.hero.cta     = body.querySelector('#hero_cta').value.trim();
+      const heroPhoto = body.querySelector('.img-slot input[data-photo]')?.value.trim();
+      if (heroPhoto) obj.hero.heroPhoto = heroPhoto; else delete obj.hero.heroPhoto;
 
       obj.quote = obj.quote || {};
       obj.quote.text   = body.querySelector('#quote_text').value.trim();
@@ -138,6 +149,7 @@ export async function init({ token, showToast, setLoading }) {
         'success',
       );
       inputs.forEach((i) => origValues.set(i, i.value));
+      imgDirty = false;
       window.__adminSetDirty?.(false);
       checkDirty();
     } catch (e) {

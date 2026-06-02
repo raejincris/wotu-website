@@ -1,6 +1,9 @@
 ---
 import site from '../../data/site.yml';
 import { SITE_VERSION } from '../../lib/version';
+import { navPages } from '../../lib/custom-pages';
+
+const extraPages = navPages('shop');
 ---
 <footer class="shop-footer">
   <div class="container">
@@ -36,6 +39,7 @@ import { SITE_VERSION } from '../../lib/version';
           <li><a href="/#why">Đổi trả 30 ngày</a></li>
           <li><a href="/bao-mat">Chính sách bảo mật</a></li>
           <li><a href="/studio/">Studio thiết kế ↗</a></li>
+          {extraPages.map((p) => <li><a href={`/${p.slug}/`}>{p.title}</a></li>)}
         </ul>
       </div>
       <div class="shop-foot-col">

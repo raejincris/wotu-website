@@ -5,6 +5,7 @@
  */
 
 import { getFile, putFile } from '../github.js';
+import { connectBody } from '../lib/preview-bus.js';
 
 const FILE = 'src/data/shop-sofa-may.yml';
 const BODY = 'editor-sofa-body';
@@ -17,11 +18,12 @@ function escHtml(s) {
   return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-function field(id, label, value, type = 'text', hint = '') {
+function field(id, label, value, type = 'text', hint = '', cmsKey = '') {
+  const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
   return `
     <div class="form-row">
       <label class="form-label" for="${id}">${label}</label>
-      <input class="form-input" id="${id}" type="${type}"
+      <input class="form-input" id="${id}" type="${type}"${cms}
              value="${escVal(value)}" autocomplete="off" />
       ${hint ? `<p class="form-hint">${hint}</p>` : ''}
     </div>`;
@@ -82,12 +84,12 @@ export async function init({ token, showToast, setLoading }) {
     <div class="form-card">
       <p class="form-card-title">Giá bán</p>
       <div class="form-grid-2">
-        ${field('priceNow', 'Giá hiện tại', obj.priceNow, 'text', 'VD: 6.900.000đ')}
-        ${field('priceWas', 'Giá gốc (gạch)', obj.priceWas, 'text', 'VD: 8.500.000đ')}
+        ${field('priceNow', 'Giá hiện tại', obj.priceNow, 'text', 'VD: 6.900.000đ', 'priceNow')}
+        ${field('priceWas', 'Giá gốc (gạch)', obj.priceWas, 'text', 'VD: 8.500.000đ', 'priceWas')}
       </div>
       <div class="form-grid-2">
-        ${field('priceDiscount', 'Phần trăm giảm', obj.priceDiscount, 'text', 'VD: − 19%')}
-        ${field('priceInstallment', 'Trả góp / tháng', obj.priceInstallment, 'text', 'VD: 575.000đ')}
+        ${field('priceDiscount', 'Phần trăm giảm', obj.priceDiscount, 'text', 'VD: − 19%', 'priceDiscount')}
+        ${field('priceInstallment', 'Trả góp / tháng', obj.priceInstallment, 'text', 'VD: 575.000đ', 'priceInstallment')}
       </div>
       ${field('priceNum', 'Giá số (VND, không dấu chấm)', obj.priceNum, 'number',
         'Dùng để tính toán và lọc. VD: 6900000')}
@@ -95,11 +97,11 @@ export async function init({ token, showToast, setLoading }) {
 
     <div class="form-card">
       <p class="form-card-title">Tồn kho &amp; Badge</p>
-      ${field('stockLabel', 'Số lượng tồn', obj.stockLabel, 'text', 'VD: Còn 12 cái')}
+      ${field('stockLabel', 'Số lượng tồn', obj.stockLabel, 'text', 'VD: Còn 12 cái', 'stockLabel')}
       ${field('stockStatus', 'Trạng thái kho', obj.stockStatus, 'text',
         'VD: Còn hàng · giao 48h')}
       ${field('badge', 'Badge hiển thị (ảnh chính)', obj.badge, 'text',
-        'VD: Bestseller tháng 5')}
+        'VD: Bestseller tháng 5', 'badge')}
     </div>
 
     <div class="form-card">
@@ -131,6 +133,9 @@ export async function init({ token, showToast, setLoading }) {
   }
   inputs.forEach((i) => i.addEventListener('input', checkDirty));
   checkDirty();
+
+  // Xem trước trực tiếp: field có data-cms-key patch vào iframe khi gõ (chỉ production).
+  connectBody(body);
 
   window.__adminSaveFn = () => { if (!saveBtn.disabled) saveBtn.click(); };
 

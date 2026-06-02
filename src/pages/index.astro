@@ -182,7 +182,7 @@ const whyIcons: Record<string, string> = {
             <a href={p.href} style="text-decoration: none; display: contents;">
               <div class="combo-img">
                 <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
-                <img class="shop-illo" src={`${ILLO}/cat-${catFromId(p.id)}.png`} alt={`Minh hoạ ${p.name}`} loading="lazy" decoding="async" />
+                <img class="shop-illo" src={p.photo || `${ILLO}/cat-${catFromId(p.id)}.png`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name}`} loading="lazy" decoding="async" />
               </div>
               <div class="product-body">
                 <span class="product-meta" data-cms={`bestsellers.${i}.meta`}>{p.meta}</span>

@@ -152,7 +152,9 @@ export async function init({ token, showToast, setLoading }) {
       <div class="form-grid-2">
         ${rfText('stars', 'Sao (★ ☆)', b.stars ?? '★★★★★', { cmsField: 'stars' })}
         ${rfText('href', 'Đường dẫn', b.href ?? '#')}
-      </div>`,
+      </div>
+      ${imageSlot('photo', b.photo ?? '', 'Ảnh chụp thật (ghi đè minh hoạ)')}`,
+    onRow: (row) => attachImage(row.querySelector('.img-slot'), dirty.mark),
   });
 
   // Xem trước trực tiếp (sửa tại chỗ combo/bestseller hiện có → iframe đổi ngay)
@@ -218,6 +220,7 @@ export async function init({ token, showToast, setLoading }) {
         priceNum: Number(String(f.priceNum).replace(/[^\d]/g, '')) || 0,
         stars: f.stars.trim(),
         href: f.href.trim() || '#',
+        photo: (f.photo || '').trim() || undefined,
       }));
 
       const newYaml = yaml().dump(obj, { lineWidth: -1, noRefs: true, quotingType: '"' });

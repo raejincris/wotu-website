@@ -73,10 +73,10 @@ export async function init({ token, showToast, setLoading }) {
           <p class="form-hint">Shop dùng Nav/Footer + palette Shop; Studio dùng Nav/Footer + palette Studio.</p>
         </div>
         <div class="form-row">
-          <label class="form-label">Hiện trên menu</label>
+          <label class="form-label">Hiện trên menu &amp; footer</label>
           <select class="form-input" data-k="nav">
-            <option value="yes"${nav === 'yes' ? ' selected' : ''}>Có — thêm vào menu</option>
-            <option value="no"${nav === 'no' ? ' selected' : ''}>Không</option>
+            <option value="yes"${nav === 'yes' ? ' selected' : ''}>Có — thêm vào menu &amp; footer</option>
+            <option value="no"${nav === 'no' ? ' selected' : ''}>Không (chỉ truy cập qua link)</option>
           </select>
         </div>
         <p class="form-hint">✏️ Sửa <b>nội dung</b> (các khối) ở mục “Khối nội dung” → chọn trang này trong danh sách trang.</p>

@@ -1,10 +1,17 @@
 ---
 import footer from '../data/footer.yml';
 import { SITE_VERSION } from '../lib/version';
+import { navPages } from '../lib/custom-pages';
 
 interface Link { label: string; href: string; }
 interface Column { title: string; links: Link[]; }
-const cols = footer.columns as Column[];
+const cols = (footer.columns as Column[]).map((c) => ({ ...c, links: [...c.links] }));
+
+// Trang tuỳ chỉnh (admin) gắn cờ hiện-menu → thêm vào cột cuối của footer Studio.
+const extraPages = navPages('studio');
+if (extraPages.length && cols.length) {
+  cols[cols.length - 1].links.push(...extraPages.map((p) => ({ label: p.title, href: `/${p.slug}/` })));
+}
 
 const isExternal = (href: string) => /^https?:\/\//.test(href);
 ---

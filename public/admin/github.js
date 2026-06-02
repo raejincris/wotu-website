@@ -30,16 +30,32 @@ function b64Encode(str) {
   return btoa(unescape(encodeURIComponent(str)));
 }
 
+/**
+ * Ném Error với thông báo tiếng Việt thân thiện theo HTTP status.
+ * Giữ 'FILE_CONFLICT' (409) để editor xử lý riêng. Dùng cho mọi response không OK.
+ */
+async function ghThrow(res) {
+  if (res.status === 409) throw new Error('FILE_CONFLICT');
+  const err = await res.json().catch(() => ({}));
+  const MAP = {
+    401: 'Phiên đăng nhập GitHub đã hết hạn — đăng xuất rồi đăng nhập lại.',
+    403: 'Không đủ quyền hoặc đã chạm giới hạn GitHub API — chờ vài phút rồi thử lại.',
+    404: 'Không tìm thấy nội dung trên GitHub (kiểm tra đường dẫn file).',
+    422: 'GitHub từ chối dữ liệu gửi lên (không hợp lệ).',
+    500: 'GitHub đang gặp sự cố — thử lại sau ít phút.',
+    502: 'GitHub đang gặp sự cố — thử lại sau ít phút.',
+    503: 'GitHub đang gặp sự cố — thử lại sau ít phút.',
+  };
+  throw new Error(MAP[res.status] || err.message || `Lỗi GitHub (HTTP ${res.status})`);
+}
+
 /** Đọc file từ repo → { yamlString, sha } */
 export async function getFile(token, path) {
   const res = await fetch(
     `${API}/repos/${REPO}/contents/${path}?ref=${BRANCH}`,
     { headers: ghHeaders(token) },
   );
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || `HTTP ${res.status}`);
-  }
+  if (!res.ok) await ghThrow(res);
   const data = await res.json();
   return {
     yamlString: b64Decode(data.content),
@@ -62,14 +78,7 @@ export async function putFile(token, path, yamlString, sha, message) {
       branch: BRANCH,
     }),
   });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    // 409 = conflict (ai đó commit trước)
-    if (res.status === 409) {
-      throw new Error('FILE_CONFLICT');
-    }
-    throw new Error(err.message || `HTTP ${res.status}`);
-  }
+  if (!res.ok) await ghThrow(res);
   const data = await res.json();
   return { commitUrl: data.commit.html_url };
 }
@@ -81,7 +90,7 @@ export async function getFileMeta(token, path) {
     { headers: ghHeaders(token) },
   );
   if (res.status === 404) return null;
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) await ghThrow(res);
   const data = await res.json();
   return { sha: data.sha };
 }
@@ -103,11 +112,7 @@ export async function putBinaryFile(token, path, base64, sha, message) {
       branch: BRANCH,
     }),
   });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    if (res.status === 409) throw new Error('FILE_CONFLICT');
-    throw new Error(err.message || `HTTP ${res.status}`);
-  }
+  if (!res.ok) await ghThrow(res);
   const data = await res.json();
   return { commitUrl: data.commit.html_url, path };
 }
@@ -123,7 +128,7 @@ export async function listDir(token, path) {
     { headers: ghHeaders(token) },
   );
   if (res.status === 404) return [];
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) await ghThrow(res);
   const data = await res.json();
   if (!Array.isArray(data)) return [];
   return data.map((it) => ({ name: it.name, path: it.path, sha: it.sha, type: it.type }));
@@ -137,11 +142,7 @@ export async function deleteFile(token, path, sha, message) {
     headers: { ...ghHeaders(token), 'Content-Type': 'application/json' },
     body: JSON.stringify({ message, sha, branch: BRANCH }),
   });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    if (res.status === 409) throw new Error('FILE_CONFLICT');
-    throw new Error(err.message || `HTTP ${res.status}`);
-  }
+  if (!res.ok) await ghThrow(res);
   const data = await res.json();
   return { commitUrl: data.commit.html_url };
 }

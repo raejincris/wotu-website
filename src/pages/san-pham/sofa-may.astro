@@ -83,8 +83,8 @@ const breadcrumbSchema = {
           <div class="shop-ph"><span class="shop-ph-label">Sofa văng Mây — góc khách quan, ánh sáng tự nhiên · 1600×1280</span></div>
           <img class="shop-illo" src="/uploads/products/cat-sofa.png" alt="Minh hoạ sofa văng Mây — WOTU" loading="eager" fetchpriority="high" decoding="async" />
           <div class="gallery-tags">
-            <span class="tag accent">{d.badge}</span>
-            <span class="tag"><span class="pulse"></span>{d.stockLabel}</span>
+            <span class="tag accent" data-cms="badge">{d.badge}</span>
+            <span class="tag"><span class="pulse"></span><span data-cms="stockLabel">{d.stockLabel}</span></span>
           </div>
           <span class="gallery-360">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/></svg>
@@ -125,11 +125,11 @@ const breadcrumbSchema = {
 
         <div class="price-row">
           <div>
-            <span class="price-now">{d.priceNow}</span>
-            <span class="price-hint">trả góp 0% — từ <b>{d.priceInstallment}</b> / tháng</span>
+            <span class="price-now" data-cms="priceNow">{d.priceNow}</span>
+            <span class="price-hint">trả góp 0% — từ <b data-cms="priceInstallment">{d.priceInstallment}</b> / tháng</span>
           </div>
-          <span class="price-was">{d.priceWas}</span>
-          <span class="price-save">{d.priceDiscount}</span>
+          <span class="price-was" data-cms="priceWas">{d.priceWas}</span>
+          <span class="price-save" data-cms="priceDiscount">{d.priceDiscount}</span>
           <span class="price-stock"><span class="pulse"></span>{d.stockStatus}</span>
         </div>
 
@@ -577,7 +577,7 @@ const breadcrumbSchema = {
   <!-- STICKY CART BAR -->
   <div class="sticky-bar" id="stickyBar">
     <span class="sb-title">Sofa Mây 3 chỗ</span>
-    <span class="sb-price">{d.priceNow}</span>
+    <span class="sb-price" data-cms="priceNow">{d.priceNow}</span>
     <a class="btn btn-accent" href="/#contact">Mua ngay <span class="arr">→</span></a>
   </div>
 </ShopLayout>

@@ -4,9 +4,11 @@
  * bật/tắt → ẩn/hiện section trong iframe; ↑↓ → đổi thứ tự ngay.
  */
 
-import { getFile, putFile } from '../github.js';
+import { getFile, putFile, listDir } from '../github.js';
 import { section as pvSection, reorder as pvReorder, setReadyHook } from '../lib/preview-bus.js';
 import { blockSummary } from '../lib/block-types.js';
+
+const CUSTOM_DIR = 'src/data/pages';
 
 const BODY = 'editor-layout-body';
 const FOOTER = 'editor-layout-footer';
@@ -164,6 +166,32 @@ export async function init({ token, showToast, setLoading }) {
            style="flex:1;font-size:13px;" placeholder="Commit message…" />
     <button class="btn btn-primary" id="save-layout" disabled>💾 Lưu &amp; cập nhật</button>`;
   footer.hidden = false;
+
+  // Nạp nút cho từng trang tuỳ chỉnh (src/data/pages/*.yml) — mọi section là khối.
+  async function loadCustomPageButtons() {
+    let files = [];
+    try {
+      files = (await listDir(token, CUSTOM_DIR)).filter((f) => f.type === 'file' && f.name.endsWith('.yml'));
+    } catch { /* thư mục trống → bỏ qua */ }
+    const sel = body.querySelector('.lay-pagesel');
+    files.map((f) => f.name.replace(/\.yml$/, '')).sort().forEach((slug) => {
+      const key = 'page:' + slug;
+      PAGES[key] = {
+        label: 'Trang ' + slug,
+        file: `${CUSTOM_DIR}/${slug}.yml`,
+        preview: `https://www.wotu.vn/${slug}/`,
+        defaults: [],   // trang tuỳ chỉnh: không có section cố định
+        labels: {},     // nhãn lấy từ blockSummary của từng khối
+      };
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'lay-page';
+      btn.dataset.page = key;
+      btn.textContent = `/${slug}/`;
+      sel.appendChild(btn);
+    });
+  }
+  await loadCustomPageButtons();
 
   // Page selector
   body.querySelectorAll('.lay-page').forEach((b) => {
