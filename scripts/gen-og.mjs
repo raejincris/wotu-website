@@ -7,6 +7,7 @@
  * Chạy lại khi đổi logo/slogan:  node scripts/gen-og.mjs
  */
 import { chromium } from '@playwright/test';
+import sharp from 'sharp';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
@@ -80,6 +81,8 @@ const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, dev
 await page.setContent(html, { waitUntil: 'networkidle' });
 await page.evaluate(() => document.fonts.ready);
 await page.waitForTimeout(250);
-await page.screenshot({ path: out, clip: { x: 0, y: 0, width: 1200, height: 630 } });
+const buf = await page.screenshot({ clip: { x: 0, y: 0, width: 1200, height: 630 } });
 await browser.close();
+// OG phải là PNG/JPG (Facebook/Zalo không ăn WebP) — nén palette để giảm ~50%.
+await sharp(buf).png({ palette: true, quality: 90, compressionLevel: 9 }).toFile(out);
 console.log('✓ OG image written →', out);

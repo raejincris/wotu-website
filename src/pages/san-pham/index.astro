@@ -208,7 +208,7 @@ const breadcrumbSchema = {
         <a class="card feature" href="/combo/to-am/">
           <div class="card-img">
             <div class="shop-ph"><span class="shop-ph-label">Combo Tổ Ấm phòng khách</span></div>
-            <img class="card-illo" src="/uploads/products/cat-combo.png" alt="Minh hoạ combo phòng khách Tổ Ấm — WOTU" loading="lazy" decoding="async" />
+            <img class="card-illo" src="/uploads/products/cat-combo.webp" alt="Minh hoạ combo phòng khách Tổ Ấm — WOTU" loading="lazy" decoding="async" />
             <div class="card-badges"><span class="b-tag" style="background: var(--shop-bg); color: var(--shop-ink);">★ BESTSELLER</span></div>
           </div>
           <div class="card-body">
@@ -236,7 +236,7 @@ const breadcrumbSchema = {
             <a href={p.href} style="text-decoration: none; color: inherit; display: contents;">
               <div class="card-img">
                 <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
-                <img class="card-illo" src={p.photo || `/uploads/products/cat-${p.catKey}.png`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name} ${p.nameEm ?? ''}`.trim() + ' — WOTU'} loading="lazy" decoding="async" />
+                <img class="card-illo" src={p.photo || `/uploads/products/cat-${p.catKey}.webp`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name} ${p.nameEm ?? ''}`.trim() + ' — WOTU'} loading="lazy" decoding="async" />
                 {p.badges && (
                   <div class="card-badges">
                     {p.badges.map((b) => <span class={`b-tag${b.cls ? ' ' + b.cls : ''}`}>{b.label}</span>)}
@@ -297,7 +297,7 @@ const breadcrumbSchema = {
             <a href={p.href} style="text-decoration: none; color: inherit; display: contents;">
               <div class="card-img">
                 <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
-                <img class="card-illo" src={p.photo || `/uploads/products/cat-${p.catKey}.png`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name} ${p.nameEm ?? ''}`.trim() + ' — WOTU'} loading="lazy" decoding="async" />
+                <img class="card-illo" src={p.photo || `/uploads/products/cat-${p.catKey}.webp`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name} ${p.nameEm ?? ''}`.trim() + ' — WOTU'} loading="lazy" decoding="async" />
                 {p.badges && (
                   <div class="card-badges">
                     {p.badges.map((b) => <span class={`b-tag${b.cls ? ' ' + b.cls : ''}`}>{b.label}</span>)}

@@ -30,7 +30,7 @@ const { c } = Astro.props;
 const slug = String(c.id).replace(/^combo-/, '');
 const fullName = `${c.name} ${c.nameEm ?? ''}${c.nameTail ?? ''}`.trim();
 const hasPhoto = !!c.photo;
-const illo = c.photo || `/uploads/products/combo-${c.room}.png`;
+const illo = c.photo || `/uploads/products/combo-${c.room}.webp`;
 
 // "Combo gồm": tách desc theo " · " nếu là danh sách; ngược lại dùng làm prose.
 const parts = String(c.desc ?? '').split(' · ').map((s) => s.trim()).filter(Boolean);
@@ -466,7 +466,7 @@ const breadcrumbSchema = {
             <a class="pd-rel-card" href={r.id === 'combo-to-am' ? '/combo/to-am/' : `/combo/${String(r.id).replace(/^combo-/, '')}/`}>
               <div class="pd-rel-img">
                 <div class={`shop-ph ${r.tone ?? ''}`}></div>
-                <img class="shop-illo" src={r.photo || `/uploads/products/combo-${r.room}.png`} alt={`${r.photo ? '' : 'Minh hoạ '}Combo ${r.nameEm}`} loading="lazy" decoding="async" />
+                <img class="shop-illo" src={r.photo || `/uploads/products/combo-${r.room}.webp`} alt={`${r.photo ? '' : 'Minh hoạ '}Combo ${r.nameEm}`} loading="lazy" decoding="async" />
               </div>
               <div class="pd-rel-body">
                 <span>{r.cat}</span>

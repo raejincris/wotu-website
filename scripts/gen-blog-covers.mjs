@@ -3,11 +3,13 @@
  *
  * Đây là ẢNH ĐỒ HOẠ THIẾT KẾ (typographic + motif), KHÔNG phải photo giả.
  * Đọc frontmatter trực tiếp từ src/content/blog/*.md để tiêu đề/category/tone
- * luôn khớp bài viết. Output → public/uploads/blog/<slug>.png.
+ * luôn khớp bài viết. Output → public/uploads/blog/<slug>.webp (WebP qua sharp,
+ * giảm ~96% so với PNG mà vẫn nét cho ảnh đồ hoạ phẳng).
  *
  * Chạy lại khi thêm/sửa bài:  node scripts/gen-blog-covers.mjs
  */
 import { chromium } from '@playwright/test';
+import sharp from 'sharp';
 import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve, basename } from 'node:path';
@@ -84,8 +86,8 @@ for (const f of files) {
   await page.setContent(template(fm), { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(150);
-  const out = resolve(outDir, `${slug}.png`);
-  await page.screenshot({ path: out, clip: { x: 0, y: 0, width: 1600, height: 900 } });
+  const buf = await page.screenshot({ clip: { x: 0, y: 0, width: 1600, height: 900 } });
+  await sharp(buf).webp({ quality: 82 }).toFile(resolve(outDir, `${slug}.webp`));
   console.log('✓', slug, '·', fm.tone, '·', fm.category);
 }
 

@@ -73,7 +73,7 @@ const whyIcons: Record<string, string> = {
 
       <div class="hero-visual" data-hero-item>
         <div class="shop-ph"><span class="shop-ph-label">Phòng khách combo WOTU — 1600×2000</span></div>
-        <img class="shop-illo" data-cms-img="hero.photo" data-parallax data-parallax-speed="24" src={hero.photo || `${ILLO}/combo-phong-khach.png`} alt={hero.photoAlt || 'Minh hoạ combo phòng khách WOTU'} loading="eager" fetchpriority="high" decoding="async" />
+        <img class="shop-illo" data-cms-img="hero.photo" data-parallax data-parallax-speed="24" src={hero.photo || `${ILLO}/combo-phong-khach.webp`} alt={hero.photoAlt || 'Minh hoạ combo phòng khách WOTU'} loading="eager" fetchpriority="high" decoding="async" />
         <div class="sticker">
           {hero.sticker}<small>{hero.stickerSub}</small>
         </div>
@@ -128,7 +128,7 @@ const whyIcons: Record<string, string> = {
           >
             <div class="combo-img">
               <div class={`shop-ph ${c.tone}`}><span class="shop-ph-label">{c.placeholder}</span></div>
-              <img class="shop-illo" src={c.photo || `${ILLO}/combo-${c.room}.png`} alt={`${c.photo ? '' : 'Minh hoạ '}${c.placeholder}`} loading="lazy" decoding="async" />
+              <img class="shop-illo" src={c.photo || `${ILLO}/combo-${c.room}.webp`} alt={`${c.photo ? '' : 'Minh hoạ '}${c.placeholder}`} loading="lazy" decoding="async" />
               {c.badge && (
                 <span class={`combo-badge${c.badgeClass ? ' ' + c.badgeClass : ''}`} style={c.badgeStyle || undefined}>{c.badge}</span>
               )}
@@ -192,7 +192,7 @@ const whyIcons: Record<string, string> = {
             <a href={p.href} style="text-decoration: none; display: contents;">
               <div class="combo-img">
                 <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
-                <img class="shop-illo" src={p.photo || `${ILLO}/cat-${catFromId(p.id)}.png`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name}`} loading="lazy" decoding="async" />
+                <img class="shop-illo" src={p.photo || `${ILLO}/cat-${catFromId(p.id)}.webp`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name}`} loading="lazy" decoding="async" />
               </div>
               <div class="product-body">
                 <span class="product-meta" data-cms={`bestsellers.${i}.meta`}>{p.meta}</span>
@@ -229,7 +229,7 @@ const whyIcons: Record<string, string> = {
         {inspo.map((i, idx) => (
           <a class={`inspo-card${i.tall ? ' tall' : ''}`} href={i.href}>
             <div class="shop-ph dark"><span class="shop-ph-label">{i.placeholder}</span></div>
-            <img class="shop-illo" src={`${ILLO}/combo-${inspoRooms[idx] ?? 'phong-khach'}.png`} alt={`Minh hoạ ${i.placeholder}`} loading="lazy" decoding="async" />
+            <img class="shop-illo" src={`${ILLO}/combo-${inspoRooms[idx] ?? 'phong-khach'}.webp`} alt={`Minh hoạ ${i.placeholder}`} loading="lazy" decoding="async" />
             <div class="label">
               <span>{i.label}</span>
               <span class="arrow">
@@ -327,7 +327,7 @@ const whyIcons: Record<string, string> = {
         <input type="hidden" name="subject" value="[WOTU shop] Đặt tư vấn combo" />
         <input type="hidden" name="from_name" value="WOTU Shop website" />
         <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; opacity: 0;" aria-hidden="true" />
-        <input type="tel" name="phone" placeholder="Số điện thoại của bạn" required />
+        <input type="tel" name="phone" placeholder="Số điện thoại của bạn" aria-label="Số điện thoại của bạn" autocomplete="tel" required />
         <button type="submit" data-magnetic>Gọi tôi <span class="arr">→</span></button>
       </form>
     </div>
@@ -785,7 +785,22 @@ const whyIcons: Record<string, string> = {
 
 <script>
   import { addToCart, toggleFavorite, isFavorite, onChange, toast } from '../lib/shop-store';
-  import '../lib/shop-motion';
+
+  // Lớp animation nâng cao (lib `motion` ~75KB) chỉ là enhancement → tải LƯỜI
+  // khi idle, không chặn critical path. Gate reduce/?cms=1 NGAY ĐÂY để 2 nhóm
+  // này không tải chunk motion (shop-motion tự gọi initShopMotion khi import).
+  {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cms = window.location.search.includes('cms=1');
+    if (!reduce && !cms) {
+      const load = () => import('../lib/shop-motion');
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(load, { timeout: 2000 });
+      } else {
+        setTimeout(load, 200);
+      }
+    }
+  }
 
   // ===== Combo tabs filter =====
   const tabs = document.querySelectorAll<HTMLButtonElement>('.combo-tab');

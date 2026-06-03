@@ -310,6 +310,15 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
 }
 .shop .skip-to-main:focus { left: 0; }
 
+/* Focus visible nhất quán (WCAG 2.4.7). `:where()` specificity 0 + `!important`
+   để thắng inline `outline:none/0` ở Newsletter/CartDrawer/ô tìm kiếm giỏ. Chỉ
+   hiện khi điều hướng bàn phím. */
+.shop :where(a, button, input, textarea, select, summary, [tabindex="0"]):focus-visible {
+  outline: 2px solid var(--shop-accent) !important;
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
 /* ============================================================
    REVEAL ANIMATIONS — fade + slide up khi vào viewport.
    Init bởi IntersectionObserver trong ShopLayout. One-shot.

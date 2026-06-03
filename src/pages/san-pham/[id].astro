@@ -35,7 +35,7 @@ const inStock = (p.tags ?? []).includes('in-stock');
 
 const fullName = `${p.name} ${p.nameEm ?? ''}${p.nameTail ?? ''}`.trim();
 const hasPhoto = !!p.photo;
-const illo = p.photo || `/uploads/products/cat-${p.catKey}.png`;
+const illo = p.photo || `/uploads/products/cat-${p.catKey}.webp`;
 const catName: Record<string, string> = { sofa: 'Sofa', ban: 'Bàn', ghe: 'Ghế', giuong: 'Giường', tu: 'Tủ', ke: 'Kệ', den: 'Đèn', tham: 'Thảm' };
 const catVi = catName[p.catKey] ?? 'Sản phẩm';
 const related = allP.filter((x: any) => x.catKey === p.catKey && x.id !== p.id).slice(0, 4);
@@ -168,7 +168,7 @@ const breadcrumbSchema = {
             <a class="pd-rel-card" href={r.href}>
               <div class="pd-rel-img">
                 <div class={`shop-ph ${r.tone ?? ''}`}></div>
-                <img class="shop-illo" src={r.photo || `/uploads/products/cat-${r.catKey}.png`} alt={`${r.photo ? '' : 'Minh hoạ '}${r.name} ${r.nameEm ?? ''}`} loading="lazy" decoding="async" />
+                <img class="shop-illo" src={r.photo || `/uploads/products/cat-${r.catKey}.webp`} alt={`${r.photo ? '' : 'Minh hoạ '}${r.name} ${r.nameEm ?? ''}`} loading="lazy" decoding="async" />
               </div>
               <div class="pd-rel-body">
                 <span>{r.cat}</span>

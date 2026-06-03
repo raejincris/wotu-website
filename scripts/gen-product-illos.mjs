@@ -5,10 +5,14 @@
  * hiệu, dùng làm placeholder catalog khi chưa có ảnh chụp. Khi có ảnh thật,
  * thay file cùng tên trong public/uploads/products/ là xong.
  *
- * Output: public/uploads/products/cat-<key>.png  (sofa ban ghe giuong tu ke den tham combo)
+ * Output: public/uploads/products/cat-<key>.webp  (sofa ban ghe giuong tu ke den tham combo)
  * Chạy: node scripts/gen-product-illos.mjs
+ *
+ * Xuất WebP (qua sharp) thay vì PNG — line-art trên nền gradient nén còn ~20KB
+ * (giảm ~96% so với PNG ~500KB), không đụng CLS (container đã có aspect-ratio).
  */
 import { chromium } from '@playwright/test';
+import sharp from 'sharp';
 import { mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
@@ -86,14 +90,16 @@ for (const key of Object.keys(icons)) {
   await page.setContent(template(icons[key], labels[key]), { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(120);
-  await page.screenshot({ path: resolve(outDir, `cat-${key}.png`), clip: { x: 0, y: 0, width: 1200, height: 900 } });
+  const buf = await page.screenshot({ clip: { x: 0, y: 0, width: 1200, height: 900 } });
+  await sharp(buf).webp({ quality: 82 }).toFile(resolve(outDir, `cat-${key}.webp`));
   console.log('✓ cat-' + key);
 }
 for (const room of Object.keys(rooms)) {
   await page.setContent(template(rooms[room], roomLabels[room]), { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(120);
-  await page.screenshot({ path: resolve(outDir, `combo-${room}.png`), clip: { x: 0, y: 0, width: 1200, height: 900 } });
+  const buf = await page.screenshot({ clip: { x: 0, y: 0, width: 1200, height: 900 } });
+  await sharp(buf).webp({ quality: 82 }).toFile(resolve(outDir, `combo-${room}.webp`));
   console.log('✓ combo-' + room);
 }
 await browser.close();

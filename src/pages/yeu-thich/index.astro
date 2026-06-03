@@ -37,7 +37,7 @@ const catalog: CatalogEntry[] = [
     price: c.price ?? num(c.priceNew),
     priceLabel: c.priceNew ?? c.price ?? '',
     href: c.href,
-    illo: `/uploads/products/combo-${c.room}.png`,
+    illo: `/uploads/products/combo-${c.room}.webp`,
     placeholder: c.placeholder ?? `Combo ${c.nameEm ?? ''}`.trim(),
   })),
   ...allProds.map((p: any) => ({
@@ -47,7 +47,7 @@ const catalog: CatalogEntry[] = [
     price: p.priceNum ?? num(p.price),
     priceLabel: p.price,
     href: p.href,
-    illo: `/uploads/products/cat-${p.catKey}.png`,
+    illo: `/uploads/products/cat-${p.catKey}.webp`,
     placeholder: p.placeholder ?? p.name,
   })),
 ];

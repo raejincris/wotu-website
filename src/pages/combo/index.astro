@@ -219,7 +219,7 @@ const itemListSchema = {
           >
             <div class="card-img">
               <div class="shop-ph"><span class="shop-ph-label">{feature.placeholder}</span></div>
-              <img class="card-illo" src={feature.photo || '/uploads/products/cat-combo.png'} alt={`${feature.photo ? '' : 'Minh hoạ '}${feature.placeholder} — WOTU`} loading="lazy" decoding="async" />
+              <img class="card-illo" src={feature.photo || '/uploads/products/cat-combo.webp'} alt={`${feature.photo ? '' : 'Minh hoạ '}${feature.placeholder} — WOTU`} loading="lazy" decoding="async" />
               {feature.badge && (
                 <div class="card-badges"><span class={`b-tag${feature.badgeClass ? ' ' + feature.badgeClass : ''}`} style={feature.badgeStyle || undefined}>{feature.badge}</span></div>
               )}
@@ -249,7 +249,7 @@ const itemListSchema = {
             <a href={c.href} style="text-decoration: none; color: inherit; display: contents;">
               <div class="card-img">
                 <div class={`shop-ph ${c.tone ?? ''}`}><span class="shop-ph-label">{c.placeholder}</span></div>
-                <img class="card-illo" src={c.photo || `/uploads/products/cat-combo.png`} alt={`${c.photo ? '' : 'Minh hoạ '}${c.placeholder} — WOTU`} loading="lazy" decoding="async" />
+                <img class="card-illo" src={c.photo || `/uploads/products/cat-combo.webp`} alt={`${c.photo ? '' : 'Minh hoạ '}${c.placeholder} — WOTU`} loading="lazy" decoding="async" />
                 {c.badge && (
                   <div class="card-badges"><span class={`b-tag${c.badgeClass ? ' ' + c.badgeClass : ''}`} style={c.badgeStyle || undefined}>{c.badge}</span></div>
                 )}

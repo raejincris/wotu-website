@@ -5,7 +5,7 @@ excerpt: "Con số đầu tiên bạn nghe không bao giờ là con số cuối 
 category: "Quy trình"
 tags: ["ngân sách", "quy trình", "chi phí"]
 tone: warm
-photo: "/uploads/blog/ngan-sach-that-cho-mot-lan-lam-nha.png"
+photo: "/uploads/blog/ngan-sach-that-cho-mot-lan-lam-nha.webp"
 photoAlt: "Ảnh bìa Nhật ký WOTU — Ngân sách thật cho một lần làm nhà"
 ---
 

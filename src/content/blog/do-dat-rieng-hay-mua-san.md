@@ -5,7 +5,7 @@ excerpt: "Không phải món nào cũng đáng đặt riêng — nhưng có vài
 category: "Vật liệu"
 tags: ["đồ gỗ", "đặt riêng", "xưởng"]
 tone: deep
-photo: "/uploads/blog/do-dat-rieng-hay-mua-san.png"
+photo: "/uploads/blog/do-dat-rieng-hay-mua-san.webp"
 photoAlt: "Ảnh bìa Nhật ký WOTU — Đồ đặt riêng, hay mua sẵn?"
 ---
 
