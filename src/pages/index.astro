@@ -708,8 +708,32 @@ const whyIcons: Record<string, string> = {
   .combo-card[data-tilt]:hover { --lift: -6px; }
   .product-card[data-tilt]:hover { --lift: -4px; }
 
+  /* Ảnh card: zoom-settle khi cuộn vào + Ken Burns khi hover.
+     CHỈ ảnh trong card (stagger) — KHÔNG đụng .shop-illo hero (đang parallax inline). */
+  .shop-reveal-stagger .shop-illo {
+    transform: scale(1.07);
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .shop-reveal-stagger.is-visible .shop-illo { transform: scale(1); }
+  .combo-card:hover .shop-illo,
+  .product-card:hover .shop-illo,
+  .inspo-card:hover .shop-illo { transform: scale(1.06); }
+
+  /* Spotlight con trỏ trên panel tối .inspo (vị trí --mx/--my do JS set) */
+  .inspo::after {
+    content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in oklab, var(--shop-accent) 20%, transparent), transparent 62%);
+    opacity: 0; transition: opacity .5s ease;
+  }
+  .inspo.spotting::after { opacity: 1; }
+
   @media (prefers-reduced-motion: reduce) {
     .hero::before { animation: none; }
+    .shop-reveal-stagger .shop-illo,
+    .combo-card:hover .shop-illo,
+    .product-card:hover .shop-illo,
+    .inspo-card:hover .shop-illo { transform: none !important; transition: none !important; }
   }
 
   /* ===== RESPONSIVE ===== */

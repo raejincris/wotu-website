@@ -46,27 +46,65 @@ export function initShopMotion(): void {
   if (!coarse) {
     magnetic();
     tilt();
+    spotlight();
   }
 }
 
-/* 1. Hero entrance — chỉ TRANSFORM (opacity để parent .shop-reveal lo → không mờ kép). */
+/* 1. Hero entrance — h1 "wipe" bằng clip-path (kịch tính), phần còn lại rise.
+   Opacity để parent .shop-reveal lo → không mờ kép. */
 function heroEntrance(): void {
   const items = Array.from(
     document.querySelectorAll<HTMLElement>('[data-hero-item]'),
   );
   if (!items.length) return;
-  items.forEach((el) => {
+  const h1 = items.find((el) => el.tagName === 'H1') ?? null;
+  const rest = items.filter((el) => el !== h1);
+
+  rest.forEach((el) => {
     el.style.transform = 'translateY(20px)';
   });
   animate(
-    items,
+    rest,
     { transform: ['translateY(20px)', 'translateY(0px)'] },
     { duration: 0.8, delay: stagger(0.07, { startDelay: 0.1 }), ease: EASE },
   ).finished.finally(() => {
-    items.forEach((el) => {
+    rest.forEach((el) => {
       el.style.transform = '';
     });
   });
+
+  if (h1) {
+    h1.style.clipPath = 'inset(0 0 100% 0)';
+    animate(
+      h1,
+      { clipPath: ['inset(0 0 100% 0)', 'inset(0 0 -0.12em 0)'] },
+      { duration: 1.0, delay: 0.18, ease: EASE },
+    ).finished.finally(() => {
+      h1.style.clipPath = '';
+    });
+  }
+}
+
+/* Spotlight theo con trỏ trên panel tối .inspo — quầng accent bám chuột (lerp). */
+function spotlight(): void {
+  const el = document.querySelector<HTMLElement>('.inspo');
+  if (!el) return;
+  let mx = 50, my = 50, tx = 50, ty = 50;
+  const lerper: Lerper = () => {
+    mx += (tx - mx) * 0.18;
+    my += (ty - my) * 0.18;
+    el.style.setProperty('--mx', `${mx.toFixed(1)}%`);
+    el.style.setProperty('--my', `${my.toFixed(1)}%`);
+    return !(Math.abs(tx - mx) < 0.1 && Math.abs(ty - my) < 0.1);
+  };
+  el.addEventListener('pointerenter', () => el.classList.add('spotting'));
+  el.addEventListener('pointermove', (e) => {
+    const r = el.getBoundingClientRect();
+    tx = ((e.clientX - r.left) / r.width) * 100;
+    ty = ((e.clientY - r.top) / r.height) * 100;
+    kick(lerper);
+  });
+  el.addEventListener('pointerleave', () => el.classList.remove('spotting'));
 }
 
 /* 2. Parallax cuộn — transform + layer-promote (will-change) cho mượt, kể cả blob blur. */
