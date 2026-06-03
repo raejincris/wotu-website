@@ -680,7 +680,7 @@ const whyIcons: Record<string, string> = {
     top: -8%; right: -4%; width: 52%; height: 82%;
     background: radial-gradient(circle at 62% 42%,
       color-mix(in oklab, var(--shop-accent) 22%, transparent), transparent 70%);
-    filter: blur(60px); opacity: .55;
+    filter: blur(60px); opacity: .55; will-change: transform;
     animation: heroGlow 16s ease-in-out infinite alternate;
   }
   @keyframes heroGlow {
@@ -699,17 +699,17 @@ const whyIcons: Record<string, string> = {
   }
   .inspo .section-head, .inspo-grid { position: relative; z-index: 1; }
 
-  /* 3D tilt — kết hợp lift (hover) qua biến --lift, không vỡ hover cũ */
+  /* 3D tilt — transform do JS lerp điều khiển (mượt 60fps). CSS chỉ là fallback
+     no-JS: giữ hover-lift qua --lift, KHÔNG transition transform (tránh đè JS). */
   .combo-card[data-tilt], .product-card[data-tilt] {
     transform: perspective(720px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
-    transition: transform .18s ease-out, box-shadow .3s ease;
+    transition: box-shadow .3s ease;
   }
   .combo-card[data-tilt]:hover { --lift: -6px; }
   .product-card[data-tilt]:hover { --lift: -4px; }
 
   @media (prefers-reduced-motion: reduce) {
     .hero::before { animation: none; }
-    .combo-card[data-tilt], .product-card[data-tilt] { transition: none; }
   }
 
   /* ===== RESPONSIVE ===== */
