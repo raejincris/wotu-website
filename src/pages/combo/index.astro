@@ -2,6 +2,7 @@
 import ShopLayout from '../../layouts/ShopLayout.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
+import SplitWords from '../../components/SplitWords.astro';
 import shopHome from '../../data/shop-home.yml';
 
 const combos = (shopHome as any).combos ?? [];
@@ -89,8 +90,8 @@ const itemListSchema = {
   <header class="ph-head container shop-reveal">
     <div class="ph-head-grid">
       <div>
-        <span class="eyebrow">Cửa hàng — combo trọn bộ 2026</span>
-        <h1>Tất cả <em>combo</em>.</h1>
+        <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Cửa hàng — combo trọn bộ 2026</span>
+        <SplitWords tag="h1" text="Tất cả <em>combo</em>." base={90} step={55} />
       </div>
       <div>
         <p class="meta">
@@ -305,8 +306,8 @@ const itemListSchema = {
   /* Page header */
   .ph-head { padding: 14px 0 28px; }
   .ph-head-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 50px; align-items: end; }
-  .ph-head h1 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(48px, 6.5vw, 88px); line-height: 0.96; letter-spacing: -.02em; margin: 14px 0 0; }
-  .ph-head h1 em { font-style: italic; color: var(--shop-accent); }
+  .ph-head :global(h1) { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(48px, 6.5vw, 88px); line-height: 0.96; letter-spacing: -.02em; margin: 14px 0 0; }
+  .ph-head :global(h1 em) { font-style: italic; color: var(--shop-accent); }
   .ph-head .meta { color: var(--shop-ink-soft); font-size: 15px; max-width: 460px; margin: 0; line-height: 1.55; }
   .ph-head .meta b { color: var(--shop-ink); font-weight: 600; }
   .ph-head .meta-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--shop-line); font-size: 13px; }

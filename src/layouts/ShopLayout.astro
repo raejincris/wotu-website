@@ -94,7 +94,9 @@ const shopAccentCss = [
       // Reveal-on-scroll cho shop. Reveal ngay element đang trong viewport
       // (covers prerendered / no-IO browser); IO progressively reveal phần còn lại.
       (function () {
-        var els = document.querySelectorAll('.shop-reveal, .shop-reveal-stagger');
+        // Reveal cả hệ cũ (.shop-reveal*) lẫn hệ studio port sang (.reveal* qua
+        // [data-reveal]) — chung 1 trigger .is-visible.
+        var els = document.querySelectorAll('.shop-reveal, .shop-reveal-stagger, [data-reveal]');
         if (!els.length) return;
 
         function revealVisible() {

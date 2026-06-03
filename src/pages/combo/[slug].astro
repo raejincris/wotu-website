@@ -8,6 +8,7 @@
 import ShopLayout from '../../layouts/ShopLayout.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
+import SplitWords from '../../components/SplitWords.astro';
 import shopHome from '../../data/shop-home.yml';
 import toAmDetail from '../../data/combo-to-am.yml';
 
@@ -145,8 +146,9 @@ const breadcrumbSchema = {
       </div>
 
       <div class="pd-info">
-        <span class="pd-cat">{c.cat}</span>
-        <h1>{c.name} <em>{c.nameEm}</em>{c.nameTail}</h1>
+        <span class="pd-cat reveal" data-reveal style="--rev-delay: 0ms">{c.cat}</span>
+        <SplitWords tag="h1" text={`${c.name} <em>${c.nameEm}</em>${c.nameTail ?? ''}`} base={80} step={45} />
+
 
         <div class="pd-price">
           {c.priceOld && <s>{c.priceOld}</s>}
@@ -251,15 +253,15 @@ const breadcrumbSchema = {
         {descBlocks[0].headingHtml && (
           <div class="block-head">
             <div>
-              <span class="eyebrow">{descBlocks[0].eyebrowSection}</span>
-              <h2 set:html={descBlocks[0].headingHtml} />
+              <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">{descBlocks[0].eyebrowSection}</span>
+              <h2 class="reveal" data-reveal style="--rev-delay: 120ms" set:html={descBlocks[0].headingHtml} />
             </div>
-            <div class="right">{descBlocks[0].headingRight}</div>
+            <div class="right reveal" data-reveal style="--rev-delay: 180ms">{descBlocks[0].headingRight}</div>
           </div>
         )}
         {descBlocks.map((b: any) => (
           <div class={`desc-grid${b.flip ? ' flip' : ''}`}>
-            <div class="desc-img"><div class={`shop-ph${b.imgTone ? ' ' + b.imgTone : ''}`}><span class="shop-ph-label">{b.imgLabel}</span></div></div>
+            <div class="desc-img reveal-img" data-reveal><div class={`shop-ph${b.imgTone ? ' ' + b.imgTone : ''}`}><span class="shop-ph-label">{b.imgLabel}</span></div></div>
             <div class="desc-body">
               <span class="eyebrow">{b.eyebrow}</span>
               <h3>{b.h3}</h3>
@@ -305,10 +307,10 @@ const breadcrumbSchema = {
       <section class="block" id="dim">
         <div class="block-head">
           <div>
-            <span class="eyebrow">Sơ đồ &amp; kích thước</span>
-            <h2 set:html={dim.headingHtml} />
+            <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Sơ đồ &amp; kích thước</span>
+            <h2 class="reveal" data-reveal style="--rev-delay: 120ms" set:html={dim.headingHtml} />
           </div>
-          <div class="right">{dim.caption}</div>
+          <div class="right reveal" data-reveal style="--rev-delay: 180ms">{dim.caption}</div>
         </div>
         <div class="dim-wrap">
           <div class="dim-grid">
@@ -571,8 +573,8 @@ const breadcrumbSchema = {
   .pd-illo-note { margin-top: 12px; font-size: 12px; color: var(--shop-ink-soft); font-style: italic; }
 
   .pd-cat { font-size: 13px; letter-spacing: .04em; color: var(--shop-ink-soft); }
-  .pd-info h1 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(34px, 5vw, 54px); line-height: 1.05; margin: 8px 0 16px; }
-  .pd-info h1 em { font-style: italic; color: var(--shop-accent); }
+  .pd-info :global(h1) { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(34px, 5vw, 54px); line-height: 1.05; margin: 8px 0 16px; }
+  .pd-info :global(h1 em) { font-style: italic; color: var(--shop-accent); }
   .pd-price { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
   .pd-price s { color: var(--shop-ink-soft); font-size: 18px; }
   .pd-price strong { font-family: var(--shop-serif); font-size: 36px; font-weight: 500; color: var(--shop-ink); }

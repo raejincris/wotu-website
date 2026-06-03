@@ -4,6 +4,7 @@
  * trong cùng dataset để tra cứu khi cần render thẻ.
  */
 import ShopLayout from '../../layouts/ShopLayout.astro';
+import SplitWords from '../../components/SplitWords.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
 import shopProducts from '../../data/shop-products.yml';
@@ -66,9 +67,9 @@ const catalogJson = JSON.stringify(catalog).replace(/<\/script>/gi, '<\\/script>
   </div>
 
   <header class="wl-head container shop-reveal">
-    <span class="eyebrow">Của riêng bạn</span>
-    <h1>Yêu thích <em>của bạn</em>.</h1>
-    <p class="wl-sub">Mọi sản phẩm và combo bạn đánh dấu ♥ trên các trang khác sẽ xuất hiện ở đây. Danh sách lưu trong trình duyệt — không cần đăng nhập, đồng bộ tự động giữa các tab.</p>
+    <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Của riêng bạn</span>
+    <SplitWords tag="h1" text="Yêu thích <em>của bạn</em>." base={80} step={50} />
+    <p class="wl-sub reveal" data-reveal style="--rev-delay: 160ms">Mọi sản phẩm và combo bạn đánh dấu ♥ trên các trang khác sẽ xuất hiện ở đây. Danh sách lưu trong trình duyệt — không cần đăng nhập, đồng bộ tự động giữa các tab.</p>
   </header>
 
   <section class="container shop-reveal" style="padding: 24px 28px var(--shop-section-py);">
@@ -201,12 +202,12 @@ const catalogJson = JSON.stringify(catalog).replace(/<\/script>/gi, '<\\/script>
   .crumb-list .here { color: var(--shop-ink); font-weight: 600; }
 
   .wl-head { padding: 14px 28px 36px; max-width: 880px; }
-  .wl-head h1 {
+  .wl-head :global(h1) {
     font-family: var(--shop-serif); font-weight: 400;
     font-size: clamp(44px, 6vw, 76px); line-height: 0.98; letter-spacing: -.02em;
     margin: 14px 0 18px;
   }
-  .wl-head h1 em { font-style: italic; color: var(--shop-accent); }
+  .wl-head :global(h1 em) { font-style: italic; color: var(--shop-accent); }
   .wl-sub { font-size: 16px; color: var(--shop-ink-soft); line-height: 1.55; max-width: 60ch; margin: 0; }
 
   .wl-empty {

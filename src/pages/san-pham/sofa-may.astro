@@ -1,5 +1,6 @@
 ---
 import ShopLayout from '../../layouts/ShopLayout.astro';
+import SplitWords from '../../components/SplitWords.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
 import sofaData from '../../data/shop-sofa-may.yml';
@@ -120,7 +121,7 @@ const breadcrumbSchema = {
           </span>
         </div>
 
-        <h1>Sofa văng <em>"Mây"</em><br />3 chỗ ngồi</h1>
+        <SplitWords tag="h1" text={'Sofa văng <em>"Mây"</em><br />3 chỗ ngồi'} base={80} step={45} />
         <p class="lede">{d.lede}</p>
 
         <div class="price-row">
@@ -659,8 +660,8 @@ const breadcrumbSchema = {
   .cat-link { font-size: 12px; letter-spacing: .18em; color: var(--accent); text-transform: uppercase; font-weight: 700; }
   .review-row { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-soft); }
   .stars { display: inline-flex; gap: 1px; color: var(--accent); }
-  .info h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 5vw, 64px); line-height: 1; letter-spacing: -.015em; margin: 0; }
-  .info h1 em { font-style: italic; color: var(--accent); }
+  .info :global(h1) { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 5vw, 64px); line-height: 1; letter-spacing: -.015em; margin: 0; }
+  .info :global(h1 em) { font-style: italic; color: var(--accent); }
   .lede { font-size: 15px; color: var(--ink-soft); margin: 0; line-height: 1.6; }
 
   .price-row { display: flex; align-items: baseline; gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
