@@ -9,6 +9,7 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  ogImageAlt?: string;
   ogType?: string;
 }
 
@@ -16,6 +17,7 @@ const {
   title = `WOTU — Nội thất cho tổ ấm Việt`,
   description = 'WOTU — combo nội thất phòng khách, phòng ngủ, phòng ăn. Gỗ tự nhiên, bảo hành 5 năm, giao và lắp đặt tận nơi tại Quy Nhơn.',
   ogImage,
+  ogImageAlt = 'WOTU — Nội thất Quy Nhơn',
   ogType = 'website',
 } = Astro.props;
 
@@ -63,11 +65,13 @@ const shopAccentCss = [
     <meta property="og:image" content={ogImageURL} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <!-- Structured data: LocalBusiness + WebSite (cùng schema với studio) -->
     <StructuredData
