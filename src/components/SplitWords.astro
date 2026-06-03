@@ -7,7 +7,9 @@ interface Props {
   /**
    * Trusted author HTML only. Tokens matching `<em>...</em>` and self-closing
    * tags (e.g. `<br/>`) are emitted via `set:html` without sanitisation.
-   * Never pass user-generated or fetched content here — XSS would follow.
+   * Mọi attribute trên opening tag được GIỮ NGUYÊN (vd `class="stroke"`, kể cả
+   * event handler nếu có) — vì vậy chỉ truyền HTML do tác giả kiểm soát (YAML
+   * build-time). Never pass user-generated or fetched content here — XSS would follow.
    */
   text: string;
   base?: number;

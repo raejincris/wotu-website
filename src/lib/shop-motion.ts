@@ -157,10 +157,12 @@ function countUp(): void {
     const fmt = (v: number) =>
       (decimals ? v.toFixed(decimals).replace('.', sep) : String(Math.round(v))) +
       suffix;
-    el.textContent = fmt(0);
+    // KHÔNG reset về 0 ngay — giữ giá trị SSR ("5★") cho tới khi sắp animate,
+    // tránh nhấp nháy "0★" (rõ khi JS chậm hoặc element còn dưới fold).
     inView(
       el,
       () => {
+        el.textContent = fmt(0);
         animate(0, target, {
           duration: 1.4,
           ease: 'easeOut',

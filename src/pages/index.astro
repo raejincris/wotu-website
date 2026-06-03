@@ -607,8 +607,10 @@ const whyIcons: Record<string, string> = {
     margin: 0 28px;
     position: relative; overflow: hidden;
   }
-  .inspo .section-head h2 { color: var(--shop-bg); }
-  .inspo .section-head h2 em { color: var(--shop-accent); }
+  /* h2 render qua SplitWords (khác cid) → :global để override màu trên nền tối.
+     (Hiện vẫn đúng nhờ kế thừa color từ .inspo, nhưng :global cho chắc.) */
+  .inspo .section-head :global(h2) { color: var(--shop-bg); }
+  .inspo .section-head :global(h2 em) { color: var(--shop-accent); }
   .inspo .section-head .right { color: color-mix(in oklab, var(--shop-bg) 70%, transparent); }
   .inspo :global(.eyebrow) { color: color-mix(in oklab, var(--shop-bg) 70%, transparent); }
   .inspo-grid {
