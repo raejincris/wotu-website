@@ -439,15 +439,15 @@ const whyIcons: Record<string, string> = {
   .hero-tag .v s { color: var(--shop-ink-soft); font-size: 14px; margin-right: 8px; font-family: var(--shop-sans); }
   .sticker {
     position: absolute; top: 22px; right: 22px;
-    width: 110px; height: 110px; border-radius: 50%;
+    width: 176px; height: 176px; border-radius: 50%;
     background: var(--shop-accent); color: white;
     display: grid; place-items: center; text-align: center;
-    font-family: var(--shop-serif); font-size: 22px; line-height: 1;
+    font-family: var(--shop-serif); font-size: 44px; line-height: 1;
     transform: rotate(-12deg);
     box-shadow: 0 14px 30px -14px rgba(0,0,0,.4);
     animation: shopSway 4s ease-in-out infinite;
   }
-  .sticker small { display: block; font-family: var(--shop-sans); font-size: 10px; letter-spacing: .2em; margin-top: 6px; font-weight: 700; }
+  .sticker small { display: block; font-family: var(--shop-sans); font-size: 11px; letter-spacing: .12em; margin-top: 6px; font-weight: 700; white-space: nowrap; }
   @keyframes shopSway {
     0%,100% { transform: rotate(-12deg) translateY(0); }
     50% { transform: rotate(-8deg) translateY(-6px); }
