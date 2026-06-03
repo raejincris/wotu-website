@@ -89,7 +89,9 @@ while (i < n) {
     // consume closing tag
     while (i < n && text[i] !== '>') i++;
     i++;
-    tokens.push({ kind: 'html', value: `<${tagName}>${inner}</${tagName}>` });
+    // Giữ NGUYÊN tag mở gốc (tagStr) để không mất attribute như class — vd
+    // <span class="stroke"> cần class để style. `<em>` không có attr nên không đổi.
+    tokens.push({ kind: 'html', value: `${tagStr}${inner}</${tagName}>` });
     continue;
   }
   if (/\s/.test(ch)) {
