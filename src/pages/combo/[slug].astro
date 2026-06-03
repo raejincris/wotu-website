@@ -11,6 +11,7 @@ import Footer from '../../components/shop/Footer.astro';
 import SplitWords from '../../components/SplitWords.astro';
 import shopHome from '../../data/shop-home.yml';
 import toAmDetail from '../../data/combo-to-am.yml';
+import { jsonLd } from '../../lib/jsonld';
 
 const data = shopHome as any;
 const combos = (data.combos ?? []) as any[];
@@ -124,9 +125,9 @@ const breadcrumbSchema = {
 ---
 <ShopLayout title={`${fullName} — Combo ${roomLabel[c.room] ?? 'nội thất'} — WOTU`} description={desc} ogType="product">
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
-    {faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
-    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script type="application/ld+json" set:html={jsonLd(productSchema)} />
+    {faqSchema && <script type="application/ld+json" set:html={jsonLd(faqSchema)} />}
+    <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
   </Fragment>
   <Nav active="Combo nội thất" />
 

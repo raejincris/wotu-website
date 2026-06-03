@@ -1,5 +1,6 @@
 ---
 import site from '../data/site.yml';
+import { jsonLd } from '../lib/jsonld';
 
 interface Props {
   /** Page type — controls which JSON-LD schema is emitted. */
@@ -121,4 +122,4 @@ const creativeWork = type === 'project' && title
 
 const graph = [localBusiness, website, blogPosting, creativeWork].filter(Boolean);
 ---
-<script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} is:inline />
+<script type="application/ld+json" set:html={jsonLd({ '@context': 'https://schema.org', '@graph': graph })} is:inline />

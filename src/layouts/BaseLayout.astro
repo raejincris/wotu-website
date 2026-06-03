@@ -32,8 +32,14 @@ const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
 
 // Theme studio (tuỳ biến qua admin). Override --earth/--accent trên html[data-theme]
 // (specificity > :root → luôn thắng, không phụ thuộc thứ tự CSS). Default = hiện tại.
-const studioEarth = (theme?.studio?.earth || '#6B5C45').trim();
-const studioAccent = (theme?.studio?.accent || '#B8835A').trim();
+// Chỉ giữ ký tự hợp lệ cho màu CSS — chặn breakout khỏi <style set:html>
+// (vd giá trị "x}</style><script>…" từ theme.yml bị tamper).
+const sanitizeColor = (v: unknown, fallback: string) => {
+  const c = String(v ?? '').trim().replace(/[^a-zA-Z0-9#(),.%\s-]/g, '');
+  return c || fallback;
+};
+const studioEarth = sanitizeColor(theme?.studio?.earth, '#6B5C45');
+const studioAccent = sanitizeColor(theme?.studio?.accent, '#B8835A');
 const studioThemeCss = `html[data-theme]{--earth:${studioEarth};--accent:${studioAccent};}`;
 ---
 <!DOCTYPE html>

@@ -4,6 +4,7 @@ import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
 import SplitWords from '../../components/SplitWords.astro';
 import shopProducts from '../../data/shop-products.yml';
+import { jsonLd } from '../../lib/jsonld';
 
 const { categories: cats, products, productsAfterCta, filters } = shopProducts as any;
 
@@ -33,7 +34,7 @@ const breadcrumbSchema = {
 ---
 <ShopLayout title="Tất cả sản phẩm — WOTU Nội thất Việt" description="Cửa hàng nội thất WOTU — sofa, bàn ăn, giường, tủ, kệ, đèn. Đồ gỗ tự nhiên, giao 48h tại Quy Nhơn và các tỉnh lân cận.">
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
   </Fragment>
   <Nav active="Sản phẩm" />
 
@@ -279,36 +280,52 @@ const breadcrumbSchema = {
           </div>
         </div>
 
+        {/* Cùng cấu trúc card chính (.product-card-item + data + fav/add) để
+            filter/sort/đếm/giỏ hàng áp dụng được — trước đây là <a class="card">
+            trơ, không bị lọc (luôn hiện) và fav/add no-op. */}
         {productsAfterCta.map((p) => (
-          <a class="card" href={p.href}>
-            <div class="card-img">
-              <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
-              {p.badges && (
-                <div class="card-badges">
-                  {p.badges.map((b) => <span class={`b-tag${b.cls ? ' ' + b.cls : ''}`}>{b.label}</span>)}
-                </div>
-              )}
-              <button class="card-fav" type="button" aria-label="Yêu thích" onclick="event.preventDefault()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3 5.97 5.97 0 0 0 12 5a5.97 5.97 0 0 0-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
-              </button>
-              <span class="card-quick">+ Thêm nhanh vào giỏ</span>
-            </div>
-            <div class="card-body">
-              <span class="card-meta">{p.cat}</span>
-              <h4>{p.name} <em>{p.nameEm}</em>{p.nameTail}</h4>
-              {p.colors && (
-                <span class="card-color-row" style="margin-top: 2px;">
-                  {p.colors.map((c) => <span style={`background:${c}`}></span>)}
-                </span>
-              )}
-              <div class="card-foot">
-                <div class="card-price">
-                  {p.priceOld && <s>{p.priceOld}</s>}{p.price}
-                </div>
-                <span class="card-rating"><span class="stars">★★★★★</span>{p.rating} · {p.reviews}</span>
+          <article
+            class="card product-card-item"
+            data-id={p.id}
+            data-cat={p.catKey}
+            data-room={p.room}
+            data-price={p.priceNum}
+            data-rating={p.ratingNum}
+            data-name={`${p.name} ${p.nameEm}${p.nameTail ?? ''}`.trim()}
+            data-tags={(p.tags ?? []).join(' ')}
+          >
+            <a href={p.href} style="text-decoration: none; color: inherit; display: contents;">
+              <div class="card-img">
+                <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
+                <img class="card-illo" src={p.photo || `/uploads/products/cat-${p.catKey}.png`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name} ${p.nameEm ?? ''}`.trim() + ' — WOTU'} loading="lazy" decoding="async" />
+                {p.badges && (
+                  <div class="card-badges">
+                    {p.badges.map((b) => <span class={`b-tag${b.cls ? ' ' + b.cls : ''}`}>{b.label}</span>)}
+                  </div>
+                )}
               </div>
-            </div>
-          </a>
+              <div class="card-body">
+                <span class="card-meta">{p.cat}</span>
+                <h4>{p.name} <em>{p.nameEm}</em>{p.nameTail}</h4>
+                {p.colors && (
+                  <span class="card-color-row" style="margin-top: 2px;">
+                    {p.colors.map((c) => <span style={`background:${c}`}></span>)}
+                    {p.extraColors && <span style={`background:var(--shop-bg-soft); color:var(--shop-ink-soft); font-size:8px; display:grid; place-items:center;`}>+{p.extraColors}</span>}
+                  </span>
+                )}
+                <div class="card-foot">
+                  <div class="card-price">
+                    {p.priceOld && <s>{p.priceOld}</s>}{p.price}
+                  </div>
+                  <span class="card-rating"><span class="stars">★★★★★</span>{p.rating} · {p.reviews}</span>
+                </div>
+              </div>
+            </a>
+            <button class="card-fav" type="button" data-fav={p.id} aria-label="Yêu thích">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3 5.97 5.97 0 0 0 12 5a5.97 5.97 0 0 0-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
+            </button>
+            <button class="card-quick" type="button" data-add>+ Thêm nhanh vào giỏ</button>
+          </article>
         ))}
 
       </div>

@@ -149,8 +149,8 @@ const catalogJson = JSON.stringify(catalog).replace(/<\/script>/gi, '<\\/script>
     grid.innerHTML = items
       .map(
         (it) => `
-          <article class="wl-card" data-id="${it.id}">
-            <a href="${it.href}" class="wl-link">
+          <article class="wl-card" data-id="${escapeHtml(it.id)}">
+            <a href="${escapeHtml(it.href)}" class="wl-link">
               <div class="wl-img">
                 <div class="shop-ph"><span class="shop-ph-label">${escapeHtml(it.placeholder)}</span></div>
                 <img class="shop-illo" src="${escapeHtml(it.illo)}" alt="${escapeHtml(it.name)}" loading="lazy" decoding="async" />

@@ -38,7 +38,10 @@ function applyImg(key: string, src: string) {
         el.style.removeProperty('display');
       }
     } else {
-      (el as HTMLElement).style.backgroundImage = src ? `url("${src}")` : '';
+      // Strip ký tự có thể thoát khỏi url("…") trước khi gán (defense-in-depth,
+      // dù origin postMessage đã được kiểm tra).
+      const safe = (src || '').replace(/["')\\\n\r]/g, '');
+      (el as HTMLElement).style.backgroundImage = safe ? `url("${safe}")` : '';
     }
   });
 }

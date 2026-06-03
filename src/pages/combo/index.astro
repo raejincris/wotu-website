@@ -4,6 +4,7 @@ import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
 import SplitWords from '../../components/SplitWords.astro';
 import shopHome from '../../data/shop-home.yml';
+import { jsonLd } from '../../lib/jsonld';
 
 const combos = (shopHome as any).combos ?? [];
 const TOTAL = combos.length;
@@ -72,8 +73,8 @@ const itemListSchema = {
 ---
 <ShopLayout title="Tất cả combo nội thất — WOTU Nội thất Việt" description="Combo nội thất trọn bộ WOTU — phòng khách, phòng ngủ, phòng ăn, làm việc, căn hộ studio, phòng trẻ em. Mua trọn bộ tiết kiệm tới 35% so với mua lẻ, giao 48h tại Quy Nhơn và lân cận.">
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
-    <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+    <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
+    <script type="application/ld+json" set:html={jsonLd(itemListSchema)} />
   </Fragment>
   <Nav active="Combo nội thất" />
 

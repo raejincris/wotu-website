@@ -10,6 +10,7 @@ import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
 import SplitWords from '../../components/SplitWords.astro';
 import shopProducts from '../../data/shop-products.yml';
+import { jsonLd } from '../../lib/jsonld';
 
 const data = shopProducts as any;
 const allP = [...(data.products ?? []), ...(data.productsAfterCta ?? [])];
@@ -84,8 +85,8 @@ const breadcrumbSchema = {
 ---
 <ShopLayout title={`${fullName} — WOTU`} description={desc}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
-    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script type="application/ld+json" set:html={jsonLd(productSchema)} />
+    <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
   </Fragment>
   <Nav active="Sản phẩm" />
 

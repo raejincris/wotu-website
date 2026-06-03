@@ -6,6 +6,8 @@
  * Dùng: <Breadcrumb items={[{ name: 'Studio', href: '/studio/' }, { name: 'Dự án', href: '/studio/projects' }, { name: p.name }]} />
  * Item cuối (không có href) = trang hiện tại.
  */
+import { jsonLd } from '../lib/jsonld';
+
 interface Crumb { name: string; href?: string; }
 interface Props { items: Crumb[]; maxWidth?: string; }
 
@@ -39,7 +41,7 @@ const schema = {
     ))}
   </ol>
 </nav>
-<script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+<script type="application/ld+json" set:html={jsonLd(schema)} is:inline />
 
 <style>
   .breadcrumb {

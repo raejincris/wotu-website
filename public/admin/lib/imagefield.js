@@ -214,6 +214,12 @@ export function attachImage(slot, onChange) {
       input.value = '';
       return;
     }
+    // Chặn file quá lớn (RAW/ảnh máy ảnh) — nén canvas sẽ block UI nhiều giây.
+    if (file.size > 40 * 1024 * 1024) {
+      status.textContent = `⚠ Ảnh quá lớn (${fmtSize(file.size)}) — tối đa 40MB`;
+      input.value = '';
+      return;
+    }
     status.textContent = 'Đang nén…';
     try {
       const r = await compressImage(file);

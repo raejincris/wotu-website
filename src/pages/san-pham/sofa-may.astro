@@ -4,6 +4,7 @@ import SplitWords from '../../components/SplitWords.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
 import sofaData from '../../data/shop-sofa-may.yml';
+import { jsonLd } from '../../lib/jsonld';
 
 const d = sofaData as any;
 const fabricSwatchesTop = d.fabricSwatchesTop as any[];
@@ -58,8 +59,8 @@ const breadcrumbSchema = {
   description="Sofa văng Mây — 3 chỗ ngồi, gỗ sồi tự nhiên, 24 màu vải tuỳ chọn. Bảo hành 5 năm, giao và lắp tận nơi tại Quy Nhơn."
 >
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
-    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script type="application/ld+json" set:html={jsonLd(productSchema)} />
+    <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
   </Fragment>
   <Nav active="Sản phẩm" />
 

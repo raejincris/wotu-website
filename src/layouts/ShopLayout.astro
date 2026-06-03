@@ -29,10 +29,13 @@ const cfBeaconConfig = cfToken ? JSON.stringify({ token: cfToken }) : '';
 
 // Theme (tuỳ biến qua admin). palette/density dùng preset có sẵn trong shop.css;
 // accent override (nếu có) đặt trên body.shop (specificity > preset → luôn thắng).
+// Chỉ giữ ký tự hợp lệ cho màu CSS — chặn breakout khỏi <style set:html>
+// (vd giá trị "red}</style><script>…" từ theme.yml bị tamper).
+const sanitizeColor = (v: unknown) => String(v ?? '').trim().replace(/[^a-zA-Z0-9#(),.%\s-]/g, '');
 const shopPalette = theme?.shop?.palette || 'warm';
 const shopDensity = theme?.shop?.density || 'comfy';
-const shopAccent = (theme?.shop?.accent || '').trim();
-const shopAccentDeep = (theme?.shop?.accentDeep || '').trim();
+const shopAccent = sanitizeColor(theme?.shop?.accent);
+const shopAccentDeep = sanitizeColor(theme?.shop?.accentDeep);
 const shopAccentCss = [
   shopAccent ? `--shop-accent:${shopAccent};` : '',
   shopAccentDeep ? `--shop-accent-deep:${shopAccentDeep};` : '',

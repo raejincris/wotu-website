@@ -6,6 +6,7 @@ import Footer from '../../../components/Footer.astro';
 import Breadcrumb from '../../../components/Breadcrumb.astro';
 import ProjectItem from '../../../components/ProjectItem.astro';
 import servicesData from '../../../data/services.yml';
+import { jsonLd } from '../../../lib/jsonld';
 
 const all = (servicesData as any).services as any[];
 
@@ -54,8 +55,8 @@ const serviceSchema = {
 ---
 <BaseLayout title={s.metaTitle} description={s.metaDescription}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
-    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script type="application/ld+json" set:html={jsonLd(serviceSchema)} />
+    <script type="application/ld+json" set:html={jsonLd(faqSchema)} />
   </Fragment>
   <Nav variant="inner" homeRoute="/studio/" />
   <Breadcrumb items={[{ name: 'Studio', href: '/studio/' }, { name: 'Dịch vụ', href: '/studio/dich-vu/' }, { name: s.navName }]} />
