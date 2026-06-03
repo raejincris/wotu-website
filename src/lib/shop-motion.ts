@@ -47,7 +47,29 @@ export function initShopMotion(): void {
     magnetic();
     tilt();
     spotlight();
+    liquidGlass();
   }
+}
+
+/* Liquid glass — vệt specular trên .hero-tag bám con trỏ (lerp). */
+function liquidGlass(): void {
+  const el = document.querySelector<HTMLElement>('.hero-tag');
+  if (!el) return;
+  let gx = 50, gy = 0, tx = 50, ty = 0;
+  const lerper: Lerper = () => {
+    gx += (tx - gx) * 0.18;
+    gy += (ty - gy) * 0.18;
+    el.style.setProperty('--gx', `${gx.toFixed(1)}%`);
+    el.style.setProperty('--gy', `${gy.toFixed(1)}%`);
+    return !(Math.abs(tx - gx) < 0.1 && Math.abs(ty - gy) < 0.1);
+  };
+  el.addEventListener('pointermove', (e) => {
+    const r = el.getBoundingClientRect();
+    tx = ((e.clientX - r.left) / r.width) * 100;
+    ty = ((e.clientY - r.top) / r.height) * 100;
+    kick(lerper);
+  });
+  el.addEventListener('pointerleave', () => { tx = 50; ty = 0; kick(lerper); });
 }
 
 /* 1. Hero entrance — rise bằng TRANSFORM cho mọi block (GPU-composited → mượt;

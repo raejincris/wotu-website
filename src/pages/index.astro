@@ -401,14 +401,39 @@ const whyIcons: Record<string, string> = {
     border-radius: var(--shop-radius-xl); overflow: hidden;
     background: var(--shop-bg-soft);
   }
+  /* ===== LIQUID GLASS (hero-tag) =====
+     Kính lỏng: blur+saturate mạnh cho ảnh xuyên qua, viền sáng khúc xạ, highlight
+     inset, vệt specular bám con trỏ (--gx/--gy do shop-motion set, lerp). */
   .hero-tag {
     position: absolute; left: 22px; bottom: 22px; right: 22px;
-    background: color-mix(in oklab, var(--shop-bg-card) 85%, transparent);
-    backdrop-filter: blur(8px);
-    border-radius: 18px; padding: 16px 18px;
+    padding: 16px 18px; border-radius: 20px;
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    box-shadow: 0 8px 32px -12px rgba(0,0,0,.12);
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--shop-bg-card) 48%, transparent),
+      color-mix(in oklab, var(--shop-bg-card) 20%, transparent));
+    backdrop-filter: blur(18px) saturate(180%) brightness(1.05);
+    -webkit-backdrop-filter: blur(18px) saturate(180%) brightness(1.05);
+    border: 1px solid color-mix(in oklab, white 42%, transparent);
+    box-shadow:
+      0 12px 40px -16px rgba(40, 28, 18, .35),
+      inset 0 1px 1px rgba(255, 255, 255, .75),
+      inset 0 -10px 22px -12px rgba(255, 255, 255, .28);
+    overflow: hidden; isolation: isolate;
   }
+  /* Vệt sáng specular bám con trỏ */
+  .hero-tag::before {
+    content: ''; position: absolute; inset: -1px; z-index: 0; pointer-events: none;
+    background: radial-gradient(170px circle at var(--gx, 50%) var(--gy, 0%),
+      rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 60%);
+    mix-blend-mode: screen; opacity: .85;
+  }
+  /* Sheen tĩnh mép trên (ánh kính) */
+  .hero-tag::after {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 46%;
+    z-index: 0; pointer-events: none; border-radius: 20px 20px 0 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .38), rgba(255, 255, 255, 0));
+  }
+  .hero-tag > * { position: relative; z-index: 1; }
   .hero-tag .l { font-size: 12px; color: var(--shop-ink-soft); letter-spacing: .14em; text-transform: uppercase; }
   .hero-tag .v { font-family: var(--shop-serif); font-size: 22px; color: var(--shop-ink); }
   .hero-tag .v s { color: var(--shop-ink-soft); font-size: 14px; margin-right: 8px; font-family: var(--shop-sans); }
