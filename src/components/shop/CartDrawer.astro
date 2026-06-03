@@ -257,7 +257,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
       .map(
         (it) => `
           <div class="cart-item" data-id="${escapeHtml(it.id)}" data-variant="${escapeHtml(it.variant ?? '')}">
-            <div class="cart-item-img">${it.img ? `<img src="${escapeHtml(it.img)}" alt="" style="width:100%;height:100%;object-fit:cover;" />` : 'WOTU'}</div>
+            <div class="cart-item-img">${it.img ? `<img src="${escapeHtml(it.img)}" alt="" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;" />` : 'WOTU'}</div>
             <div class="cart-item-info">
               <p class="cart-item-name">${escapeHtml(it.name)}</p>
               ${it.variant ? `<span class="cart-item-variant">${escapeHtml(it.variant)}</span>` : ''}

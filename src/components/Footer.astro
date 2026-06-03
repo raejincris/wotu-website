@@ -19,7 +19,7 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
   <div class="footer-grid" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 64px; border-bottom: 1px solid rgba(245,240,232,0.1);">
     <div>
       <a href="/studio/" aria-label="WOTU Studio — về trang chủ" style="display: inline-block;">
-        <img src="/logo-light.svg" alt="WOTU" width="200" height="82" style="height: 56px; width: auto; display: block;" />
+        <img src="/logo-light.svg" alt="WOTU" width="200" height="82" loading="lazy" decoding="async" style="height: 56px; width: auto; display: block;" />
       </a>
       <p style="margin-top: 16px; font-size: 13px; color: var(--clay); max-width: 32ch; line-height: 1.6;" set:html={footer.tagline}></p>
     </div>
