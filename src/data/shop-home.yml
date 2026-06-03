@@ -28,6 +28,13 @@ marquee:
   - { text: Đổi trả trong 30 ngày }
   - { text: Combo trọn gói — 7 ngày dọn vào ở, italic: true }
   - { text: Tư vấn 1:1 miễn phí }
+# Dải "cam kết" thứ hai (trước phần Đánh giá). Bỏ trống/xoá → dùng default trong index.astro.
+marqueeTrust:
+  - Bảo hành 5 năm
+  - Giao & lắp đặt tận nơi
+  - Gỗ tự nhiên 100%
+  - Thiết kế riêng theo nhà bạn
+  - 7 ngày dọn vào ở
 sections:
   combos:
     eyebrow: Combo nội thất

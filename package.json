@@ -17,7 +17,8 @@
     "@astrojs/sitemap": "^3.7.2",
     "@playwright/test": "^1.59.1",
     "astro": "^6.2.1",
-    "astro-pagefind": "^2.0.0"
+    "astro-pagefind": "^2.0.0",
+    "motion": "^12.40.0"
   },
   "devDependencies": {
     "@rollup/plugin-yaml": "^4.1.2",

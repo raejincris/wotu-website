@@ -15,6 +15,13 @@ const email = site.email;
 const { hero, sections, combos, bestsellers, inspo, reviews } = shopHome as any;
 const blocks = ((shopHome as any).blocks ?? []) as any[];
 
+// Dải marquee "cam kết" (mới) — đặt trước Reviews. Editable qua YAML, có default.
+const mt = (shopHome as any).marqueeTrust;
+const marqueeTrust: string[] = (Array.isArray(mt) && mt.length ? mt : [
+  'Bảo hành 5 năm', 'Giao & lắp đặt tận nơi', 'Gỗ tự nhiên 100%',
+  'Thiết kế riêng theo nhà bạn', '7 ngày dọn vào ở',
+]).map((s: any) => String(s).trim()).filter(Boolean);
+
 // Bố cục: bật/tắt + thứ tự section (sửa qua admin "Bố cục trang").
 const L = resolveLayout((shopHome as any).layout, [
   'combos', 'bestsellers', 'inspo', 'whyUs', 'reviews', 'cta', 'newsletter',
@@ -43,29 +50,29 @@ const whyIcons: Record<string, string> = {
   <header class="hero shop-reveal">
     <div class="container hero-grid">
       <div>
-        <div class="hero-eyebrow-row">
+        <div class="hero-eyebrow-row" data-hero-item>
           <span class="pill"><span class="dot"></span> <span data-cms="hero.pill">{hero.pill}</span></span>
           <span class="eyebrow" data-cms="hero.eyebrow">{hero.eyebrow}</span>
         </div>
-        <h1 set:html={hero.title} data-cms="hero.title" />
-        <p class="hero-sub" data-cms="hero.sub">{hero.sub}</p>
-        <div class="hero-actions">
-          <a class="shop-btn shop-btn-primary" href="#combos"><span data-cms="hero.cta1">{hero.cta1}</span> <span class="arr">→</span></a>
+        <h1 set:html={hero.title} data-cms="hero.title" data-hero-item />
+        <p class="hero-sub" data-cms="hero.sub" data-hero-item>{hero.sub}</p>
+        <div class="hero-actions" data-hero-item>
+          <a class="shop-btn shop-btn-primary" href="#combos" data-magnetic><span data-cms="hero.cta1">{hero.cta1}</span> <span class="arr">→</span></a>
           <a class="shop-btn shop-btn-ghost" href="#inspo" data-cms="hero.cta2">{hero.cta2}</a>
         </div>
-        <div class="hero-meta">
+        <div class="hero-meta" data-hero-item>
           {hero.stats.map((s: any) => (
             <div>
-              <div class="meta-num" set:html={s.num} />
+              <div class="meta-num" data-count set:html={s.num} />
               <div class="meta-label">{s.label}</div>
             </div>
           ))}
         </div>
       </div>
 
-      <div class="hero-visual">
+      <div class="hero-visual" data-hero-item>
         <div class="shop-ph"><span class="shop-ph-label">Phòng khách combo WOTU — 1600×2000</span></div>
-        <img class="shop-illo" data-cms-img="hero.photo" src={hero.photo || `${ILLO}/combo-phong-khach.png`} alt={hero.photoAlt || 'Minh hoạ combo phòng khách WOTU'} loading="eager" fetchpriority="high" decoding="async" />
+        <img class="shop-illo" data-cms-img="hero.photo" data-parallax data-parallax-speed="24" src={hero.photo || `${ILLO}/combo-phong-khach.png`} alt={hero.photoAlt || 'Minh hoạ combo phòng khách WOTU'} loading="eager" fetchpriority="high" decoding="async" />
         <div class="sticker">
           {hero.sticker}<small>{hero.stickerSub}</small>
         </div>
@@ -116,6 +123,7 @@ const whyIcons: Record<string, string> = {
             data-id={c.id}
             data-price={c.price}
             data-name={`Combo ${c.nameEm}${c.nameTail ?? ''}`}
+            data-tilt={c.feature ? undefined : ''}
           >
             <div class="combo-img">
               <div class={`shop-ph ${c.tone}`}><span class="shop-ph-label">{c.placeholder}</span></div>
@@ -178,6 +186,7 @@ const whyIcons: Record<string, string> = {
             data-id={p.id}
             data-price={p.priceNum}
             data-name={p.name}
+            data-tilt
           >
             <a href={p.href} style="text-decoration: none; display: contents;">
               <div class="combo-img">
@@ -206,6 +215,7 @@ const whyIcons: Record<string, string> = {
   <!-- ====== INSPIRATION ====== -->
   <section id="inspo" class="shop-reveal" data-cms-section="inspo" style={secStyle('inspo')}>
     <div class="inspo">
+      <div class="inspo-blob" data-parallax data-parallax-speed="-48" aria-hidden="true"></div>
       <div class="section-head">
         <div>
           <span class="eyebrow" data-cms="sections.inspo.eyebrow">{sections.inspo.eyebrow}</span>
@@ -257,6 +267,18 @@ const whyIcons: Record<string, string> = {
     </div>
   </section>
 
+  <!-- ====== MARQUEE CAM KẾT (mới) ====== -->
+  <div class="shop-marquee alt" style={`order:${L.order('reviews')}`} aria-label="Cam kết WOTU">
+    <div class="shop-marquee-track">
+      <span>
+        {marqueeTrust.map((t) => (<><span>{t}</span><span class="star" aria-hidden="true"></span></>))}
+      </span>
+      <span aria-hidden="true">
+        {marqueeTrust.map((t) => (<><span>{t}</span><span class="star" aria-hidden="true"></span></>))}
+      </span>
+    </div>
+  </div>
+
   <!-- ====== REVIEWS ====== -->
   <section class="shop-reveal" data-cms-section="reviews" style={secStyle('reviews')}>
     <div class="container">
@@ -305,7 +327,7 @@ const whyIcons: Record<string, string> = {
         <input type="hidden" name="from_name" value="WOTU Shop website" />
         <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; opacity: 0;" aria-hidden="true" />
         <input type="tel" name="phone" placeholder="Số điện thoại của bạn" required />
-        <button type="submit">Gọi tôi <span class="arr">→</span></button>
+        <button type="submit" data-magnetic>Gọi tôi <span class="arr">→</span></button>
       </form>
     </div>
   </section>
@@ -651,6 +673,45 @@ const whyIcons: Record<string, string> = {
   .cta-form button .arr { transition: transform .2s ease; }
   .cta-form button:hover .arr { transform: translateX(4px); }
 
+  /* ===== ANIMATION NÂNG CAO ===== */
+  /* Ambient glow mềm sau hero (CSS thuần, drift chậm) */
+  .hero::before {
+    content: ''; position: absolute; z-index: -1; pointer-events: none;
+    top: -8%; right: -4%; width: 52%; height: 82%;
+    background: radial-gradient(circle at 62% 42%,
+      color-mix(in oklab, var(--shop-accent) 22%, transparent), transparent 70%);
+    filter: blur(60px); opacity: .55;
+    animation: heroGlow 16s ease-in-out infinite alternate;
+  }
+  @keyframes heroGlow {
+    0%   { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-30px, 22px) scale(1.12); }
+  }
+
+  /* Blob chiều sâu trong panel inspo (parallax khi cuộn) */
+  .inspo-blob {
+    position: absolute; z-index: 0; pointer-events: none;
+    width: 380px; height: 380px; border-radius: 50%;
+    top: -130px; right: -90px;
+    background: radial-gradient(circle,
+      color-mix(in oklab, var(--shop-accent) 42%, transparent), transparent 70%);
+    filter: blur(44px); opacity: .5; will-change: transform;
+  }
+  .inspo .section-head, .inspo-grid { position: relative; z-index: 1; }
+
+  /* 3D tilt — kết hợp lift (hover) qua biến --lift, không vỡ hover cũ */
+  .combo-card[data-tilt], .product-card[data-tilt] {
+    transform: perspective(720px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
+    transition: transform .18s ease-out, box-shadow .3s ease;
+  }
+  .combo-card[data-tilt]:hover { --lift: -6px; }
+  .product-card[data-tilt]:hover { --lift: -4px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero::before { animation: none; }
+    .combo-card[data-tilt], .product-card[data-tilt] { transition: none; }
+  }
+
   /* ===== RESPONSIVE ===== */
   @media (max-width: 1100px) {
     .hero-grid { grid-template-columns: 1fr; }
@@ -673,6 +734,7 @@ const whyIcons: Record<string, string> = {
 
 <script>
   import { addToCart, toggleFavorite, isFavorite, onChange, toast } from '../lib/shop-store';
+  import '../lib/shop-motion';
 
   // ===== Combo tabs filter =====
   const tabs = document.querySelectorAll<HTMLButtonElement>('.combo-tab');

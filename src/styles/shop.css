@@ -198,6 +198,13 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
   flex-shrink: 0;
 }
 @keyframes shopMarq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.shop-marquee:hover .shop-marquee-track { animation-play-state: paused; }
+/* Biến thể "cam kết" — nền accent nhạt, đặt giữa trang */
+.shop-marquee.alt { background: var(--shop-warm-soft); border-color: transparent; }
+.shop-marquee.alt .shop-marquee-track { animation-duration: 42s; font-size: 20px; }
+@media (prefers-reduced-motion: reduce) {
+  .shop-marquee-track { animation: none !important; }
+}
 
 /* ============================================================
    SECTION HEADERS
