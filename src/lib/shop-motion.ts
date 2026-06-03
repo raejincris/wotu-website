@@ -50,39 +50,27 @@ export function initShopMotion(): void {
   }
 }
 
-/* 1. Hero entrance — h1 "wipe" bằng clip-path (kịch tính), phần còn lại rise.
-   Opacity để parent .shop-reveal lo → không mờ kép. */
+/* 1. Hero entrance — rise bằng TRANSFORM cho mọi block (GPU-composited → mượt;
+   KHÔNG clip-path vì repaint chữ lớn = jank). Opacity để parent .shop-reveal lo. */
 function heroEntrance(): void {
   const items = Array.from(
     document.querySelectorAll<HTMLElement>('[data-hero-item]'),
   );
   if (!items.length) return;
-  const h1 = items.find((el) => el.tagName === 'H1') ?? null;
-  const rest = items.filter((el) => el !== h1);
-
-  rest.forEach((el) => {
-    el.style.transform = 'translateY(20px)';
+  items.forEach((el) => {
+    el.style.transform = 'translateY(22px)';
+    el.style.willChange = 'transform';
   });
   animate(
-    rest,
-    { transform: ['translateY(20px)', 'translateY(0px)'] },
-    { duration: 0.8, delay: stagger(0.07, { startDelay: 0.1 }), ease: EASE },
+    items,
+    { transform: ['translateY(22px)', 'translateY(0px)'] },
+    { duration: 0.85, delay: stagger(0.08, { startDelay: 0.1 }), ease: EASE },
   ).finished.finally(() => {
-    rest.forEach((el) => {
+    items.forEach((el) => {
       el.style.transform = '';
+      el.style.willChange = '';
     });
   });
-
-  if (h1) {
-    h1.style.clipPath = 'inset(0 0 100% 0)';
-    animate(
-      h1,
-      { clipPath: ['inset(0 0 100% 0)', 'inset(0 0 -0.12em 0)'] },
-      { duration: 1.0, delay: 0.18, ease: EASE },
-    ).finished.finally(() => {
-      h1.style.clipPath = '';
-    });
-  }
 }
 
 /* Spotlight theo con trỏ trên panel tối .inspo — quầng accent bám chuột (lerp). */
