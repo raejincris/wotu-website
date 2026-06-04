@@ -153,7 +153,7 @@ function setupPreview() {
 const PANELS = [
   'panel-dashboard',
   'panel-site', 'panel-sofa', 'panel-combo', 'panel-shop-home', 'panel-home-hero',
-  'panel-shop-hero', 'panel-products', 'panel-footer',
+  'panel-shop-hero', 'panel-products', 'panel-phong-mau', 'panel-footer',
   'panel-studio-home', 'panel-services', 'panel-privacy', 'panel-theme',
   'panel-layout', 'panel-blocks', 'panel-pages',
 ];
@@ -168,6 +168,7 @@ const HASH_MAP = {
   'home-hero':   'panel-home-hero',
   'shop-hero':   'panel-shop-hero',
   'products':    'panel-products',
+  'phong-mau':   'panel-phong-mau',
   'footer':      'panel-footer',
   'studio-home': 'panel-studio-home',
   'services':    'panel-services',
@@ -187,6 +188,7 @@ const PANEL_META = {
   'panel-home-hero': { title: 'Trang chủ Studio',         preview: 'https://www.wotu.vn/studio/' },
   'panel-shop-hero': { title: 'Trang chủ Shop',           preview: 'https://www.wotu.vn/' },
   'panel-products':  { title: 'Catalog sản phẩm',         preview: 'https://www.wotu.vn/san-pham/' },
+  'panel-phong-mau': { title: 'Phòng mẫu',                preview: 'https://www.wotu.vn/phong-mau/to-am/' },
   'panel-footer':    { title: 'Footer & Menu',            preview: 'https://www.wotu.vn/studio/' },
   'panel-studio-home': { title: 'Studio — Các section',   preview: 'https://www.wotu.vn/studio/' },
   'panel-services':  { title: 'Trang dịch vụ',            preview: 'https://www.wotu.vn/studio/dich-vu/' },
@@ -205,6 +207,7 @@ const EDITOR_MAP = {
   'home-hero':  '/admin/editors/home-hero.js',
   'shop-hero':  '/admin/editors/shop-hero.js',
   'products':   '/admin/editors/products.js',
+  'phong-mau':  '/admin/editors/phong-mau.js',
   'footer':     '/admin/editors/footer.js',
   'studio-home': '/admin/editors/studio-home.js',
   'services':   '/admin/editors/services.js',
@@ -222,6 +225,7 @@ const FILE_STATUS_CONFIG = [
   { name: 'Catalog sản phẩm',  path: 'src/data/shop-products.yml',   hash: 'products' },
   { name: 'Combo Tổ Ấm',       path: 'src/data/combo-to-am.yml',     hash: 'combo' },
   { name: 'Sofa Mây',          path: 'src/data/shop-sofa-may.yml',   hash: 'sofa' },
+  { name: 'Phòng mẫu',         path: 'src/data/phong-mau-to-am.yml', hash: 'phong-mau' },
   // Studio · Trang thiết kế
   { name: 'Trang chủ Studio',  path: 'src/data/home.yml',            hash: 'home-hero' },
   { name: 'Studio — section',  path: 'src/data/home.yml',            hash: 'studio-home' },
