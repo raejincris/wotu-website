@@ -9,7 +9,6 @@ import ShopLayout from '../../layouts/ShopLayout.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
 import SplitWords from '../../components/SplitWords.astro';
-import Placeholder from '../../components/Placeholder.astro';
 import phongMau from '../../data/phong-mau.yml';
 import { jsonLd } from '../../lib/jsonld';
 
@@ -70,7 +69,40 @@ const listSchema = liveRooms.length
           </div>
         </div>
         <div class="pm-hero-visual" data-hero-item>
-          <Placeholder label={hero.imageAlt || 'Phối cảnh phòng mẫu'} photo={hero.image || undefined} alt={hero.imageAlt} ratio="4/3" tone="warm" priority />
+          {rooms.length > 1 && (
+            <button class="pm-nav prev" type="button" aria-label="Phòng trước">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+          )}
+          <div class="pm-slider" data-pm-slider>
+            {rooms.map((r, i) => {
+              const live = !r.soon && r.href;
+              const imgSrc = r.photo || hero.image || '';
+              const Tag = live ? 'a' : 'div';
+              return (
+                <Tag class={`pm-slide${i === 0 ? ' active' : ''}`} href={live ? r.href : undefined} data-slide={i} aria-hidden={i === 0 ? 'false' : 'true'}>
+                  {imgSrc
+                    ? <img class="pm-slide-img" src={imgSrc} alt={`${r.name} ${r.nameEm ?? ''}`.trim()} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+                    : <div class="pm-slide-ph"><span>{r.placeholder || hero.imageAlt || 'Phối cảnh phòng mẫu WOTU'}</span></div>
+                  }
+                  <div class="pm-slide-cap">
+                    <span class="pm-slide-name">{r.name} <em>{r.nameEm}</em></span>
+                    <span class="pm-slide-style">{r.style}{r.soon ? ' · Sắp ra mắt' : ''}</span>
+                  </div>
+                </Tag>
+              );
+            })}
+          </div>
+          {rooms.length > 1 && (
+            <button class="pm-nav next" type="button" aria-label="Phòng sau">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          )}
+          {rooms.length > 1 && (
+            <div class="pm-dots">
+              {rooms.map((_, i) => <button class="pm-dot" type="button" data-dot={i} aria-current={i === 0 ? 'true' : 'false'} aria-label={`Phòng ${i + 1}`}></button>)}
+            </div>
+          )}
         </div>
       </div>
     </header>
@@ -145,6 +177,29 @@ const listSchema = liveRooms.length
   <Footer />
 </ShopLayout>
 
+<script>
+  // Hero carousel — lướt qua lại giữa các phòng (nút ‹ › + chấm).
+  const slider = document.querySelector('[data-pm-slider]');
+  if (slider) {
+    const slides = Array.from(slider.querySelectorAll<HTMLElement>('.pm-slide'));
+    const dots = Array.from(document.querySelectorAll<HTMLElement>('.pm-dot'));
+    const prev = document.querySelector<HTMLElement>('.pm-nav.prev');
+    const next = document.querySelector<HTMLElement>('.pm-nav.next');
+    let i = 0;
+    function show(n: number) {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, k) => {
+        s.classList.toggle('active', k === i);
+        s.setAttribute('aria-hidden', k === i ? 'false' : 'true');
+      });
+      dots.forEach((d, k) => d.setAttribute('aria-current', k === i ? 'true' : 'false'));
+    }
+    prev?.addEventListener('click', () => show(i - 1));
+    next?.addEventListener('click', () => show(i + 1));
+    dots.forEach((d, k) => d.addEventListener('click', () => show(k)));
+  }
+</script>
+
 <style>
   .crumb { padding: 22px 0 6px; font-size: 13px; color: var(--shop-ink-soft); }
   .crumb a { color: var(--shop-ink-soft); text-decoration: none; }
@@ -163,7 +218,57 @@ const listSchema = liveRooms.length
   .pm-hero-copy :global(h1 em) { font-style: italic; color: var(--shop-accent); }
   .pm-hero-sub { font-size: 16px; line-height: 1.7; color: var(--shop-ink-soft); margin: 18px 0 0; max-width: 520px; }
   .pm-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 0; }
-  .pm-hero-visual { border-radius: var(--shop-radius-lg); overflow: hidden; box-shadow: 0 24px 60px -30px rgba(42, 37, 32, .5); }
+
+  /* ── Hero carousel ── */
+  .pm-hero-visual { position: relative; aspect-ratio: 4/3; }
+  .pm-slider {
+    position: absolute; inset: 0; border-radius: var(--shop-radius-lg); overflow: hidden;
+    background: var(--shop-bg-card);
+    box-shadow: 0 24px 60px -30px rgba(42, 37, 32, .5);
+  }
+  .pm-slide {
+    position: absolute; inset: 0; opacity: 0; pointer-events: none;
+    transition: opacity .5s ease; text-decoration: none; color: var(--shop-bg);
+  }
+  .pm-slide.active { opacity: 1; pointer-events: auto; }
+  .pm-slide-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .pm-slide-ph {
+    position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 16px;
+    background: repeating-linear-gradient(135deg, #D9CDB6 0 18px, #C9B89C 18px 36px);
+  }
+  .pm-slide-ph span {
+    font-family: var(--shop-sans); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--shop-ink-soft); text-shadow: 0 1px 2px rgba(255,255,255,.3);
+  }
+  /* Lớp phủ tối để chữ caption đọc được */
+  .pm-slide::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(26,20,16,0) 45%, rgba(26,20,16,.6) 100%);
+    pointer-events: none;
+  }
+  .pm-slide-cap { position: absolute; left: 18px; bottom: 16px; z-index: 1; display: flex; flex-direction: column; gap: 2px; }
+  .pm-slide-name { font-family: var(--shop-serif); font-size: 22px; line-height: 1.1; }
+  .pm-slide-name em { font-style: italic; color: var(--shop-accent); }
+  .pm-slide-style { font-size: 12px; opacity: .85; }
+
+  .pm-nav {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 4;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--shop-bg-card); color: var(--shop-ink);
+    border: 1px solid var(--shop-line); cursor: pointer;
+    display: grid; place-items: center;
+    box-shadow: 0 8px 22px -8px rgba(42, 37, 32, .45);
+    transition: background .2s, transform .2s;
+  }
+  .pm-nav:hover { background: var(--shop-ink); color: var(--shop-bg); }
+  .pm-nav.prev { left: -14px; }
+  .pm-nav.next { right: -14px; }
+  .pm-dots { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); z-index: 4; display: flex; gap: 7px; }
+  .pm-dot {
+    width: 8px; height: 8px; border-radius: 50%; padding: 0; cursor: pointer;
+    background: rgba(255,255,255,.55); border: none; transition: background .2s, transform .2s;
+  }
+  .pm-dot[aria-current="true"] { background: var(--shop-bg); transform: scale(1.25); }
 
   /* ── HÌNH DUNG KHÔNG GIAN SỐNG ── */
   .pm-fp { padding: 70px 0 64px; }
@@ -239,6 +344,8 @@ const listSchema = liveRooms.length
   }
   @media (max-width: 620px) {
     .pm-hero { padding: 40px 0 44px; }
+    .pm-nav.prev { left: 8px; }
+    .pm-nav.next { right: 8px; }
     .pm-fp { padding: 50px 0 44px; }
     .pm-gallery { grid-template-columns: 1fr; grid-template-rows: repeat(4, 240px); }
     .pm-card.tall { grid-column: span 1; }

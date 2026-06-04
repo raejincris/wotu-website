@@ -83,7 +83,7 @@ export async function init({ token, showToast, setLoading }) {
       ${field('idx_eyebrow', 'Eyebrow (chữ nhỏ trên tiêu đề)', ih.eyebrow, 'text', 'VD: Phòng mẫu · WOTU')}
       ${field('idx_title', 'Tiêu đề h1', ih.title, 'text', 'Dùng &lt;em&gt; để in nghiêng nhấn mạnh')}
       ${field('idx_sub', 'Mô tả ngắn', ih.sub, 'textarea')}
-      ${imageSlot('hero_image', ih.image ?? '', 'Ảnh phối cảnh (isometric) bên phải hero')}
+      ${imageSlot('hero_image', ih.image ?? '', 'Ảnh phối cảnh mặc định (carousel hero hiện ảnh từng phòng; phòng nào chưa có "Ảnh ô" sẽ dùng ảnh này)')}
       ${field('idx_imageAlt', 'Mô tả ảnh hero (alt)', ih.imageAlt, 'text', 'Cho SEO & trình đọc màn hình')}
       <div class="form-grid-2">
         ${field('idx_cta1Label', 'Nút chính — chữ', ih.cta1Label, 'text', 'VD: Xem các phòng mẫu')}

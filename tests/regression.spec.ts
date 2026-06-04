@@ -929,6 +929,16 @@ test.describe('20 · /phong-mau/ — phòng mẫu', () => {
     await expect(page.locator('a.pm-card[href="/phong-mau/to-am/"]')).toBeAttached();
   });
 
+  test('hero carousel: nút › chuyển slide phòng', async ({ page }) => {
+    await page.goto('/phong-mau/');
+    const slides = page.locator('.pm-slide');
+    await expect(slides).toHaveCount(4);
+    await expect(slides.nth(0)).toHaveClass(/active/);
+    await page.locator('.pm-nav.next').click();
+    await expect(slides.nth(1)).toHaveClass(/active/);
+    await expect(slides.nth(0)).not.toHaveClass(/active/);
+  });
+
   test('chi tiết Tổ Ấm: có isometric hotspot, sơ đồ mặt bằng, 4 sản phẩm', async ({ page }) => {
     await page.goto('/phong-mau/to-am/');
     await expect(page.locator('h1')).toContainText('Tổ Ấm');
