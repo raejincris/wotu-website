@@ -83,6 +83,63 @@ export async function putFile(token, path, yamlString, sha, message) {
   return { commitUrl: data.commit.html_url };
 }
 
+/**
+ * Ghi NHIỀU file text trong MỘT commit (Git Data API) → chỉ 1 lần build CF.
+ * Dùng khi editor lưu nhiều file cùng lúc (vd Phòng mẫu = 2 file).
+ * @param {{path:string, content:string}[]} files
+ * @returns {{ commitUrl: string }}
+ */
+export async function putFiles(token, files, message) {
+  const h = { ...ghHeaders(token), 'Content-Type': 'application/json' };
+  const api = (p) => `${API}/repos/${REPO}/${p}`;
+
+  // 1. ref hiện tại của main → commit sha gốc
+  let res = await fetch(api(`git/ref/heads/${BRANCH}`), { headers: ghHeaders(token) });
+  if (!res.ok) await ghThrow(res);
+  const baseCommitSha = (await res.json()).object.sha;
+
+  // 2. tree sha của commit gốc
+  res = await fetch(api(`git/commits/${baseCommitSha}`), { headers: ghHeaders(token) });
+  if (!res.ok) await ghThrow(res);
+  const baseTreeSha = (await res.json()).tree.sha;
+
+  // 3. tạo blob cho từng file (base64 để an toàn tiếng Việt)
+  const treeItems = [];
+  for (const f of files) {
+    res = await fetch(api('git/blobs'), {
+      method: 'POST', headers: h,
+      body: JSON.stringify({ content: b64Encode(f.content), encoding: 'base64' }),
+    });
+    if (!res.ok) await ghThrow(res);
+    treeItems.push({ path: f.path, mode: '100644', type: 'blob', sha: (await res.json()).sha });
+  }
+
+  // 4. tree mới dựa trên tree gốc
+  res = await fetch(api('git/trees'), {
+    method: 'POST', headers: h,
+    body: JSON.stringify({ base_tree: baseTreeSha, tree: treeItems }),
+  });
+  if (!res.ok) await ghThrow(res);
+  const newTreeSha = (await res.json()).sha;
+
+  // 5. commit mới (1 commit cho tất cả file)
+  res = await fetch(api('git/commits'), {
+    method: 'POST', headers: h,
+    body: JSON.stringify({ message, tree: newTreeSha, parents: [baseCommitSha] }),
+  });
+  if (!res.ok) await ghThrow(res);
+  const newCommit = await res.json();
+
+  // 6. trỏ main vào commit mới
+  res = await fetch(api(`git/refs/heads/${BRANCH}`), {
+    method: 'PATCH', headers: h,
+    body: JSON.stringify({ sha: newCommit.sha, force: false }),
+  });
+  if (!res.ok) await ghThrow(res);
+
+  return { commitUrl: newCommit.html_url };
+}
+
 /** Lấy sha hiện tại của file (null nếu chưa tồn tại) — dùng trước khi ghi đè ảnh. */
 export async function getFileMeta(token, path) {
   const res = await fetch(

@@ -7,7 +7,7 @@
  * Sơ đồ mặt bằng (floorplan.svg) KHÔNG sửa ở đây — giữ nguyên trong YAML (nâng cao).
  */
 
-import { getFile, putFile } from '../github.js';
+import { getFile, putFiles } from '../github.js';
 import { repeatable, rfText, rfArea, rfSelect, bindDirty } from '../lib/repeatable.js';
 import { imageSlot, attachAllImages, uploadPendingImages } from '../lib/imagefield.js';
 
@@ -347,12 +347,14 @@ export async function init({ token, showToast, setLoading }) {
       const idxYaml = yaml().dump(idx, dumpOpts);
       const detYaml = yaml().dump(det, dumpOpts);
 
-      // Lấy sha tươi ngay trước mỗi PUT (putFile tự fetch fresh sha bên trong).
-      const r1 = await putFile(token, FILE_INDEX, idxYaml, idxSha, msgUp);
-      const r2 = await putFile(token, FILE_DETAIL, detYaml, detSha, msgUp);
+      // Gộp 2 file vào 1 commit → chỉ 1 lần build CF (nhanh hơn 2 commit riêng).
+      const { commitUrl } = await putFiles(token, [
+        { path: FILE_INDEX, content: idxYaml },
+        { path: FILE_DETAIL, content: detYaml },
+      ], msgUp);
 
       showToast(
-        `✅ Đã lưu! Website cập nhật trong ~1 phút. <a href="${r2.commitUrl}" target="_blank">Xem commit →</a>`,
+        `✅ Đã lưu! Website cập nhật trong ~1 phút. <a href="${commitUrl}" target="_blank">Xem commit →</a>`,
         'success',
       );
       dirty.reset();
