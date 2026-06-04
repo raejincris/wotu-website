@@ -2,14 +2,27 @@
 # Phòng "live" (soon không bật) sinh trang chi tiết từ DETAIL map trong [slug].astro.
 # Phòng soon: hiện card "Sắp ra mắt", không link, không sinh route.
 hero:
-  eyebrow: Phòng mẫu
+  eyebrow: Phòng mẫu · WOTU
   title: Bước vào căn phòng <em>đã hoàn thiện</em>.
-  sub: Mỗi phòng mẫu là một bố cục thật do đội thiết kế WOTU dựng — xem sơ đồ mặt bằng, phối cảnh 3D và từng món nội thất, rồi mang nguyên cảm hứng ấy về tổ ấm của bạn.
+  sub: Mỗi phòng mẫu là một bố cục thật do đội thiết kế WOTU dựng — xem mặt bằng, phối cảnh 3D và từng món nội thất, rồi mang nguyên cảm hứng ấy về tổ ấm của bạn.
+  image: ""
+  imageAlt: Phối cảnh phòng mẫu WOTU
+  cta1Label: Xem các phòng mẫu
+  cta1Href: "#rooms"
+  cta2Label: Đặt tư vấn 3D
+  cta2Href: /#contact
+floorplan:
+  eyebrow: Mặt bằng bố trí nội thất bởi WOTU
+  heading: Hình dung <em>không gian sống</em>.
+  desc: WOTU cung cấp bản vẽ mặt bằng chi tiết cho từng gói combo, giúp bạn dễ dàng hình dung cách sắp xếp và kích thước nội thất để đảm bảo mọi thứ vừa vặn hoàn hảo cho ngôi nhà của mình.
+  image: ""
+  imageAlt: Bản vẽ mặt bằng căn hộ — WOTU
+  caption: ""
 sections:
   intro:
-    eyebrow: Khám phá
-    heading: Không gian <em>kể chuyện</em>.
-    desc: Chạm vào từng phòng để xem chi tiết sản phẩm, bảng vật liệu và cách WOTU sắp đặt cho vừa vặn một căn nhà thật.
+    eyebrow: Các phòng
+    heading: Chọn một <em>không gian</em>.
+    desc: Mỗi phòng là một bố cục hoàn chỉnh — chạm để xem chi tiết sản phẩm, bảng vật liệu và phối cảnh 3D.
 rooms:
   - slug: to-am
     name: Phòng khách

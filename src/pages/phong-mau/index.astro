@@ -1,18 +1,21 @@
 ---
 /**
  * Trang gallery phòng mẫu — /phong-mau/.
- * Liệt kê các phòng từ phong-mau.yml. Phòng live → card link sang chi tiết;
- * phòng soon → card "Sắp ra mắt" (không link).
+ * Layout: Hero (copy + ảnh isometric) → "Hình dung không gian sống" (ảnh bản vẽ
+ * mặt bằng lớn) → lưới phòng mẫu → CTA. Data: phong-mau.yml.
+ * Ảnh (hero iso + bản vẽ) upload qua admin; chưa có → fallback gradient/placeholder.
  */
 import ShopLayout from '../../layouts/ShopLayout.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
 import SplitWords from '../../components/SplitWords.astro';
+import Placeholder from '../../components/Placeholder.astro';
 import phongMau from '../../data/phong-mau.yml';
 import { jsonLd } from '../../lib/jsonld';
 
 const data = phongMau as any;
 const hero = data.hero ?? {};
+const fp = data.floorplan ?? {};
 const intro = data.sections?.intro ?? {};
 const rooms = (data.rooms ?? []) as any[];
 
@@ -53,47 +56,89 @@ const listSchema = liveRooms.length
     <a href="/">Trang chủ</a> / <span class="here">Phòng mẫu</span>
   </div>
 
-  <main class="container pm">
+  <main class="pm">
+    {/* ===== HERO ===== */}
     <header class="pm-hero shop-reveal">
-      <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">{hero.eyebrow}</span>
-      <SplitWords tag="h1" text={hero.title} base={120} step={55} />
-      {hero.sub && <p class="pm-hero-sub reveal" data-reveal style="--rev-delay: 220ms">{hero.sub}</p>}
+      <div class="container pm-hero-grid">
+        <div class="pm-hero-copy">
+          {hero.eyebrow && <span class="pm-hero-eyebrow" data-hero-item>{hero.eyebrow}</span>}
+          <SplitWords tag="h1" text={hero.title} base={120} step={55} />
+          {hero.sub && <p class="pm-hero-sub" data-hero-item>{hero.sub}</p>}
+          <div class="pm-hero-actions" data-hero-item>
+            {hero.cta1Label && <a class="shop-btn shop-btn-primary" href={hero.cta1Href || '#rooms'}>{hero.cta1Label} <span class="arr">→</span></a>}
+            {hero.cta2Label && <a class="shop-btn shop-btn-ghost" href={hero.cta2Href || '/#contact'}>{hero.cta2Label}</a>}
+          </div>
+        </div>
+        <div class="pm-hero-visual" data-hero-item>
+          <Placeholder label={hero.imageAlt || 'Phối cảnh phòng mẫu'} photo={hero.image || undefined} alt={hero.imageAlt} ratio="4/3" tone="warm" priority />
+        </div>
+      </div>
     </header>
 
-    <section class="pm-gallery shop-reveal-stagger">
-      {rooms.map((r) => {
-        const fullName = `${r.name} ${r.nameEm ?? ''}`.trim();
-        const Tag = (r.soon || !r.href) ? 'div' : 'a';
-        return (
-          <Tag class={`pm-card${r.tall ? ' tall' : ''}${r.soon ? ' soon' : ''}`} href={r.soon ? undefined : r.href}>
-            <div class={`shop-ph ${r.tone ?? 'dark'}`}><span class="shop-ph-label">{r.placeholder}</span></div>
-            {r.photo && <img class="shop-illo" src={r.photo} alt={fullName} loading="lazy" decoding="async" />}
-            <div class="pm-card-top">
-              <span class="pm-style">{r.style}</span>
-              {r.soon && <span class="pm-soon">Sắp ra mắt</span>}
-            </div>
-            <div class="pm-card-foot">
-              <div class="pm-card-name">
-                <span class="pm-name">{r.name} <em>{r.nameEm}</em></span>
-                <span class="pm-area">{r.area}</span>
-              </div>
-              {!r.soon && (
-                <span class="pm-arrow" aria-hidden="true">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
-                </span>
-              )}
-            </div>
-          </Tag>
-        );
-      })}
+    {/* ===== HÌNH DUNG KHÔNG GIAN SỐNG (sơ đồ mặt bằng) ===== */}
+    <section class="pm-fp" id="so-do">
+      <div class="container">
+        <div class="pm-fp-head">
+          {fp.eyebrow && <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">{fp.eyebrow}</span>}
+          <h2 class="reveal" data-reveal style="--rev-delay: 110ms" set:html={fp.heading ?? 'Hình dung <em>không gian sống</em>.'} />
+          {fp.desc && <p class="pm-fp-desc reveal" data-reveal style="--rev-delay: 200ms">{fp.desc}</p>}
+        </div>
+        <figure class="pm-fp-card reveal-img" data-reveal>
+          {fp.image
+            ? <img src={fp.image} alt={fp.imageAlt || 'Bản vẽ mặt bằng — WOTU'} loading="lazy" decoding="async" />
+            : <div class="pm-fp-empty"><span>Bản vẽ mặt bằng đang được cập nhật</span></div>
+          }
+          {fp.caption && <figcaption>{fp.caption}</figcaption>}
+        </figure>
+      </div>
     </section>
 
-    <section class="pm-cta reveal" data-reveal>
-      <div>
-        <h2>Muốn một phòng <em>của riêng bạn</em>?</h2>
-        <p>Gửi mặt bằng căn nhà — WOTU dựng phối cảnh 3D miễn phí và gợi ý combo phù hợp trong 24h.</p>
+    {/* ===== LƯỚI PHÒNG MẪU ===== */}
+    <section class="pm-rooms container" id="rooms">
+      <div class="pm-rooms-head">
+        {intro.eyebrow && <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">{intro.eyebrow}</span>}
+        {intro.heading && <h2 class="reveal" data-reveal style="--rev-delay: 110ms" set:html={intro.heading} />}
+        {intro.desc && <p class="pm-rooms-desc reveal" data-reveal style="--rev-delay: 200ms">{intro.desc}</p>}
       </div>
-      <a class="shop-btn shop-btn-primary" href="/#contact">Đặt tư vấn 3D <span class="arr">→</span></a>
+
+      <div class="pm-gallery shop-reveal-stagger">
+        {rooms.map((r) => {
+          const fullName = `${r.name} ${r.nameEm ?? ''}`.trim();
+          const Tag = (r.soon || !r.href) ? 'div' : 'a';
+          return (
+            <Tag class={`pm-card${r.tall ? ' tall' : ''}${r.soon ? ' soon' : ''}`} href={r.soon ? undefined : r.href}>
+              <div class={`shop-ph ${r.tone ?? 'dark'}`}><span class="shop-ph-label">{r.placeholder}</span></div>
+              {r.photo && <img class="shop-illo" src={r.photo} alt={fullName} loading="lazy" decoding="async" />}
+              <div class="pm-card-top">
+                <span class="pm-style">{r.style}</span>
+                {r.soon && <span class="pm-soon">Sắp ra mắt</span>}
+              </div>
+              <div class="pm-card-foot">
+                <div class="pm-card-name">
+                  <span class="pm-name">{r.name} <em>{r.nameEm}</em></span>
+                  <span class="pm-area">{r.area}</span>
+                </div>
+                {!r.soon && (
+                  <span class="pm-arrow" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                  </span>
+                )}
+              </div>
+            </Tag>
+          );
+        })}
+      </div>
+    </section>
+
+    {/* ===== CTA ===== */}
+    <section class="container">
+      <div class="pm-cta reveal" data-reveal>
+        <div>
+          <h2>Muốn một phòng <em>của riêng bạn</em>?</h2>
+          <p>Gửi mặt bằng căn nhà — WOTU dựng phối cảnh 3D miễn phí và gợi ý combo phù hợp trong 24h.</p>
+        </div>
+        <a class="shop-btn shop-btn-primary" href="/#contact">Đặt tư vấn 3D <span class="arr">→</span></a>
+      </div>
     </section>
   </main>
 
@@ -106,18 +151,50 @@ const listSchema = liveRooms.length
   .crumb a:hover { color: var(--shop-accent); }
   .crumb .here { color: var(--shop-ink); }
 
-  .pm { padding: 20px 0 90px; }
+  .pm { padding: 0 0 90px; }
   .eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--shop-ink-soft); font-weight: 600; display: inline-flex; align-items: center; gap: 10px; }
   .eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; opacity: .6; }
 
-  .pm-hero { max-width: 760px; margin-bottom: 48px; }
-  .pm-hero :global(h1) { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(36px, 6vw, 64px); line-height: 1.02; margin: 14px 0 0; }
-  .pm-hero :global(h1 em) { font-style: italic; color: var(--shop-accent); }
-  .pm-hero-sub { font-size: 16px; line-height: 1.7; color: var(--shop-ink-soft); margin: 20px 0 0; }
+  /* ── HERO ── */
+  .pm-hero { background: var(--shop-bg-soft); padding: 56px 0 64px; margin-bottom: 8px; }
+  .pm-hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
+  .pm-hero-eyebrow { display: inline-block; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--shop-accent-deep); font-weight: 700; }
+  .pm-hero-copy :global(h1) { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(34px, 5.2vw, 60px); line-height: 1.02; margin: 14px 0 0; }
+  .pm-hero-copy :global(h1 em) { font-style: italic; color: var(--shop-accent); }
+  .pm-hero-sub { font-size: 16px; line-height: 1.7; color: var(--shop-ink-soft); margin: 18px 0 0; max-width: 520px; }
+  .pm-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 0; }
+  .pm-hero-visual { border-radius: var(--shop-radius-lg); overflow: hidden; box-shadow: 0 24px 60px -30px rgba(42, 37, 32, .5); }
+
+  /* ── HÌNH DUNG KHÔNG GIAN SỐNG ── */
+  .pm-fp { padding: 70px 0 64px; }
+  .pm-fp-head { text-align: center; max-width: 720px; margin: 0 auto 40px; }
+  .pm-fp-head h2 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(30px, 4.4vw, 50px); line-height: 1.04; margin: 14px 0 0; }
+  .pm-fp-head h2 :global(em) { font-style: italic; color: var(--shop-accent); }
+  .pm-fp-desc { font-size: 15px; line-height: 1.7; color: var(--shop-ink-soft); margin: 18px auto 0; max-width: 600px; }
+  .pm-fp-card {
+    background: var(--shop-bg-card); border: 1px solid var(--shop-line);
+    border-radius: var(--shop-radius-lg); padding: 22px; margin: 0;
+    box-shadow: 0 18px 50px -32px rgba(42, 37, 32, .4);
+  }
+  .pm-fp-card img { display: block; width: 100%; height: auto; border-radius: var(--shop-radius); }
+  .pm-fp-empty {
+    display: grid; place-items: center; aspect-ratio: 16/10;
+    border: 1px dashed var(--shop-line); border-radius: var(--shop-radius);
+    background: repeating-linear-gradient(135deg, var(--shop-bg-soft) 0 16px, var(--shop-bg) 16px 32px);
+    color: var(--shop-ink-soft); font-size: 14px; font-style: italic;
+  }
+  .pm-fp-card figcaption { margin-top: 14px; text-align: center; font-size: 13px; color: var(--shop-ink-soft); font-style: italic; }
+
+  /* ── LƯỚI PHÒNG ── */
+  .pm-rooms { padding-top: 8px; scroll-margin-top: 80px; }
+  .pm-rooms-head { max-width: 640px; margin-bottom: 32px; }
+  .pm-rooms-head h2 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(28px, 4vw, 44px); line-height: 1.04; margin: 12px 0 0; }
+  .pm-rooms-head h2 :global(em) { font-style: italic; color: var(--shop-accent); }
+  .pm-rooms-desc { font-size: 15px; line-height: 1.7; color: var(--shop-ink-soft); margin: 16px 0 0; }
 
   .pm-gallery {
     display: grid; grid-template-columns: 1.4fr 1fr 1fr;
-    grid-template-rows: 300px 300px; gap: 18px;
+    grid-template-rows: 300px 300px; gap: 18px; margin-top: 28px;
   }
   .pm-card {
     position: relative; border-radius: var(--shop-radius-lg); overflow: hidden;
@@ -129,35 +206,23 @@ const listSchema = liveRooms.length
   .pm-card .shop-ph { position: absolute; inset: 0; }
   .pm-card .shop-illo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease, ease); }
   .pm-card:not(.soon):hover .shop-illo { transform: scale(1.06); }
-  /* Lớp phủ tối để chữ đọc được trên ảnh/placeholder. */
   .pm-card::after {
     content: ''; position: absolute; inset: 0; z-index: 1;
     background: linear-gradient(180deg, rgba(26,20,16,.15) 0%, rgba(26,20,16,0) 38%, rgba(26,20,16,.72) 100%);
   }
   .pm-card-top, .pm-card-foot { position: relative; z-index: 2; }
   .pm-card-top { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px; }
-  .pm-style {
-    background: rgba(0,0,0,.4); backdrop-filter: blur(6px);
-    padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
-  }
-  .pm-soon {
-    background: var(--shop-bg); color: var(--shop-ink);
-    padding: 6px 12px; border-radius: 999px; font-size: 11px; font-weight: 700;
-    letter-spacing: .04em;
-  }
-  .pm-card-foot {
-    position: absolute; left: 0; right: 0; bottom: 0;
-    display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;
-    padding: 18px;
-  }
+  .pm-style { background: rgba(0,0,0,.4); backdrop-filter: blur(6px); padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .pm-soon { background: var(--shop-bg); color: var(--shop-ink); padding: 6px 12px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+  .pm-card-foot { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 18px; }
   .pm-name { display: block; font-family: var(--shop-serif); font-size: 24px; line-height: 1.05; }
   .pm-name em { font-style: italic; color: var(--shop-accent); }
   .pm-area { display: block; font-size: 13px; opacity: .8; margin-top: 4px; }
   .pm-arrow { width: 40px; height: 40px; border-radius: 50%; background: var(--shop-bg); color: var(--shop-ink); display: grid; place-items: center; flex: none; transition: transform .25s ease; }
   .pm-card:hover .pm-arrow { transform: translate(2px, -2px); }
   .pm-card.soon { cursor: default; }
-  .pm-card.soon .shop-ph::before { content: ''; }
 
+  /* ── CTA ── */
   .pm-cta {
     display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
     margin-top: 64px; padding: 44px 48px;
@@ -168,10 +233,13 @@ const listSchema = liveRooms.length
   .pm-cta p { margin: 8px 0 0; color: var(--shop-ink-soft); font-size: 15px; max-width: 520px; }
 
   @media (max-width: 1000px) {
+    .pm-hero-grid { grid-template-columns: 1fr; gap: 32px; }
     .pm-gallery { grid-template-columns: 1fr 1fr; grid-template-rows: 260px 260px 260px; }
     .pm-card.tall { grid-row: span 1; grid-column: span 2; }
   }
   @media (max-width: 620px) {
+    .pm-hero { padding: 40px 0 44px; }
+    .pm-fp { padding: 50px 0 44px; }
     .pm-gallery { grid-template-columns: 1fr; grid-template-rows: repeat(4, 240px); }
     .pm-card.tall { grid-column: span 1; }
     .pm-cta { padding: 32px 24px; }

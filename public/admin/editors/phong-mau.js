@@ -70,18 +70,43 @@ export async function init({ token, showToast, setLoading }) {
   );
 
   const ih = idx.hero || {};
+  const ifp = idx.floorplan || {};
   const rooms = idx.rooms || [];
   const dh = det.hero || {};
   const iso = det.iso || {};
   const palette = det.palette || {};
 
   body.innerHTML = `
-    <!-- ── DANH SÁCH PHÒNG (gallery) ── -->
+    <!-- ── HERO ── -->
     <div class="form-card">
-      <p class="form-card-title">Trang danh sách — /phong-mau/</p>
-      ${field('idx_title', 'Tiêu đề trang', ih.title, 'text', 'Dùng &lt;em&gt; để in nghiêng nhấn mạnh')}
+      <p class="form-card-title">Hero — đầu trang /phong-mau/</p>
+      ${field('idx_eyebrow', 'Eyebrow (chữ nhỏ trên tiêu đề)', ih.eyebrow, 'text', 'VD: Phòng mẫu · WOTU')}
+      ${field('idx_title', 'Tiêu đề h1', ih.title, 'text', 'Dùng &lt;em&gt; để in nghiêng nhấn mạnh')}
       ${field('idx_sub', 'Mô tả ngắn', ih.sub, 'textarea')}
+      ${imageSlot('hero_image', ih.image ?? '', 'Ảnh phối cảnh (isometric) bên phải hero')}
+      ${field('idx_imageAlt', 'Mô tả ảnh hero (alt)', ih.imageAlt, 'text', 'Cho SEO & trình đọc màn hình')}
+      <div class="form-grid-2">
+        ${field('idx_cta1Label', 'Nút chính — chữ', ih.cta1Label, 'text', 'VD: Xem các phòng mẫu')}
+        ${field('idx_cta1Href', 'Nút chính — link', ih.cta1Href, 'text', 'VD: #rooms hoặc /combo/')}
+      </div>
+      <div class="form-grid-2">
+        ${field('idx_cta2Label', 'Nút phụ — chữ', ih.cta2Label, 'text', 'VD: Đặt tư vấn 3D')}
+        ${field('idx_cta2Href', 'Nút phụ — link', ih.cta2Href, 'text', 'VD: /#contact')}
+      </div>
     </div>
+
+    <!-- ── SƠ ĐỒ MẶT BẰNG (Hình dung không gian sống) ── -->
+    <div class="form-card">
+      <p class="form-card-title">Sơ đồ mặt bằng — "Hình dung không gian sống"</p>
+      ${field('fp_eyebrow', 'Eyebrow', ifp.eyebrow, 'text', 'VD: Mặt bằng bố trí nội thất bởi WOTU')}
+      ${field('fp_heading', 'Tiêu đề', ifp.heading, 'text', 'Dùng &lt;em&gt; để in nghiêng')}
+      ${field('fp_desc', 'Mô tả', ifp.desc, 'textarea')}
+      ${imageSlot('floor_image', ifp.image ?? '', 'Ảnh bản vẽ mặt bằng (upload bản vẽ thật — để trống → ô minh hoạ)')}
+      ${field('fp_imageAlt', 'Mô tả ảnh bản vẽ (alt)', ifp.imageAlt, 'text')}
+      ${field('fp_caption', 'Chú thích dưới bản vẽ', ifp.caption, 'text')}
+    </div>
+
+    <!-- ── DANH SÁCH PHÒNG (gallery) ── -->
 
     <div class="form-card">
       <p class="form-card-title">Các phòng trên lưới</p>
@@ -244,7 +269,29 @@ export async function init({ token, showToast, setLoading }) {
       const g = (id) => body.querySelector(`#${id}`)?.value.trim() ?? '';
 
       // ── phong-mau.yml ──
-      idx.hero = { ...(idx.hero || {}), title: g('idx_title'), sub: g('idx_sub') };
+      const heroImg  = body.querySelector('.img-slot input[data-field="hero_image"]')?.value.trim() ?? '';
+      const floorImg = body.querySelector('.img-slot input[data-field="floor_image"]')?.value.trim() ?? '';
+      idx.hero = {
+        ...(idx.hero || {}),
+        eyebrow: g('idx_eyebrow'),
+        title: g('idx_title'),
+        sub: g('idx_sub'),
+        image: heroImg,
+        imageAlt: g('idx_imageAlt'),
+        cta1Label: g('idx_cta1Label'),
+        cta1Href: g('idx_cta1Href'),
+        cta2Label: g('idx_cta2Label'),
+        cta2Href: g('idx_cta2Href'),
+      };
+      idx.floorplan = {
+        ...(idx.floorplan || {}),
+        eyebrow: g('fp_eyebrow'),
+        heading: g('fp_heading'),
+        desc: g('fp_desc'),
+        image: floorImg,
+        imageAlt: g('fp_imageAlt'),
+        caption: g('fp_caption'),
+      };
       idx.rooms = repRooms.collect((f, orig) => {
         const soon = f.soon === 'yes';
         const slug = orig.slug || '';
