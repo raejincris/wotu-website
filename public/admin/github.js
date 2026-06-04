@@ -6,6 +6,10 @@
  * thay vì btoa/atob thuần (btoa crash với ký tự ngoài Latin-1).
  */
 
+import {
+  setTextDraft, setBinaryDraft, setDeleteDraft, getDraft, listDrafts, clearDrafts,
+} from './lib/drafts.js';
+
 const REPO = 'raejincris/wotu-website';
 const BRANCH = 'main';
 const API = 'https://api.github.com';
@@ -49,8 +53,15 @@ async function ghThrow(res) {
   throw new Error(MAP[res.status] || err.message || `Lỗi GitHub (HTTP ${res.status})`);
 }
 
-/** Đọc file từ repo → { yamlString, sha } */
+/**
+ * Đọc file từ repo → { yamlString, sha }.
+ * Draft-aware: nếu có bản nháp text cho path → trả nội dung nháp (để editor
+ * hiện đúng thay đổi chưa đăng khi mở lại). sha='draft' (không dùng khi ghi nháp).
+ */
 export async function getFile(token, path) {
+  const d = getDraft(path);
+  if (d && d.type === 'text') return { yamlString: d.content, sha: 'draft' };
+
   const res = await fetch(
     `${API}/repos/${REPO}/contents/${path}?ref=${BRANCH}`,
     { headers: ghHeaders(token) },
@@ -64,65 +75,60 @@ export async function getFile(token, path) {
 }
 
 /**
- * Ghi file lên repo (tạo commit).
- * @returns {{ commitUrl: string }}
+ * "Lưu" file → ghi vào hàng đợi NHÁP (chưa lên web). Đăng sau qua publishDrafts.
+ * @returns {{ commitUrl: string, draft: boolean }}
  */
-export async function putFile(token, path, yamlString, sha, message) {
-  const res = await fetch(`${API}/repos/${REPO}/contents/${path}`, {
-    method: 'PUT',
-    headers: { ...ghHeaders(token), 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message,
-      content: b64Encode(yamlString),
-      sha,
-      branch: BRANCH,
-    }),
-  });
-  if (!res.ok) await ghThrow(res);
-  const data = await res.json();
-  return { commitUrl: data.commit.html_url };
+export async function putFile(token, path, yamlString, _sha, _message) {
+  setTextDraft(path, yamlString);
+  return { commitUrl: '', draft: true };
 }
 
 /**
- * Ghi NHIỀU file text trong MỘT commit (Git Data API) → chỉ 1 lần build CF.
- * Dùng khi editor lưu nhiều file cùng lúc (vd Phòng mẫu = 2 file).
+ * "Lưu" nhiều file text → tất cả vào hàng đợi NHÁP.
  * @param {{path:string, content:string}[]} files
- * @returns {{ commitUrl: string }}
+ * @returns {{ commitUrl: string, draft: boolean }}
  */
-export async function putFiles(token, files, message) {
+export async function putFiles(token, files, _message) {
+  files.forEach((f) => setTextDraft(f.path, f.content));
+  return { commitUrl: '', draft: true };
+}
+
+/**
+ * Commit NHIỀU thay đổi (text/binary/xoá) trong MỘT commit (Git Data API)
+ * → chỉ 1 lần build CF. Dùng bởi publishDrafts.
+ * @param {{path:string, base64?:string, delete?:boolean}[]} items
+ */
+async function _commitItems(token, items, message) {
   const h = { ...ghHeaders(token), 'Content-Type': 'application/json' };
   const api = (p) => `${API}/repos/${REPO}/${p}`;
 
-  // 1. ref hiện tại của main → commit sha gốc
+  // 1. ref + commit gốc → tree gốc
   let res = await fetch(api(`git/ref/heads/${BRANCH}`), { headers: ghHeaders(token) });
   if (!res.ok) await ghThrow(res);
   const baseCommitSha = (await res.json()).object.sha;
-
-  // 2. tree sha của commit gốc
   res = await fetch(api(`git/commits/${baseCommitSha}`), { headers: ghHeaders(token) });
   if (!res.ok) await ghThrow(res);
   const baseTreeSha = (await res.json()).tree.sha;
 
-  // 3. tạo blob cho từng file (base64 để an toàn tiếng Việt)
-  const treeItems = [];
-  for (const f of files) {
+  // 2. tạo blob + dựng tree mới (sha:null = xoá file)
+  const tree = [];
+  for (const it of items) {
+    if (it.delete) { tree.push({ path: it.path, mode: '100644', type: 'blob', sha: null }); continue; }
     res = await fetch(api('git/blobs'), {
       method: 'POST', headers: h,
-      body: JSON.stringify({ content: b64Encode(f.content), encoding: 'base64' }),
+      body: JSON.stringify({ content: it.base64, encoding: 'base64' }),
     });
     if (!res.ok) await ghThrow(res);
-    treeItems.push({ path: f.path, mode: '100644', type: 'blob', sha: (await res.json()).sha });
+    tree.push({ path: it.path, mode: '100644', type: 'blob', sha: (await res.json()).sha });
   }
 
-  // 4. tree mới dựa trên tree gốc
   res = await fetch(api('git/trees'), {
     method: 'POST', headers: h,
-    body: JSON.stringify({ base_tree: baseTreeSha, tree: treeItems }),
+    body: JSON.stringify({ base_tree: baseTreeSha, tree }),
   });
   if (!res.ok) await ghThrow(res);
   const newTreeSha = (await res.json()).sha;
 
-  // 5. commit mới (1 commit cho tất cả file)
   res = await fetch(api('git/commits'), {
     method: 'POST', headers: h,
     body: JSON.stringify({ message, tree: newTreeSha, parents: [baseCommitSha] }),
@@ -130,7 +136,6 @@ export async function putFiles(token, files, message) {
   if (!res.ok) await ghThrow(res);
   const newCommit = await res.json();
 
-  // 6. trỏ main vào commit mới
   res = await fetch(api(`git/refs/heads/${BRANCH}`), {
     method: 'PATCH', headers: h,
     body: JSON.stringify({ sha: newCommit.sha, force: false }),
@@ -139,6 +144,27 @@ export async function putFiles(token, files, message) {
 
   return { commitUrl: newCommit.html_url };
 }
+
+/**
+ * ĐĂNG tất cả nháp đang chờ lên web — gom thành 1 commit (1 build CF).
+ * @returns {{ commitUrl: string, count: number } | { none: true }}
+ */
+export async function publishDrafts(token, message) {
+  const drafts = listDrafts();
+  if (!drafts.length) return { none: true };
+
+  const items = drafts.map((d) => {
+    if (d.type === 'delete') return { path: d.path, delete: true };
+    if (d.type === 'binary') return { path: d.path, base64: d.content };
+    return { path: d.path, base64: b64Encode(d.content) }; // text → utf8 base64
+  });
+
+  const { commitUrl } = await _commitItems(token, items, message);
+  clearDrafts();
+  return { commitUrl, count: drafts.length };
+}
+
+export { draftCount, listDrafts, clearDrafts } from './lib/drafts.js';
 
 /** Lấy sha hiện tại của file (null nếu chưa tồn tại) — dùng trước khi ghi đè ảnh. */
 export async function getFileMeta(token, path) {
@@ -157,21 +183,9 @@ export async function getFileMeta(token, path) {
  * (KHÔNG qua b64Encode — hàm đó encode text UTF-8 sẽ làm hỏng binary).
  * @param {string} base64 - phần base64 sau dấu phẩy của dataURL
  */
-export async function putBinaryFile(token, path, base64, sha, message) {
-  const cleanPath = encodeURIComponent(path).replace(/%2F/g, '/');
-  const res = await fetch(`${API}/repos/${REPO}/contents/${cleanPath}`, {
-    method: 'PUT',
-    headers: { ...ghHeaders(token), 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message,
-      content: base64,
-      ...(sha ? { sha } : {}),
-      branch: BRANCH,
-    }),
-  });
-  if (!res.ok) await ghThrow(res);
-  const data = await res.json();
-  return { commitUrl: data.commit.html_url, path };
+export async function putBinaryFile(token, path, base64, _sha, _message) {
+  setBinaryDraft(path, base64);
+  return { commitUrl: '', path, draft: true };
 }
 
 /**
@@ -191,17 +205,10 @@ export async function listDir(token, path) {
   return data.map((it) => ({ name: it.name, path: it.path, sha: it.sha, type: it.type }));
 }
 
-/** Xoá 1 file khỏi repo (tạo commit). @returns {{ commitUrl: string }} */
-export async function deleteFile(token, path, sha, message) {
-  const cleanPath = encodeURIComponent(path).replace(/%2F/g, '/');
-  const res = await fetch(`${API}/repos/${REPO}/contents/${cleanPath}`, {
-    method: 'DELETE',
-    headers: { ...ghHeaders(token), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message, sha, branch: BRANCH }),
-  });
-  if (!res.ok) await ghThrow(res);
-  const data = await res.json();
-  return { commitUrl: data.commit.html_url };
+/** "Xoá" 1 file → ghi nháp xoá (chỉ thực thi khi Đăng). @returns {{ commitUrl, draft }} */
+export async function deleteFile(token, path, _sha, _message) {
+  setDeleteDraft(path);
+  return { commitUrl: '', draft: true };
 }
 
 /** Lấy thông tin user hiện tại */

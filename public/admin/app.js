@@ -5,7 +5,8 @@
  */
 
 import { getSession, clearSession, openAuthPopup } from './auth.js';
-import { getCommits, getFileLastCommit } from './github.js';
+import { getCommits, getFileLastCommit, publishDrafts } from './github.js';
+import { draftCount } from './lib/drafts.js';
 import * as previewBus from './lib/preview-bus.js';
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
@@ -17,6 +18,16 @@ export function escHtml(s) {
 }
 
 export function showToast(html, type = 'info', ms = 6000) {
+  // Chế độ Lưu nháp: viết lại thông báo "đã lưu → web cập nhật ~1 phút" (cũ của
+  // từng editor) thành thông điệp nháp + bỏ link "Xem commit" (chưa có commit).
+  // Chỉ áp cho toast lưu của editor (chứa "Đã lưu! Website…"), KHÔNG đụng toast Đăng.
+  html = String(html);
+  if (/Đã lưu!\s*Website/i.test(html)) {
+    html = html
+      .replace(/Đã lưu!\s*Website[^<]*/i, 'Đã lưu nháp — bấm “Đăng lên web” để xuất bản. ')
+      .replace(/<a\b[^>]*>\s*Xem commit[^<]*<\/a>/i, '');
+  }
+
   const c = document.getElementById('toast-container');
   const t = document.createElement('div');
   t.className = `toast ${type}`;
@@ -145,6 +156,65 @@ function setupPreview() {
       b.classList.add('active');
       wrap.classList.toggle('mobile', b.dataset.w === 'mobile');
     });
+  });
+}
+
+// ─── Publish (Đăng lên web) ─────────────────────────────────────────────────────
+
+function updatePublishUI() {
+  const btn = document.getElementById('btn-publish');
+  if (!btn) return;
+  const n = draftCount();
+  const badge = document.getElementById('publish-count');
+  if (badge) { badge.textContent = String(n); badge.hidden = n === 0; }
+  btn.hidden = n === 0;
+}
+
+function setupPublish() {
+  const btn = document.getElementById('btn-publish');
+  if (!btn) return;
+  window.addEventListener('wotu-drafts-changed', updatePublishUI);
+  updatePublishUI();
+
+  btn.addEventListener('click', async () => {
+    const n = draftCount();
+    if (!n) return;
+    if (!confirm(`Đăng ${n} thay đổi lên website?\nWebsite sẽ tự cập nhật sau ~1–2 phút.`)) return;
+    const session = getSession();
+    if (!session) return;
+    setLoading(true);
+    btn.disabled = true;
+    try {
+      const now = new Date();
+      const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} ${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}`;
+      const r = await publishDrafts(session.token, `quan-tri: đăng ${n} thay đổi — ${ts}`);
+      if (r.none) { showToast('Không có thay đổi nào để đăng.', 'info'); return; }
+      showToast(
+        `✅ Đã đăng ${r.count} thay đổi! Website cập nhật sau ~1–2 phút. <a href="${r.commitUrl}" target="_blank">Xem commit →</a>`,
+        'success',
+      );
+      updatePublishUI();
+      // Tải lại để đọc nội dung đã đăng (nháp đã xoá).
+      if (location.hash && location.hash !== '#dashboard' && location.hash !== '#') navigate();
+      else loadDashboard(session.token);
+    } catch (e) {
+      const msg = e.message === 'FILE_CONFLICT'
+        ? 'Có thay đổi mới trên web — tải lại trang rồi Đăng lại.'
+        : e.message;
+      showToast(`❌ Không thể đăng: ${escHtml(msg)}`, 'error');
+    } finally {
+      setLoading(false);
+      btn.disabled = false;
+    }
+  });
+}
+
+/** Đổi nhãn nút Lưu của editor sang "Lưu nháp" (chế độ draft). */
+function relabelSaveButtons() {
+  document.querySelectorAll('.editor-footer button[id^="save-"]').forEach((b) => {
+    if (/lưu/i.test(b.textContent) && !/nháp/i.test(b.textContent)) {
+      b.innerHTML = '💾 Lưu nháp';
+    }
   });
 }
 
@@ -419,7 +489,9 @@ async function navigate() {
   if (editorSrc) {
     try {
       const { init } = await import(editorSrc);
-      init({ token: session.token, showToast, setLoading });
+      await init({ token: session.token, showToast, setLoading });
+      relabelSaveButtons();
+      updatePublishUI();
     } catch (e) {
       const bodyId = `editor-${hash.replace('-', '')}-body`
         .replace('shopHome', 'shop-home')
@@ -439,6 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   setupSidebar();
   setupPreview();
+  setupPublish();
 
   // Sidebar link click → dirty guard
   document.addEventListener('click', (e) => {
