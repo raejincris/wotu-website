@@ -1,6 +1,3 @@
-# Chi tiết phòng mẫu "Tổ Ấm" (phòng khách). Seed từ combo Tổ Ấm.
-# Mỗi section optional — template [slug].astro tự ẩn khi data rỗng.
-# Khi có ảnh thật: bỏ ảnh vào public/uploads/phong-mau/ rồi điền iso.image + chỉnh x/y hotspot.
 hero:
   title: Phòng khách
   titleEm: Tổ Ấm
@@ -11,31 +8,27 @@ hero:
   badges:
     - 4 món · combo Tổ Ấm
     - ★ Bestseller phòng khách
-
-# Phối cảnh isometric: ảnh chính + hotspot. iso.image rỗng → fallback placeholder gradient.
 iso:
   image: ""
   alt: Phối cảnh isometric phòng khách Tổ Ấm — WOTU
   caption: Phối cảnh 3D — chạm vào từng điểm để xem chi tiết sản phẩm.
   hotspots:
     - x: 42
-      y: 64
+      "y": 64
       productId: p-sofa-may-3
       label: Sofa văng Mây
     - x: 53
-      y: 55
+      "y": 55
       productId: p-ban-tra-nang-mai
       label: Bàn trà Nắng Mai
     - x: 31
-      y: 36
+      "y": 36
       productId: p-ke-tv-an
       label: Kệ TV An
     - x: 58
-      y: 73
+      "y": 73
       productId: p-tham-soi
       label: Thảm dệt tay
-
-# Sơ đồ mặt bằng 2D — tái dùng SVG .dim-svg của combo Tổ Ấm.
 floorplan:
   caption: Sơ đồ bố trí điển hình cho phòng khách căn hộ 2PN — bạn có thể gửi mặt bằng để WOTU dựng riêng.
   heading: Bố trí trên <em>16–22 m²</em>.
@@ -71,8 +64,6 @@ floorplan:
     - title: Lối đi tối thiểu
       sub: 75 cm giữa sofa và bàn
       kind: line
-
-# Bảng vật liệu / tông màu (moodboard).
 palette:
   heading: Bảng vật liệu & tông màu
   desc: "Bốn chất liệu nền của phòng — chọn theo nguyên tắc Japandi: gỗ ấm, vải mộc, tông trung tính."
@@ -89,8 +80,6 @@ palette:
     - name: Tường nền kem
       note: Sơn mịn, phản sáng dịu
       style: linear-gradient(135deg,#F4ECDD,#E2D5BF)
-
-# Sản phẩm trong phòng — chỉ tham chiếu id (resolve từ shop-products.yml).
 products:
   - id: p-sofa-may-3
     role: Trung tâm phòng khách
@@ -100,7 +89,6 @@ products:
     role: Lưu trữ & TV
   - id: p-tham-soi
     role: Nền ấm dưới chân
-
 cta:
   heading: Thích phòng này? <em>Dựng riêng cho nhà bạn.</em>
   desc: WOTU khảo sát không gian thật, dựng phối cảnh 3D miễn phí và báo giá trọn gói trong 24h.
