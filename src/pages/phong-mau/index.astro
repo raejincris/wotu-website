@@ -1,0 +1,179 @@
+---
+/**
+ * Trang gallery phòng mẫu — /phong-mau/.
+ * Liệt kê các phòng từ phong-mau.yml. Phòng live → card link sang chi tiết;
+ * phòng soon → card "Sắp ra mắt" (không link).
+ */
+import ShopLayout from '../../layouts/ShopLayout.astro';
+import Nav from '../../components/shop/Nav.astro';
+import Footer from '../../components/shop/Footer.astro';
+import SplitWords from '../../components/SplitWords.astro';
+import phongMau from '../../data/phong-mau.yml';
+import { jsonLd } from '../../lib/jsonld';
+
+const data = phongMau as any;
+const hero = data.hero ?? {};
+const intro = data.sections?.intro ?? {};
+const rooms = (data.rooms ?? []) as any[];
+
+const SITE_URL = 'https://www.wotu.vn';
+const PAGE_URL = `${SITE_URL}/phong-mau/`;
+const desc = 'Khám phá phòng mẫu WOTU — sơ đồ mặt bằng, phối cảnh 3D và chi tiết từng món nội thất. Phòng khách, phòng ngủ, bếp & phòng ăn được dựng sẵn để bạn lấy cảm hứng.';
+
+const liveRooms = rooms.filter((r) => !r.soon && r.href);
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: SITE_URL + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Phòng mẫu', item: PAGE_URL },
+  ],
+};
+const listSchema = liveRooms.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      itemListElement: liveRooms.map((r, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: `${r.name} ${r.nameEm ?? ''}`.trim(),
+        url: SITE_URL + r.href,
+      })),
+    }
+  : null;
+---
+<ShopLayout title="Phòng mẫu — Khám phá không gian WOTU" description={desc}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
+    {listSchema && <script type="application/ld+json" set:html={jsonLd(listSchema)} />}
+  </Fragment>
+  <Nav active="Phòng mẫu" />
+
+  <div class="container crumb">
+    <a href="/">Trang chủ</a> / <span class="here">Phòng mẫu</span>
+  </div>
+
+  <main class="container pm">
+    <header class="pm-hero shop-reveal">
+      <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">{hero.eyebrow}</span>
+      <SplitWords tag="h1" text={hero.title} base={120} step={55} />
+      {hero.sub && <p class="pm-hero-sub reveal" data-reveal style="--rev-delay: 220ms">{hero.sub}</p>}
+    </header>
+
+    <section class="pm-gallery shop-reveal-stagger">
+      {rooms.map((r) => {
+        const fullName = `${r.name} ${r.nameEm ?? ''}`.trim();
+        const Tag = (r.soon || !r.href) ? 'div' : 'a';
+        return (
+          <Tag class={`pm-card${r.tall ? ' tall' : ''}${r.soon ? ' soon' : ''}`} href={r.soon ? undefined : r.href}>
+            <div class={`shop-ph ${r.tone ?? 'dark'}`}><span class="shop-ph-label">{r.placeholder}</span></div>
+            {r.photo && <img class="shop-illo" src={r.photo} alt={fullName} loading="lazy" decoding="async" />}
+            <div class="pm-card-top">
+              <span class="pm-style">{r.style}</span>
+              {r.soon && <span class="pm-soon">Sắp ra mắt</span>}
+            </div>
+            <div class="pm-card-foot">
+              <div class="pm-card-name">
+                <span class="pm-name">{r.name} <em>{r.nameEm}</em></span>
+                <span class="pm-area">{r.area}</span>
+              </div>
+              {!r.soon && (
+                <span class="pm-arrow" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                </span>
+              )}
+            </div>
+          </Tag>
+        );
+      })}
+    </section>
+
+    <section class="pm-cta reveal" data-reveal>
+      <div>
+        <h2>Muốn một phòng <em>của riêng bạn</em>?</h2>
+        <p>Gửi mặt bằng căn nhà — WOTU dựng phối cảnh 3D miễn phí và gợi ý combo phù hợp trong 24h.</p>
+      </div>
+      <a class="shop-btn shop-btn-primary" href="/#contact">Đặt tư vấn 3D <span class="arr">→</span></a>
+    </section>
+  </main>
+
+  <Footer />
+</ShopLayout>
+
+<style>
+  .crumb { padding: 22px 0 6px; font-size: 13px; color: var(--shop-ink-soft); }
+  .crumb a { color: var(--shop-ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--shop-accent); }
+  .crumb .here { color: var(--shop-ink); }
+
+  .pm { padding: 20px 0 90px; }
+  .eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--shop-ink-soft); font-weight: 600; display: inline-flex; align-items: center; gap: 10px; }
+  .eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; opacity: .6; }
+
+  .pm-hero { max-width: 760px; margin-bottom: 48px; }
+  .pm-hero :global(h1) { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(36px, 6vw, 64px); line-height: 1.02; margin: 14px 0 0; }
+  .pm-hero :global(h1 em) { font-style: italic; color: var(--shop-accent); }
+  .pm-hero-sub { font-size: 16px; line-height: 1.7; color: var(--shop-ink-soft); margin: 20px 0 0; }
+
+  .pm-gallery {
+    display: grid; grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-rows: 300px 300px; gap: 18px;
+  }
+  .pm-card {
+    position: relative; border-radius: var(--shop-radius-lg); overflow: hidden;
+    background: var(--shop-ink); color: var(--shop-bg);
+    text-decoration: none; display: block;
+    box-shadow: 0 16px 40px -26px rgba(42, 37, 32, .5);
+  }
+  .pm-card.tall { grid-row: span 2; }
+  .pm-card .shop-ph { position: absolute; inset: 0; }
+  .pm-card .shop-illo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease, ease); }
+  .pm-card:not(.soon):hover .shop-illo { transform: scale(1.06); }
+  /* Lớp phủ tối để chữ đọc được trên ảnh/placeholder. */
+  .pm-card::after {
+    content: ''; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(180deg, rgba(26,20,16,.15) 0%, rgba(26,20,16,0) 38%, rgba(26,20,16,.72) 100%);
+  }
+  .pm-card-top, .pm-card-foot { position: relative; z-index: 2; }
+  .pm-card-top { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px; }
+  .pm-style {
+    background: rgba(0,0,0,.4); backdrop-filter: blur(6px);
+    padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
+  }
+  .pm-soon {
+    background: var(--shop-bg); color: var(--shop-ink);
+    padding: 6px 12px; border-radius: 999px; font-size: 11px; font-weight: 700;
+    letter-spacing: .04em;
+  }
+  .pm-card-foot {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;
+    padding: 18px;
+  }
+  .pm-name { display: block; font-family: var(--shop-serif); font-size: 24px; line-height: 1.05; }
+  .pm-name em { font-style: italic; color: var(--shop-accent); }
+  .pm-area { display: block; font-size: 13px; opacity: .8; margin-top: 4px; }
+  .pm-arrow { width: 40px; height: 40px; border-radius: 50%; background: var(--shop-bg); color: var(--shop-ink); display: grid; place-items: center; flex: none; transition: transform .25s ease; }
+  .pm-card:hover .pm-arrow { transform: translate(2px, -2px); }
+  .pm-card.soon { cursor: default; }
+  .pm-card.soon .shop-ph::before { content: ''; }
+
+  .pm-cta {
+    display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
+    margin-top: 64px; padding: 44px 48px;
+    background: var(--shop-bg-soft); border-radius: var(--shop-radius-xl);
+  }
+  .pm-cta h2 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(26px, 3.6vw, 38px); margin: 0; }
+  .pm-cta h2 em { font-style: italic; color: var(--shop-accent); }
+  .pm-cta p { margin: 8px 0 0; color: var(--shop-ink-soft); font-size: 15px; max-width: 520px; }
+
+  @media (max-width: 1000px) {
+    .pm-gallery { grid-template-columns: 1fr 1fr; grid-template-rows: 260px 260px 260px; }
+    .pm-card.tall { grid-row: span 1; grid-column: span 2; }
+  }
+  @media (max-width: 620px) {
+    .pm-gallery { grid-template-columns: 1fr; grid-template-rows: repeat(4, 240px); }
+    .pm-card.tall { grid-column: span 1; }
+    .pm-cta { padding: 32px 24px; }
+  }
+</style>

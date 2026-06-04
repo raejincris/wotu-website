@@ -1,0 +1,214 @@
+---
+/**
+ * Phối cảnh isometric phòng mẫu + hotspot tương tác.
+ * - iso.image có → render <img>; rỗng → Placeholder gradient fallback (hotspot vẫn hoạt động).
+ * - Mỗi hotspot: chấm pulse định vị theo % (x/y) + popover mini-card sản phẩm (ẩn sẵn).
+ * - Tương tác (toggle popover + thêm giỏ) trong <script> dưới — CSP-safe (bundle qua Vite).
+ */
+import Placeholder from '../Placeholder.astro';
+
+interface Hotspot { x: number; y: number; productId: string; label?: string; }
+interface ResolvedProduct {
+  id: string; fullName: string; cat?: string;
+  price?: string; priceOld?: string; priceNum?: number;
+  href: string; illo: string;
+}
+interface Props {
+  iso: { image?: string; alt?: string; caption?: string; hotspots?: Hotspot[] };
+  byId: Record<string, ResolvedProduct>;
+}
+
+const { iso, byId } = Astro.props;
+const hotspots = (iso.hotspots ?? []).filter((h) => byId[h.productId]);
+const hasImg = !!iso.image;
+---
+<figure class="iso-figure">
+  <div class="iso-stage" data-iso-stage>
+    {hasImg ? (
+      <img class="iso-img" src={iso.image} alt={iso.alt ?? 'Phối cảnh phòng mẫu'} loading="lazy" decoding="async" />
+    ) : (
+      <Placeholder label={iso.alt ?? 'Phối cảnh 3D đang được dựng'} ratio="4/3" tone="warm" />
+    )}
+
+    {hotspots.map((h, i) => {
+      const p = byId[h.productId];
+      return (
+        <Fragment>
+          <button
+            class="iso-dot"
+            type="button"
+            data-hotspot={i}
+            aria-expanded="false"
+            aria-label={`Xem ${p.fullName}`}
+            style={`left:${h.x}%;top:${h.y}%`}
+          >
+            <span class="iso-dot-core">{i + 1}</span>
+            <span class="iso-dot-pulse" aria-hidden="true"></span>
+          </button>
+
+          <div class="iso-pop" data-pop={i} style={`left:${h.x}%;top:${h.y}%`} hidden>
+            <a class="iso-pop-media" href={p.href} aria-label={p.fullName}>
+              <div class="iso-pop-imgwrap">
+                <img src={p.illo} alt={p.fullName} loading="lazy" decoding="async" />
+              </div>
+            </a>
+            <div class="iso-pop-body">
+              {p.cat && <div class="iso-pop-cat">{p.cat}</div>}
+              <a class="iso-pop-name" href={p.href}>{p.fullName}</a>
+              <div class="iso-pop-price">
+                {p.priceOld && <s>{p.priceOld}</s>}
+                <strong>{p.price}</strong>
+              </div>
+              <div class="iso-pop-actions">
+                <a class="shop-btn shop-btn-outline" href={p.href}>Xem chi tiết</a>
+                <button
+                  class="shop-btn shop-btn-primary"
+                  type="button"
+                  data-add
+                  data-id={p.id}
+                  data-name={p.fullName}
+                  data-price={p.priceNum ?? 0}
+                >+ Giỏ</button>
+              </div>
+            </div>
+          </div>
+        </Fragment>
+      );
+    })}
+  </div>
+  {iso.caption && <figcaption class="iso-caption">{iso.caption}</figcaption>}
+</figure>
+
+<script>
+  import { addToCart, toast } from '../../lib/shop-store';
+
+  const stage = document.querySelector<HTMLElement>('[data-iso-stage]');
+  if (stage) {
+    const dots = Array.from(stage.querySelectorAll<HTMLElement>('[data-hotspot]'));
+    const pops = Array.from(stage.querySelectorAll<HTMLElement>('[data-pop]'));
+
+    function closeAll() {
+      pops.forEach((p) => { p.hidden = true; });
+      dots.forEach((d) => d.setAttribute('aria-expanded', 'false'));
+    }
+
+    dots.forEach((d) => {
+      d.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const i = d.getAttribute('data-hotspot');
+        const pop = stage.querySelector<HTMLElement>(`[data-pop="${i}"]`);
+        const isOpen = !!pop && !pop.hidden;
+        closeAll();
+        if (pop && !isOpen) {
+          pop.hidden = false;
+          d.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // Click trong popover không đóng (trừ khi là link điều hướng).
+    pops.forEach((p) => p.addEventListener('click', (e) => e.stopPropagation()));
+
+    stage.querySelectorAll<HTMLElement>('[data-add]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        addToCart({
+          id: btn.dataset.id ?? '',
+          name: btn.dataset.name ?? 'Sản phẩm',
+          price: Number(btn.dataset.price ?? 0),
+        });
+        toast(`✓ Đã thêm "${btn.dataset.name}" vào giỏ`);
+        (window as any).__wotuOpenCart?.();
+      });
+    });
+
+    document.addEventListener('click', closeAll);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); });
+  }
+</script>
+
+<style>
+  .iso-figure { margin: 0; }
+  .iso-stage {
+    position: relative;
+    border-radius: var(--shop-radius-lg);
+    overflow: visible;
+    background: var(--shop-bg-soft);
+    box-shadow: 0 18px 50px -28px rgba(42, 37, 32, .35);
+  }
+  /* Bo góc ảnh/placeholder nhưng cho popover tràn ra ngoài stage. */
+  .iso-stage > :global(div:first-child),
+  .iso-img {
+    border-radius: var(--shop-radius-lg);
+    overflow: hidden;
+  }
+  .iso-img { display: block; width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover; }
+
+  /* ── Hotspot dot ── */
+  .iso-dot {
+    position: absolute; transform: translate(-50%, -50%);
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--shop-accent); color: #fff;
+    border: 2px solid var(--shop-bg-card);
+    display: grid; place-items: center;
+    font: 700 13px/1 var(--shop-sans); cursor: pointer;
+    box-shadow: 0 4px 14px -3px rgba(42, 37, 32, .5);
+    z-index: 3; padding: 0;
+  }
+  .iso-dot-core { position: relative; z-index: 2; }
+  .iso-dot-pulse {
+    position: absolute; inset: -2px; border-radius: 50%;
+    border: 2px solid var(--shop-accent);
+    animation: iso-pulse 2.2s ease-out infinite;
+  }
+  .iso-dot[aria-expanded="true"] { background: var(--shop-ink); border-color: var(--shop-accent); }
+  .iso-dot:hover { transform: translate(-50%, -50%) scale(1.12); }
+  @keyframes iso-pulse {
+    0%   { transform: scale(1); opacity: .7; }
+    70%  { transform: scale(2.1); opacity: 0; }
+    100% { transform: scale(2.1); opacity: 0; }
+  }
+
+  /* ── Popover ── */
+  .iso-pop {
+    position: absolute; z-index: 5;
+    transform: translate(-50%, calc(-100% - 22px));
+    width: 230px; max-width: 72vw;
+    background: var(--shop-bg-card);
+    border: 1px solid var(--shop-line);
+    border-radius: var(--shop-radius);
+    box-shadow: 0 22px 50px -18px rgba(42, 37, 32, .45);
+    overflow: hidden;
+  }
+  .iso-pop::after {
+    content: ''; position: absolute; left: 50%; bottom: -7px;
+    width: 14px; height: 14px; background: var(--shop-bg-card);
+    border-right: 1px solid var(--shop-line); border-bottom: 1px solid var(--shop-line);
+    transform: translateX(-50%) rotate(45deg);
+  }
+  .iso-pop-media { display: block; }
+  .iso-pop-imgwrap { position: relative; aspect-ratio: 4/3; background: var(--shop-bg-soft); overflow: hidden; }
+  .iso-pop-imgwrap img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .iso-pop-body { padding: 12px 14px 14px; }
+  .iso-pop-cat { font-size: 11px; letter-spacing: .04em; color: var(--shop-ink-soft); }
+  .iso-pop-name {
+    display: block; font-family: var(--shop-serif); font-size: 18px; line-height: 1.15;
+    color: var(--shop-ink); text-decoration: none; margin: 3px 0 6px;
+  }
+  .iso-pop-name:hover { color: var(--shop-accent); }
+  .iso-pop-price { display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+  .iso-pop-price s { color: var(--shop-ink-soft); font-size: 12px; }
+  .iso-pop-price strong { font-family: var(--shop-serif); font-size: 19px; font-weight: 500; color: var(--shop-ink); }
+  .iso-pop-actions { display: flex; gap: 8px; }
+  .iso-pop-actions .shop-btn { flex: 1; justify-content: center; padding: 9px 10px; font-size: 13px; }
+
+  .iso-caption { margin-top: 14px; font-size: 13px; color: var(--shop-ink-soft); font-style: italic; text-align: center; }
+
+  @media (max-width: 560px) {
+    .iso-pop { width: 200px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .iso-dot-pulse { animation: none; }
+    .iso-dot:hover { transform: translate(-50%, -50%); }
+  }
+</style>

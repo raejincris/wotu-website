@@ -1,0 +1,106 @@
+# Chi tiết phòng mẫu "Tổ Ấm" (phòng khách). Seed từ combo Tổ Ấm.
+# Mỗi section optional — template [slug].astro tự ẩn khi data rỗng.
+# Khi có ảnh thật: bỏ ảnh vào public/uploads/phong-mau/ rồi điền iso.image + chỉnh x/y hotspot.
+hero:
+  title: Phòng khách
+  titleEm: Tổ Ấm
+  subtitle: Một phòng khách Japandi ấm cho căn hộ 2PN — gỗ sồi tự nhiên, vải bố mềm và ánh sáng dịu. Bố cục được KTS WOTU cân chỉnh để vừa vặn 16–22 m².
+  area: 17–22 m²
+  style: Japandi ấm
+  room: phong-khach
+  badges:
+    - 4 món · combo Tổ Ấm
+    - ★ Bestseller phòng khách
+
+# Phối cảnh isometric: ảnh chính + hotspot. iso.image rỗng → fallback placeholder gradient.
+iso:
+  image: ""
+  alt: Phối cảnh isometric phòng khách Tổ Ấm — WOTU
+  caption: Phối cảnh 3D — chạm vào từng điểm để xem chi tiết sản phẩm.
+  hotspots:
+    - x: 42
+      y: 64
+      productId: p-sofa-may-3
+      label: Sofa văng Mây
+    - x: 53
+      y: 55
+      productId: p-ban-tra-nang-mai
+      label: Bàn trà Nắng Mai
+    - x: 31
+      y: 36
+      productId: p-ke-tv-an
+      label: Kệ TV An
+    - x: 58
+      y: 73
+      productId: p-tham-soi
+      label: Thảm dệt tay
+
+# Sơ đồ mặt bằng 2D — tái dùng SVG .dim-svg của combo Tổ Ấm.
+floorplan:
+  caption: Sơ đồ bố trí điển hình cho phòng khách căn hộ 2PN — bạn có thể gửi mặt bằng để WOTU dựng riêng.
+  heading: Bố trí trên <em>16–22 m²</em>.
+  svg: |
+    <svg class="dim-svg" viewBox="0 0 540 340" preserveAspectRatio="xMidYMid meet">
+      <rect class="room" x="40" y="40" width="460" height="260" rx="2" />
+      <rect class="obj" x="120" y="200" width="210" height="60" rx="6" />
+      <text x="225" y="234" text-anchor="middle">SOFA · 210×92</text>
+      <rect class="obj-2" x="170" y="130" width="110" height="55" rx="6" />
+      <text x="225" y="162" text-anchor="middle">BÀN TRÀ</text>
+      <rect class="obj" x="140" y="60" width="180" height="36" rx="4" />
+      <text x="230" y="83" text-anchor="middle">KỆ TV · 180×40</text>
+      <rect class="obj-2" x="110" y="115" width="230" height="155" rx="6" fill="none" stroke-dasharray="4 3" opacity=".75" />
+      <text x="225" y="270" text-anchor="middle" class="label">thảm 160 × 230</text>
+      <line class="dim-line" x1="40" y1="22" x2="500" y2="22" />
+      <line class="dim-line" x1="40" y1="18" x2="40" y2="26" />
+      <line class="dim-line" x1="500" y1="18" x2="500" y2="26" />
+      <text x="270" y="16" text-anchor="middle">4.6 m</text>
+      <line class="dim-line" x1="22" y1="40" x2="22" y2="300" />
+      <line class="dim-line" x1="18" y1="40" x2="26" y2="40" />
+      <line class="dim-line" x1="18" y1="300" x2="26" y2="300" />
+      <text x="14" y="170" text-anchor="middle" transform="rotate(-90 14 170)">3.8 m</text>
+      <text x="430" y="170" text-anchor="middle" class="label">phòng khách</text>
+      <text x="430" y="186" text-anchor="middle" class="label">~17.5 m²</text>
+    </svg>
+  legend:
+    - title: Khung gỗ sồi
+      sub: Sofa & kệ TV
+      kind: warm
+    - title: Bàn trà & thảm
+      sub: Đặt giữa, làm tâm phòng
+      kind: accent2
+    - title: Lối đi tối thiểu
+      sub: 75 cm giữa sofa và bàn
+      kind: line
+
+# Bảng vật liệu / tông màu (moodboard).
+palette:
+  heading: Bảng vật liệu & tông màu
+  desc: "Bốn chất liệu nền của phòng — chọn theo nguyên tắc Japandi: gỗ ấm, vải mộc, tông trung tính."
+  swatches:
+    - name: Gỗ sồi tự nhiên
+      note: Khung sofa, bàn trà & kệ TV
+      style: linear-gradient(135deg,#C9A77E,#A07A4F)
+    - name: Vải bố Nâu Đất
+      note: Bọc sofa · linen nhập khẩu
+      style: linear-gradient(135deg,#B77452,#915438)
+    - name: Thảm dệt tay
+      note: Sợi cotton · tông be sữa
+      style: linear-gradient(135deg,#E5D2B5,#C9B091)
+    - name: Tường nền kem
+      note: Sơn mịn, phản sáng dịu
+      style: linear-gradient(135deg,#F4ECDD,#E2D5BF)
+
+# Sản phẩm trong phòng — chỉ tham chiếu id (resolve từ shop-products.yml).
+products:
+  - id: p-sofa-may-3
+    role: Trung tâm phòng khách
+  - id: p-ban-tra-nang-mai
+    role: Điểm nhấn giữa phòng
+  - id: p-ke-tv-an
+    role: Lưu trữ & TV
+  - id: p-tham-soi
+    role: Nền ấm dưới chân
+
+cta:
+  heading: Thích phòng này? <em>Dựng riêng cho nhà bạn.</em>
+  desc: WOTU khảo sát không gian thật, dựng phối cảnh 3D miễn phí và báo giá trọn gói trong 24h.

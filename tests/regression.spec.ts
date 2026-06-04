@@ -910,3 +910,59 @@ test.describe('19 · /combo/ — room filter & cart', () => {
     await expect(badge).toHaveText('1');
   });
 });
+
+// ---------------------------------------------------------------------------
+// 20. /phong-mau/ — gallery phòng mẫu + chi tiết (isometric hotspot)
+// ---------------------------------------------------------------------------
+test.describe('20 · /phong-mau/ — phòng mẫu', () => {
+  test('nút "Khám phá phòng mẫu" trên trang chủ trỏ /phong-mau/', async ({ page }) => {
+    await page.goto('/');
+    const cta = page.locator('a.shop-btn-ghost[href="/phong-mau/"]');
+    await expect(cta.first()).toBeAttached();
+  });
+
+  test('gallery hiển thị đủ 4 phòng (1 live + 3 sắp ra mắt)', async ({ page }) => {
+    await page.goto('/phong-mau/');
+    await expect(page.locator('.pm-card')).toHaveCount(4);
+    await expect(page.locator('.pm-card.soon')).toHaveCount(3);
+    // Phòng live là một <a> link sang chi tiết.
+    await expect(page.locator('a.pm-card[href="/phong-mau/to-am/"]')).toBeAttached();
+  });
+
+  test('chi tiết Tổ Ấm: có isometric hotspot, sơ đồ mặt bằng, 4 sản phẩm', async ({ page }) => {
+    await page.goto('/phong-mau/to-am/');
+    await expect(page.locator('h1')).toContainText('Tổ Ấm');
+    await expect(page.locator('.iso-dot[data-hotspot]')).toHaveCount(4);
+    await expect(page.locator('.dim-svg')).toBeAttached();
+    await expect(page.locator('.prod-card')).toHaveCount(4);
+  });
+
+  test('click hotspot → popover hiện; Escape → đóng', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'desktop only — popover phụ thuộc con trỏ');
+    await page.goto('/phong-mau/to-am/');
+    const firstDot = page.locator('.iso-dot[data-hotspot="0"]');
+    const firstPop = page.locator('.iso-pop[data-pop="0"]');
+    await expect(firstPop).toBeHidden();
+    await firstDot.click();
+    await expect(firstPop).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(firstPop).toBeHidden();
+  });
+
+  test('"+ Giỏ" trên product card → badge increment', async ({ page }) => {
+    await page.goto('/phong-mau/to-am/');
+    await clearStorage(page);
+    await page.reload();
+    await page.waitForLoadState('domcontentloaded');
+
+    const badge = page.locator('#wotu-cart-badge');
+    await expect(badge).toHaveAttribute('hidden', '');
+
+    const addBtn = page.locator('.prod-card .prod-add').first();
+    await addBtn.scrollIntoViewIfNeeded();
+    await addBtn.click();
+
+    await expect(badge).not.toHaveAttribute('hidden');
+    await expect(badge).toHaveText('1');
+  });
+});

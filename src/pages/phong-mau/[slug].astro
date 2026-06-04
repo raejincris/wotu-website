@@ -1,0 +1,342 @@
+---
+/**
+ * Trang chi tiết phòng mẫu — route động sinh từ phong-mau.yml (phòng live).
+ * DETAIL map slug → file YAML giàu (hiện chỉ Tổ Ấm). Sản phẩm chỉ tham chiếu id,
+ * resolve từ shop-products.yml. Các section tự ẩn nếu data rỗng.
+ */
+import ShopLayout from '../../layouts/ShopLayout.astro';
+import Nav from '../../components/shop/Nav.astro';
+import Footer from '../../components/shop/Footer.astro';
+import SplitWords from '../../components/SplitWords.astro';
+import RoomHotspots from '../../components/shop/RoomHotspots.astro';
+import phongMau from '../../data/phong-mau.yml';
+import toAmDetail from '../../data/phong-mau-to-am.yml';
+import shopProducts from '../../data/shop-products.yml';
+import { jsonLd } from '../../lib/jsonld';
+
+// Map slug → file detail giàu. Phòng mới: thêm 1 import + 1 dòng.
+const DETAIL: Record<string, any> = { 'to-am': toAmDetail };
+
+export function getStaticPaths() {
+  const d = phongMau as any;
+  return (d.rooms ?? [])
+    .filter((r: any) => !r.soon && r.href)
+    .map((r: any) => ({ params: { slug: r.slug }, props: { room: r } }));
+}
+
+interface Props { room: any; }
+const { room } = Astro.props;
+const slug = room.slug;
+const detail = DETAIL[slug] ?? null;
+
+// ── Resolve sản phẩm theo id từ shop-products.yml ──
+const sp = shopProducts as any;
+const allP = [...(sp.products ?? []), ...(sp.productsAfterCta ?? [])];
+const byId: Record<string, any> = {};
+for (const p of allP) {
+  const fullName = `${p.name} ${p.nameEm ?? ''}${p.nameTail ?? ''}`.trim();
+  byId[p.id] = {
+    id: p.id,
+    fullName,
+    cat: p.cat,
+    price: p.price,
+    priceOld: p.priceOld,
+    priceNum: p.priceNum,
+    href: p.href || `/san-pham/${String(p.id).replace(/^p-/, '')}/`,
+    illo: p.photo || `/uploads/products/cat-${p.catKey}.webp`,
+    tone: p.tone ?? '',
+    placeholder: p.placeholder ?? fullName,
+  };
+}
+
+const hero = detail?.hero ?? {};
+const iso = detail?.iso ?? null;
+const floorplan = detail?.floorplan ?? null;
+const palette = detail?.palette ?? null;
+const productRefs = ((detail?.products ?? []) as any[]).filter((x) => byId[x.id]);
+const cta = detail?.cta ?? null;
+
+const fullName = `${hero.title ?? room.name} ${hero.titleEm ?? room.nameEm ?? ''}`.trim();
+
+const SITE_URL = 'https://www.wotu.vn';
+const PAGE_URL = `${SITE_URL}/phong-mau/${slug}/`;
+const desc = `${fullName} — phòng mẫu ${room.style ?? ''} ${room.area ?? ''} của WOTU. ${hero.subtitle ?? ''} Xem sơ đồ mặt bằng, phối cảnh 3D và chi tiết từng món nội thất.`.replace(/\s+/g, ' ').trim();
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: SITE_URL + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Phòng mẫu', item: SITE_URL + '/phong-mau/' },
+    { '@type': 'ListItem', position: 3, name: fullName, item: PAGE_URL },
+  ],
+};
+---
+<ShopLayout title={`${fullName} — Phòng mẫu WOTU`} description={desc}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
+  </Fragment>
+  <Nav active="Phòng mẫu" />
+
+  <div class="container crumb">
+    <a href="/">Trang chủ</a> / <a href="/phong-mau/">Phòng mẫu</a> / <span class="here">{fullName}</span>
+  </div>
+
+  <main class="pm container">
+    {/* ===== HERO ===== */}
+    <header class="pm-head shop-reveal">
+      <span class="pm-eyebrow reveal" data-reveal style="--rev-delay: 0ms">Phòng mẫu · {room.style}</span>
+      <SplitWords tag="h1" text={`${hero.title ?? room.name} <em>${hero.titleEm ?? room.nameEm ?? ''}</em>`} base={90} step={48} />
+      {hero.subtitle && <p class="pm-lead reveal" data-reveal style="--rev-delay: 200ms">{hero.subtitle}</p>}
+      <div class="pm-facts reveal" data-reveal style="--rev-delay: 280ms">
+        <span><b>{room.area}</b> diện tích</span>
+        <span><b>{room.style}</b> phong cách</span>
+        {productRefs.length > 0 && <span><b>{productRefs.length} món</b> nội thất</span>}
+      </div>
+      {hero.badges && (
+        <div class="pm-badges reveal" data-reveal style="--rev-delay: 340ms">
+          {(hero.badges as string[]).map((b) => <span class="pm-badge">{b}</span>)}
+        </div>
+      )}
+    </header>
+
+    {/* ===== ISOMETRIC + HOTSPOT ===== */}
+    {iso && (
+      <section class="pm-block" id="iso">
+        <div class="block-head">
+          <div>
+            <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Phối cảnh 3D</span>
+            <h2 class="reveal" data-reveal style="--rev-delay: 120ms">Nhìn từ <em>trên xuống</em>.</h2>
+          </div>
+          <div class="right reveal" data-reveal style="--rev-delay: 180ms">Góc nhìn isometric của cả phòng — chạm vào từng điểm để mở chi tiết món đồ.</div>
+        </div>
+        <RoomHotspots iso={iso} byId={byId} />
+      </section>
+    )}
+
+    {/* ===== SƠ ĐỒ MẶT BẰNG ===== */}
+    {floorplan && (
+      <section class="pm-block" id="floorplan">
+        <div class="block-head">
+          <div>
+            <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Sơ đồ mặt bằng</span>
+            <h2 class="reveal" data-reveal style="--rev-delay: 120ms" set:html={floorplan.heading ?? 'Bố trí nội thất.'} />
+          </div>
+          <div class="right reveal" data-reveal style="--rev-delay: 180ms">{floorplan.caption}</div>
+        </div>
+        <div class="dim-wrap">
+          <div class="dim-grid">
+            <Fragment set:html={floorplan.svg} />
+            <div class="dim-legend">
+              {(floorplan.legend ?? []).map((lg: any) => (
+                <div class="legend-item">
+                  {lg.kind === 'line' ? (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--shop-ink)" stroke-width="1.5"><path d="M3 12h18" /></svg>
+                  ) : (
+                    <span class={`legend-dot lg-${lg.kind}`}></span>
+                  )}
+                  <div><b>{lg.title}</b><br /><span style="color: var(--shop-ink-soft); font-size: 12px;">{lg.sub}</span></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    {/* ===== BẢNG VẬT LIỆU ===== */}
+    {palette && (palette.swatches ?? []).length > 0 && (
+      <section class="pm-block" id="palette">
+        <div class="block-head">
+          <div>
+            <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Bảng vật liệu</span>
+            <h2 class="reveal" data-reveal style="--rev-delay: 120ms" set:html={palette.heading ?? 'Vật liệu & tông màu.'} />
+          </div>
+          {palette.desc && <div class="right reveal" data-reveal style="--rev-delay: 180ms">{palette.desc}</div>}
+        </div>
+        <div class="swatch-grid shop-reveal-stagger">
+          {(palette.swatches as any[]).map((s) => (
+            <div class="swatch">
+              <span class="swatch-chip" style={`background:${s.style}`}></span>
+              <div>
+                <div class="swatch-name">{s.name}</div>
+                {s.note && <div class="swatch-note">{s.note}</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* ===== SẢN PHẨM TRONG PHÒNG ===== */}
+    {productRefs.length > 0 && (
+      <section class="pm-block" id="products">
+        <div class="block-head">
+          <div>
+            <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Trong phòng có gì</span>
+            <h2 class="reveal" data-reveal style="--rev-delay: 120ms">{productRefs.length} món — <em>mua lẻ hay trọn bộ</em>.</h2>
+          </div>
+          <div class="right reveal" data-reveal style="--rev-delay: 180ms">Mỗi món đều có thể đặt riêng. Bấm "+ Giỏ" để thêm nhanh hoặc xem trang chi tiết.</div>
+        </div>
+        <div class="prod-grid shop-reveal-stagger">
+          {productRefs.map((ref: any) => {
+            const p = byId[ref.id];
+            return (
+              <article class="prod-card">
+                <a class="prod-img" href={p.href} aria-label={p.fullName}>
+                  <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
+                  <img class="shop-illo" src={p.illo} alt={p.fullName} loading="lazy" decoding="async" />
+                </a>
+                <div class="prod-body">
+                  {ref.role && <div class="prod-role">{ref.role}</div>}
+                  <a class="prod-name" href={p.href}>{p.fullName}</a>
+                  <div class="prod-foot">
+                    <div class="prod-price">
+                      {p.priceOld && <s>{p.priceOld}</s>}
+                      <strong>{p.price}</strong>
+                    </div>
+                    <button
+                      class="shop-btn shop-btn-primary prod-add"
+                      type="button"
+                      data-add
+                      data-id={p.id}
+                      data-name={p.fullName}
+                      data-price={p.priceNum ?? 0}
+                    >+ Giỏ</button>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    {/* ===== CTA ===== */}
+    {cta && (
+      <section class="pm-cta reveal" data-reveal>
+        <div>
+          <h2 set:html={cta.heading} />
+          <p>{cta.desc}</p>
+        </div>
+        <a class="shop-btn shop-btn-primary" href="/#contact">Đặt tư vấn 3D <span class="arr">→</span></a>
+      </section>
+    )}
+  </main>
+
+  <Footer />
+</ShopLayout>
+
+<script>
+  import { addToCart, toast } from '../../lib/shop-store';
+
+  // Nút "+ Giỏ" của các product card (popover hotspot tự xử lý riêng trong component).
+  document.querySelectorAll<HTMLElement>('.prod-add[data-add]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      addToCart({
+        id: btn.dataset.id ?? '',
+        name: btn.dataset.name ?? 'Sản phẩm',
+        price: Number(btn.dataset.price ?? 0),
+      });
+      toast(`✓ Đã thêm "${btn.dataset.name}" vào giỏ`);
+      (window as any).__wotuOpenCart?.();
+    });
+  });
+</script>
+
+<style>
+  .crumb { padding: 22px 0 6px; font-size: 13px; color: var(--shop-ink-soft); }
+  .crumb a { color: var(--shop-ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--shop-accent); }
+  .crumb .here { color: var(--shop-ink); }
+
+  .pm { padding: 18px 0 90px; }
+  .pm > section.pm-block { padding: 52px 0; scroll-margin-top: 120px; }
+
+  .eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--shop-ink-soft); font-weight: 600; display: inline-flex; align-items: center; gap: 10px; }
+  .eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; opacity: .6; }
+
+  .block-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 32px; }
+  .block-head h2 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(28px, 4vw, 44px); line-height: 1.02; margin: 12px 0 0; max-width: 640px; }
+  .block-head h2 em { font-style: italic; color: var(--shop-accent); }
+  .block-head .right { color: var(--shop-ink-soft); max-width: 360px; font-size: 14px; }
+
+  /* ── Hero ── */
+  .pm-head { padding: 16px 0 8px; max-width: 820px; }
+  .pm-eyebrow { font-size: 13px; letter-spacing: .04em; color: var(--shop-ink-soft); }
+  .pm-head :global(h1) { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(38px, 6.2vw, 68px); line-height: 1.0; margin: 10px 0 0; }
+  .pm-head :global(h1 em) { font-style: italic; color: var(--shop-accent); }
+  .pm-lead { font-size: 17px; line-height: 1.7; color: var(--shop-ink-soft); margin: 20px 0 0; max-width: 640px; }
+  .pm-facts { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 22px 0 0; font-size: 14px; color: var(--shop-ink-soft); }
+  .pm-facts b { color: var(--shop-ink); font-weight: 600; }
+  .pm-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; }
+  .pm-badge { font-size: 12.5px; font-weight: 600; padding: 6px 14px; border-radius: 999px; background: var(--shop-warm-soft); color: var(--shop-accent-deep); }
+
+  /* ── Sơ đồ mặt bằng (port từ combo) ── */
+  .dim-wrap { background: var(--shop-bg-card); border: 1px solid var(--shop-line); border-radius: var(--shop-radius-lg); padding: 36px; }
+  .dim-grid { display: grid; grid-template-columns: 1fr 280px; gap: 40px; align-items: center; }
+  .dim-svg { width: 100%; height: auto; }
+  .dim-svg :global(.room) { fill: var(--shop-bg-soft); stroke: var(--shop-ink); stroke-width: 1.5; }
+  .dim-svg :global(.obj) { fill: var(--shop-warm-soft); stroke: var(--shop-accent-deep); stroke-width: 1.2; }
+  .dim-svg :global(.obj-2) { fill: var(--shop-accent-2-soft); stroke: var(--shop-accent-2); stroke-width: 1.2; }
+  .dim-svg :global(.dim-line) { stroke: var(--shop-ink); stroke-width: 0.6; fill: none; }
+  .dim-svg :global(text) { font-family: var(--shop-sans); font-size: 11px; fill: var(--shop-ink); font-weight: 600; }
+  .dim-svg :global(.label) { font-family: var(--shop-serif); font-size: 13px; font-style: italic; fill: var(--shop-ink-soft); font-weight: 400; }
+  .dim-legend { display: flex; flex-direction: column; gap: 14px; }
+  .legend-item { display: flex; gap: 12px; align-items: flex-start; font-size: 13px; }
+  .legend-dot { width: 18px; height: 18px; border-radius: 5px; flex: none; margin-top: 2px; }
+  .legend-dot.lg-warm { background: var(--shop-warm-soft); border: 1px solid var(--shop-accent-deep); }
+  .legend-dot.lg-accent2 { background: var(--shop-accent-2-soft); border: 1px solid var(--shop-accent-2); }
+
+  /* ── Bảng vật liệu ── */
+  .swatch-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .swatch {
+    display: flex; gap: 14px; align-items: center;
+    background: var(--shop-bg-card); border: 1px solid var(--shop-line);
+    border-radius: var(--shop-radius); padding: 16px;
+  }
+  .swatch-chip { width: 52px; height: 52px; border-radius: 12px; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+  .swatch-name { font-weight: 600; font-size: 14px; color: var(--shop-ink); }
+  .swatch-note { font-size: 12.5px; color: var(--shop-ink-soft); margin-top: 3px; line-height: 1.4; }
+
+  /* ── Sản phẩm ── */
+  .prod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .prod-card { display: flex; flex-direction: column; }
+  .prod-img { position: relative; aspect-ratio: 4/3; border-radius: var(--shop-radius); overflow: hidden; background: var(--shop-bg-soft); display: block; }
+  .prod-img .shop-ph { position: absolute; inset: 0; }
+  .prod-img .shop-illo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+  .prod-card:hover .shop-illo { transform: scale(1.05); }
+  .prod-body { padding-top: 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .prod-role { font-size: 12px; letter-spacing: .03em; color: var(--shop-accent); font-weight: 600; }
+  .prod-name { font-family: var(--shop-serif); font-size: 19px; line-height: 1.15; color: var(--shop-ink); text-decoration: none; margin: 2px 0 6px; }
+  .prod-name:hover { color: var(--shop-accent); }
+  .prod-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .prod-price { display: flex; flex-direction: column; line-height: 1.1; }
+  .prod-price s { color: var(--shop-ink-soft); font-size: 12px; }
+  .prod-price strong { font-size: 16px; color: var(--shop-ink); }
+  .prod-add { padding: 9px 14px; font-size: 13px; }
+
+  /* ── CTA ── */
+  .pm-cta {
+    display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
+    margin-top: 36px; padding: 44px 48px;
+    background: var(--shop-ink); color: var(--shop-bg); border-radius: var(--shop-radius-xl);
+  }
+  .pm-cta h2 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(26px, 3.6vw, 40px); margin: 0; color: var(--shop-bg); }
+  .pm-cta h2 :global(em) { font-style: italic; color: var(--shop-accent); }
+  .pm-cta p { margin: 10px 0 0; color: color-mix(in oklab, var(--shop-bg) 72%, transparent); font-size: 15px; max-width: 560px; }
+
+  @media (max-width: 1000px) {
+    .dim-grid { grid-template-columns: 1fr; }
+    .swatch-grid { grid-template-columns: 1fr 1fr; }
+    .prod-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 680px) {
+    .block-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .dim-wrap { padding: 22px; }
+    .pm-cta { padding: 32px 24px; }
+  }
+  @media (max-width: 520px) {
+    .swatch-grid, .prod-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,57 @@
+# Phòng mẫu — danh sách (source of truth cho /phong-mau/ và route động /phong-mau/[slug]).
+# Phòng "live" (soon không bật) sinh trang chi tiết từ DETAIL map trong [slug].astro.
+# Phòng soon: hiện card "Sắp ra mắt", không link, không sinh route.
+hero:
+  eyebrow: Phòng mẫu
+  title: Bước vào căn phòng <em>đã hoàn thiện</em>.
+  sub: Mỗi phòng mẫu là một bố cục thật do đội thiết kế WOTU dựng — xem sơ đồ mặt bằng, phối cảnh 3D và từng món nội thất, rồi mang nguyên cảm hứng ấy về tổ ấm của bạn.
+sections:
+  intro:
+    eyebrow: Khám phá
+    heading: Không gian <em>kể chuyện</em>.
+    desc: Chạm vào từng phòng để xem chi tiết sản phẩm, bảng vật liệu và cách WOTU sắp đặt cho vừa vặn một căn nhà thật.
+rooms:
+  - slug: to-am
+    name: Phòng khách
+    nameEm: Tổ Ấm
+    room: phong-khach
+    area: 17–22 m²
+    style: Japandi ấm
+    placeholder: Phòng khách Tổ Ấm
+    photo: ""
+    href: /phong-mau/to-am/
+    tags: [japandi, phong-khach]
+    tall: true
+
+  - slug: an-yen
+    name: Phòng ngủ master
+    nameEm: An Yên
+    room: phong-ngu
+    area: 14–18 m²
+    style: Tối giản ấm
+    placeholder: Phòng ngủ An Yên
+    photo: ""
+    href: ""
+    soon: true
+
+  - slug: sum-hop
+    name: Bếp & phòng ăn
+    nameEm: Sum Họp
+    room: phong-an
+    area: 12–16 m²
+    style: Mộc mạc sáng
+    placeholder: Bếp & phòng ăn Sum Họp
+    photo: ""
+    href: ""
+    soon: true
+
+  - slug: chuyen-tam
+    name: Phòng làm việc
+    nameEm: Chuyên Tâm
+    room: lam-viec
+    area: 8–12 m²
+    style: Tinh gọn
+    placeholder: Phòng làm việc Chuyên Tâm
+    photo: ""
+    href: ""
+    soon: true
