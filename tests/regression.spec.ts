@@ -929,14 +929,18 @@ test.describe('20 · /phong-mau/ — phòng mẫu', () => {
     await expect(page.locator('a.pm-card[href="/phong-mau/to-am/"]')).toBeAttached();
   });
 
-  test('hero carousel: nút › chuyển slide phòng', async ({ page }) => {
+  test('hero carousel: nút › đổi cả cụm (chữ + ảnh)', async ({ page }) => {
     await page.goto('/phong-mau/');
-    const slides = page.locator('.pm-slide');
-    await expect(slides).toHaveCount(4);
-    await expect(slides.nth(0)).toHaveAttribute('aria-hidden', 'false');
+    const copies = page.locator('.pm-hero-copy');
+    const imgs = page.locator('.pm-img-slide');
+    await expect(copies).toHaveCount(4);
+    await expect(imgs).toHaveCount(4);
+    await expect(copies.nth(0)).toHaveClass(/active/);
+    await expect(imgs.nth(0)).toHaveClass(/active/);
     await page.locator('.pm-nav.next').click();
-    await expect(slides.nth(1)).toHaveAttribute('aria-hidden', 'false');
-    await expect(slides.nth(0)).toHaveAttribute('aria-hidden', 'true');
+    await expect(copies.nth(1)).toHaveClass(/active/);
+    await expect(imgs.nth(1)).toHaveClass(/active/);
+    await expect(copies.nth(0)).not.toHaveClass(/active/);
   });
 
   test('chi tiết Tổ Ấm: có isometric hotspot, sơ đồ mặt bằng, 4 sản phẩm', async ({ page }) => {
