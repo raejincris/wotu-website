@@ -933,10 +933,10 @@ test.describe('20 · /phong-mau/ — phòng mẫu', () => {
     await page.goto('/phong-mau/');
     const slides = page.locator('.pm-slide');
     await expect(slides).toHaveCount(4);
-    await expect(slides.nth(0)).toHaveClass(/active/);
+    await expect(slides.nth(0)).toHaveAttribute('aria-hidden', 'false');
     await page.locator('.pm-nav.next').click();
-    await expect(slides.nth(1)).toHaveClass(/active/);
-    await expect(slides.nth(0)).not.toHaveClass(/active/);
+    await expect(slides.nth(1)).toHaveAttribute('aria-hidden', 'false');
+    await expect(slides.nth(0)).toHaveAttribute('aria-hidden', 'true');
   });
 
   test('chi tiết Tổ Ấm: có isometric hotspot, sơ đồ mặt bằng, 4 sản phẩm', async ({ page }) => {

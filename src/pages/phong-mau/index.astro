@@ -75,23 +75,25 @@ const listSchema = liveRooms.length
             </button>
           )}
           <div class="pm-slider" data-pm-slider>
-            {rooms.map((r, i) => {
-              const live = !r.soon && r.href;
-              const imgSrc = r.photo || hero.image || '';
-              const Tag = live ? 'a' : 'div';
-              return (
-                <Tag class={`pm-slide${i === 0 ? ' active' : ''}`} href={live ? r.href : undefined} data-slide={i} aria-hidden={i === 0 ? 'false' : 'true'}>
-                  {imgSrc
-                    ? <img class="pm-slide-img" src={imgSrc} alt={`${r.name} ${r.nameEm ?? ''}`.trim()} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
-                    : <div class="pm-slide-ph"><span>{r.placeholder || hero.imageAlt || 'Phối cảnh phòng mẫu WOTU'}</span></div>
-                  }
-                  <div class="pm-slide-cap">
-                    <span class="pm-slide-name">{r.name} <em>{r.nameEm}</em></span>
-                    <span class="pm-slide-style">{r.style}{r.soon ? ' · Sắp ra mắt' : ''}</span>
-                  </div>
-                </Tag>
-              );
-            })}
+            <div class="pm-track" data-pm-track>
+              {rooms.map((r, i) => {
+                const live = !r.soon && r.href;
+                const imgSrc = r.photo || hero.image || '';
+                const Tag = live ? 'a' : 'div';
+                return (
+                  <Tag class="pm-slide" href={live ? r.href : undefined} data-slide={i}>
+                    {imgSrc
+                      ? <img class="pm-slide-img" src={imgSrc} alt={`${r.name} ${r.nameEm ?? ''}`.trim()} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+                      : <div class="pm-slide-ph"><span>{r.placeholder || hero.imageAlt || 'Phối cảnh phòng mẫu WOTU'}</span></div>
+                    }
+                    <div class="pm-slide-cap">
+                      <span class="pm-slide-name">{r.name} <em>{r.nameEm}</em></span>
+                      <span class="pm-slide-style">{r.style}{r.soon ? ' · Sắp ra mắt' : ''}</span>
+                    </div>
+                  </Tag>
+                );
+              })}
+            </div>
           </div>
           {rooms.length > 1 && (
             <button class="pm-nav next" type="button" aria-label="Phòng sau">
@@ -178,25 +180,24 @@ const listSchema = liveRooms.length
 </ShopLayout>
 
 <script>
-  // Hero carousel — lướt qua lại giữa các phòng (nút ‹ › + chấm).
-  const slider = document.querySelector('[data-pm-slider]');
-  if (slider) {
-    const slides = Array.from(slider.querySelectorAll<HTMLElement>('.pm-slide'));
+  // Hero carousel — cả box trượt ngang giữa các phòng (nút ‹ › + chấm).
+  const track = document.querySelector<HTMLElement>('[data-pm-track]');
+  if (track) {
+    const slides = Array.from(track.querySelectorAll<HTMLElement>('.pm-slide'));
     const dots = Array.from(document.querySelectorAll<HTMLElement>('.pm-dot'));
     const prev = document.querySelector<HTMLElement>('.pm-nav.prev');
     const next = document.querySelector<HTMLElement>('.pm-nav.next');
     let i = 0;
     function show(n: number) {
       i = (n + slides.length) % slides.length;
-      slides.forEach((s, k) => {
-        s.classList.toggle('active', k === i);
-        s.setAttribute('aria-hidden', k === i ? 'false' : 'true');
-      });
+      track!.style.transform = `translateX(${-i * 100}%)`;
+      slides.forEach((s, k) => s.setAttribute('aria-hidden', k === i ? 'false' : 'true'));
       dots.forEach((d, k) => d.setAttribute('aria-current', k === i ? 'true' : 'false'));
     }
     prev?.addEventListener('click', () => show(i - 1));
     next?.addEventListener('click', () => show(i + 1));
     dots.forEach((d, k) => d.addEventListener('click', () => show(k)));
+    show(0);
   }
 </script>
 
@@ -226,11 +227,11 @@ const listSchema = liveRooms.length
     background: var(--shop-bg-card);
     box-shadow: 0 24px 60px -30px rgba(42, 37, 32, .5);
   }
+  .pm-track { display: flex; height: 100%; transition: transform .45s var(--ease, ease); will-change: transform; }
   .pm-slide {
-    position: absolute; inset: 0; opacity: 0; pointer-events: none;
-    transition: opacity .5s ease; text-decoration: none; color: var(--shop-bg);
+    position: relative; flex: 0 0 100%; min-width: 100%; height: 100%;
+    text-decoration: none; color: var(--shop-bg);
   }
-  .pm-slide.active { opacity: 1; pointer-events: auto; }
   .pm-slide-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .pm-slide-ph {
     position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 16px;
@@ -251,18 +252,19 @@ const listSchema = liveRooms.length
   .pm-slide-name em { font-style: italic; color: var(--shop-accent); }
   .pm-slide-style { font-size: 12px; opacity: .85; }
 
+  /* Mũi tên nằm ngay trên viền 2 bên box (tâm nút trùng đường viền) */
   .pm-nav {
-    position: absolute; top: 50%; transform: translateY(-50%); z-index: 4;
+    position: absolute; top: 50%; z-index: 4;
     width: 42px; height: 42px; border-radius: 50%;
     background: var(--shop-bg-card); color: var(--shop-ink);
     border: 1px solid var(--shop-line); cursor: pointer;
     display: grid; place-items: center;
     box-shadow: 0 8px 22px -8px rgba(42, 37, 32, .45);
-    transition: background .2s, transform .2s;
+    transition: background .2s, color .2s;
   }
   .pm-nav:hover { background: var(--shop-ink); color: var(--shop-bg); }
-  .pm-nav.prev { left: -14px; }
-  .pm-nav.next { right: -14px; }
+  .pm-nav.prev { left: 0; transform: translate(-50%, -50%); }
+  .pm-nav.next { right: 0; transform: translate(50%, -50%); }
   .pm-dots { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); z-index: 4; display: flex; gap: 7px; }
   .pm-dot {
     width: 8px; height: 8px; border-radius: 50%; padding: 0; cursor: pointer;
@@ -344,8 +346,8 @@ const listSchema = liveRooms.length
   }
   @media (max-width: 620px) {
     .pm-hero { padding: 40px 0 44px; }
-    .pm-nav.prev { left: 8px; }
-    .pm-nav.next { right: 8px; }
+    .pm-nav.prev { left: 8px; transform: translateY(-50%); }
+    .pm-nav.next { right: 8px; transform: translateY(-50%); }
     .pm-fp { padding: 50px 0 44px; }
     .pm-gallery { grid-template-columns: 1fr; grid-template-rows: repeat(4, 240px); }
     .pm-card.tall { grid-column: span 1; }
