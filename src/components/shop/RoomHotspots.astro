@@ -22,7 +22,7 @@ const { iso, byId } = Astro.props;
 const hotspots = (iso.hotspots ?? []).filter((h) => byId[h.productId]);
 const hasImg = !!iso.image;
 ---
-<figure class="iso-figure">
+<figure class="iso-figure" data-parallax data-parallax-speed="14">
   <div class="iso-stage" data-iso-stage>
     {hasImg ? (
       <img class="iso-img" src={iso.image} alt={iso.alt ?? 'Phối cảnh phòng mẫu'} loading="lazy" decoding="async" />
@@ -186,6 +186,13 @@ const hasImg = !!iso.image;
     border-right: 1px solid var(--shop-line); border-bottom: 1px solid var(--shop-line);
     transform: translateX(-50%) rotate(45deg);
   }
+  /* Popover bật ra kiểu spring mỗi lần mở (display none→block restart animation). */
+  .iso-pop:not([hidden]) { animation: iso-pop-in .26s cubic-bezier(.34, 1.56, .64, 1); }
+  @keyframes iso-pop-in {
+    from { opacity: 0; transform: translate(-50%, calc(-100% - 14px)) scale(.94); }
+    to   { opacity: 1; transform: translate(-50%, calc(-100% - 22px)) scale(1); }
+  }
+
   .iso-pop-media { display: block; }
   .iso-pop-imgwrap { position: relative; aspect-ratio: 4/3; background: var(--shop-bg-soft); overflow: hidden; }
   .iso-pop-imgwrap img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -210,5 +217,6 @@ const hasImg = !!iso.image;
   @media (prefers-reduced-motion: reduce) {
     .iso-dot-pulse { animation: none; }
     .iso-dot:hover { transform: translate(-50%, -50%); }
+    .iso-pop:not([hidden]) { animation: none; }
   }
 </style>

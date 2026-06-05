@@ -120,7 +120,7 @@ const listSchema = liveRooms.length
           <h2 class="reveal" data-reveal style="--rev-delay: 110ms" set:html={fp.heading ?? 'Hình dung <em>không gian sống</em>.'} />
           {fp.desc && <p class="pm-fp-desc reveal" data-reveal style="--rev-delay: 200ms">{fp.desc}</p>}
         </div>
-        <figure class="pm-fp-card reveal-img" data-reveal>
+        <figure class="pm-fp-card reveal-img" data-reveal data-parallax data-parallax-speed="-18">
           {fp.image
             ? <img src={fp.image} alt={fp.imageAlt || 'Bản vẽ mặt bằng — WOTU'} loading="lazy" decoding="async" />
             : <div class="pm-fp-empty"><span>Bản vẽ mặt bằng đang được cập nhật</span></div>
@@ -143,7 +143,7 @@ const listSchema = liveRooms.length
           const fullName = `${r.name} ${r.nameEm ?? ''}`.trim();
           const Tag = (r.soon || !r.href) ? 'div' : 'a';
           return (
-            <Tag class={`pm-card${r.tall ? ' tall' : ''}${r.soon ? ' soon' : ''}`} href={r.soon ? undefined : r.href}>
+            <Tag class={`pm-card${r.tall ? ' tall' : ''}${r.soon ? ' soon' : ''}`} href={r.soon ? undefined : r.href} {...(r.soon ? {} : { 'data-tilt': true })}>
               <div class={`shop-ph ${r.tone ?? 'dark'}`}><span class="shop-ph-label">{r.placeholder}</span></div>
               {r.photo && <img class="shop-illo" src={r.photo} alt={fullName} loading="lazy" decoding="async" />}
               <div class="pm-card-top">
@@ -174,7 +174,7 @@ const listSchema = liveRooms.length
           <h2>Muốn một phòng <em>của riêng bạn</em>?</h2>
           <p>Gửi mặt bằng căn nhà — WOTU dựng phối cảnh 3D miễn phí và gợi ý combo phù hợp trong 24h.</p>
         </div>
-        <a class="shop-btn shop-btn-primary" href="/#contact">Đặt tư vấn 3D <span class="arr">→</span></a>
+        <a class="shop-btn shop-btn-primary" href="/#contact" data-magnetic>Đặt tư vấn 3D <span class="arr">→</span></a>
       </div>
     </section>
   </main>
@@ -183,7 +183,21 @@ const listSchema = liveRooms.length
 </ShopLayout>
 
 <script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cms = window.location.search.includes('cms=1');
+
+  // Lớp motion nâng cao (tilt/parallax/magnetic) — tải LƯỜI khi idle, gate reduce/cms.
+  if (!reduce && !cms) {
+    const load = () => import('../../lib/shop-motion');
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(load, { timeout: 2000 });
+    } else {
+      setTimeout(load, 200);
+    }
+  }
+
   // Hero carousel — đổi CẢ CỤM (chữ trái + ảnh phải) theo từng phòng.
+  // Nâng cấp: cross-fade có CHIỀU + Ken Burns (CSS) + chữ rise + auto-play + swipe.
   const heroEl = document.querySelector<HTMLElement>('[data-pm-hero]');
   if (heroEl) {
     const copies = Array.from(heroEl.querySelectorAll<HTMLElement>('.pm-hero-copy'));
@@ -191,18 +205,61 @@ const listSchema = liveRooms.length
     const dots = Array.from(heroEl.querySelectorAll<HTMLElement>('.pm-dot'));
     const prev = heroEl.querySelector<HTMLElement>('.pm-nav.prev');
     const next = heroEl.querySelector<HTMLElement>('.pm-nav.next');
+    const visual = heroEl.querySelector<HTMLElement>('.pm-hero-visual');
     const n = Math.max(copies.length, imgs.length);
     let i = 0;
-    function show(k: number) {
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    function show(k: number, dir = 1) {
       i = (k + n) % n;
       copies.forEach((c, j) => { c.classList.toggle('active', j === i); c.setAttribute('aria-hidden', j === i ? 'false' : 'true'); });
-      imgs.forEach((m, j) => { m.classList.toggle('active', j === i); m.setAttribute('aria-hidden', j === i ? 'false' : 'true'); });
+      imgs.forEach((m, j) => {
+        const on = j === i;
+        m.classList.toggle('active', on);
+        m.setAttribute('aria-hidden', on ? 'false' : 'true');
+        if (on && !reduce) {
+          // Slide-in có chiều: đặt lệch rồi clear → transition kéo về 0 (chỉ transform/opacity).
+          m.style.transform = `translateX(${dir * 16}px)`;
+          void m.offsetWidth; // force reflow để transition chạy
+          m.style.transform = '';
+        }
+      });
       dots.forEach((d, j) => d.setAttribute('aria-current', j === i ? 'true' : 'false'));
     }
-    prev?.addEventListener('click', () => show(i - 1));
-    next?.addEventListener('click', () => show(i + 1));
-    dots.forEach((d, j) => d.addEventListener('click', () => show(j)));
+
+    function startAuto() {
+      if (reduce || n < 2) return;
+      stopAuto();
+      timer = setInterval(() => show(i + 1, 1), 5000);
+    }
+    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
+    // Thao tác thủ công → đổi slide + reset đồng hồ auto-play.
+    function go(k: number, dir: number) { show(k, dir); startAuto(); }
+
+    prev?.addEventListener('click', () => go(i - 1, -1));
+    next?.addEventListener('click', () => go(i + 1, 1));
+    dots.forEach((d, j) => d.addEventListener('click', () => go(j, j > i ? 1 : -1)));
+
+    // Tạm dừng khi hover / focus trong cụm hero.
+    heroEl.addEventListener('pointerenter', stopAuto);
+    heroEl.addEventListener('pointerleave', startAuto);
+    heroEl.addEventListener('focusin', stopAuto);
+    heroEl.addEventListener('focusout', startAuto);
+
+    // Vuốt trên ảnh (mobile) đổi phòng.
+    if (visual) {
+      let sx = 0, sw = false;
+      visual.addEventListener('pointerdown', (e) => { sx = e.clientX; sw = true; });
+      visual.addEventListener('pointerup', (e) => {
+        if (!sw) return; sw = false;
+        const dx = e.clientX - sx;
+        if (Math.abs(dx) > 40) go(dx < 0 ? i + 1 : i - 1, dx < 0 ? 1 : -1);
+      });
+      visual.addEventListener('pointercancel', () => { sw = false; });
+    }
+
     show(0);
+    startAuto();
   }
 </script>
 
@@ -229,6 +286,15 @@ const listSchema = liveRooms.length
   .pm-hero-copy-stage { display: grid; }
   .pm-hero-copy { grid-area: 1 / 1; opacity: 0; pointer-events: none; transition: opacity .4s ease; }
   .pm-hero-copy.active { opacity: 1; pointer-events: auto; }
+  /* Chữ rise theo dòng mỗi lần phòng được kích hoạt. */
+  .pm-hero-copy.active .pm-hero-eyebrow,
+  .pm-hero-copy.active h1,
+  .pm-hero-copy.active .pm-hero-sub,
+  .pm-hero-copy.active .pm-hero-actions { animation: pm-copy-rise .6s cubic-bezier(0.22,0.61,0.36,1) both; }
+  .pm-hero-copy.active h1 { animation-delay: .05s; }
+  .pm-hero-copy.active .pm-hero-sub { animation-delay: .12s; }
+  .pm-hero-copy.active .pm-hero-actions { animation-delay: .18s; }
+  @keyframes pm-copy-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
   .pm-hero-copy h1 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(34px, 5.2vw, 60px); line-height: 1.02; margin: 14px 0 0; }
   .pm-hero-copy h1 em { font-style: italic; color: var(--shop-accent); }
 
@@ -238,9 +304,12 @@ const listSchema = liveRooms.length
     position: absolute; inset: 0; border-radius: var(--shop-radius-lg); overflow: hidden;
     background: transparent;
   }
-  .pm-img-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .4s ease; }
+  .pm-img-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .5s ease, transform .5s cubic-bezier(0.22,0.61,0.36,1); }
   .pm-img-slide.active { opacity: 1; }
   .pm-slide-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  /* Ken Burns — ảnh active phóng chậm trong lúc hiển thị, replay mỗi lần đổi phòng. */
+  .pm-img-slide.active .pm-slide-img { animation: pm-ken 7s ease-out forwards; }
+  @keyframes pm-ken { from { transform: scale(1.001); } to { transform: scale(1.06); } }
   .pm-slide-ph {
     position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 16px;
     background: repeating-linear-gradient(135deg, #D9CDB6 0 18px, #C9B89C 18px 36px);
@@ -350,5 +419,13 @@ const listSchema = liveRooms.length
     .pm-gallery { grid-template-columns: 1fr; grid-template-rows: repeat(4, 240px); }
     .pm-card.tall { grid-column: span 1; }
     .pm-cta { padding: 32px 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pm-img-slide { transition: opacity .3s ease; }
+    .pm-img-slide.active .pm-slide-img { animation: none; }
+    .pm-hero-copy.active .pm-hero-eyebrow,
+    .pm-hero-copy.active h1,
+    .pm-hero-copy.active .pm-hero-sub,
+    .pm-hero-copy.active .pm-hero-actions { animation: none; }
   }
 </style>

@@ -182,7 +182,7 @@ const breadcrumbSchema = {
           {productRefs.map((ref: any) => {
             const p = byId[ref.id];
             return (
-              <article class="prod-card">
+              <article class="prod-card" data-tilt>
                 <a class="prod-img" href={p.href} aria-label={p.fullName}>
                   <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
                   <img class="shop-illo" src={p.illo} alt={p.fullName} loading="lazy" decoding="async" />
@@ -216,10 +216,10 @@ const breadcrumbSchema = {
     {cta && (
       <section class="pm-cta reveal" data-reveal>
         <div>
-          <h2 set:html={cta.heading} />
+          <SplitWords tag="h2" text={cta.heading} base={60} step={42} />
           <p>{cta.desc}</p>
         </div>
-        <a class="shop-btn shop-btn-primary" href="/#contact">Đặt tư vấn 3D <span class="arr">→</span></a>
+        <a class="shop-btn shop-btn-primary" href="/#contact" data-magnetic>Đặt tư vấn 3D <span class="arr">→</span></a>
       </section>
     )}
   </main>
@@ -229,6 +229,22 @@ const breadcrumbSchema = {
 
 <script>
   import { addToCart, toast } from '../../lib/shop-store';
+
+  // Lớp motion nâng cao (lib `motion`) chỉ là enhancement → tải LƯỜI khi idle.
+  // Gate reduce/?cms=1 NGAY ĐÂY để không tải chunk motion ở 2 nhóm này. shop-motion
+  // (tilt/parallax/magnetic) + phong-mau-motion (vẽ SVG + hotspot) tự init khi import.
+  {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cms = window.location.search.includes('cms=1');
+    if (!reduce && !cms) {
+      const load = () => { import('../../lib/shop-motion'); import('../../lib/phong-mau-motion'); };
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(load, { timeout: 2000 });
+      } else {
+        setTimeout(load, 200);
+      }
+    }
+  }
 
   // Nút "+ Giỏ" của các product card (popover hotspot tự xử lý riêng trong component).
   document.querySelectorAll<HTMLElement>('.prod-add[data-add]').forEach((btn) => {
@@ -322,8 +338,8 @@ const breadcrumbSchema = {
     margin-top: 36px; padding: 44px 48px;
     background: var(--shop-ink); color: var(--shop-bg); border-radius: var(--shop-radius-xl);
   }
-  .pm-cta h2 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(26px, 3.6vw, 40px); margin: 0; color: var(--shop-bg); }
-  .pm-cta h2 :global(em) { font-style: italic; color: var(--shop-accent); }
+  .pm-cta :global(h2) { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(26px, 3.6vw, 40px); margin: 0; color: var(--shop-bg); line-height: 1.05; }
+  .pm-cta :global(h2 em) { font-style: italic; color: var(--shop-accent); }
   .pm-cta p { margin: 10px 0 0; color: color-mix(in oklab, var(--shop-bg) 72%, transparent); font-size: 15px; max-width: 560px; }
 
   @media (max-width: 1000px) {
