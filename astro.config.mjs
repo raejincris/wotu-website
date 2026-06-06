@@ -45,6 +45,10 @@ const SITE_VERSION = (() => {
 export default defineConfig({
   site: 'https://www.wotu.vn',
   output: 'static',
+  // Prefetch link nội bộ khi hover/touchstart → điều hướng gần tức thì. Chỉ tải
+  // khi user tỏ ý (hover), không prefetch ồ ạt lúc load. Astro tự tôn trọng
+  // Save-Data + chèn <link rel="prefetch"> động (CSP 'self' → không đổi headers).
+  prefetch: { defaultStrategy: 'hover', prefetchAll: true },
   integrations: [
     pagefind(),
     mdx(),

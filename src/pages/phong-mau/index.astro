@@ -91,7 +91,7 @@ const listSchema = liveRooms.length
               return (
                 <div class={`pm-img-slide${i === 0 ? ' active' : ''}`} data-img={i} aria-hidden={i === 0 ? 'false' : 'true'}>
                   {imgSrc
-                    ? <img class="pm-slide-img" src={imgSrc} alt={`${r.name} ${r.nameEm ?? ''}`.trim()} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+                    ? <img class="pm-slide-img" src={imgSrc} alt={`${r.name} ${r.nameEm ?? ''}`.trim()} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} decoding="async" />
                     : <div class="pm-slide-ph"><span>{r.placeholder || hero.imageAlt || 'Phối cảnh phòng mẫu WOTU'}</span></div>
                   }
                 </div>
@@ -107,6 +107,12 @@ const listSchema = liveRooms.length
             <div class="pm-dots">
               {rooms.map((_, i) => <button class="pm-dot" type="button" data-dot={i} aria-current={i === 0 ? 'true' : 'false'} aria-label={`Phòng ${i + 1}`}></button>)}
             </div>
+          )}
+          {rooms.length > 1 && (
+            <button class="pm-pause" type="button" data-playing="true" aria-label="Tạm dừng chuyển ảnh tự động" hidden>
+              <svg class="ic-pause" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+              <svg class="ic-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            </button>
           )}
         </div>
       </div>
@@ -206,9 +212,11 @@ const listSchema = liveRooms.length
     const prev = heroEl.querySelector<HTMLElement>('.pm-nav.prev');
     const next = heroEl.querySelector<HTMLElement>('.pm-nav.next');
     const visual = heroEl.querySelector<HTMLElement>('.pm-hero-visual');
+    const pauseBtn = heroEl.querySelector<HTMLElement>('.pm-pause');
     const n = Math.max(copies.length, imgs.length);
     let i = 0;
     let timer: ReturnType<typeof setInterval> | null = null;
+    let paused = false; // user chủ động dừng (WCAG 2.2.2) — không tự chạy lại
 
     function show(k: number, dir = 1) {
       i = (k + n) % n;
@@ -228,13 +236,24 @@ const listSchema = liveRooms.length
     }
 
     function startAuto() {
-      if (reduce || n < 2) return;
+      if (reduce || n < 2 || paused) return;
       stopAuto();
       timer = setInterval(() => show(i + 1, 1), 5000);
     }
     function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
     // Thao tác thủ công → đổi slide + reset đồng hồ auto-play.
     function go(k: number, dir: number) { show(k, dir); startAuto(); }
+
+    // Nút Tạm dừng/Tiếp tục (WCAG 2.2.2) — chỉ ý nghĩa khi có auto-play.
+    if (pauseBtn && !reduce && n > 1) {
+      pauseBtn.hidden = false;
+      pauseBtn.addEventListener('click', () => {
+        paused = !paused;
+        pauseBtn.setAttribute('data-playing', paused ? 'false' : 'true');
+        pauseBtn.setAttribute('aria-label', paused ? 'Tiếp tục chuyển ảnh tự động' : 'Tạm dừng chuyển ảnh tự động');
+        if (paused) stopAuto(); else startAuto();
+      });
+    }
 
     prev?.addEventListener('click', () => go(i - 1, -1));
     next?.addEventListener('click', () => go(i + 1, 1));
@@ -338,6 +357,18 @@ const listSchema = liveRooms.length
     background: rgba(255,255,255,.55); border: none; transition: background .2s, transform .2s;
   }
   .pm-dot[aria-current="true"] { background: var(--shop-bg); transform: scale(1.25); }
+  /* Nút Tạm dừng/Tiếp tục auto-play (WCAG 2.2.2) — góc dưới-trái box ảnh. */
+  .pm-pause {
+    position: absolute; left: 12px; bottom: 8px; z-index: 4;
+    width: 28px; height: 28px; border-radius: 50%; padding: 0;
+    display: grid; place-items: center; cursor: pointer;
+    background: rgba(0,0,0,.42); color: #fff; border: none;
+    backdrop-filter: blur(6px); transition: background .2s;
+  }
+  .pm-pause:hover { background: rgba(0,0,0,.62); }
+  .pm-pause .ic-play { display: none; }
+  .pm-pause[data-playing="false"] .ic-pause { display: none; }
+  .pm-pause[data-playing="false"] .ic-play { display: block; }
 
   /* ── HÌNH DUNG KHÔNG GIAN SỐNG ── */
   .pm-fp { padding: 70px 0 64px; }

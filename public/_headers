@@ -27,6 +27,27 @@
   Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: *
 
-# Uploads (CMS-managed images) — short cache so swaps appear quickly
+# Uploads — Cloudflare _headers: khi nhiều rule khớp cùng path, RULE ĐỨNG SAU
+# THẮNG → đặt fallback generic TRƯỚC, rule cụ thể SAU để override đúng.
+
+# Fallback cho mọi upload (mặc định an toàn: cache vừa phải)
 /uploads/*
-  Cache-Control: public, max-age=3600, must-revalidate
+  Cache-Control: public, max-age=86400, must-revalidate
+
+# gen-script (tên file CỐ ĐỊNH: cat-*.webp, <slug>.webp) — có thể bị thay bằng
+# ảnh chụp thật cùng tên → giữ cache ngắn để bản mới hiện trong ~1 ngày.
+/uploads/products/*
+  Cache-Control: public, max-age=86400
+/uploads/blog/*
+  Cache-Control: public, max-age=86400
+
+# admin upload (tên file UNIQUE mỗi swap: <area>-<ts>-<rand>.webp) — cache vĩnh
+# viễn an toàn vì URL cũ không bao giờ tái dùng (swap = filename mới).
+/uploads/phong-mau/*
+  Cache-Control: public, max-age=31536000, immutable
+/uploads/combos/*
+  Cache-Control: public, max-age=31536000, immutable
+/uploads/hero/*
+  Cache-Control: public, max-age=31536000, immutable
+/uploads/projects/*
+  Cache-Control: public, max-age=31536000, immutable
