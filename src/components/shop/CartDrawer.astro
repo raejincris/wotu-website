@@ -291,8 +291,12 @@ const accessKey = site.forms?.contactAccessKey ?? '';
     return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
   }
 
+  let lastFocused: HTMLElement | null = null;
+
   function open(): void {
     if (!drawer) return;
+    // Nhớ phần tử đang focus (nút mở giỏ) để trả lại khi đóng (a11y).
+    lastFocused = document.activeElement as HTMLElement | null;
     drawer.hidden = false;
     drawer.setAttribute('aria-hidden', 'false');
     document.documentElement.classList.add('wotu-cart-open');
@@ -304,13 +308,36 @@ const accessKey = site.forms?.contactAccessKey ?? '';
     drawer.hidden = true;
     drawer.setAttribute('aria-hidden', 'true');
     document.documentElement.classList.remove('wotu-cart-open');
+    // Trả focus về phần tử đã mở drawer (WCAG focus management).
+    lastFocused?.focus();
+    lastFocused = null;
+  }
+
+  // Focus-trap: giữ Tab/Shift+Tab loanh quanh trong panel khi drawer mở.
+  function focusables(): HTMLElement[] {
+    if (!drawer) return [];
+    const sel = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    return Array.from(drawer.querySelectorAll<HTMLElement>(sel)).filter(
+      (el) => el.offsetParent !== null, // loại phần tử ẩn (foot khi giỏ trống)
+    );
   }
 
   drawer?.querySelectorAll<HTMLElement>('[data-close]').forEach((el) =>
     el.addEventListener('click', close),
   );
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && drawer && !drawer.hidden) close();
+    if (!drawer || drawer.hidden) return;
+    if (e.key === 'Escape') { close(); return; }
+    if (e.key === 'Tab') {
+      const list = focusables();
+      if (!list.length) return;
+      const first = list[0];
+      const last = list[list.length - 1];
+      const act = document.activeElement;
+      if (e.shiftKey && act === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && act === last) { e.preventDefault(); first.focus(); }
+      else if (!drawer.contains(act)) { e.preventDefault(); first.focus(); }
+    }
   });
   clearBtn?.addEventListener('click', () => {
     if (confirm('Xoá toàn bộ giỏ hàng?')) clearCart();

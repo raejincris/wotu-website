@@ -22,6 +22,12 @@ const PAGE_URL = `${SITE_URL}/phong-mau/`;
 const desc = 'Khám phá phòng mẫu WOTU — sơ đồ mặt bằng, phối cảnh 3D và chi tiết từng món nội thất. Phòng khách, phòng ngủ, bếp & phòng ăn được dựng sẵn để bạn lấy cảm hứng.';
 
 const liveRooms = rooms.filter((r) => !r.soon && r.href);
+
+// Thumb 640px (sinh bởi scripts/gen-upload-thumbs.mjs) cho ảnh /uploads/*.webp.
+// srcset → màn nhỏ tải ~77KB thay bản full ~382KB. File thiếu → trình duyệt
+// fallback về src (degrade an toàn).
+const thumb640 = (p?: string) =>
+  p && p.startsWith('/uploads/') && p.endsWith('.webp') ? p.replace(/\.webp$/, '-640.webp') : '';
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -91,7 +97,7 @@ const listSchema = liveRooms.length
               return (
                 <div class={`pm-img-slide${i === 0 ? ' active' : ''}`} data-img={i} aria-hidden={i === 0 ? 'false' : 'true'}>
                   {imgSrc
-                    ? <img class="pm-slide-img" src={imgSrc} alt={`${r.name} ${r.nameEm ?? ''}`.trim()} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} decoding="async" />
+                    ? <img class="pm-slide-img" src={imgSrc} srcset={thumb640(imgSrc) ? `${thumb640(imgSrc)} 640w, ${imgSrc} 1600w` : undefined} sizes="(max-width: 1000px) 92vw, 45vw" alt={`${r.name} ${r.nameEm ?? ''}`.trim()} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} decoding="async" />
                     : <div class="pm-slide-ph"><span>{r.placeholder || hero.imageAlt || 'Phối cảnh phòng mẫu WOTU'}</span></div>
                   }
                 </div>
@@ -151,7 +157,7 @@ const listSchema = liveRooms.length
           return (
             <Tag class={`pm-card${r.tall ? ' tall' : ''}${r.soon ? ' soon' : ''}`} href={r.soon ? undefined : r.href} {...(r.soon ? {} : { 'data-tilt': true })}>
               <div class={`shop-ph ${r.tone ?? 'dark'}`}><span class="shop-ph-label">{r.placeholder}</span></div>
-              {r.photo && <img class="shop-illo" src={r.photo} alt={fullName} loading="lazy" decoding="async" />}
+              {r.photo && <img class="shop-illo" src={r.photo} srcset={thumb640(r.photo) ? `${thumb640(r.photo)} 640w, ${r.photo} 1600w` : undefined} sizes="(max-width: 620px) 100vw, (max-width: 1000px) 50vw, 33vw" alt={fullName} loading="lazy" decoding="async" />}
               <div class="pm-card-top">
                 <span class="pm-style">{r.style}</span>
                 {r.soon && <span class="pm-soon">Sắp ra mắt</span>}
