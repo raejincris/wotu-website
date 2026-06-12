@@ -96,7 +96,7 @@ const breadcrumbSchema = {
     <div class="container tb-inner">
       <div class="tb-chips">
         <span style="font-size: 12px; color: var(--shop-ink-soft); font-weight: 600; letter-spacing: .04em;">Lọc đang dùng:</span>
-        <a href="#" style="font-size: 12px; color: var(--shop-accent); font-weight: 600;">Xoá tất cả</a>
+        <a href="#" style="font-size: 12px; color: var(--shop-accent-deep); font-weight: 600;">Xoá tất cả</a>
       </div>
       <div class="tb-controls">
         <span style="color: var(--shop-ink-soft);"><b style="color: var(--shop-ink); font-weight: 600;">{TOTAL}</b> kết quả</span>
@@ -368,12 +368,12 @@ const breadcrumbSchema = {
     color: var(--shop-ink); font-family: inherit;
   }
   .cat-tile:hover { border-color: var(--shop-accent); }
-  .cat-tile[data-active="true"] { background: var(--shop-accent); color: #fff; border-color: var(--shop-accent); }
+  .cat-tile[data-active="true"] { background: var(--shop-accent-deep); color: #fff; border-color: var(--shop-accent-deep); }
   .cat-tile .ic { width: 44px; height: 44px; border-radius: 12px; background: var(--shop-warm-soft); color: var(--shop-accent); display: grid; place-items: center; flex: none; }
   .cat-tile[data-active="true"] .ic { background: rgba(255,255,255,0.25); color: #fff; }
   .cat-tile .name { font-size: 13px; font-weight: 600; line-height: 1.1; white-space: nowrap; }
   .cat-tile .n { font-size: 10px; color: var(--shop-ink-soft); }
-  .cat-tile[data-active="true"] .n { color: rgba(255,255,255,0.8); }
+  .cat-tile[data-active="true"] .n { color: rgba(255,255,255,0.95); }
 
   /* Toolbar */
   .toolbar {
@@ -405,7 +405,7 @@ const breadcrumbSchema = {
   aside.filters { position: sticky; top: 136px; align-self: flex-start; max-height: calc(100vh - 150px); overflow-y: auto; padding-right: 6px; background: var(--shop-bg); z-index: 1; }
   .filters-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--shop-line); }
   .filters-head h3 { font-family: var(--shop-serif); font-size: 22px; margin: 0; font-weight: 400; }
-  .filters-head a { font-size: 12px; color: var(--shop-accent); font-weight: 600; }
+  .filters-head a { font-size: 12px; color: var(--shop-accent-deep); font-weight: 600; }
 
   .fgrp { border-bottom: 1px solid var(--shop-line); padding: 16px 0; }
   .fgrp summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--shop-ink); padding: 4px 0; }
@@ -445,8 +445,8 @@ const breadcrumbSchema = {
   .card-illo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
   .card-badges { position: absolute; top: 12px; left: 12px; display: flex; flex-direction: column; gap: 6px; z-index: 2; }
   .b-tag { background: var(--shop-bg-card); padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--shop-ink); display: inline-block; width: fit-content; }
-  .b-tag.accent { background: var(--shop-accent); color: white; }
-  .b-tag.sage { background: var(--shop-accent-2); color: white; }
+  .b-tag.accent { background: var(--shop-accent-deep); color: white; }
+  .b-tag.sage { background: var(--shop-accent-2-deep); color: white; }
   .b-tag.dark { background: var(--shop-ink); color: var(--shop-bg); }
   .card-fav {
     position: absolute; top: 12px; right: 12px; z-index: 2;
@@ -486,11 +486,12 @@ const breadcrumbSchema = {
   .card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
   .card-meta { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--shop-ink-soft); font-weight: 600; }
   .card-body h4 { font-family: var(--shop-serif); font-size: 22px; margin: 0; line-height: 1.1; letter-spacing: -.005em; font-weight: 400; }
-  .card-body h4 em { font-style: italic; color: var(--shop-accent); }
+  /* 22px = text thường → deep cho 4.5:1 trên card trắng. */
+  .card-body h4 em { font-style: italic; color: var(--shop-accent-deep); }
   .card-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; gap: 8px; flex-wrap: wrap; }
   .card-price { font-family: var(--shop-serif); font-size: 19px; color: var(--shop-ink); }
   .card-price s { font-size: 12px; color: var(--shop-ink-soft); font-family: var(--shop-sans); margin-right: 6px; }
-  .stars { display: inline-flex; gap: 1px; color: var(--shop-accent); font-size: 12px; }
+  .stars { display: inline-flex; gap: 1px; color: var(--shop-accent-deep); font-size: 12px; }
   .card-rating { font-size: 12px; color: var(--shop-ink-soft); display: inline-flex; align-items: center; gap: 4px; }
 
   /* Feature card */
@@ -524,7 +525,7 @@ const breadcrumbSchema = {
   .cta-row p { color: color-mix(in oklab, var(--shop-bg) 75%, transparent); font-size: 14px; margin: 0; }
   .cta-row .actions { display: flex; gap: 10px; flex-wrap: wrap; }
   .cta-row .eyebrow { color: color-mix(in oklab, var(--shop-bg) 70%, transparent); }
-  .cta-row .shop-btn-primary { background: var(--shop-accent); color: var(--shop-bg); }
+  .cta-row .shop-btn-primary { background: var(--shop-accent-deep); color: var(--shop-bg); }
   .cta-row .shop-btn-primary:hover { background: var(--shop-bg); color: var(--shop-ink); }
   .cta-row .shop-btn-outline { background: transparent; border-color: color-mix(in oklab, var(--shop-bg) 40%, transparent); color: var(--shop-bg); }
   .cta-row .shop-btn-outline:hover { background: var(--shop-bg); color: var(--shop-ink); border-color: var(--shop-bg); }

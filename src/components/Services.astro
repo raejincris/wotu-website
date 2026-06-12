@@ -27,7 +27,7 @@ interface ServiceItem {
   <div style="display: flex; flex-direction: column;">
     {(s.items as ServiceItem[]).map((item, i) => (
       <Reveal variant="reveal" delay={i * 120} class="grid-services-row" style="display: grid; grid-template-columns: 100px 1fr 1.4fr 320px; gap: 48px; padding: 56px 0; border-top: 1px solid var(--line); align-items: start;">
-        <div style="font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.1em; color: var(--taupe); padding-top: 14px;">{item.num}</div>
+        <div style="font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.1em; color: var(--earth); padding-top: 14px;">{item.num}</div>
         <h3 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(36px, 4vw, 64px); line-height: 1; color: var(--bark);">
           {item.title}<br/><em style="font-style: italic; color: var(--earth);">{item.em}</em>
         </h3>

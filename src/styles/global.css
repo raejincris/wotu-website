@@ -17,7 +17,7 @@
   --bark:     #4A3F32;
   --ink:      #2B231C;
   --cocoa:    #1A1410;
-  --accent:   #B8835A;
+  --accent:   #AC7344;  /* Darkened from #B8835A — đạt 3:1 large-text trên bone (axe 12/06). */
   --line:      rgba(43, 35, 28, 0.12);
   --line-soft: rgba(43, 35, 28, 0.06);
 

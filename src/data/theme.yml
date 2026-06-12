@@ -5,8 +5,8 @@
 studio:
   # Màu nhấn editorial (chữ in nghiêng, eyebrow). Đã tối để đạt WCAG AA trên nền bone.
   earth: "#6B5C45"
-  # Màu accent ấm (CTA, gạch chân).
-  accent: "#B8835A"
+  # Màu accent ấm (CTA, gạch chân). Đã tối từ #B8835A → đạt 3:1 large-text trên bone (axe 12/06).
+  accent: "#AC7344"
 
 shop:
   # Bảng màu nền có sẵn: warm (mặc định) | sunny | sage | rose

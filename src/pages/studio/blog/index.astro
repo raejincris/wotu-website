@@ -52,7 +52,7 @@ const categories = [...new Set(posts.map((p) => p.data.category))];
       >
         <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; color: var(--earth); text-transform: uppercase; line-height: 1.7;">
           {fmt.format(post.data.date)}
-          <div style="color: var(--taupe); margin-top: 6px;">{post.data.category} · {readingTime(post.body)} phút đọc</div>
+          <div style="color: var(--earth); margin-top: 6px;">{post.data.category} · {readingTime(post.body)} phút đọc</div>
         </div>
         <h2 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 3.4vw, 48px); line-height: 1.05; color: var(--bark);">
           {post.data.title}

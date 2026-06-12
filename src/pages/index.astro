@@ -492,8 +492,8 @@ const whyIcons: Record<string, string> = {
     padding: 6px 12px; border-radius: 999px;
     font-size: 11px; font-weight: 700; letter-spacing: .08em;
   }
-  .combo-badge.sage { background: var(--shop-accent-2); color: white; }
-  .combo-badge.terra { background: var(--shop-accent); color: white; }
+  .combo-badge.sage { background: var(--shop-accent-2-deep); color: white; }
+  .combo-badge.terra { background: var(--shop-accent-deep); color: white; }
   .combo-fav {
     position: absolute; top: 14px; right: 14px;
     width: 36px; height: 36px; border-radius: 50%;
@@ -513,7 +513,7 @@ const whyIcons: Record<string, string> = {
   }
   .price { font-family: var(--shop-serif); font-size: 24px; color: var(--shop-ink); }
   .price s { font-size: 14px; color: var(--shop-ink-soft); font-family: var(--shop-sans); margin-right: 8px; }
-  .price small { display: block; font-size: 11px; color: var(--shop-accent-2); font-family: var(--shop-sans); margin-top: 2px; }
+  .price small { display: block; font-size: 11px; color: var(--shop-accent-2-deep); font-family: var(--shop-sans); margin-top: 2px; }
   .combo-cta {
     width: 40px; height: 40px; border-radius: 50%; background: var(--shop-warm-soft);
     display: grid; place-items: center;
@@ -566,7 +566,7 @@ const whyIcons: Record<string, string> = {
     text-align: center; margin: 36px auto 0; max-width: 56ch;
     color: var(--shop-ink-soft); font-size: 14px; line-height: 1.6;
   }
-  .combo-empty a { color: var(--shop-accent); border-bottom: 1px solid currentColor; }
+  .combo-empty a { color: var(--shop-accent-deep); border-bottom: 1px solid currentColor; }
 
   /* ===== BESTSELLERS ===== */
   .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
@@ -597,7 +597,7 @@ const whyIcons: Record<string, string> = {
   .product-meta { font-size: 12px; color: var(--shop-ink-soft); }
   .product-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; }
   .product-foot .price { font-size: 18px; }
-  .stars { display: inline-flex; gap: 1px; color: var(--shop-accent); }
+  .stars { display: inline-flex; gap: 1px; color: var(--shop-accent-deep); }
 
   /* ===== INSPIRATION ===== */
   .inspo {
@@ -666,7 +666,8 @@ const whyIcons: Record<string, string> = {
 
   /* ===== CTA STRIPE ===== */
   .cta {
-    background: var(--shop-accent-2);
+    /* 2-deep thay accent-2: text trắng/kem trên nền sage đạt 4.5:1 (axe 12/06). */
+    background: var(--shop-accent-2-deep);
     border-radius: var(--shop-radius-xl);
     margin: 0 28px;
     padding: 70px 56px;
@@ -676,7 +677,7 @@ const whyIcons: Record<string, string> = {
   }
   .cta :global(h2) { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(36px, 5vw, 56px); line-height: 1; margin: 0; letter-spacing: -.015em; color: var(--shop-bg); }
   .cta :global(h2 em) { font-style: italic; color: var(--shop-warm-soft); }
-  .cta p { color: color-mix(in oklab, var(--shop-bg) 85%, transparent); margin: 18px 0 0; max-width: 540px; line-height: 1.6; }
+  .cta p { color: var(--shop-bg); margin: 18px 0 0; max-width: 540px; line-height: 1.6; }
   .cta p a { color: var(--shop-bg); }
   .cta-form {
     background: var(--shop-bg-card); border-radius: 999px;

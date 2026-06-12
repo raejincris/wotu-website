@@ -12,9 +12,12 @@
   --shop-ink: #2A2520;
   --shop-ink-soft: #6B6259;
   --shop-line: #E8DFCE;
-  --shop-accent: #C97B5E;
-  --shop-accent-deep: #A35E45;
+  /* Contrast (axe 12/06): accent đạt 3:1 large-text trên cả bg-soft; deep đạt 4.5:1
+     trên bg/bg-soft/warm-soft cho text chức năng; 2-deep cho text/badge sage. */
+  --shop-accent: #BD6B4C;
+  --shop-accent-deep: #94543D;
   --shop-accent-2: #6B8E7A;
+  --shop-accent-2-deep: #4E6F5D;
   --shop-accent-2-soft: #DCE5DC;
   --shop-warm-soft: #F2E5D0;
   --shop-yellow: #E9C46A;
@@ -38,22 +41,22 @@
 [data-shop-palette="sunny"] {
   --shop-bg: #FFFCF5; --shop-bg-soft: #FFF4DC;
   --shop-ink: #1F2A2E; --shop-ink-soft: #5B6A6F; --shop-line: #ECE3CC;
-  --shop-accent: #F5C57B; --shop-accent-deep: #D9A24F;
-  --shop-accent-2: #7FA8B5; --shop-accent-2-soft: #DCE9ED;
+  --shop-accent: #F5C57B; --shop-accent-deep: #8F6429;
+  --shop-accent-2: #7FA8B5; --shop-accent-2-deep: #4A7280; --shop-accent-2-soft: #DCE9ED;
   --shop-warm-soft: #FCEFCF;
 }
 [data-shop-palette="sage"] {
   --shop-bg: #F6F8F3; --shop-bg-soft: #E7EFDF;
   --shop-ink: #23332B; --shop-ink-soft: #5C6C61; --shop-line: #DDE6D6;
   --shop-accent: #6B8E7A; --shop-accent-deep: #4E6F5D;
-  --shop-accent-2: #D88660; --shop-accent-2-soft: #F4DDC9;
+  --shop-accent-2: #D88660; --shop-accent-2-deep: #A85B38; --shop-accent-2-soft: #F4DDC9;
   --shop-warm-soft: #EAF1E2;
 }
 [data-shop-palette="rose"] {
   --shop-bg: #FDF5F1; --shop-bg-soft: #F8E3D9;
   --shop-ink: #2E1F1A; --shop-ink-soft: #74574E; --shop-line: #EFD9CB;
-  --shop-accent: #D88660; --shop-accent-deep: #B0613D;
-  --shop-accent-2: #6E7F5C; --shop-accent-2-soft: #E1E6CF;
+  --shop-accent: #D88660; --shop-accent-deep: #99502E;
+  --shop-accent-2: #6E7F5C; --shop-accent-2-deep: #55663F; --shop-accent-2-soft: #E1E6CF;
   --shop-warm-soft: #F8E0D0;
 }
 
@@ -141,7 +144,7 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
 }
 .shop-icon-btn:hover { background: var(--shop-warm-soft); transform: translateY(-1px); }
 .shop-badge-dot {
-  background: var(--shop-accent); color: white; font-size: 10px; font-weight: 700;
+  background: var(--shop-accent-deep); color: white; font-size: 10px; font-weight: 700;
   border-radius: 999px; min-width: 18px; height: 18px; padding: 0 5px;
   display: inline-flex; align-items: center; justify-content: center;
   position: absolute; top: -2px; right: -2px;
@@ -191,7 +194,8 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
   display: inline-flex; align-items: center; gap: 56px;
   flex-shrink: 0;
 }
-.shop-marquee-track i { font-style: normal; color: var(--shop-accent); }
+/* 22px normal = text thường → cần 4.5:1 → dùng deep. */
+.shop-marquee-track i { font-style: normal; color: var(--shop-accent-deep); }
 .shop-marquee-track .star {
   display: inline-block; width: 16px; height: 16px; background: var(--shop-accent);
   clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);

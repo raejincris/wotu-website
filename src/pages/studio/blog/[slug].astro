@@ -81,7 +81,7 @@ const ogImage = cover && (cover.startsWith('/') || cover.startsWith('http'))
         {related.map((r) => (
           <li>
             <a href={`/studio/blog/${r.id}`} style="display: block; padding: 20px 0; border-bottom: 1px solid var(--line); text-decoration: none;">
-              <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; color: var(--taupe); text-transform: uppercase; margin-bottom: 8px;">
+              <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; color: var(--earth); text-transform: uppercase; margin-bottom: 8px;">
                 {fmt.format(r.data.date)} · Nhật ký
               </div>
               <h3 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 3vw, 34px); line-height: 1.1; color: var(--bark);">{r.data.title}</h3>
