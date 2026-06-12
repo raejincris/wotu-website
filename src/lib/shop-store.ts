@@ -7,6 +7,8 @@
 
 const CART_KEY = 'wotu-shop-cart-v1';
 const FAV_KEY = 'wotu-shop-fav-v1';
+const RECENT_KEY = 'wotu-shop-recent-v1';
+const RECENT_MAX = 8;
 
 export interface CartItem {
   id: string;
@@ -78,6 +80,18 @@ export function addToCart(
   writeCart(items);
 }
 
+/** Thêm nhiều sản phẩm 1 lần (wishlist "Thêm hết vào giỏ") — 1 write + 1 notify thay vì N. */
+export function addManyToCart(newItems: Omit<CartItem, 'qty'>[]): void {
+  if (!newItems.length) return;
+  const items = readCart();
+  for (const item of newItems) {
+    const existing = items.find((x) => x.id === item.id && x.variant === item.variant);
+    if (existing) existing.qty += 1;
+    else items.push({ ...item, qty: 1 });
+  }
+  writeCart(items);
+}
+
 export function removeFromCart(id: string, variant?: string): void {
   const items = readCart().filter(
     (x) => !(x.id === id && x.variant === variant),
@@ -140,6 +154,20 @@ export function getFavoriteCount(): number {
   return readFav().length;
 }
 
+/* ── "Đã xem gần đây" — MRU list id sản phẩm/combo, cap RECENT_MAX. ──
+ * KHÔNG notify(): chỉ ghi lịch sử xem, không cần re-render cart/badge UI. */
+export function recordView(id: string): void {
+  if (typeof localStorage === 'undefined' || !id) return;
+  const ids = safeParse<string[]>(localStorage.getItem(RECENT_KEY), []).filter((x) => x !== id);
+  ids.unshift(id);
+  localStorage.setItem(RECENT_KEY, JSON.stringify(ids.slice(0, RECENT_MAX)));
+}
+
+export function getRecent(): string[] {
+  if (typeof localStorage === 'undefined') return [];
+  return safeParse<string[]>(localStorage.getItem(RECENT_KEY), []);
+}
+
 /** Subscribe to any cart/favorite change. Returns unsubscribe.
  *  Idempotent: gọi cùng cb nhiều lần chỉ đăng ký 1 lần. */
 export function onChange(cb: Listener): () => void {
@@ -196,10 +224,10 @@ export function toast(msg: string, opts: { type?: 'success' | 'info' | 'error' }
   const el = document.createElement('div');
   const bg =
     opts.type === 'error'
-      ? '#A35E45'
+      ? '#94543D'
       : opts.type === 'info'
         ? '#2A2520'
-        : '#6B8E7A';
+        : '#4E6F5D';
   el.style.cssText = `
     background:${bg};color:#FBF7F0;padding:12px 22px;border-radius:999px;
     font:600 14px/1 'Inter',system-ui,sans-serif;

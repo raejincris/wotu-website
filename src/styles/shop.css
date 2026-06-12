@@ -1,3 +1,6 @@
+/* Self-hosted fonts (per-weight static — fix shaping VN). Xem global.css + fonts.css. */
+@import './fonts.css';
+
 /* ============================================================
    WOTU Shop — tokens, base, shared components
    Source of truth cho aesthetic retail (khác editorial studio).
@@ -103,6 +106,8 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
      88% opacity + backdrop blur trước không đủ che chữ trên page bg cùng tông. */
   background: var(--shop-bg);
   border-bottom: 1px solid color-mix(in oklab, var(--shop-line) 70%, transparent);
+  /* View Transitions: nav đứng yên khi chuyển trang trong shop (Chrome 126+). */
+  view-transition-name: shop-nav;
 }
 .shop-nav-inner {
   display: flex; align-items: center; justify-content: space-between;
@@ -437,4 +442,13 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
     transition: none !important; opacity: 1 !important;
     transform: none !important; clip-path: none !important;
   }
+}
+
+/* Cross-document View Transitions — shop pages (same as global.css Studio).
+ * Shop Nav có `view-transition-name: shop-nav` → nav đứng yên khi chuyển trang
+ * trong cùng Shop section. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation-duration: 180ms; }
 }

@@ -88,9 +88,13 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
 </section>
 
 <script>
+  import { viValidate } from '../lib/form-vi';
+
   const form = document.getElementById('wotu-contact-form') as HTMLFormElement | null;
   const submitBtn = document.getElementById('wotu-contact-submit') as HTMLButtonElement | null;
   const feedback = document.getElementById('wotu-contact-feedback') as HTMLDivElement | null;
+
+  if (form) viValidate(form);
 
   if (form && submitBtn && feedback) {
     form.addEventListener('submit', async (event) => {

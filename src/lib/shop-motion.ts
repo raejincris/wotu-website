@@ -9,27 +9,9 @@
  * vì CSS transition đè per-frame hay tạo spring mỗi pointermove → mượt, không trễ.
  */
 import { animate, scroll, inView, stagger } from 'motion';
+import { type Lerper, kick, clamp as _clamp } from './motion-utils';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
-
-/* ---- rAF lerp engine dùng chung ---- */
-type Lerper = () => boolean; // true = còn chạy
-const active = new Set<Lerper>();
-let running = false;
-function tick(): void {
-  active.forEach((l) => {
-    if (!l()) active.delete(l);
-  });
-  running = active.size > 0;
-  if (running) requestAnimationFrame(tick);
-}
-function kick(l: Lerper): void {
-  active.add(l);
-  if (!running) {
-    running = true;
-    requestAnimationFrame(tick);
-  }
-}
 
 export function initShopMotion(): void {
   if (typeof window === 'undefined') return;
@@ -241,8 +223,6 @@ function tilt(): void {
   });
 }
 
-function clamp(v: number, max: number): number {
-  return Math.max(-max, Math.min(max, v));
-}
+function clamp(v: number, max: number): number { return _clamp(v, max); }
 
 initShopMotion();

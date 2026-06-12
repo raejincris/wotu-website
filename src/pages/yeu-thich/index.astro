@@ -7,53 +7,8 @@ import ShopLayout from '../../layouts/ShopLayout.astro';
 import SplitWords from '../../components/SplitWords.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
-import shopProducts from '../../data/shop-products.yml';
-import shopHome from '../../data/shop-home.yml';
-
-/* Hydrate-able catalog metadata cho client lookup. Mỗi entry là 1 sản phẩm/combo
- * có thể được lưu vào favorites — id phải khớp với data-id ở các page khác. */
-interface CatalogEntry {
-  id: string;
-  name: string;
-  meta: string;
-  price: number;
-  priceLabel: string;
-  href: string;
-  illo: string;
-  placeholder: string;
-}
-
-/* Catalog cho client lookup — sinh TỪ chính data YAML (shop-products + shop-home)
- * để href + ảnh minh hoạ luôn khớp trang chi tiết, không drift như khi hardcode. */
-const num = (s: any) => Number(String(s ?? '').replace(/[^\d]/g, '')) || 0;
-const allProds = [ ...((shopProducts as any).products ?? []), ...((shopProducts as any).productsAfterCta ?? []) ];
-const combos = (shopHome as any).combos ?? [];
-
-const catalog: CatalogEntry[] = [
-  ...combos.map((c: any) => ({
-    id: c.id,
-    name: `${c.name} ${c.nameEm ?? ''}${c.nameTail ?? ''}`.trim(),
-    meta: c.cat,
-    price: c.price ?? num(c.priceNew),
-    priceLabel: c.priceNew ?? c.price ?? '',
-    href: c.href,
-    illo: `/uploads/products/combo-${c.room}.webp`,
-    placeholder: c.placeholder ?? `Combo ${c.nameEm ?? ''}`.trim(),
-  })),
-  ...allProds.map((p: any) => ({
-    id: p.id,
-    name: `${p.name} ${p.nameEm ?? ''}${p.nameTail ?? ''}`.trim(),
-    meta: p.cat,
-    price: p.priceNum ?? num(p.price),
-    priceLabel: p.price,
-    href: p.href,
-    illo: `/uploads/products/cat-${p.catKey}.webp`,
-    placeholder: p.placeholder ?? p.name,
-  })),
-];
-
-/* Serialize cho client lookup. Escape `</script>` đề phòng break-out qua define:vars. */
-const catalogJson = JSON.stringify(catalog).replace(/<\/script>/gi, '<\\/script>');
+import { catalogJson } from '../../lib/shop-catalog';
+const catalogJsonStr = catalogJson();
 ---
 <ShopLayout title="Yêu thích — WOTU" description="Sản phẩm và combo bạn đã đánh dấu yêu thích. Lưu trong trình duyệt — không cần đăng nhập.">
   <Nav />
@@ -89,19 +44,22 @@ const catalogJson = JSON.stringify(catalog).replace(/<\/script>/gi, '<\\/script>
 
     <div id="wl-actions" class="wl-actions" hidden>
       <span id="wl-count" class="wl-count">0 sản phẩm</span>
-      <button type="button" class="wl-clear" id="wl-clear">Xoá tất cả</button>
+      <div class="wl-actions-btns">
+        <button type="button" class="shop-btn shop-btn-primary" id="wl-add-all">Thêm hết vào giỏ</button>
+        <button type="button" class="wl-clear" id="wl-clear">Xoá tất cả</button>
+      </div>
     </div>
   </section>
 
   <Footer />
 </ShopLayout>
 
-<script is:inline define:vars={{ catalogJson }}>
-  window.__wotuCatalog = JSON.parse(catalogJson);
+<script is:inline define:vars={{ catalogJsonStr }}>
+  window.__wotuCatalog = window.__wotuCatalog || JSON.parse(catalogJsonStr);
 </script>
 
 <script>
-  import { getFavorites, toggleFavorite, clearFavorites, addToCart, onChange, toast, formatPrice } from '../../lib/shop-store';
+  import { getFavorites, toggleFavorite, clearFavorites, addToCart, addManyToCart, onChange, toast, formatPrice } from '../../lib/shop-store';
 
   interface CatalogEntry {
     id: string;
@@ -184,6 +142,16 @@ const catalogJson = JSON.stringify(catalog).replace(/<\/script>/gi, '<\\/script>
       });
     });
   }
+
+  const addAllBtn = document.getElementById('wl-add-all');
+  addAllBtn?.addEventListener('click', () => {
+    const ids = getFavorites();
+    const items = ids.map((id) => byId.get(id)).filter((x): x is CatalogEntry => !!x);
+    if (!items.length) return;
+    addManyToCart(items.map((it) => ({ id: it.id, name: it.name, price: it.price })));
+    toast(`✓ Đã thêm ${items.length} sản phẩm vào giỏ`);
+    (window as unknown as { __wotuOpenCart?: () => void }).__wotuOpenCart?.();
+  });
 
   clearBtn?.addEventListener('click', () => {
     if (!confirm('Xoá toàn bộ danh sách yêu thích?')) return;
@@ -269,7 +237,9 @@ const catalogJson = JSON.stringify(catalog).replace(/<\/script>/gi, '<\\/script>
     margin-top: 32px; padding-top: 24px;
     border-top: 1px solid var(--shop-line);
     display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
   }
+  .wl-actions-btns { display: flex; align-items: center; gap: 14px; }
   .wl-count { font-size: 13px; color: var(--shop-ink-soft); }
   .wl-clear {
     background: none; border: 0; cursor: pointer;

@@ -1,0 +1,58 @@
+title: "Giao hàng & Lắp đặt"
+description: "Chính sách giao hàng và lắp đặt nội thất WOTU — miễn phí trong Quy Nhơn và vùng lân cận, lịch hẹn linh hoạt, đội thợ lành nghề tận tình."
+template: shop
+blocks:
+  - id: hero
+    type: richText
+    eyebrow: "Dịch vụ"
+    heading: "Giao hàng &amp; <em>Lắp đặt</em>"
+    body: "<p>WOTU đảm nhận toàn bộ khâu vận chuyển và lắp đặt — từ xưởng đến tận căn phòng của bạn. Chúng tôi không chỉ giao đồ; chúng tôi hoàn thiện không gian sống đúng như bản vẽ đã duyệt.</p>"
+    align: left
+
+  - id: features-giao
+    type: features
+    heading: "Cam kết của chúng tôi"
+    items:
+      - icon: "🚚"
+        heading: "Miễn phí trong Quy Nhơn"
+        text: "Giao & lắp đặt hoàn toàn miễn phí trong nội thành Quy Nhơn và các vùng lân cận (bán kính 20km)."
+      - icon: "📅"
+        heading: "Lịch hẹn linh hoạt"
+        text: "Đặt lịch theo ca sáng/chiều, kể cả cuối tuần. Chúng tôi xác nhận giờ cụ thể trước 24h để bạn chủ động."
+      - icon: "🔧"
+        heading: "Đội thợ lành nghề"
+        text: "Đội lắp đặt của WOTU là thợ kỳ cựu — biết từng món đồ từ khi sản xuất, nên lắp nhanh, chuẩn, không trầy xước."
+      - icon: "🏠"
+        heading: "Dọn sạch sau lắp"
+        text: "Sau khi hoàn tất, chúng tôi thu dọn bao bì, mảnh vụn và bàn giao không gian sạch sẽ như mới."
+
+  - id: process-giao
+    type: richText
+    eyebrow: "Quy trình"
+    heading: "Từ xưởng đến nhà bạn"
+    body: "<p><strong>Bước 1 — Xác nhận lịch:</strong> Sau khi ký hợp đồng hoặc đặt cọc, chúng tôi liên hệ trong 24h để chốt ngày giờ giao phù hợp.<br/><strong>Bước 2 — Kiểm tra hàng:</strong> Mỗi món đồ được kiểm tra kỹ tại xưởng trước khi lên xe — đóng gói bảo vệ góc cạnh, chống ẩm.<br/><strong>Bước 3 — Giao & lắp:</strong> Đội thợ đến đúng giờ, lắp đặt theo bản vẽ, kiểm tra vận hành (ngăn kéo, bản lề, khung giường).<br/><strong>Bước 4 — Nghiệm thu:</strong> Bạn kiểm tra cùng thợ, ký biên bản bàn giao. Có vấn đề → xử lý ngay tại chỗ.</p>"
+    align: left
+
+  - id: faq-giao
+    type: faq
+    heading: "Câu hỏi thường gặp"
+    items:
+      - question: "Giao hàng có mất phí không?"
+        answer: "<p>Miễn phí trong nội thành Quy Nhơn và bán kính 20km. Đối với khu vực xa hơn (Bình Định, Phú Yên, toàn quốc), chúng tôi báo phí vận chuyển thực tế dựa trên khoảng cách và khối lượng — thông thường 200.000–600.000đ/chuyến.</p>"
+        open: true
+      - question: "Tôi có thể chọn ngày giờ giao không?"
+        answer: "<p>Có. Sau khi đặt cọc, nhân viên WOTU sẽ liên hệ để bạn chọn ca sáng (8–12h) hoặc chiều (13–17h), kể cả thứ 7 và chủ nhật.</p>"
+      - question: "Nếu nhà tôi chưa sơn xong khi hàng đến thì sao?"
+        answer: "<p>Bạn có thể dời lịch miễn phí 1 lần nếu báo trước 48h. Trường hợp hoàn cảnh bất khả kháng, chúng tôi cũng linh hoạt sắp xếp lại — gọi hotline <strong>0933 774 708</strong> để trao đổi.</p>"
+      - question: "Lắp đặt mất bao lâu?"
+        answer: "<p>Phụ thuộc số lượng: một bộ sofa + bàn trà mất khoảng 1–2 giờ; một phòng ngủ đầy đủ (giường + tủ + đầu giường) khoảng 3–5 giờ. Combo căn hộ trọn gói thường chia 2 đợt.</p>"
+      - question: "Thợ có cần tôi có mặt suốt quá trình không?"
+        answer: "<p>Bạn nên có mặt khi thợ đến và lúc nghiệm thu. Trong quá trình lắp, bạn không cần đứng theo dõi liên tục — chúng tôi sẽ gọi bạn khi cần xác nhận vị trí đặt đồ.</p>"
+
+  - id: cta-giao
+    type: bannerCta
+    heading: "Sẵn sàng nhận <em>tổ ấm mới</em>?"
+    sub: "Đặt lịch tư vấn — chúng tôi gọi lại trong 15 phút (giờ hành chính)."
+    btnLabel: "Đặt tư vấn ngay"
+    btnHref: "/#contact"
+    tone: accent

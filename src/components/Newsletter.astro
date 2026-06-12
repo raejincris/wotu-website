@@ -35,7 +35,10 @@ const {
 </section>
 
 <script>
+  import { viValidate } from '../lib/form-vi';
+
   document.querySelectorAll<HTMLFormElement>('.nl-form').forEach((form) => {
+    viValidate(form);
     const btn = form.querySelector<HTMLButtonElement>('.nl-btn');
     const fb = form.querySelector<HTMLParagraphElement>('.nl-feedback');
     form.addEventListener('submit', async (e) => {

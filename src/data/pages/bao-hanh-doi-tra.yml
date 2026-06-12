@@ -1,0 +1,66 @@
+title: "Bảo hành & Đổi trả"
+description: "Chính sách bảo hành 5 năm và đổi trả 30 ngày của WOTU — cam kết rõ ràng, quy trình đơn giản, không phát sinh chi phí ẩn."
+template: shop
+blocks:
+  - id: hero
+    type: richText
+    eyebrow: "Cam kết"
+    heading: "Bảo hành &amp; <em>Đổi trả</em>"
+    body: "<p>Chúng tôi làm đồ nội thất theo lối thủ công truyền thống — mỗi mộng ghép, mỗi lớp sơn đều có chủ nhân. Vì thế, bảo hành không chỉ là chính sách — đó là cam kết nghề nghiệp.</p>"
+    align: left
+
+  - id: baohanh-stats
+    type: stats
+    heading: ""
+    items:
+      - value: "5 năm"
+        label: "Bảo hành cấu kiện gỗ"
+      - value: "30 ngày"
+        label: "Đổi trả lỗi sản xuất"
+      - value: "24h"
+        label: "Phản hồi yêu cầu bảo hành"
+
+  - id: baohanh-detail
+    type: richText
+    eyebrow: "Chi tiết bảo hành"
+    heading: "Bảo hành <em>5 năm</em>"
+    body: "<p>WOTU bảo hành <strong>5 năm</strong> cho toàn bộ cấu kiện gỗ và khung kim loại của sản phẩm — bao gồm: nứt vỡ do lỗi vật liệu, biến dạng cơ cấu, bung mộng, hỏng bản lề/ray trượt do lỗi lắp ráp.</p><p>Bảo hành <strong>miễn phí sửa chữa tại nhà</strong> trong phạm vi Quy Nhơn và lân cận. Khu vực xa hơn: chúng tôi hướng dẫn qua video hoặc thu phí vận chuyển thực tế.</p>"
+    align: left
+
+  - id: khong-bao-hanh
+    type: features
+    heading: "Không áp dụng bảo hành"
+    items:
+      - icon: "💧"
+        heading: "Hư hỏng do nước/ẩm"
+        text: "Đồ gỗ để ngoài trời, tiếp xúc mưa hoặc ngập nước — không thuộc phạm vi bảo hành."
+      - icon: "⚡"
+        heading: "Sử dụng sai mục đích"
+        text: "Tải trọng vượt thông số kỹ thuật, dùng đồ phòng ngủ để làm kệ công nghiệp,…"
+      - icon: "🔨"
+        heading: "Tự sửa hoặc cải tạo"
+        text: "Khách hàng hoặc thợ khác tự đục, cắt, sơn đè, thay phụ kiện mà không thông báo WOTU."
+      - icon: "🎨"
+        heading: "Bạc màu tự nhiên"
+        text: "Gỗ tự nhiên thay đổi màu theo thời gian và ánh sáng là đặc tính vật liệu, không phải lỗi."
+
+  - id: doi-tra
+    type: richText
+    eyebrow: "Đổi trả"
+    heading: "Đổi trả <em>30 ngày</em>"
+    body: "<p>Nếu sản phẩm giao đến có <strong>lỗi sản xuất</strong> (vết nứt, lệch màu, thiếu phụ kiện, kích thước sai so với đơn hàng), bạn có quyền đổi hoặc hoàn tiền trong vòng <strong>30 ngày</strong> kể từ ngày giao.</p><p><strong>Quy trình:</strong> Chụp ảnh lỗi → gọi <strong>0933 774 708</strong> hoặc email <strong>hello@wotu.vn</strong> → đội kỹ thuật xác nhận trong 24h → lên lịch đổi/sửa trong 3–7 ngày làm việc.</p><p><em>Lưu ý:</em> Đổi trả theo ý muốn (không lỗi sản xuất) phụ thuộc vào thoả thuận trong hợp đồng — vui lòng đọc kỹ trước khi ký.</p>"
+    align: left
+
+  - id: faq-bh
+    type: faq
+    heading: "Câu hỏi về bảo hành"
+    items:
+      - question: "Làm sao kích hoạt bảo hành?"
+        answer: "<p>Bảo hành tự động theo số hợp đồng hoặc biên bản bàn giao — không cần đăng ký thêm. Khi cần, bạn cung cấp số hợp đồng hoặc ngày mua và mô tả vấn đề.</p>"
+        open: true
+      - question: "Tôi ở tỉnh khác, WOTU có đến bảo hành không?"
+        answer: "<p>Có, nhưng sẽ mất thêm chi phí vận chuyển thực tế. Đối với hư hỏng nhỏ, chúng tôi sẽ hướng dẫn qua video call trước — đa số có thể tự xử lý hoặc nhờ thợ địa phương theo chỉ dẫn của WOTU.</p>"
+      - question: "Nếu màu sơn bị bong sau 2 năm thì có bảo hành không?"
+        answer: "<p>Bong tróc sơn <em>do lỗi lớp phủ</em> (áp dụng trong 12 tháng đầu) được bảo hành miễn phí. Bong tróc sau 12 tháng do va đập, vệ sinh sai cách, hoặc tiếp xúc hoá chất — ngoài phạm vi bảo hành nhưng WOTU có thể tư vấn sơn lại với chi phí thực tế.</p>"
+      - question: "Tôi muốn hoàn tiền thay vì đổi hàng có được không?"
+        answer: "<p>Có, trong trường hợp lỗi sản xuất và WOTU không thể cung cấp sản phẩm thay thế tương đương trong thời gian hợp lý (tối đa 14 ngày). Hoàn tiền theo phương thức thanh toán ban đầu, xử lý trong 5–7 ngày làm việc.</p>"

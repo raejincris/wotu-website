@@ -3,6 +3,8 @@ import ShopLayout from '../../layouts/ShopLayout.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
 import SplitWords from '../../components/SplitWords.astro';
+import RecentlyViewed from '../../components/shop/RecentlyViewed.astro';
+import BackToTop from '../../components/shop/BackToTop.astro';
 import shopProducts from '../../data/shop-products.yml';
 import { jsonLd } from '../../lib/jsonld';
 
@@ -330,6 +332,13 @@ const breadcrumbSchema = {
 
       </div>
 
+      <!-- Empty state khi bộ lọc cho ra 0 kết quả -->
+      <div class="catalog-empty" id="catalog-empty" hidden>
+        <h3>Không có sản phẩm khớp bộ lọc</h3>
+        <p>Thử nới khoảng giá hoặc bỏ bớt điều kiện — hoặc xoá hết bộ lọc để xem lại toàn bộ {TOTAL} sản phẩm.</p>
+        <button type="button" class="shop-btn shop-btn-outline" id="catalog-empty-clear">Xoá bộ lọc</button>
+      </div>
+
       <!-- Tổng kết kết quả (toàn bộ sản phẩm hiển thị trên 1 trang — chưa cần phân trang) -->
       <div class="pager">
         <div class="info">Hiển thị <b style="color: var(--shop-ink);">{TOTAL}</b> trong tổng <b style="color: var(--shop-ink);">{TOTAL}</b> sản phẩm</div>
@@ -337,6 +346,8 @@ const breadcrumbSchema = {
     </div>
   </main>
 
+  <RecentlyViewed />
+  <BackToTop />
   <Footer />
 </ShopLayout>
 
@@ -531,6 +542,14 @@ const breadcrumbSchema = {
   .cta-row .shop-btn-outline:hover { background: var(--shop-bg); color: var(--shop-ink); border-color: var(--shop-bg); }
 
   /* Pagination */
+  .catalog-empty {
+    text-align: center; padding: 56px 24px;
+    border: 1px dashed var(--shop-line); border-radius: var(--shop-radius-xl);
+    color: var(--shop-ink-soft);
+  }
+  .catalog-empty h3 { font-family: var(--shop-serif); font-weight: 400; font-size: 28px; margin: 0 0 10px; color: var(--shop-ink); }
+  .catalog-empty p { font-size: 14px; line-height: 1.6; max-width: 46ch; margin: 0 auto 22px; }
+
   .pager { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 40px 0 0; flex-wrap: wrap; }
   .pager-nums { display: inline-flex; gap: 6px; align-items: center; }
   .pager-nums a {
@@ -724,6 +743,9 @@ const breadcrumbSchema = {
       if (show) visible++;
     });
     if (resultCount) resultCount.textContent = String(visible);
+    // Empty state khi bộ lọc cho ra 0 kết quả.
+    const emptyEl = document.getElementById('catalog-empty');
+    if (emptyEl) emptyEl.hidden = visible > 0;
     if (pagerInfo) {
       const total = TOTAL;
       pagerInfo.innerHTML = `Hiển thị <b style="color: var(--shop-ink);">${visible}</b> trong tổng <b style="color: var(--shop-ink);">${total}</b> sản phẩm`;
@@ -751,6 +773,9 @@ const breadcrumbSchema = {
     });
     if (state.sort !== 'relevant') visCards.forEach((c) => grid.appendChild(c));
   }
+
+  // Nút "Xoá bộ lọc" trong empty state.
+  document.getElementById('catalog-empty-clear')?.addEventListener('click', clearAll);
 
   // ===== Cat tile single-select =====
   const catTiles = document.querySelectorAll<HTMLButtonElement>('.cat-tile');

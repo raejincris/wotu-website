@@ -230,6 +230,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
     onChange,
     formatPrice,
   } from '../../lib/shop-store';
+  import { viValidate } from '../../lib/form-vi';
 
   const drawer = document.getElementById('wotu-cart-drawer') as HTMLElement | null;
   const body = document.getElementById('cart-body');
@@ -345,6 +346,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
 
   // ===== Submit form (Web3Forms with cart payload) =====
   const form = document.getElementById('cart-form') as HTMLFormElement | null;
+  if (form) viValidate(form);
   const payloadField = document.getElementById('cart-payload') as HTMLInputElement | null;
   let submitting = false;
 

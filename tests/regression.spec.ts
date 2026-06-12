@@ -980,3 +980,144 @@ test.describe('20 · /phong-mau/ — phòng mẫu', () => {
     await expect(badge).toHaveText('1');
   });
 });
+
+// ---------------------------------------------------------------------------
+// 21 · Shop UX Pack (P2 — lightbox, qty, empty-state, bulk add, viValidate)
+// ---------------------------------------------------------------------------
+test.describe('21 · Shop UX Pack', () => {
+  test('Lightbox: click ảnh chính → dialog mở; Escape → đóng (sofa-may)', async ({ page }) => {
+    await page.goto('/san-pham/sofa-may/');
+    await page.waitForLoadState('domcontentloaded');
+
+    const trigger = page.locator('[data-lightbox]').first();
+    await trigger.scrollIntoViewIfNeeded();
+    await trigger.click();
+
+    const dialog = page.locator('#wotu-lightbox');
+    await expect(dialog).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+  });
+
+  test('Lightbox: click ảnh chính → dialog mở; Escape → đóng (combo/to-am)', async ({ page }) => {
+    await page.goto('/combo/to-am/');
+    await page.waitForLoadState('domcontentloaded');
+
+    const trigger = page.locator('[data-lightbox]').first();
+    await trigger.scrollIntoViewIfNeeded();
+    await trigger.click();
+
+    const dialog = page.locator('#wotu-lightbox');
+    await expect(dialog).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+  });
+
+  test('Qty stepper: nút + tăng qty; nút − giảm qty (san-pham/[id])', async ({ page }) => {
+    await page.goto('/san-pham/ban-tra-nang-mai/');
+    await page.waitForLoadState('domcontentloaded');
+
+    const input = page.locator('#pdQty');
+    const plus = page.locator('.pd-qty [data-q="1"]');
+    const minus = page.locator('.pd-qty [data-q="-1"]');
+
+    await expect(input).toHaveValue('1');
+    await plus.click();
+    await expect(input).toHaveValue('2');
+    await minus.click();
+    await expect(input).toHaveValue('1');
+    // Không giảm xuống dưới 1
+    await minus.click();
+    await expect(input).toHaveValue('1');
+  });
+
+  test('Empty state lọc: filter không có kết quả → catalog-empty hiển thị; Xoá bộ lọc → ẩn', async ({ page }) => {
+    await page.goto('/san-pham/');
+    await page.waitForLoadState('domcontentloaded');
+
+    const emptyEl = page.locator('#catalog-empty');
+    await expect(emptyEl).toBeHidden();
+
+    // Đặt khoảng giá tối đa rất thấp để không có sản phẩm nào khớp
+    const maxInput = page.locator('.range-inputs input:last-child');
+    await maxInput.scrollIntoViewIfNeeded();
+    await maxInput.fill('100');
+    await maxInput.dispatchEvent('change');
+
+    await expect(emptyEl).toBeVisible();
+
+    const clearBtn = page.locator('#catalog-empty-clear');
+    await clearBtn.click();
+    await expect(emptyEl).toBeHidden();
+  });
+
+  test('Wishlist bulk add: "Thêm hết vào giỏ" → badge tăng đúng số lượng', async ({ page }) => {
+    await page.goto('/yeu-thich/');
+    await clearStorage(page);
+
+    // Seed 2 item yêu thích vào localStorage (dùng ID thực từ shop-home.yml)
+    await page.evaluate(() => {
+      localStorage.setItem('wotu-shop-fav-v1', JSON.stringify(['combo-to-am', 'combo-an-cu']));
+    });
+    await page.reload();
+    await page.waitForLoadState('domcontentloaded');
+
+    const addAllBtn = page.locator('#wl-add-all');
+    await expect(addAllBtn).toBeVisible();
+
+    const badge = page.locator('#wotu-cart-badge');
+    await addAllBtn.click();
+
+    await expect(badge).not.toHaveAttribute('hidden');
+    // 2 items thêm vào → badge = 2
+    await expect(badge).toHaveText('2');
+  });
+
+  test('Back-to-top nút hiển thị sau khi scroll xuống (san-pham/)', async ({ page }) => {
+    await page.goto('/san-pham/');
+    await page.waitForLoadState('domcontentloaded');
+
+    const btn = page.locator('#wotu-btt');
+    // Ban đầu chưa có class .on
+    await expect(btn).not.toHaveClass(/\bon\b/);
+
+    // Scroll xuống đủ xa (> 1.2 × innerHeight)
+    await page.evaluate(() => window.scrollTo(0, window.innerHeight * 1.5));
+    await page.waitForTimeout(400);
+
+    await expect(btn).toHaveClass(/\bon\b/);
+  });
+
+  test('Form validation tiếng Việt: submit CartDrawer form thiếu tên → custom message', async ({ page }) => {
+    await page.goto('/');
+    await clearStorage(page);
+    await page.evaluate(() => {
+      localStorage.setItem('wotu-shop-cart-v1', JSON.stringify([
+        { id: 'c-to-am', name: 'Combo Tổ Ấm', price: 28500000, qty: 1 }
+      ]));
+    });
+    await page.reload();
+    await page.waitForLoadState('domcontentloaded');
+
+    // Mở cart drawer
+    await page.evaluate(() => (window as any).__wotuOpenCart?.());
+    const drawer = page.locator('#wotu-cart-drawer');
+    await expect(drawer).not.toHaveAttribute('hidden');
+
+    // Submit form trống
+    const form = page.locator('#cart-form');
+    const nameInput = form.locator('input[name="name"]');
+    await expect(nameInput).toBeVisible();
+
+    // Kiểm tra HTML5 validation sẽ chặn submit — browser native, không fetch
+    const submitBtn = form.locator('button[type="submit"]');
+    await submitBtn.click();
+
+    // Kiểm tra validationMessage tiếng Việt via evaluate
+    const msg = await nameInput.evaluate((el: HTMLInputElement) => el.validationMessage);
+    expect(msg).not.toBe('');
+    expect(msg).toMatch(/vui lòng|điền/i);
+  });
+});

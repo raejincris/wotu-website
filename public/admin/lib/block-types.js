@@ -114,6 +114,25 @@ export const BLOCK_TYPES = {
       { icon: '🛋️', heading: 'Tiêu đề điểm 1', text: 'Mô tả ngắn cho điểm nổi bật.' },
     ] },
   },
+  faq: {
+    label: 'Câu hỏi thường gặp',
+    icon: '❓',
+    desc: 'Accordion hỏi–đáp, phát JSON-LD FAQPage cho SEO',
+    fields: [
+      { key: 'heading', label: 'Tiêu đề (tuỳ chọn)', type: 'text', hint: 'Cho phép &lt;em&gt; in nghiêng' },
+      { key: 'items', label: 'Các câu hỏi', type: 'list', itemLabel: 'Thêm câu hỏi',
+        itemFields: [
+          { key: 'question', label: 'Câu hỏi', type: 'text' },
+          { key: 'answer', label: 'Trả lời', type: 'area', hint: 'Cho phép &lt;p&gt;, &lt;ul&gt;, &lt;strong&gt;, &lt;a&gt;' },
+          { key: 'open', label: 'Mở sẵn?', type: 'select', options: [
+            { value: false, label: 'Không' }, { value: true, label: 'Có' },
+          ] },
+        ] },
+    ],
+    defaults: { heading: '', items: [
+      { question: 'Câu hỏi mẫu?', answer: '<p>Câu trả lời mẫu.</p>', open: false },
+    ] },
+  },
   spacer: {
     label: 'Giãn cách',
     icon: '↕️',

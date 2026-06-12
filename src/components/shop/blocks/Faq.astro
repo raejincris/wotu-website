@@ -1,0 +1,56 @@
+---
+/** Khối FAQ: tiêu đề (tuỳ chọn) + accordion details/summary. Phát thêm JSON-LD
+ * FAQPage nếu có ít nhất 1 mục — giúp Google hiển thị rich snippet. */
+interface Props { block: any; }
+const { block } = Astro.props;
+const items = (Array.isArray(block.items) ? block.items : []).filter(
+  (it: any) => it && it.question && it.answer,
+);
+
+const jsonLd = items.length > 0
+  ? JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: items.map((it: any) => ({
+        '@type': 'Question',
+        name: String(it.question).replace(/<[^>]+>/g, ''),
+        acceptedAnswer: { '@type': 'Answer', text: String(it.answer).replace(/<[^>]+>/g, '') },
+      })),
+    })
+  : null;
+---
+<div class="container blk-faq">
+  {block.heading && <h2 set:html={block.heading} />}
+  {items.length > 0 && (
+    <div class="faq">
+      {items.map((it: any) => (
+        <details open={it.open || undefined}>
+          <summary set:html={it.question} />
+          <div class="ans" set:html={it.answer} />
+        </details>
+      ))}
+    </div>
+  )}
+</div>
+
+{jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
+
+<style>
+  .blk-faq { max-width: var(--shop-maxw); display: flex; flex-direction: column; gap: 32px; }
+  .blk-faq h2 {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(28px, 3.6vw, 46px); line-height: 1.08; letter-spacing: -0.01em;
+    color: var(--shop-ink); margin: 0;
+  }
+  .blk-faq :global(h2 em) { font-style: italic; color: var(--shop-accent); }
+  .faq { display: flex; flex-direction: column; gap: 10px; }
+  .faq details { background: var(--shop-bg-card); border: 1px solid var(--shop-line); border-radius: var(--shop-radius); padding: 0; }
+  .faq summary { padding: 22px 24px; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; font-family: var(--shop-serif); font-size: 20px; color: var(--shop-ink); align-items: center; list-style: none; line-height: 1.3; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; flex-shrink: 0; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: var(--shop-warm-soft); color: var(--shop-accent-deep); font-size: 18px; font-weight: 300; transition: transform .25s, background .2s; }
+  .faq details[open] summary::after { content: "−"; background: var(--shop-ink); color: var(--shop-bg); }
+  .faq .ans { padding: 0 24px 24px; color: var(--shop-ink-soft); font-size: 15px; line-height: 1.65; }
+  .faq .ans :global(p) { margin: 0 0 8px; }
+  .faq .ans :global(ul), .faq .ans :global(ol) { padding-left: 20px; margin: 0 0 8px; }
+  .faq .ans :global(a) { color: var(--shop-accent-deep); text-decoration: underline; }
+</style>

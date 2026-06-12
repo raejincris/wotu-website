@@ -9,6 +9,8 @@ import ShopLayout from '../../layouts/ShopLayout.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
 import SplitWords from '../../components/SplitWords.astro';
+import Lightbox from '../../components/shop/Lightbox.astro';
+import BackToTop from '../../components/shop/BackToTop.astro';
 import shopHome from '../../data/shop-home.yml';
 import toAmDetail from '../../data/combo-to-am.yml';
 import { jsonLd } from '../../lib/jsonld';
@@ -140,7 +142,7 @@ const breadcrumbSchema = {
       <div class="pd-gallery">
         <div class="pd-main">
           <div class={`shop-ph ${c.tone ?? ''}`}><span class="shop-ph-label">{c.placeholder ?? fullName}</span></div>
-          <img class="shop-illo" src={illo} alt={`${hasPhoto ? '' : 'Minh hoạ '}${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" />
+          <img class="shop-illo" src={illo} alt={`${hasPhoto ? '' : 'Minh hoạ '}${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" data-lightbox data-caption={fullName} />
           {c.badge && <div class="pd-badges"><span class={`b-tag${c.badgeClass ? ' ' + c.badgeClass : ' dark'}`}>{c.badge}</span></div>}
         </div>
         {!hasPhoto && <p class="pd-illo-note">Ảnh minh hoạ — ảnh chụp thật đang được cập nhật.</p>}
@@ -480,21 +482,27 @@ const breadcrumbSchema = {
     )}
   </main>
 
+  <Lightbox />
+  <BackToTop />
   <Footer />
 
-  {/* ===== STICKY CART BAR (chỉ combo giàu) ===== */}
-  {hasRich && (
-    <div class="sticky-bar" id="stickyBar">
-      <span class="sb-title">{fullName}</span>
-      <span class="sb-price">{c.priceOld && <s>{c.priceOld}</s>}{c.priceNew}</span>
-      <button class="shop-btn shop-btn-primary" type="button" id="pdAddSticky"
-        data-id={c.id} data-name={`Combo ${c.nameEm}`} data-price={c.price}>Thêm giỏ →</button>
-    </div>
-  )}
+  {/* ===== STICKY CART BAR (mọi combo — hiện khi cuộn qua hero) ===== */}
+  <div class="sticky-bar" id="stickyBar">
+    <span class="sb-title">{fullName}</span>
+    <span class="sb-price">{c.priceOld && <s>{c.priceOld}</s>}{c.priceNew}</span>
+    <button class="shop-btn shop-btn-primary" type="button" id="pdAddSticky"
+      data-id={c.id} data-name={`Combo ${c.nameEm}`} data-price={c.price}>Thêm giỏ →</button>
+  </div>
 </ShopLayout>
 
 <script>
-  import { addToCart, toggleFavorite, isFavorite, toast } from '../../lib/shop-store';
+  import { addToCart, toggleFavorite, isFavorite, toast, recordView } from '../../lib/shop-store';
+
+  // Ghi lịch sử "Đã xem gần đây".
+  {
+    const addBtn = document.getElementById('pdAdd');
+    if (addBtn?.dataset.id) recordView(addBtn.dataset.id);
+  }
 
   function wireAdd(el: HTMLElement | null) {
     el?.addEventListener('click', () => {

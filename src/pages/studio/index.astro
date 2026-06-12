@@ -63,3 +63,19 @@ const projects = all
   <Footer />
   <TweaksPanel />
 </BaseLayout>
+
+<script>
+  // Studio motion (parallax hero/projects + magnetic submit) — lazy, không chặn critical path.
+  {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cms = window.location.search.includes('cms=1');
+    if (!reduce && !cms) {
+      const load = () => import('../../lib/studio-motion');
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(load, { timeout: 2000 });
+      } else {
+        setTimeout(load, 200);
+      }
+    }
+  }
+</script>

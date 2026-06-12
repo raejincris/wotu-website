@@ -9,6 +9,8 @@ import ShopLayout from '../../layouts/ShopLayout.astro';
 import Nav from '../../components/shop/Nav.astro';
 import Footer from '../../components/shop/Footer.astro';
 import SplitWords from '../../components/SplitWords.astro';
+import Lightbox from '../../components/shop/Lightbox.astro';
+import RecentlyViewed from '../../components/shop/RecentlyViewed.astro';
 import shopProducts from '../../data/shop-products.yml';
 import { jsonLd } from '../../lib/jsonld';
 
@@ -99,7 +101,7 @@ const breadcrumbSchema = {
       <div class="pd-gallery">
         <div class="pd-main">
           <div class={`shop-ph ${p.tone ?? ''}`}><span class="shop-ph-label">{p.placeholder ?? fullName}</span></div>
-          <img class="shop-illo" src={illo} alt={`${hasPhoto ? '' : 'Minh hoạ '}${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" />
+          <img class="shop-illo" src={illo} alt={`${hasPhoto ? '' : 'Minh hoạ '}${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" data-lightbox data-caption={fullName} />
           {p.badges && (
             <div class="pd-badges">
               {p.badges.map((b: any) => <span class={`b-tag${b.cls ? ' ' + b.cls : ''}`}>{b.label}</span>)}
@@ -138,6 +140,11 @@ const breadcrumbSchema = {
         )}
 
         <div class="pd-actions">
+          <div class="pd-qty" role="group" aria-label="Số lượng">
+            <button type="button" data-q="-1" aria-label="Giảm số lượng">−</button>
+            <input id="pdQty" type="text" inputmode="numeric" value="1" aria-label="Số lượng" />
+            <button type="button" data-q="1" aria-label="Tăng số lượng">+</button>
+          </div>
           <button class="shop-btn shop-btn-primary" type="button" id="pdAdd"
             data-id={p.id} data-name={fullName} data-price={p.priceNum}>
             + Thêm vào giỏ
@@ -180,24 +187,56 @@ const breadcrumbSchema = {
         </div>
       </section>
     )}
+    <RecentlyViewed exclude={p.id} />
   </main>
 
+  <!-- Sticky add-to-cart cho mobile — hiện khi .pd-actions cuộn khỏi viewport. -->
+  <div class="pd-sticky" id="pdSticky" aria-hidden="true">
+    <div class="ps-info">
+      <strong>{fullName}</strong>
+      <span>{p.price}</span>
+    </div>
+    <button class="shop-btn shop-btn-primary ps-add" type="button" id="pdStickyAdd">+ Giỏ</button>
+  </div>
+
+  <Lightbox />
   <Footer />
 </ShopLayout>
 
 <script>
-  import { addToCart, toggleFavorite, isFavorite, toast } from '../../lib/shop-store';
+  import { addToCart, toggleFavorite, isFavorite, toast, recordView } from '../../lib/shop-store';
 
   const add = document.getElementById('pdAdd');
-  add?.addEventListener('click', () => {
+  const qtyInput = document.getElementById('pdQty') as HTMLInputElement | null;
+
+  // Ghi lịch sử "Đã xem gần đây".
+  if (add?.dataset.id) recordView(add.dataset.id);
+
+  function getQty(): number {
+    const n = Math.round(Number(qtyInput?.value ?? 1));
+    return Math.min(99, Math.max(1, Number.isFinite(n) ? n : 1));
+  }
+  document.querySelectorAll<HTMLButtonElement>('.pd-qty [data-q]').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (!qtyInput) return;
+      qtyInput.value = String(Math.min(99, Math.max(1, getQty() + Number(b.dataset.q))));
+    }),
+  );
+  qtyInput?.addEventListener('change', () => { qtyInput.value = String(getQty()); });
+
+  function doAdd(): void {
+    if (!add) return;
+    const qty = getQty();
     addToCart({
       id: add.dataset.id ?? '',
       name: add.dataset.name ?? 'Sản phẩm',
       price: Number(add.dataset.price ?? 0),
-    });
-    toast(`✓ Đã thêm "${add.dataset.name}" vào giỏ`);
+    }, qty);
+    toast(`✓ Đã thêm ${qty > 1 ? qty + ' × ' : ''}"${add.dataset.name}" vào giỏ`);
+    if (qtyInput) qtyInput.value = '1';
     (window as any).__wotuOpenCart?.();
-  });
+  }
+  add?.addEventListener('click', doAdd);
 
   const fav = document.getElementById('pdFav');
   function syncFav() {
@@ -208,6 +247,22 @@ const breadcrumbSchema = {
   }
   fav?.addEventListener('click', () => { toggleFavorite(fav.dataset.fav ?? ''); syncFav(); });
   syncFav();
+
+  // Sticky add-to-cart mobile: hiện khi .pd-actions đã cuộn LÊN khỏi viewport
+  // (boundingClientRect.top < 0 — cuộn xuống đọc tiếp), ẩn khi quay lại.
+  const sticky = document.getElementById('pdSticky');
+  const actions = document.querySelector('.pd-actions');
+  if (sticky && actions && 'IntersectionObserver' in window) {
+    new IntersectionObserver(
+      ([entry]) => {
+        const on = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+        sticky.classList.toggle('on', on);
+        sticky.setAttribute('aria-hidden', on ? 'false' : 'true');
+      },
+      { threshold: 0 },
+    ).observe(actions);
+    document.getElementById('pdStickyAdd')?.addEventListener('click', doAdd);
+  }
 </script>
 
 <style>
@@ -248,6 +303,49 @@ const breadcrumbSchema = {
 
   .pd-actions { display: flex; gap: 12px; margin: 28px 0 14px; }
   .pd-actions .shop-btn-primary { flex: 1; justify-content: center; }
+
+  /* Quantity stepper — markup giống .cart-item-qty của CartDrawer, cỡ lớn hơn. */
+  .pd-qty {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--shop-bg-soft); border-radius: 999px; padding: 5px 7px;
+  }
+  .pd-qty button {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--shop-bg-card); border: 0; cursor: pointer;
+    color: var(--shop-ink); font-size: 16px;
+    display: grid; place-items: center;
+  }
+  .pd-qty button:hover { background: var(--shop-warm-soft); }
+  .pd-qty input {
+    width: 34px; border: 0; background: transparent; text-align: center;
+    font: 600 15px/1 var(--shop-sans); color: var(--shop-ink); outline: 0;
+  }
+
+  /* Sticky add-to-cart (mobile) — chỉ transform/opacity → 0 CLS. */
+  .pd-sticky {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
+    display: none; align-items: center; gap: 14px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: var(--shop-bg-card);
+    border-top: 1px solid var(--shop-line);
+    box-shadow: 0 -12px 30px -18px rgba(20, 16, 12, 0.35);
+    transform: translateY(110%);
+    transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .pd-sticky.on { transform: none; }
+  .ps-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .ps-info strong {
+    font-family: var(--shop-serif); font-weight: 400; font-size: 16px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .ps-info span { font-size: 13px; font-weight: 600; color: var(--shop-accent-deep); }
+  .pd-sticky .ps-add { flex: none; padding: 12px 20px; }
+  @media (max-width: 860px) {
+    .pd-sticky { display: flex; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pd-sticky { transition: none; }
+  }
   .pd-zalo { display: inline-block; font-size: 14px; color: var(--shop-accent-deep); text-decoration: none; font-weight: 600; }
   .pd-zalo:hover { text-decoration: underline; }
 

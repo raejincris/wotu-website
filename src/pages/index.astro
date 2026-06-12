@@ -327,7 +327,7 @@ const whyIcons: Record<string, string> = {
         <input type="hidden" name="subject" value="[WOTU shop] Đặt tư vấn combo" />
         <input type="hidden" name="from_name" value="WOTU Shop website" />
         <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; opacity: 0;" aria-hidden="true" />
-        <input type="tel" name="phone" placeholder="Số điện thoại của bạn" aria-label="Số điện thoại của bạn" autocomplete="tel" required />
+        <input type="tel" name="phone" placeholder="Số điện thoại của bạn" aria-label="Số điện thoại của bạn" autocomplete="tel" required pattern="[0-9 ]{9,12}" />
         <button type="submit" data-magnetic>Gọi tôi <span class="arr">→</span></button>
       </form>
     </div>
@@ -786,6 +786,7 @@ const whyIcons: Record<string, string> = {
 
 <script>
   import { addToCart, toggleFavorite, isFavorite, onChange, toast } from '../lib/shop-store';
+  import { viValidate } from '../lib/form-vi';
 
   // Lớp animation nâng cao (lib `motion` ~75KB) chỉ là enhancement → tải LƯỜI
   // khi idle, không chặn critical path. Gate reduce/?cms=1 NGAY ĐÂY để 2 nhóm
@@ -864,6 +865,7 @@ const whyIcons: Record<string, string> = {
 
   // ===== Contact form =====
   const form = document.querySelector<HTMLFormElement>('form[data-shop-contact]');
+  if (form) viValidate(form);
   form?.addEventListener('submit', () => {
     const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
     if (btn) {

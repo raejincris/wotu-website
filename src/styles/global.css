@@ -1,6 +1,7 @@
-/* fonts.css self-hosted disabled — Cormorant Garamond VN woff2 uses GSUB/GPOS
-   decomposition that breaks on Windows Chromium inside inline-block context.
-   Google Fonts CDN serves correct precomposed rendering. */
+/* Self-hosted fonts (per-weight static declarations, không phải variable range →
+   fix GSUB/GPOS shaping dấu VN trên Windows Chromium trong inline-block context).
+   Sinh bởi scripts/mirror-fonts.py từ Google Fonts CSS với Chrome UA. */
+@import './fonts.css';
 
 /* === WOTU global tokens — source of truth ===
    Mirrored from design-system.html + homepage-a.html.
@@ -232,4 +233,12 @@ button { font: inherit; }
     grid-template-columns: 1fr !important;
     gap: 32px !important;
   }
+}
+
+/* Cross-document View Transitions (Chrome 126+ / Safari 18.2+ / Edge 126+).
+ * CSS-only, không dùng Astro ClientRouter — MPA giữ nguyên, progressive enhancement. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation-duration: 180ms; }
 }

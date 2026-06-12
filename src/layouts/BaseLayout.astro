@@ -50,7 +50,7 @@ const studioThemeCss = `html[data-theme]{--earth:${studioEarth};--accent:${studi
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://avatars.githubusercontent.com; connect-src 'self' https://api.web3forms.com https://api.github.com https://github.com https://unpkg.com https://cloudflareinsights.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://github.com https://api.web3forms.com;" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://images.unsplash.com https://avatars.githubusercontent.com; connect-src 'self' https://api.web3forms.com https://api.github.com https://github.com https://unpkg.com https://cloudflareinsights.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://github.com https://api.web3forms.com;" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -87,22 +87,12 @@ const studioThemeCss = `html[data-theme]{--earth:${studioEarth};--accent:${studi
       url={canonicalURL}
     />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://images.unsplash.com" />
 
-    <!-- Google Fonts non-blocking (print-swap): preload CSS + media=print → đổi all khi load
-         xong → không chặn render (Lighthouse perf). noscript fallback cho trình duyệt tắt JS. -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
-    </noscript>
+    <!-- Preload critical woff2 (VN + Latin) — self-hosted, không CDN, không blocking. -->
+    <link rel="preload" href="/fonts/cormorant-normal-400-vn.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/cormorant-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-normal-400-vn.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
     <a href="#main" class="skip-to-main">Bỏ qua điều hướng — đến nội dung chính</a>

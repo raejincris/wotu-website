@@ -1,0 +1,138 @@
+---
+/* Lightbox phóng to ảnh — native <dialog> (focus-trap + Esc + backdrop miễn phí
+ * từ trình duyệt). 0 dependency, CSP không đổi.
+ *
+ * Cách dùng: include component 1 lần cuối page, gắn `data-lightbox` lên <img>
+ * muốn phóng to. Ảnh cùng `data-lightbox-group="x"` tạo nhóm có nút ‹ › + phím
+ * mũi tên. Caption lấy từ data-caption hoặc alt. Trả focus về ảnh trigger khi
+ * đóng (pattern lastFocused của CartDrawer). */
+---
+<dialog id="wotu-lightbox" class="lb" aria-label="Xem ảnh phóng to">
+  <button type="button" class="lb-close" data-lb-close aria-label="Đóng">×</button>
+  <button type="button" class="lb-nav lb-prev" data-lb-prev aria-label="Ảnh trước" hidden>‹</button>
+  <figure class="lb-fig">
+    <img class="lb-img" src="" alt="" />
+    <figcaption class="lb-cap"></figcaption>
+  </figure>
+  <button type="button" class="lb-nav lb-next" data-lb-next aria-label="Ảnh sau" hidden>›</button>
+</dialog>
+
+<style>
+  .lb {
+    border: 0; padding: 0; background: transparent;
+    max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh;
+    display: none; align-items: center; justify-content: center;
+    position: fixed; inset: 0;
+  }
+  .lb[open] { display: flex; }
+  .lb::backdrop { background: rgba(20, 16, 12, 0.82); }
+
+  .lb-fig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .lb-img {
+    max-width: 92vw; max-height: 84vh;
+    object-fit: contain; border-radius: 14px;
+    box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.5);
+    background: var(--shop-bg-soft, #F4ECDD);
+  }
+  .lb-cap { color: #FBF7F0; font: 400 13px/1.4 var(--shop-sans, sans-serif); text-align: center; max-width: 70ch; }
+  .lb-cap:empty { display: none; }
+
+  .lb-close {
+    position: fixed; top: 18px; right: 18px; z-index: 2;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(251, 247, 240, 0.14); color: #FBF7F0;
+    border: 0; cursor: pointer; font-size: 26px; line-height: 1;
+    display: grid; place-items: center;
+    transition: background 0.2s;
+  }
+  .lb-close:hover { background: rgba(251, 247, 240, 0.3); }
+
+  .lb-nav {
+    position: fixed; top: 50%; transform: translateY(-50%); z-index: 2;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: rgba(251, 247, 240, 0.14); color: #FBF7F0;
+    border: 0; cursor: pointer; font-size: 30px; line-height: 1;
+    display: grid; place-items: center;
+    transition: background 0.2s;
+  }
+  .lb-nav:hover { background: rgba(251, 247, 240, 0.3); }
+  .lb-prev { left: 16px; }
+  .lb-next { right: 16px; }
+
+  @media (max-width: 640px) {
+    .lb-img { max-width: 100vw; max-height: 80vh; border-radius: 0; }
+    .lb-nav { width: 42px; height: 42px; }
+    .lb-prev { left: 8px; }
+    .lb-next { right: 8px; }
+  }
+
+  /* Ảnh trigger: con trỏ phóng to (gắn data-lightbox là có). */
+  :global([data-lightbox]) { cursor: zoom-in; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lb[open] .lb-img { animation: lbIn 0.22s ease; }
+    @keyframes lbIn { from { opacity: 0; transform: scale(0.96); } }
+  }
+</style>
+
+<script>
+  const dialog = document.getElementById('wotu-lightbox') as HTMLDialogElement | null;
+  const img = dialog?.querySelector<HTMLImageElement>('.lb-img');
+  const cap = dialog?.querySelector<HTMLElement>('.lb-cap');
+  const prevBtn = dialog?.querySelector<HTMLButtonElement>('[data-lb-prev]');
+  const nextBtn = dialog?.querySelector<HTMLButtonElement>('[data-lb-next]');
+
+  const triggers = Array.from(document.querySelectorAll<HTMLImageElement>('[data-lightbox]'));
+  let group: HTMLImageElement[] = [];
+  let index = 0;
+  let lastFocused: HTMLElement | null = null;
+
+  function show(i: number): void {
+    if (!img || !cap || !group.length) return;
+    index = (i + group.length) % group.length;
+    const t = group[index];
+    // Ưu tiên bản full nếu có (data-lightbox-src), không thì dùng chính src.
+    img.src = t.dataset.lightboxSrc || t.currentSrc || t.src;
+    img.alt = t.alt || '';
+    cap.textContent = t.dataset.caption ?? t.alt ?? '';
+    const multi = group.length > 1;
+    if (prevBtn) prevBtn.hidden = !multi;
+    if (nextBtn) nextBtn.hidden = !multi;
+  }
+
+  function openFrom(t: HTMLImageElement): void {
+    if (!dialog) return;
+    const g = t.dataset.lightboxGroup;
+    group = g ? triggers.filter((x) => x.dataset.lightboxGroup === g) : [t];
+    lastFocused = t;
+    show(group.indexOf(t));
+    dialog.showModal(); // native: focus-trap + Esc + ::backdrop
+  }
+
+  triggers.forEach((t) => {
+    // Ảnh không focus được mặc định → thêm để mở được bằng bàn phím (a11y).
+    t.setAttribute('tabindex', '0');
+    t.setAttribute('role', 'button');
+    if (!t.getAttribute('aria-label')) t.setAttribute('aria-label', 'Phóng to ảnh');
+    t.addEventListener('click', () => openFrom(t));
+    t.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openFrom(t); }
+    });
+  });
+
+  dialog?.querySelector('[data-lb-close]')?.addEventListener('click', () => dialog.close());
+  prevBtn?.addEventListener('click', () => show(index - 1));
+  nextBtn?.addEventListener('click', () => show(index + 1));
+  dialog?.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') show(index - 1);
+    if (e.key === 'ArrowRight') show(index + 1);
+  });
+  // Click vùng backdrop (ngoài figure) → đóng.
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+  dialog?.addEventListener('close', () => {
+    lastFocused?.focus();
+    lastFocused = null;
+  });
+</script>

@@ -11,6 +11,7 @@ import ImageText from './ImageText.astro';
 import Gallery from './Gallery.astro';
 import Stats from './Stats.astro';
 import Features from './Features.astro';
+import Faq from './Faq.astro';
 
 interface Props { block: any; }
 const { block } = Astro.props;
@@ -24,6 +25,7 @@ const REGISTRY: Record<string, any> = {
   gallery: Gallery,
   stats: Stats,
   features: Features,
+  faq: Faq,
 };
 const C = REGISTRY[block?.type];
 ---
