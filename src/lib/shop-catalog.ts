@@ -9,8 +9,10 @@ export interface CatalogEntry {
   id: string;
   name: string;
   meta: string;
+  catKey: string; // hạng mục để nhóm gợi ý (sofa/ban/ghe… hoặc "combo")
   price: number;
   priceLabel: string;
+  rating: string; // điểm sao hiển thị (vd "4.8"), '' nếu không có
   href: string;
   illo: string;
   placeholder: string;
@@ -30,8 +32,10 @@ export function buildCatalog(): CatalogEntry[] {
       id: c.id,
       name: `${c.name} ${c.nameEm ?? ''}${c.nameTail ?? ''}`.trim(),
       meta: c.cat,
+      catKey: 'combo',
       price: c.price ?? num(c.priceNew),
       priceLabel: c.priceNew ?? c.price ?? '',
+      rating: String(c.rating ?? ''),
       href: c.href,
       illo: `/uploads/products/combo-${c.room}.webp`,
       placeholder: c.placeholder ?? `Combo ${c.nameEm ?? ''}`.trim(),
@@ -40,8 +44,10 @@ export function buildCatalog(): CatalogEntry[] {
       id: p.id,
       name: `${p.name} ${p.nameEm ?? ''}${p.nameTail ?? ''}`.trim(),
       meta: p.cat,
+      catKey: p.catKey ?? '',
       price: p.priceNum ?? num(p.price),
       priceLabel: p.price,
+      rating: String(p.rating ?? ''),
       href: p.href,
       illo: p.photo || `/uploads/products/cat-${p.catKey}.webp`,
       placeholder: p.placeholder ?? p.name,

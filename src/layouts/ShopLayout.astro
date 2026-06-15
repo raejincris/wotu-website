@@ -131,6 +131,22 @@ const shopAccentCss = [
       })();
     </script>
 
+    <script is:inline>
+      // Fade-in ảnh card khi tải xong (skeleton nhẹ). CHỈ fade ảnh CHƯA load →
+      // no-JS / ảnh cache vẫn hiện ngay (không ẩn content). Gate reduced-motion.
+      (function () {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var imgs = document.querySelectorAll('.card-illo, .shop-illo');
+        imgs.forEach(function (img) {
+          if (img.complete && img.naturalWidth > 0) return;
+          img.classList.add('img-fade');
+          var show = function () { img.classList.add('img-in'); };
+          img.addEventListener('load', show, { once: true });
+          img.addEventListener('error', show, { once: true });
+        });
+      })();
+    </script>
+
     {/* Xem trước trực tiếp cho admin — tự gate ?cms=1, no-op trên trang công khai */}
     <script>
       import '../scripts/cms-preview.ts';

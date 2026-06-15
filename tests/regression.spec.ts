@@ -1121,3 +1121,144 @@ test.describe('21 · Shop UX Pack', () => {
     expect(msg).toMatch(/vui lòng|điền/i);
   });
 });
+
+// ---------------------------------------------------------------------------
+// 22 · Studio reading & gallery (Sprint 1+2 — progress, share, post-nav, gallery)
+// ---------------------------------------------------------------------------
+test.describe('22 · Studio reading & gallery', () => {
+  test('Blog detail: thanh tiến trình + nút chia sẻ (copy) hiển thị', async ({ page }) => {
+    await page.goto('/studio/blog/do-dat-rieng-hay-mua-san');
+    await page.waitForLoadState('domcontentloaded');
+
+    await expect(page.locator('.art-progress__bar')).toBeAttached();
+    await expect(page.locator('[data-share-copy]').first()).toBeVisible();
+  });
+
+  test('Blog detail: điều hướng bài trước/sau có ít nhất 1 link', async ({ page }) => {
+    await page.goto('/studio/blog/do-dat-rieng-hay-mua-san');
+    await page.waitForLoadState('domcontentloaded');
+
+    const nav = page.locator('.post-nav');
+    await expect(nav).toBeVisible();
+    expect(await nav.locator('a').count()).toBeGreaterThanOrEqual(1);
+  });
+
+  test('Project gallery: click ô ảnh → lightbox mở; Escape → đóng', async ({ page }) => {
+    await page.goto('/studio/projects/nha-cua-me');
+    await page.waitForLoadState('domcontentloaded');
+
+    const cell = page.locator('[data-pg-open]').first();
+    await cell.scrollIntoViewIfNeeded();
+    await cell.click();
+
+    const dialog = page.locator('#wotu-proj-lightbox');
+    await expect(dialog).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+  });
+
+  test('Contact: nút sao chép hotline/email hiển thị trên /studio/', async ({ page }) => {
+    await page.goto('/studio/');
+    await page.waitForLoadState('domcontentloaded');
+
+    const copyBtns = page.locator('.contact-copy');
+    expect(await copyBtns.count()).toBeGreaterThanOrEqual(2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 23 · Shop Sprint 3 (tồn kho urgency, specs, suggestions)
+// ---------------------------------------------------------------------------
+test.describe('23 · Shop Sprint 3', () => {
+  test('Catalog: badge tồn kho "Chỉ còn N" hiển thị', async ({ page }) => {
+    await page.goto('/san-pham/');
+    await page.waitForLoadState('domcontentloaded');
+    const stock = page.locator('.card-stock').first();
+    await expect(stock).toBeAttached();
+    await expect(stock).toContainText(/Chỉ còn|hết hàng/i);
+  });
+
+  test('Detail: bảng thông số (specs) + tồn kho low hiển thị', async ({ page }) => {
+    await page.goto('/san-pham/ban-tra-nang-mai/');
+    await page.waitForLoadState('domcontentloaded');
+    await expect(page.locator('.pd-specs')).toBeVisible();
+    await expect(page.locator('.pd-stock.low')).toContainText(/Chỉ còn/);
+  });
+
+  test('Suggestions: section hiện sau khi có lịch sử xem', async ({ page }) => {
+    // Seed lịch sử xem 2 sản phẩm cùng hạng mục "Bàn".
+    await page.goto('/');
+    await page.evaluate(() => {
+      localStorage.setItem('wotu-shop-recent-v1', JSON.stringify(['p-ban-tra-nang-mai']));
+    });
+    await page.reload();
+    await page.waitForLoadState('domcontentloaded');
+    const sg = page.locator('#wotu-suggest');
+    await expect(sg).toBeVisible();
+    expect(await sg.locator('.sg-card').count()).toBeGreaterThanOrEqual(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 24 · Shop Sprint 4 (so sánh, review summary, a11y range slider)
+// ---------------------------------------------------------------------------
+test.describe('24 · Shop Sprint 4', () => {
+  test('Review summary: thanh phân bố sao hiển thị trên trang chủ', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+    await expect(page.locator('.rs-bars')).toBeAttached();
+    await expect(page.locator('.rs-avg')).toContainText(/\d/);
+  });
+
+  // Click nút so sánh thứ n, đưa về giữa viewport trước (tránh bị thanh sticky che).
+  async function clickCompare(page: import('@playwright/test').Page, n: number) {
+    // dispatchEvent: bắn thẳng 'click' vào nút (thanh so sánh sticky có thể che
+    // toạ độ → click thường trượt sang overlay). Chỉ cần verify wiring store.
+    await page.locator('[data-compare]').nth(n).dispatchEvent('click');
+  }
+
+  test('So sánh: chọn 2 SP → bar hiện → mở modal bảng', async ({ page }) => {
+    await page.goto('/san-pham/');
+    await clearStorage(page);
+    await page.reload();
+    await page.waitForLoadState('domcontentloaded');
+
+    await clickCompare(page, 0);
+    await clickCompare(page, 1);
+
+    const bar = page.locator('#wotu-compare-bar');
+    await expect(bar).toBeVisible();
+    await expect(page.locator('#cmp-count')).toHaveText('2');
+
+    await page.locator('#cmp-open').click();
+    const modal = page.locator('#wotu-compare-modal');
+    await expect(modal).toBeVisible();
+    await expect(modal.locator('.cmp-table')).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(modal).toBeHidden();
+  });
+
+  test('So sánh: giới hạn 3 sản phẩm', async ({ page }) => {
+    await page.goto('/san-pham/');
+    await clearStorage(page);
+    await page.reload();
+    await page.waitForLoadState('domcontentloaded');
+
+    for (let i = 0; i < 4; i++) await clickCompare(page, i);
+    await expect(page.locator('#cmp-count')).toHaveText('3');
+  });
+
+  test('Range slider: thumb focusable + phím mũi tên đổi aria-valuenow', async ({ page }) => {
+    await page.goto('/san-pham/');
+    await page.waitForLoadState('domcontentloaded');
+    const lo = page.locator('.range-thumb.lo');
+    await expect(lo).toHaveAttribute('role', 'slider');
+    const before = await lo.getAttribute('aria-valuenow');
+    await lo.focus();
+    await page.keyboard.press('ArrowRight');
+    const after = await lo.getAttribute('aria-valuenow');
+    expect(Number(after)).toBeGreaterThan(Number(before));
+  });
+});

@@ -34,6 +34,12 @@ const colLabel: Record<string, string> = Object.fromEntries((data.filters?.color
 const materials = (p.tags ?? []).filter((t: string) => matLabel[t]).map((t: string) => matLabel[t]);
 const colorNames = (p.tags ?? []).filter((t: string) => colLabel[t]).map((t: string) => colLabel[t]);
 const inStock = (p.tags ?? []).includes('in-stock');
+// Bảng thông số/kích thước (optional) — list {label, value} trong shop-products.yml.
+const specs = (p.specs ?? []) as { label: string; value: string }[];
+// Tồn kho urgency (optional): số nguyên trong shop-products.yml. 0 = hết hàng.
+const stockNum = typeof p.stock === 'number' ? p.stock : null;
+const isLowStock = stockNum !== null && stockNum > 0 && stockNum <= 5;
+const isOutStock = stockNum === 0;
 
 const fullName = `${p.name} ${p.nameEm ?? ''}${p.nameTail ?? ''}`.trim();
 const hasPhoto = !!p.photo;
@@ -61,7 +67,11 @@ const productSchema = {
     '@type': 'Offer',
     price: p.priceNum,
     priceCurrency: 'VND',
-    availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+    availability: isOutStock
+      ? 'https://schema.org/OutOfStock'
+      : inStock
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/PreOrder',
     url: PAGE_URL,
     seller: { '@type': 'Organization', name: 'WOTU' },
   },
@@ -120,7 +130,13 @@ const breadcrumbSchema = {
           {p.priceOld && <s>{p.priceOld}</s>}
           <strong>{p.price}</strong>
         </div>
-        <div class={`pd-stock ${inStock ? 'in' : 'pre'}`}>{inStock ? '● Còn hàng · giao 48h' : '○ Đặt trước'}</div>
+        {isOutStock ? (
+          <div class="pd-stock out">○ Tạm hết hàng · liên hệ đặt làm</div>
+        ) : isLowStock ? (
+          <div class="pd-stock low">● Chỉ còn {stockNum} · đặt sớm để giữ hàng</div>
+        ) : (
+          <div class={`pd-stock ${inStock ? 'in' : 'pre'}`}>{inStock ? '● Còn hàng · giao 48h' : '○ Đặt trước'}</div>
+        )}
 
         {p.colors && (
           <div class="pd-block">
@@ -136,6 +152,22 @@ const breadcrumbSchema = {
           <div class="pd-block">
             <span class="pd-label">Chất liệu</span>
             <div class="pd-chips">{materials.map((m: string) => <span>{m}</span>)}</div>
+          </div>
+        )}
+
+        {specs.length > 0 && (
+          <div class="pd-block">
+            <span class="pd-label">Thông số &amp; kích thước</span>
+            <table class="pd-specs">
+              <tbody>
+                {specs.map((s: any) => (
+                  <tr>
+                    <th scope="row">{s.label}</th>
+                    <td>{s.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 
@@ -292,9 +324,15 @@ const breadcrumbSchema = {
   .pd-stock { font-size: 13px; margin-bottom: 26px; }
   .pd-stock.in { color: #4a7c4a; }
   .pd-stock.pre { color: var(--shop-ink-soft); }
+  .pd-stock.low { color: var(--shop-accent-deep); font-weight: 600; }
+  .pd-stock.out { color: var(--shop-ink-soft); }
 
   .pd-block { margin-bottom: 22px; }
   .pd-label { display: block; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--shop-ink-soft); margin-bottom: 10px; }
+  .pd-specs { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .pd-specs th, .pd-specs td { text-align: left; padding: 9px 0; border-bottom: 1px solid var(--shop-line); vertical-align: top; }
+  .pd-specs th { font-weight: 500; color: var(--shop-ink-soft); width: 42%; }
+  .pd-specs td { color: var(--shop-ink); }
   .pd-colors { display: flex; gap: 8px; }
   .pd-colors span { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--shop-line); }
   .pd-colors .more { display: grid; place-items: center; font-size: 10px; color: var(--shop-ink-soft); background: var(--shop-bg-soft); }

@@ -1,0 +1,182 @@
+---
+/* So sánh sản phẩm — thanh sticky dưới màn + dialog bảng side-by-side.
+ * Trạng thái từ shop-store (getCompare/toggleCompare, cap 3). Dữ liệu sản phẩm
+ * từ __wotuCatalog (shop-catalog build-time). Include 1 lần trên trang catalog;
+ * tự wire mọi [data-compare]. Native <dialog> → focus-trap + Esc + backdrop.
+ */
+import { catalogJson } from '../../lib/shop-catalog';
+const json = catalogJson();
+---
+<div id="wotu-compare-bar" class="cmpbar" hidden>
+  <div class="cmpbar-inner container">
+    <span class="cmpbar-count">So sánh <b id="cmp-count">0</b>/3</span>
+    <div class="cmpbar-thumbs" id="cmp-thumbs"></div>
+    <div class="cmpbar-actions">
+      <button id="cmp-open" class="shop-btn shop-btn-primary" type="button">Xem so sánh</button>
+      <button id="cmp-clear" class="cmpbar-clear" type="button">Xoá hết</button>
+    </div>
+  </div>
+</div>
+
+<dialog id="wotu-compare-modal" class="cmpmodal" aria-label="So sánh sản phẩm">
+  <button class="cmpmodal-close" data-cmp-close type="button" aria-label="Đóng">×</button>
+  <h2 class="cmpmodal-head">So sánh sản phẩm</h2>
+  <div class="cmpmodal-scroll"><div class="cmpmodal-body" id="cmp-table"></div></div>
+</dialog>
+
+<script is:inline define:vars={{ json }}>
+  window.__wotuCatalog = window.__wotuCatalog || JSON.parse(json);
+</script>
+
+<style>
+  .cmpbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+    background: var(--shop-bg-card);
+    border-top: 1px solid var(--shop-line);
+    box-shadow: 0 -10px 30px -16px rgba(58, 42, 30, 0.25);
+    padding: 12px 0;
+  }
+  .cmpbar[hidden] { display: none; }
+  :global(body.cmp-pad) { padding-bottom: 92px; }
+  .cmpbar-inner { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .cmpbar-count { font: 600 13px/1 var(--shop-sans); color: var(--shop-ink); white-space: nowrap; }
+  .cmpbar-count b { color: var(--shop-accent-deep); }
+  .cmpbar-thumbs { display: flex; gap: 8px; flex: 1; min-width: 0; flex-wrap: wrap; }
+  .cmpbar-thumb {
+    width: 44px; height: 44px; border-radius: 8px; overflow: hidden;
+    border: 1px solid var(--shop-line); background: var(--shop-bg-soft); position: relative;
+  }
+  .cmpbar-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .cmpbar-actions { display: flex; gap: 10px; align-items: center; }
+  .cmpbar-clear {
+    background: transparent; border: 0; cursor: pointer;
+    color: var(--shop-ink-soft); font: 500 13px/1 var(--shop-sans);
+    text-decoration: underline; min-height: 44px; padding: 0 6px;
+  }
+  .cmpbar-clear:hover { color: var(--shop-ink); }
+
+  .cmpmodal {
+    border: 0; padding: 0; max-width: min(960px, 96vw); width: 100%;
+    border-radius: var(--shop-radius-lg); background: var(--shop-bg);
+    color: var(--shop-ink); margin: auto;
+  }
+  .cmpmodal[open] { display: block; }
+  .cmpmodal::backdrop { background: rgba(20, 16, 12, 0.6); }
+  .cmpmodal-head { font-family: var(--shop-serif); font-weight: 400; font-size: 26px; margin: 0; padding: 22px 24px 0; }
+  .cmpmodal-close {
+    position: absolute; top: 14px; right: 14px; width: 44px; height: 44px;
+    border: 0; background: transparent; font-size: 26px; cursor: pointer; color: var(--shop-ink);
+  }
+  .cmpmodal-scroll { overflow-x: auto; padding: 16px 24px 24px; }
+  .cmp-table { border-collapse: collapse; width: 100%; min-width: 440px; }
+  .cmp-table th, .cmp-table td { padding: 12px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--shop-line); font-size: 14px; }
+  .cmp-table thead th { width: 33%; }
+  .cmp-row-label { color: var(--shop-ink-soft); font-weight: 500; white-space: nowrap; width: 96px; }
+  .cmp-prod-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 8px; background: var(--shop-bg-soft); }
+  .cmp-prod-name { font-family: var(--shop-serif); font-size: 17px; line-height: 1.15; margin: 8px 0 0; }
+  .cmp-price { font-family: var(--shop-serif); font-size: 17px; color: var(--shop-ink); }
+  .cmp-remove { background: transparent; border: 0; cursor: pointer; color: var(--shop-ink-soft); font-size: 12px; text-decoration: underline; padding: 4px 0; }
+  .cmp-view { display: inline-block; margin-top: 6px; font: 600 12px/1 var(--shop-sans); color: var(--shop-accent-deep); text-decoration: underline; }
+  @media (max-width: 600px) {
+    .cmpbar-actions { width: 100%; justify-content: space-between; }
+  }
+</style>
+
+<script>
+  import { getCompare, toggleCompare, clearCompare, onChange, toast, COMPARE_LIMIT } from '../../lib/shop-store';
+
+  interface CatalogEntry {
+    id: string; name: string; meta: string; catKey: string; price: number;
+    priceLabel: string; rating: string; href: string; illo: string; placeholder: string;
+  }
+
+  const bar = document.getElementById('wotu-compare-bar');
+  const countEl = document.getElementById('cmp-count');
+  const thumbs = document.getElementById('cmp-thumbs');
+  const openBtn = document.getElementById('cmp-open');
+  const clearBtn = document.getElementById('cmp-clear');
+  const modal = document.getElementById('wotu-compare-modal') as HTMLDialogElement | null;
+  const tableHost = document.getElementById('cmp-table');
+  const catalog: CatalogEntry[] =
+    (window as unknown as { __wotuCatalog?: CatalogEntry[] }).__wotuCatalog ?? [];
+  const byId = new Map(catalog.map((c) => [c.id, c]));
+
+  function esc(s: string): string {
+    return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  }
+
+  function render(): void {
+    if (!bar || !countEl || !thumbs) return;
+    const ids = getCompare();
+
+    // Đồng bộ trạng thái nút trên card.
+    document.querySelectorAll<HTMLButtonElement>('[data-compare]').forEach((b) => {
+      const on = ids.includes(b.dataset.compare || '');
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+
+    // Chừa khoảng trống dưới trang để bar không che hàng sản phẩm cuối.
+    document.body.classList.toggle('cmp-pad', ids.length > 0);
+    countEl.textContent = String(ids.length);
+    thumbs.innerHTML = ids
+      .map((id) => {
+        const c = byId.get(id);
+        if (!c) return '';
+        return `<span class="cmpbar-thumb"><img src="${esc(c.illo)}" alt="${esc(c.name)}" loading="lazy" /></span>`;
+      })
+      .join('');
+    bar.hidden = ids.length === 0;
+
+    // Cập nhật bảng nếu modal đang mở.
+    if (modal?.open) buildTable(ids);
+  }
+
+  function buildTable(ids: string[]): void {
+    if (!tableHost) return;
+    const cols = ids.map((id) => byId.get(id)).filter((c): c is CatalogEntry => !!c);
+    if (!cols.length) {
+      tableHost.innerHTML = '<p style="color:var(--shop-ink-soft)">Chưa có sản phẩm để so sánh.</p>';
+      return;
+    }
+    const rowsHtml = (label: string, cell: (c: CatalogEntry) => string) =>
+      `<tr><th scope="row" class="cmp-row-label">${label}</th>${cols.map((c) => `<td>${cell(c)}</td>`).join('')}</tr>`;
+
+    tableHost.innerHTML = `
+      <table class="cmp-table">
+        <tbody>
+          ${rowsHtml('', (c) => `<img class="cmp-prod-img" src="${esc(c.illo)}" alt="${esc(c.name)}" /><div class="cmp-prod-name">${esc(c.name)}</div><a class="cmp-view" href="${esc(c.href)}">Xem chi tiết →</a>`)}
+          ${rowsHtml('Hạng mục', (c) => esc(c.meta))}
+          ${rowsHtml('Giá', (c) => `<span class="cmp-price">${esc(c.priceLabel)}</span>`)}
+          ${rowsHtml('Đánh giá', (c) => (c.rating ? `★ ${esc(c.rating)}` : '—'))}
+          ${rowsHtml('', (c) => `<button class="cmp-remove" data-cmp-remove="${esc(c.id)}" type="button">Bỏ khỏi so sánh</button>`)}
+        </tbody>
+      </table>`;
+
+    tableHost.querySelectorAll<HTMLButtonElement>('[data-cmp-remove]').forEach((b) => {
+      b.addEventListener('click', () => {
+        toggleCompare(b.dataset.cmpRemove || '');
+        const next = getCompare();
+        if (next.length === 0) modal?.close();
+      });
+    });
+  }
+
+  // Wire nút so sánh trên từng card.
+  document.querySelectorAll<HTMLButtonElement>('[data-compare]').forEach((b) => {
+    b.addEventListener('click', () => {
+      const res = toggleCompare(b.dataset.compare || '');
+      if (res === 'full') toast(`Chỉ so sánh tối đa ${COMPARE_LIMIT} sản phẩm`, { type: 'info' });
+    });
+  });
+
+  openBtn?.addEventListener('click', () => {
+    buildTable(getCompare());
+    modal?.showModal();
+  });
+  clearBtn?.addEventListener('click', () => clearCompare());
+  modal?.querySelector('[data-cmp-close]')?.addEventListener('click', () => modal.close());
+  modal?.addEventListener('click', (e) => { if (e.target === modal) modal.close(); });
+
+  onChange(render);
+  render();
+</script>

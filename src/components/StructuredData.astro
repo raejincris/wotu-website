@@ -1,5 +1,6 @@
 ---
 import site from '../data/site.yml';
+import shopHome from '../data/shop-home.yml';
 import { jsonLd } from '../lib/jsonld';
 
 interface Props {
@@ -75,6 +76,18 @@ const localBusiness = {
     'Cải tạo nhà',
     'Tư vấn vật liệu',
   ],
+  // AggregateRating từ tổng hợp đánh giá (shop-home.yml reviewsSummary) — SEO sao.
+  ...((shopHome as any)?.reviewsSummary?.total > 0
+    ? {
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: String((shopHome as any).reviewsSummary.average),
+          reviewCount: (shopHome as any).reviewsSummary.total,
+          bestRating: '5',
+          worstRating: '1',
+        },
+      }
+    : {}),
 };
 
 const website = {

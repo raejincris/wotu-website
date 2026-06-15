@@ -11,6 +11,16 @@ excerpt: "Cải tạo căn nhà ba mẹ xây năm 1992 — giữ lại tinh th�
 photo: "1764445274425-f6bcdd84bbd4"
 photoDetail: "1712169603032-7b7b2ff1ea2f"
 photoAlt: "Phòng truyền thống với cửa giấy và vườn nhỏ"
+# Ảnh tạm (Unsplash) — thay bằng ảnh công trình thật qua admin khi có.
+gallery:
+  - src: "1712169603032-7b7b2ff1ea2f"
+    alt: "Bàn gỗ với bình hoa trong ánh sáng giếng trời"
+  - src: "1693664681816-f7f8422758f0"
+    alt: "Phòng tối giản với cửa kéo, ánh sáng tự nhiên"
+  - src: "1772442364436-6ee6e42302a2"
+    alt: "Nắng đổ trên sàn gỗ và tủ"
+  - src: "1768152858627-517b5e495830"
+    alt: "Tường nâu ấm với cửa sổ hẹp"
 ---
 
 Một căn nhà ống ba tầng kiểu phổ biến những năm 90. Gia chủ — con gái cả của người mẹ đã mất — không muốn xây mới: "Em muốn giữ tường, giữ cửa, giữ cả mùi cũ." Nhưng kết cấu đã yếu, hệ thống điện nước hỏng, ánh sáng tự nhiên gần như không vào được.

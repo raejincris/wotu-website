@@ -8,7 +8,9 @@
 const CART_KEY = 'wotu-shop-cart-v1';
 const FAV_KEY = 'wotu-shop-fav-v1';
 const RECENT_KEY = 'wotu-shop-recent-v1';
+const COMPARE_KEY = 'wotu-shop-compare-v1';
 const RECENT_MAX = 8;
+const COMPARE_MAX = 3;
 
 export interface CartItem {
   id: string;
@@ -168,6 +170,48 @@ export function getRecent(): string[] {
   return safeParse<string[]>(localStorage.getItem(RECENT_KEY), []);
 }
 
+/* ── So sánh sản phẩm — danh sách id, cap COMPARE_MAX. notify() để bar/checkbox
+ * cập nhật reactive qua onChange. ── */
+export const COMPARE_LIMIT = COMPARE_MAX;
+
+function readCompare(): string[] {
+  if (typeof localStorage === 'undefined') return [];
+  return safeParse<string[]>(localStorage.getItem(COMPARE_KEY), []);
+}
+
+function writeCompare(ids: string[]): void {
+  if (typeof localStorage === 'undefined') return;
+  localStorage.setItem(COMPARE_KEY, JSON.stringify(ids));
+  notify();
+}
+
+export function getCompare(): string[] {
+  return readCompare();
+}
+
+export function isComparing(id: string): boolean {
+  return readCompare().includes(id);
+}
+
+/** Toggle id trong danh sách so sánh. Trả về 'added' | 'removed' | 'full'. */
+export function toggleCompare(id: string): 'added' | 'removed' | 'full' {
+  const ids = readCompare();
+  const i = ids.indexOf(id);
+  if (i >= 0) {
+    ids.splice(i, 1);
+    writeCompare(ids);
+    return 'removed';
+  }
+  if (ids.length >= COMPARE_MAX) return 'full';
+  ids.push(id);
+  writeCompare(ids);
+  return 'added';
+}
+
+export function clearCompare(): void {
+  writeCompare([]);
+}
+
 /** Subscribe to any cart/favorite change. Returns unsubscribe.
  *  Idempotent: gọi cùng cb nhiều lần chỉ đăng ký 1 lần. */
 export function onChange(cb: Listener): () => void {
@@ -184,7 +228,7 @@ export function onChange(cb: Listener): () => void {
   }
   listeners.add(cb);
   const onStorage = (e: StorageEvent) => {
-    if (e.key === CART_KEY || e.key === FAV_KEY) cb();
+    if (e.key === CART_KEY || e.key === FAV_KEY || e.key === COMPARE_KEY) cb();
   };
   storageHandlers.set(cb, onStorage);
   if (typeof window !== 'undefined') {

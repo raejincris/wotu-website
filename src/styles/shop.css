@@ -154,6 +154,19 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
   display: inline-flex; align-items: center; justify-content: center;
   position: absolute; top: -2px; right: -2px;
 }
+/* Fade-in ảnh card chưa cache (skeleton nhẹ) — class do JS thêm, no-JS hiện thường. */
+.card-illo.img-fade, .shop-illo.img-fade { opacity: 0; }
+.card-illo.img-fade.img-in, .shop-illo.img-fade.img-in { opacity: 1; transition: opacity 0.45s ease; }
+
+.shop-badge-dot.pulse { animation: wotu-badge-pulse 0.42s ease; }
+@keyframes wotu-badge-pulse {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.42); }
+  100% { transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shop-badge-dot.pulse { animation: none; }
+}
 
 /* ============================================================
    BUTTONS

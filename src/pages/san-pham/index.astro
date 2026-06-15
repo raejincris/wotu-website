@@ -5,6 +5,7 @@ import Footer from '../../components/shop/Footer.astro';
 import SplitWords from '../../components/SplitWords.astro';
 import RecentlyViewed from '../../components/shop/RecentlyViewed.astro';
 import BackToTop from '../../components/shop/BackToTop.astro';
+import CompareBar from '../../components/shop/CompareBar.astro';
 import shopProducts from '../../data/shop-products.yml';
 import { jsonLd } from '../../lib/jsonld';
 
@@ -24,6 +25,9 @@ const materialsLive = (filters.materials ?? []).filter((f: any) => tagCount(f.ke
 const colorsLive    = (filters.colors    ?? []).filter((f: any) => tagCount(f.key) > 0);
 const statusLive    = (filters.status    ?? []).filter((f: any) => tagCount(f.key) > 0);
 const catGroupCount = (cats as any[]).filter((c: any) => c.key).length;
+// Tồn kho urgency (helper ở frontmatter — tránh toán tử `<=` trong JSX bị hiểu là tag).
+const isLowStock = (s: any): boolean => typeof s === 'number' && s > 0 && s <= 5;
+const isOutStock = (s: any): boolean => s === 0;
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
@@ -151,8 +155,8 @@ const breadcrumbSchema = {
         <div class="fgrp-body range">
           <div class="range-track">
             <div class="range-fill"></div>
-            <div class="range-thumb lo"></div>
-            <div class="range-thumb hi"></div>
+            <div class="range-thumb lo" role="slider" tabindex="0" aria-label="Giá tối thiểu" aria-valuemin="500000" aria-valuemax="9500000" aria-valuenow="500000"></div>
+            <div class="range-thumb hi" role="slider" tabindex="0" aria-label="Giá tối đa" aria-valuemin="500000" aria-valuemax="9500000" aria-valuenow="9500000"></div>
           </div>
           <div class="range-inputs">
             <input type="text" value="500.000đ" aria-label="Giá tối thiểu" />
@@ -260,11 +264,18 @@ const breadcrumbSchema = {
                   </div>
                   <span class="card-rating"><span class="stars">★★★★★</span>{p.rating} · {p.reviews}</span>
                 </div>
+                {isLowStock(p.stock) && (
+                  <div class="card-stock">● Chỉ còn {p.stock}</div>
+                )}
+                {isOutStock(p.stock) && (
+                  <div class="card-stock card-stock--out">Tạm hết hàng</div>
+                )}
               </div>
             </a>
             <button class="card-fav" type="button" data-fav={p.id} aria-label="Yêu thích">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3 5.97 5.97 0 0 0 12 5a5.97 5.97 0 0 0-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
             </button>
+            <button class="card-compare" type="button" data-compare={p.id} aria-pressed="false" aria-label="Thêm vào so sánh">⇄ So sánh</button>
             <button class="card-quick" type="button" data-add>+ Thêm nhanh vào giỏ</button>
           </article>
         ))}
@@ -321,11 +332,18 @@ const breadcrumbSchema = {
                   </div>
                   <span class="card-rating"><span class="stars">★★★★★</span>{p.rating} · {p.reviews}</span>
                 </div>
+                {isLowStock(p.stock) && (
+                  <div class="card-stock">● Chỉ còn {p.stock}</div>
+                )}
+                {isOutStock(p.stock) && (
+                  <div class="card-stock card-stock--out">Tạm hết hàng</div>
+                )}
               </div>
             </a>
             <button class="card-fav" type="button" data-fav={p.id} aria-label="Yêu thích">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3 5.97 5.97 0 0 0 12 5a5.97 5.97 0 0 0-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
             </button>
+            <button class="card-compare" type="button" data-compare={p.id} aria-pressed="false" aria-label="Thêm vào so sánh">⇄ So sánh</button>
             <button class="card-quick" type="button" data-add>+ Thêm nhanh vào giỏ</button>
           </article>
         ))}
@@ -341,12 +359,13 @@ const breadcrumbSchema = {
 
       <!-- Tổng kết kết quả (toàn bộ sản phẩm hiển thị trên 1 trang — chưa cần phân trang) -->
       <div class="pager">
-        <div class="info">Hiển thị <b style="color: var(--shop-ink);">{TOTAL}</b> trong tổng <b style="color: var(--shop-ink);">{TOTAL}</b> sản phẩm</div>
+        <div class="info" aria-live="polite">Hiển thị <b style="color: var(--shop-ink);">{TOTAL}</b> trong tổng <b style="color: var(--shop-ink);">{TOTAL}</b> sản phẩm</div>
       </div>
     </div>
   </main>
 
   <RecentlyViewed />
+  <CompareBar />
   <BackToTop />
   <Footer />
 </ShopLayout>
@@ -478,6 +497,33 @@ const breadcrumbSchema = {
   .card:hover .card-quick,
   .card:focus-within .card-quick { transform: none; opacity: 1; }
   .card-quick:hover { background: var(--shop-accent); }
+  /* Nút so sánh — góc trên-trái, hiện khi hover/focus (như quick-add). */
+  .card-compare {
+    position: absolute; left: 12px; top: 12px; z-index: 3;
+    background: color-mix(in oklab, var(--shop-bg) 88%, transparent);
+    color: var(--shop-ink); border: 1px solid var(--shop-line);
+    padding: 6px 10px; border-radius: 999px; cursor: pointer;
+    font: 600 11px/1 var(--shop-sans); letter-spacing: 0.02em;
+    opacity: 0; transform: translateY(-6px);
+    transition: opacity .25s, transform .25s, background .2s, color .2s;
+  }
+  .card:hover .card-compare,
+  .card:focus-within .card-compare { opacity: 1; transform: none; }
+  .card-compare[aria-pressed="true"] {
+    background: var(--shop-accent-deep); color: #fff; border-color: var(--shop-accent-deep);
+    opacity: 1; transform: none;
+  }
+  @media (hover: none) {
+    .card-compare { opacity: 1; transform: none; }
+  }
+  /* Thiết bị cảm ứng (không hover) → quick-add luôn hiện, đặt trong luồng
+     dưới card thay vì overlay, đạt touch target tốt. */
+  @media (hover: none) {
+    .card-quick {
+      position: static; transform: none; opacity: 1;
+      margin: 10px 12px 12px; padding: 12px; min-height: 44px;
+    }
+  }
 
   /* Card now has multiple click targets — make article container position relative
      so the favorite + quick-add buttons sit above the link layer. */
@@ -490,6 +536,13 @@ const breadcrumbSchema = {
   .card-fav[data-active="true"],
   .card-fav[data-active="true"]:hover { color: var(--shop-accent); }
   .card-fav[data-active="true"] svg { fill: currentColor; }
+  .card-fav.pop { animation: wotu-fav-pop 0.34s ease; }
+  @keyframes wotu-fav-pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.35); }
+    100% { transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) { .card-fav.pop { animation: none; } }
 
   .card-color-row { display: inline-flex; gap: 4px; }
   .card-color-row span { width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--shop-line); }
@@ -504,6 +557,9 @@ const breadcrumbSchema = {
   .card-price s { font-size: 12px; color: var(--shop-ink-soft); font-family: var(--shop-sans); margin-right: 6px; }
   .stars { display: inline-flex; gap: 1px; color: var(--shop-accent-deep); font-size: 12px; }
   .card-rating { font-size: 12px; color: var(--shop-ink-soft); display: inline-flex; align-items: center; gap: 4px; }
+  /* Chỉ báo tồn kho / urgency — accent-deep đạt WCAG AA. */
+  .card-stock { margin-top: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.01em; color: var(--shop-accent-deep); }
+  .card-stock--out { color: var(--shop-ink-soft); font-weight: 500; }
 
   /* Feature card */
   .card.feature {
@@ -857,8 +913,8 @@ const breadcrumbSchema = {
     const lo = track.querySelector<HTMLElement>('.range-thumb.lo');
     const hi = track.querySelector<HTMLElement>('.range-thumb.hi');
     if (fill) { fill.style.left = loPct + '%'; fill.style.right = (100 - hiPct) + '%'; }
-    if (lo) lo.style.left = loPct + '%';
-    if (hi) hi.style.left = hiPct + '%';
+    if (lo) { lo.style.left = loPct + '%'; lo.setAttribute('aria-valuenow', String(loVal)); lo.setAttribute('aria-valuetext', fmtPrice(loVal)); }
+    if (hi) { hi.style.left = hiPct + '%'; hi.setAttribute('aria-valuenow', String(hiVal)); hi.setAttribute('aria-valuetext', fmtPrice(hiVal)); }
     if (priceMinInput) priceMinInput.value = fmtPrice(loVal);
     if (priceMaxInput) priceMaxInput.value = fmtPrice(hiVal);
   }
@@ -899,6 +955,37 @@ const breadcrumbSchema = {
   const hiThumb = document.querySelector<HTMLElement>('.range-thumb.hi');
   if (loThumb) setupThumbDrag(loThumb, true);
   if (hiThumb) setupThumbDrag(hiThumb, false);
+
+  // ===== Keyboard cho range slider (a11y) =====
+  const PRICE_STEP = 100_000;
+  function curVals(): { lo: number; hi: number } {
+    const lo = parsePrice(priceMinInput?.value ?? '') || PRICE_RANGE_MIN;
+    const hi = parsePrice(priceMaxInput?.value ?? '') || PRICE_RANGE_MAX;
+    return { lo, hi };
+  }
+  function setupThumbKeyboard(thumb: HTMLElement, isLo: boolean): void {
+    thumb.addEventListener('keydown', (e: KeyboardEvent) => {
+      let delta = 0;
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') delta = -PRICE_STEP;
+      else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') delta = PRICE_STEP;
+      else if (e.key === 'Home') delta = -Infinity;
+      else if (e.key === 'End') delta = Infinity;
+      else return;
+      e.preventDefault();
+      let { lo, hi } = curVals();
+      if (isLo) {
+        lo = delta === -Infinity ? PRICE_RANGE_MIN : delta === Infinity ? hi : lo + delta;
+        lo = Math.max(PRICE_RANGE_MIN, Math.min(lo, hi));
+      } else {
+        hi = delta === Infinity ? PRICE_RANGE_MAX : delta === -Infinity ? lo : hi + delta;
+        hi = Math.min(PRICE_RANGE_MAX, Math.max(hi, lo));
+      }
+      updateSliderUI(lo, hi);
+      syncPriceRange();
+    });
+  }
+  if (loThumb) setupThumbKeyboard(loThumb, true);
+  if (hiThumb) setupThumbKeyboard(hiThumb, false);
 
   // ===== View toggle =====
   document.querySelectorAll<HTMLButtonElement>('.view-toggle button').forEach((b) =>
@@ -949,6 +1036,11 @@ const breadcrumbSchema = {
       const id = b.dataset.fav ?? '';
       const nowOn = toggleFavorite(id);
       b.dataset.active = nowOn ? 'true' : 'false';
+      if (nowOn && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        b.classList.remove('pop');
+        void b.offsetWidth;
+        b.classList.add('pop');
+      }
       toast(nowOn ? '♥ Đã lưu vào yêu thích' : 'Đã bỏ yêu thích', { type: 'info' });
     });
   });

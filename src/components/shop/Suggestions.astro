@@ -1,0 +1,106 @@
+---
+/* Section "Gợi ý cho bạn" — render client-side dựa trên lịch sử xem
+ * (getRecent từ shop-store) + catalog (shop-catalog build-time). Khác với
+ * "Bạn vừa xem": đây là sản phẩm CÙNG HẠNG MỤC với thứ bạn đã xem nhưng
+ * CHƯA xem. `hidden` mặc định, chỉ hiện khi có gợi ý → 0 CLS đáng kể
+ * (section below-fold). Ẩn hoàn toàn nếu chưa có lịch sử xem.
+ *
+ * Props:
+ *  - heading: tiêu đề (mặc định "Gợi ý cho bạn") */
+import { catalogJson } from '../../lib/shop-catalog';
+
+interface Props { heading?: string; }
+const { heading = 'Gợi ý cho bạn' } = Astro.props;
+const json = catalogJson();
+---
+<section class="sg container" id="wotu-suggest" hidden>
+  <h2 class="sg-head">{heading}</h2>
+  <div class="sg-grid" id="wotu-suggest-grid"></div>
+</section>
+
+<script is:inline define:vars={{ json }}>
+  // Catalog chung cho mọi consumer client-side (dùng chung với RecentlyViewed/wishlist).
+  window.__wotuCatalog = window.__wotuCatalog || JSON.parse(json);
+</script>
+
+<script>
+  import { getRecent } from '../../lib/shop-store';
+
+  interface CatalogEntry {
+    id: string; name: string; meta: string; catKey: string; price: number;
+    priceLabel: string; href: string; illo: string; placeholder: string;
+  }
+
+  const section = document.getElementById('wotu-suggest');
+  const grid = document.getElementById('wotu-suggest-grid');
+
+  function escapeHtml(s: string): string {
+    return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  }
+
+  if (section && grid) {
+    const catalog: CatalogEntry[] =
+      (window as unknown as { __wotuCatalog?: CatalogEntry[] }).__wotuCatalog ?? [];
+    const recent = getRecent();
+
+    if (recent.length > 0 && catalog.length > 0) {
+      const byId = new Map(catalog.map((c) => [c.id, c]));
+      // Hạng mục (catKey) của những thứ đã xem.
+      const seenCats = new Set(
+        recent.map((id) => byId.get(id)?.catKey).filter((k): k is string => !!k),
+      );
+      // Gợi ý: cùng hạng mục, chưa xem.
+      const items = catalog
+        .filter((c) => c.catKey && seenCats.has(c.catKey) && !recent.includes(c.id))
+        .slice(0, 4);
+
+      if (items.length > 0) {
+        grid.innerHTML = items
+          .map(
+            (it) => `
+              <a class="sg-card" href="${escapeHtml(it.href)}">
+                <div class="sg-img">
+                  <div class="shop-ph"><span class="shop-ph-label">${escapeHtml(it.placeholder)}</span></div>
+                  <img class="shop-illo" src="${escapeHtml(it.illo)}" alt="${escapeHtml(it.name)}" loading="lazy" decoding="async" />
+                </div>
+                <div class="sg-body">
+                  <span class="sg-meta">${escapeHtml(it.meta)}</span>
+                  <h3>${escapeHtml(it.name)}</h3>
+                  <div class="sg-price">${escapeHtml(it.priceLabel)}</div>
+                </div>
+              </a>
+            `,
+          )
+          .join('');
+        section.hidden = false;
+      }
+    }
+  }
+</script>
+
+<style>
+  .sg-head {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(26px, 3.5vw, 38px); margin: 0 0 24px;
+  }
+  .sg-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  /* Card render qua innerHTML → mất data-astro-cid → cần :global(). */
+  :global(.sg-card) {
+    background: var(--shop-bg-card); border-radius: var(--shop-radius-lg);
+    overflow: hidden; display: flex; flex-direction: column;
+    border: 1px solid color-mix(in oklab, var(--shop-line) 60%, transparent);
+    transition: transform 0.25s, box-shadow 0.25s;
+    color: var(--shop-ink); text-decoration: none;
+  }
+  :global(.sg-card:hover) { transform: translateY(-4px); box-shadow: 0 18px 36px -16px rgba(58, 42, 30, 0.16); }
+  :global(.sg-img) { aspect-ratio: 4/3; position: relative; overflow: hidden; background: var(--shop-bg-soft); }
+  :global(.sg-body) { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 5px; }
+  :global(.sg-meta) { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--shop-ink-soft); font-weight: 600; }
+  :global(.sg-body h3) { font-family: var(--shop-serif); font-weight: 400; font-size: 19px; line-height: 1.1; margin: 0; }
+  :global(.sg-price) { font-family: var(--shop-serif); font-size: 16px; margin-top: 2px; }
+  @media (max-width: 980px) { .sg-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.sg-card) { transition: none; }
+    :global(.sg-card:hover) { transform: none; }
+  }
+</style>

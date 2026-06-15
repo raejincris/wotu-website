@@ -60,6 +60,8 @@ const links: NavLink[] = [
   const btn = document.getElementById('wotu-cart-btn');
   const badge = document.getElementById('wotu-cart-badge');
 
+  let prevN = -1;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function refreshBadge(): void {
     if (!badge) return;
     const n = getCartCount();
@@ -68,7 +70,14 @@ const links: NavLink[] = [
     } else {
       badge.hidden = false;
       badge.textContent = String(n);
+      // Pulse khi số lượng tăng (không khi load/giảm), gate reduced-motion.
+      if (!reduce && prevN >= 0 && n > prevN) {
+        badge.classList.remove('pulse');
+        void badge.offsetWidth; // restart animation
+        badge.classList.add('pulse');
+      }
     }
+    prevN = n;
   }
 
   btn?.addEventListener('click', () => {

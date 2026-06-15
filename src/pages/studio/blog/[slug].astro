@@ -6,6 +6,10 @@ import Footer from '../../../components/Footer.astro';
 import Placeholder from '../../../components/Placeholder.astro';
 import Reveal from '../../../components/Reveal.astro';
 import Breadcrumb from '../../../components/Breadcrumb.astro';
+import ArticleProgress from '../../../components/ArticleProgress.astro';
+import TableOfContents from '../../../components/TableOfContents.astro';
+import ShareRow from '../../../components/ShareRow.astro';
+import site from '../../../data/site.yml';
 
 export async function getStaticPaths() {
   const all = await getCollection('blog');
@@ -24,6 +28,14 @@ const related = allPosts
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 2);
 
+// Điều hướng bài trước / bài sau theo thứ tự thời gian (cũ → mới).
+const chrono = [...allPosts].sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+const idx = chrono.findIndex((x) => x.id === entry.id);
+const prevPost = idx > 0 ? chrono[idx - 1] : null;        // bài cũ hơn liền kề
+const nextPost = idx >= 0 && idx < chrono.length - 1 ? chrono[idx + 1] : null; // bài mới hơn
+const r = (site as any).reading ?? {};
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
 // OG image = ảnh bìa bài (nếu là ảnh local /uploads). Unsplash ID hoặc thiếu
 // ảnh → để default og.png của BaseLayout.
 const cover = entry.data.photo;
@@ -39,6 +51,8 @@ const ogImage = cover && (cover.startsWith('/') || cover.startsWith('http'))
   schemaDate={entry.data.date.toISOString()}
 >
   <Nav variant="inner" homeRoute="/studio/" />
+  <ArticleProgress />
+  <TableOfContents target=".blog-body" />
   <Breadcrumb maxWidth="880px" items={[{ name: 'Studio', href: '/studio/' }, { name: 'Nhật ký', href: '/studio/blog' }, { name: entry.data.title }]} />
 
   <header style="padding: 40px var(--pad-x) 64px; max-width: 880px; margin: 0 auto;">
@@ -53,6 +67,7 @@ const ogImage = cover && (cover.startsWith('/') || cover.startsWith('http'))
         {entry.data.excerpt}
       </p>
     )}
+    <ShareRow url={canonical} title={entry.data.title} style="margin-top: 32px;" />
   </header>
 
   <Reveal variant="reveal-img" delay={150} style="padding: 0 var(--pad-x); max-width: 1280px; margin: 0 auto;">
@@ -95,6 +110,23 @@ const ogImage = cover && (cover.startsWith('/') || cover.startsWith('http'))
     </section>
   )}
 
+  {(prevPost || nextPost) && (
+    <nav class="post-nav" aria-label="Bài khác" style="padding: 0 var(--pad-x) 24px; max-width: 880px; margin: 0 auto;">
+      {prevPost ? (
+        <a class="post-nav__item" href={`/studio/blog/${prevPost.id}`}>
+          <span class="post-nav__dir">← {r.prevLabel ?? 'Bài trước'}</span>
+          <span class="post-nav__title">{prevPost.data.title}</span>
+        </a>
+      ) : <span />}
+      {nextPost ? (
+        <a class="post-nav__item post-nav__item--next" href={`/studio/blog/${nextPost.id}`}>
+          <span class="post-nav__dir">{r.nextLabel ?? 'Bài sau'} →</span>
+          <span class="post-nav__title">{nextPost.data.title}</span>
+        </a>
+      ) : <span />}
+    </nav>
+  )}
+
   <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 880px; margin: 0 auto;">
     <a href="/studio/blog" style="display: inline-flex; align-items: center; min-height: 44px; padding: 12px 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink);">← Tất cả ghi chép</a>
   </section>
@@ -103,6 +135,43 @@ const ogImage = cover && (cover.startsWith('/') || cover.startsWith('http'))
 </BaseLayout>
 
 <style>
+  .post-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    border-top: 1px solid var(--line);
+    padding-top: 28px;
+  }
+  .post-nav__item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .post-nav__item:hover { border-color: var(--ink); }
+  .post-nav__item--next { text-align: right; align-items: flex-end; }
+  .post-nav__dir {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--earth);
+  }
+  .post-nav__title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(18px, 2.2vw, 24px);
+    line-height: 1.15;
+    color: var(--bark);
+  }
+  @media (max-width: 640px) {
+    .post-nav { grid-template-columns: 1fr; }
+    .post-nav__item--next { text-align: left; align-items: flex-start; }
+  }
   .blog-body :global(p) { margin-bottom: 1.4em; }
   .blog-body :global(h2) {
     font-family: var(--font-display);

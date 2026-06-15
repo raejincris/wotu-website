@@ -7,7 +7,11 @@ import Placeholder from '../../../components/Placeholder.astro';
 import Reveal from '../../../components/Reveal.astro';
 import Breadcrumb from '../../../components/Breadcrumb.astro';
 import ProjectItem from '../../../components/ProjectItem.astro';
+import ArticleProgress from '../../../components/ArticleProgress.astro';
+import ShareRow from '../../../components/ShareRow.astro';
+import ProjectGallery from '../../../components/ProjectGallery.astro';
 import { img } from '../../../lib/unsplash';
+import site from '../../../data/site.yml';
 
 export async function getStaticPaths() {
   const all = await getCollection('projects');
@@ -22,6 +26,14 @@ const p = entry.data;
 // Dự án liên quan: ưu tiên cùng hạng mục (cat), sau đó lấp bằng dự án khác.
 const allProjects = await getCollection('projects');
 const others = allProjects.filter((x) => x.id !== entry.id);
+
+// Điều hướng dự án trước / sau (giữ thứ tự collection — theo tên file/id).
+const order = allProjects;
+const pIdx = order.findIndex((x) => x.id === entry.id);
+const prevProj = pIdx > 0 ? order[pIdx - 1] : null;
+const nextProj = pIdx >= 0 && pIdx < order.length - 1 ? order[pIdx + 1] : null;
+const rd = (site as any).reading ?? {};
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const related = [
   ...others.filter((x) => x.data.cat === p.cat),
   ...others.filter((x) => x.data.cat !== p.cat),
@@ -49,6 +61,7 @@ const ogImage = heroPhoto
 ---
 <BaseLayout title={`${p.name} — WOTU`} description={p.excerpt} ogImage={ogImage} schemaType="project">
   <Nav variant="inner" homeRoute="/studio/" />
+  <ArticleProgress />
   <Breadcrumb items={[{ name: 'Studio', href: '/studio/' }, { name: 'Dự án', href: '/studio/projects' }, { name: p.name }]} />
 
   <header style="padding: 40px var(--pad-x) 64px;">
@@ -61,6 +74,7 @@ const ogImage = heroPhoto
     <div style="margin-top: 32px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em; color: var(--earth); text-transform: uppercase;">
       {p.loc}
     </div>
+    <ShareRow url={canonical} title={p.name} style="margin-top: 28px;" />
   </header>
 
   <Reveal variant="reveal-img" delay={150} style="padding: 0 var(--pad-x);">
@@ -98,6 +112,8 @@ const ogImage = heroPhoto
     </div>
   </article>
 
+  <ProjectGallery items={p.gallery} projectName={p.name} />
+
   {related.length > 0 && (
     <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 1280px; margin: 0 auto;">
       <div style="border-top: 1px solid var(--ink); padding-top: 28px; margin-bottom: 48px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase;">
@@ -109,6 +125,23 @@ const ogImage = heroPhoto
     </section>
   )}
 
+  {(prevProj || nextProj) && (
+    <nav class="proj-nav" aria-label="Dự án khác" style="padding: 0 var(--pad-x) 24px; max-width: 1280px; margin: 0 auto;">
+      {prevProj ? (
+        <a class="proj-nav__item" href={`/studio/projects/${prevProj.id}`}>
+          <span class="proj-nav__dir">← {rd.prevLabel ?? 'Dự án trước'}</span>
+          <span class="proj-nav__title">{prevProj.data.name}</span>
+        </a>
+      ) : <span />}
+      {nextProj ? (
+        <a class="proj-nav__item proj-nav__item--next" href={`/studio/projects/${nextProj.id}`}>
+          <span class="proj-nav__dir">{rd.nextLabel ?? 'Dự án sau'} →</span>
+          <span class="proj-nav__title">{nextProj.data.name}</span>
+        </a>
+      ) : <span />}
+    </nav>
+  )}
+
   <section style="padding: 0 var(--pad-x) var(--pad-section);">
     <a href="/studio/projects" style="display: inline-flex; align-items: center; min-height: 44px; padding: 12px 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink);">← Tất cả dự án</a>
   </section>
@@ -117,6 +150,43 @@ const ogImage = heroPhoto
 </BaseLayout>
 
 <style>
+  .proj-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    border-top: 1px solid var(--line);
+    padding-top: 28px;
+  }
+  .proj-nav__item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+  .proj-nav__item:hover { border-color: var(--ink); }
+  .proj-nav__item--next { text-align: right; align-items: flex-end; }
+  .proj-nav__dir {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--earth);
+  }
+  .proj-nav__title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(18px, 2.2vw, 26px);
+    line-height: 1.15;
+    color: var(--bark);
+  }
+  @media (max-width: 640px) {
+    .proj-nav { grid-template-columns: 1fr; }
+    .proj-nav__item--next { text-align: left; align-items: flex-start; }
+  }
   .project-body :global(p) { margin-bottom: 1.4em; }
   @media (max-width: 900px) {
     .related-grid { grid-template-columns: 1fr 1fr !important; gap: 32px !important; }

@@ -1,0 +1,82 @@
+---
+/**
+ * ShareRow.astro — hàng nút chia sẻ cho blog/[slug] + projects/[slug].
+ * Web Share API (nút native ẩn tới khi JS xác nhận hỗ trợ) + copy-link + Facebook.
+ * Nhãn lấy từ site.yml (reading.*). Logic ở src/lib/share.ts.
+ */
+import site from '../data/site.yml';
+
+interface Props {
+  /** URL tuyệt đối của bài (canonical). */
+  url: string;
+  /** Tiêu đề để Web Share API dùng. */
+  title: string;
+  style?: string;
+}
+
+const { url, title, style = '' } = Astro.props;
+const r = (site as any).reading ?? {};
+const fbShare = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+---
+<div class="share-row" data-share data-share-url={url} data-share-title={title} style={style}>
+  <span class="share-row__label">{r.shareLabel ?? 'Chia sẻ'}</span>
+  <div class="share-row__btns">
+    <button type="button" class="share-row__btn" data-share-native hidden>
+      {r.shareNative ?? 'Chia sẻ…'}
+    </button>
+    <button type="button" class="share-row__btn" data-share-copy>
+      {r.shareCopy ?? 'Sao chép liên kết'}
+    </button>
+    <a
+      class="share-row__btn"
+      href={fbShare}
+      target="_blank"
+      rel="noopener noreferrer"
+    >{r.shareFacebook ?? 'Facebook'}</a>
+  </div>
+</div>
+
+<style>
+  .share-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .share-row__label { color: var(--earth); }
+  .share-row__btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .share-row__btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 10px 16px;
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .share-row__btn:hover {
+    border-color: var(--ink);
+    color: var(--bark);
+  }
+  .share-row__btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  import { initShareRows } from '../lib/share';
+  initShareRows();
+</script>

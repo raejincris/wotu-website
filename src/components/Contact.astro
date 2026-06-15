@@ -28,16 +28,35 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
         text={c.heading}
         style="font-family: var(--font-display); font-weight: 400; font-size: clamp(56px, 8vw, 140px); line-height: 1.0; color: var(--bone);"
       />
-      <div style="margin-top: 64px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 480px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; color: var(--clay); text-transform: uppercase;">
+      <div class="contact-info" style="margin-top: 64px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 480px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; color: var(--clay); text-transform: uppercase;">
         <div>
           <div style="color: var(--taupe); margin-bottom: 8px;">Studio</div>
-          <div>{site.address.line1},<br/>{site.address.city}</div>
+          <a class="contact-maplink" href={site.address.mapsUrl} target="_blank" rel="noopener noreferrer">
+            {site.address.line1},<br/>{site.address.city}
+            <span class="contact-maplink__cue">Xem bản đồ →</span>
+          </a>
         </div>
         <div>
           <div style="color: var(--taupe); margin-bottom: 8px;">Liên lạc</div>
-          <div>{site.hotline}<br/>{site.email}</div>
+          <div class="contact-row">
+            <a class="contact-link" href={`tel:${site.hotline.replace(/\s+/g, '')}`} data-hotline>{site.hotline}</a>
+            <button type="button" class="contact-copy" data-copy={site.hotline} aria-label="Sao chép số điện thoại">⧉</button>
+          </div>
+          <div class="contact-row">
+            <a class="contact-link" href={`mailto:${site.email}`}>{site.email}</a>
+            <button type="button" class="contact-copy" data-copy={site.email} aria-label="Sao chép email">⧉</button>
+          </div>
         </div>
       </div>
+
+      <a class="contact-map contact-map--noimg" href={site.address.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label="Mở vị trí studio trên Google Maps">
+        <img class="contact-map__img" src="/uploads/studio-map.webp" alt={`Bản đồ vị trí studio WOTU — ${site.address.line1}, ${site.address.city}`} loading="lazy" decoding="async" hidden />
+        <span class="contact-map__overlay">
+          <span class="contact-map__pin" aria-hidden="true">◎</span>
+          <span class="contact-map__text">{site.address.line1}, {site.address.city}</span>
+          <span class="contact-map__cta">Mở Google Maps →</span>
+        </span>
+      </a>
     </Reveal>
 
     <Reveal variant="reveal" delay={400} style="padding-top: 32px;">
@@ -89,10 +108,32 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
 
 <script>
   import { viValidate } from '../lib/form-vi';
+  import { copyLink, studioToast } from '../lib/share';
 
   const form = document.getElementById('wotu-contact-form') as HTMLFormElement | null;
   const submitBtn = document.getElementById('wotu-contact-submit') as HTMLButtonElement | null;
   const feedback = document.getElementById('wotu-contact-feedback') as HTMLDivElement | null;
+
+  // Click-to-copy hotline + email.
+  document.querySelectorAll<HTMLButtonElement>('.contact-copy').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const text = btn.dataset.copy || '';
+      const ok = await copyLink(text);
+      studioToast(ok ? `Đã sao chép: ${text}` : 'Không sao chép được — hãy thử lại');
+    });
+  });
+
+  // Ảnh bản đồ tĩnh: chỉ hiện nếu file /uploads/studio-map.webp tồn tại.
+  const mapWrap = document.querySelector<HTMLElement>('.contact-map');
+  const mapImg = document.querySelector<HTMLImageElement>('.contact-map__img');
+  if (mapWrap && mapImg) {
+    mapImg.addEventListener('load', () => {
+      if (mapImg.naturalWidth > 1) {
+        mapImg.hidden = false;
+        mapWrap.classList.remove('contact-map--noimg');
+      }
+    });
+  }
 
   if (form) viValidate(form);
 
@@ -109,6 +150,7 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
 
       submitBtn.disabled = true;
       submitBtn.style.opacity = '0.5';
+      submitBtn.classList.add('is-sending');
       submitBtn.textContent = 'Đang gửi…';
       feedback.style.color = 'var(--clay)';
       feedback.textContent = '';
@@ -126,15 +168,19 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
 
         if (response.ok && json.success) {
           form.reset();
+          submitBtn.classList.remove('is-sending');
           feedback.style.color = 'var(--accent)';
-          feedback.textContent =
+          const msg =
             (form.dataset.successMessage as string | undefined) ??
             'Cảm ơn bạn — chúng tôi sẽ liên hệ trong 24h.';
+          feedback.textContent = msg;
           submitBtn.textContent = 'Đã gửi ✓';
+          studioToast('Đã gửi yêu cầu ✓');
         } else {
           throw new Error(json.message || 'Server returned an error.');
         }
       } catch (err) {
+        submitBtn.classList.remove('is-sending');
         feedback.style.color = '#E07a5F';
         feedback.textContent =
           'Có lỗi xảy ra. Vui lòng thử lại hoặc gọi trực tiếp ' +
@@ -142,6 +188,7 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
         submitBtn.disabled = false;
         submitBtn.style.opacity = '1';
         submitBtn.textContent = (form.dataset.submitLabel as string | undefined) ?? 'Gửi yêu cầu';
+        studioToast('Gửi không thành công — vui lòng thử lại');
       }
     });
   }
@@ -149,4 +196,108 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
 
 <style>
   section :global(h2 em) { font-style: italic; color: var(--accent); }
+
+  .contact-maplink {
+    color: var(--clay);
+    text-decoration: none;
+    display: inline-block;
+    transition: color 0.2s;
+  }
+  .contact-maplink:hover { color: var(--bone); }
+  .contact-maplink__cue {
+    display: block;
+    margin-top: 8px;
+    color: var(--taupe);
+    font-size: 10px;
+  }
+  .contact-maplink:hover .contact-maplink__cue { color: var(--accent); }
+
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .contact-link {
+    color: var(--clay);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .contact-link:hover { color: var(--bone); }
+  .contact-copy {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 1px solid rgba(245, 240, 232, 0.25);
+    border-radius: 2px;
+    color: var(--clay);
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .contact-copy:hover { border-color: var(--bone); color: var(--bone); }
+  .contact-copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .contact-map {
+    display: block;
+    position: relative;
+    margin-top: 40px;
+    max-width: 480px;
+    aspect-ratio: 16 / 7;
+    border-radius: 4px;
+    overflow: hidden;
+    text-decoration: none;
+    border: 1px solid rgba(245, 240, 232, 0.18);
+  }
+  .contact-map__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Fallback khi chưa có ảnh bản đồ thật: gradient ấm dạng "bản đồ". */
+  .contact-map--noimg {
+    background:
+      repeating-linear-gradient(0deg, rgba(245,240,232,0.05) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(90deg, rgba(245,240,232,0.05) 0 1px, transparent 1px 28px),
+      linear-gradient(135deg, #3a2f24, #2a221a);
+  }
+  .contact-map__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px 24px;
+    background: linear-gradient(90deg, rgba(20,16,12,0.55), rgba(20,16,12,0.15));
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .contact-map__pin { font-size: 20px; color: var(--accent); line-height: 1; }
+  .contact-map__text { color: var(--bone); }
+  .contact-map__cta { color: var(--accent); font-size: 10px; }
+
+  /* Spinner nhẹ khi đang gửi form. */
+  #wotu-contact-submit.is-sending {
+    position: relative;
+    padding-right: 52px;
+  }
+  #wotu-contact-submit.is-sending::after {
+    content: '';
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    margin-top: -7px;
+    border: 2px solid rgba(20, 16, 12, 0.25);
+    border-top-color: var(--ink);
+    border-radius: 50%;
+    animation: contactSpin 0.7s linear infinite;
+  }
+  @keyframes contactSpin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    #wotu-contact-submit.is-sending::after { animation: none; }
+  }
 </style>

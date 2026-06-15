@@ -5,6 +5,8 @@ import Footer from '../components/shop/Footer.astro';
 import Marquee from '../components/shop/Marquee.astro';
 import Newsletter from '../components/Newsletter.astro';
 import BlockRenderer from '../components/shop/blocks/BlockRenderer.astro';
+import Suggestions from '../components/shop/Suggestions.astro';
+import ReviewSummary from '../components/shop/ReviewSummary.astro';
 import SplitWords from '../components/SplitWords.astro';
 import site from '../data/site.yml';
 import shopHome from '../data/shop-home.yml';
@@ -13,7 +15,7 @@ import { resolveLayout } from '../lib/section-layout';
 const phone = site.hotline;
 const email = site.email;
 
-const { hero, sections, combos, bestsellers, inspo, reviews } = shopHome as any;
+const { hero, sections, combos, bestsellers, inspo, reviews, reviewsSummary } = shopHome as any;
 const blocks = ((shopHome as any).blocks ?? []) as any[];
 
 // Dải marquee "cam kết" (mới) — đặt trước Reviews. Editable qua YAML, có default.
@@ -291,6 +293,8 @@ const whyIcons: Record<string, string> = {
         <div class="right reveal" data-reveal style="--rev-delay: 140ms" set:html={sections.reviews.desc} data-cms="sections.reviews.desc" />
       </div>
 
+      <ReviewSummary summary={reviewsSummary} />
+
       <div class="reviews-grid shop-reveal-stagger">
         {reviews.map((r, i) => (
           <div class="review">
@@ -345,6 +349,9 @@ const whyIcons: Record<string, string> = {
   ))}
 
   </div><!-- /cms-sections -->
+
+  <Suggestions />
+
   <Footer />
 </ShopLayout>
 

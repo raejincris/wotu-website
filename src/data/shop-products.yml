@@ -175,6 +175,7 @@ products:
     rating: "4.9"
     ratingNum: 4.9
     reviews: 96
+    stock: 3   # ≤5 → hiện "Chỉ còn N" (urgency). Bỏ field = không hiện.
     tags: [go-soi, linen, nau-dat, be-sua, xam-tro, in-stock]
 
   - id: p-ban-tra-nang-mai
@@ -194,6 +195,16 @@ products:
     rating: "4.7"
     ratingNum: 4.7
     reviews: 64
+    stock: 2
+    specs:
+      - label: "Kích thước (D×R×C)"
+        value: "110 × 60 × 45 cm"
+      - label: "Chất liệu mặt"
+        value: "Gỗ sồi tự nhiên, phủ dầu lau"
+      - label: "Khả năng chịu tải"
+        value: "≤ 40 kg"
+      - label: "Bảo hành"
+        value: "5 năm khung gỗ"
     tags: [go-soi, nau-dat, in-stock, new]
 
   - id: p-ban-doan-vien
@@ -210,6 +221,15 @@ products:
     rating: "4.9"
     ratingNum: 4.9
     reviews: 142
+    specs:
+      - label: "Kích thước (D×R×C)"
+        value: "160 × 90 × 75 cm"
+      - label: "Số chỗ ngồi"
+        value: "6 người"
+      - label: "Chất liệu"
+        value: "Gỗ sồi nguyên tấm, mộng ghép truyền thống"
+      - label: "Bảo hành"
+        value: "5 năm khung gỗ"
     tags: [go-soi, nau-dat, in-stock]
 
   - id: p-ghe-sum-vay

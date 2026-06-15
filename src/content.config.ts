@@ -16,6 +16,10 @@ const projects = defineCollection({
     photo: z.string().optional(),       // Unsplash ID for card cover
     photoDetail: z.string().optional(), // Unsplash ID for detail-page hero
     photoAlt: z.string().optional(),
+    // Thư viện ảnh công trình (Unsplash ID hoặc local /uploads/...). Mở lightbox.
+    gallery: z
+      .array(z.object({ src: z.string(), alt: z.string().optional() }))
+      .default([]),
   }),
 });
 

@@ -20,3 +20,12 @@ forms:
   contactSubject: "[WOTU website] Liên hệ mới từ khách hàng"
 analytics:
   cfBeaconToken: 54a42c6c23c340f0a1b571408d637133
+# Nhãn UI cho phần đọc bài (blog + dự án) — đưa ra YAML để editor sửa được.
+reading:
+  shareLabel: Chia sẻ
+  shareNative: Chia sẻ…
+  shareCopy: Sao chép liên kết
+  shareFacebook: Facebook
+  tocLabel: Trong bài này
+  prevLabel: Bài trước
+  nextLabel: Bài sau

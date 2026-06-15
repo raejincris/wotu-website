@@ -269,6 +269,14 @@ inspo:
   - label: Phòng bé · Vườn Cổ Tích
     placeholder: Phòng trẻ em Vườn Cổ Tích
     href: /san-pham/?room=tre-em
+# Tổng hợp đánh giá (toàn bộ khách, không chỉ 3 lời chứng thực dưới đây).
+# Editor chỉnh average/total + phân bố % theo 5★→1★. Dùng cho thanh breakdown
+# + Schema.org AggregateRating (SEO sao đánh giá).
+reviewsSummary:
+  average: 4.9
+  total: 184
+  distribution: [93, 5, 1, 1, 0]   # % cho 5★, 4★, 3★, 2★, 1★ (tổng ~100)
+
 reviews:
   - quote: Đặt nguyên combo Tổ Ấm, đội WOTU giao và lắp trong buổi sáng. Cuối ngày là đã ngồi xem TV với gia đình. Quá tiện cho người mới về nhà mới.
     name: Nguyễn Hà My

@@ -1,0 +1,63 @@
+---
+/* Tổng hợp đánh giá — điểm trung bình lớn + thanh phân bố sao (5★→1★).
+ * Data từ shop-home.yml `reviewsSummary` (editor chỉnh). Thuần tĩnh, 0 JS, 0 CLS.
+ * Đặt cạnh lưới lời chứng thực trong section reviews của shop home. */
+interface Summary { average: number; total: number; distribution: number[]; }
+interface Props { summary?: Summary; }
+const { summary } = Astro.props;
+
+const s: Summary = {
+  average: summary?.average ?? 5,
+  total: summary?.total ?? 0,
+  distribution: summary?.distribution ?? [100, 0, 0, 0, 0],
+};
+const avg = s.average.toFixed(1).replace('.', ',');
+// Số sao tô đầy (làm tròn) cho hàng ★ trang trí.
+const filled = Math.round(s.average);
+---
+{s.total > 0 && (
+  <div class="rs">
+    <div class="rs-score">
+      <div class="rs-avg">{avg}</div>
+      <div class="rs-stars" aria-hidden="true">{'★'.repeat(filled)}{'☆'.repeat(5 - filled)}</div>
+      <div class="rs-total">{s.total.toLocaleString('vi-VN')} đánh giá</div>
+    </div>
+    <ul class="rs-bars" aria-label={`Điểm trung bình ${avg} trên 5 sao, ${s.total} đánh giá`}>
+      {s.distribution.map((pct, i) => (
+        <li class="rs-bar">
+          <span class="rs-bar-label">{5 - i}★</span>
+          <span class="rs-bar-track"><span class="rs-bar-fill" style={`width:${Math.max(0, Math.min(100, pct))}%`}></span></span>
+          <span class="rs-bar-pct">{pct}%</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+<style>
+  .rs {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 32px;
+    align-items: center;
+    padding: 24px;
+    background: var(--shop-bg-card);
+    border: 1px solid color-mix(in oklab, var(--shop-line) 60%, transparent);
+    border-radius: var(--shop-radius-lg);
+    margin-bottom: 28px;
+  }
+  .rs-score { text-align: center; min-width: 120px; }
+  .rs-avg { font-family: var(--shop-serif); font-size: 52px; line-height: 1; color: var(--shop-ink); }
+  .rs-stars { color: var(--shop-accent-deep); font-size: 16px; letter-spacing: 2px; margin: 6px 0 4px; }
+  .rs-total { font-size: 12px; color: var(--shop-ink-soft); }
+  .rs-bars { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+  .rs-bar { display: grid; grid-template-columns: 28px 1fr 38px; gap: 10px; align-items: center; }
+  .rs-bar-label { font-size: 12px; color: var(--shop-ink-soft); }
+  .rs-bar-track { height: 8px; border-radius: 999px; background: var(--shop-bg-soft); overflow: hidden; }
+  .rs-bar-fill { display: block; height: 100%; background: var(--shop-accent-deep); border-radius: 999px; }
+  .rs-bar-pct { font-size: 12px; color: var(--shop-ink-soft); text-align: right; }
+  @media (max-width: 640px) {
+    .rs { grid-template-columns: 1fr; gap: 18px; text-align: center; }
+    .rs-bars { max-width: 360px; margin: 0 auto; width: 100%; }
+  }
+</style>

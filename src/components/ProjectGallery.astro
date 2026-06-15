@@ -1,0 +1,193 @@
+---
+/**
+ * ProjectGallery.astro — thư viện ảnh công trình cho projects/[slug].
+ * Lưới thumbnail → click mở native <dialog> lightbox (focus-trap + Esc + backdrop
+ * miễn phí từ browser) với prev/next + phím mũi tên + trả focus về trigger.
+ * Self-contained, studio-styled. Chỉ render khi có ảnh. 0 dependency, CSP không đổi.
+ *
+ * gallery item: { src: Unsplash ID | '/uploads/...', alt? }
+ */
+import { img } from '../lib/unsplash';
+
+interface Item { src: string; alt?: string; }
+interface Props {
+  items: Item[];
+  projectName: string;
+  label?: string;
+}
+const { items, projectName, label = 'Thư viện công trình' } = Astro.props;
+
+const isLocal = (s: string) => s.startsWith('/') || s.startsWith('http');
+const thumb = (s: string) => (isLocal(s) ? s : img(s, 1000, '4/3'));
+const full = (s: string) => (isLocal(s) ? s : img(s, 2000, '16/9'));
+---
+{items.length > 0 && (
+  <section class="pg" aria-label={label} style="padding: 0 var(--pad-x) var(--pad-section); max-width: 1280px; margin: 0 auto;">
+    <div class="pg__label">{label}</div>
+    <div class="pg__grid">
+      {items.map((it, i) => (
+        <button type="button" class="pg__cell" data-pg-open={i} aria-label={`Phóng to ảnh ${i + 1}`}>
+          <img
+            src={thumb(it.src)}
+            data-pg-full={full(it.src)}
+            alt={it.alt ?? `${projectName} — ảnh ${i + 1}`}
+            loading="lazy"
+            decoding="async"
+          />
+        </button>
+      ))}
+    </div>
+  </section>
+
+  <dialog id="wotu-proj-lightbox" class="pglb" aria-label="Xem ảnh phóng to">
+    <button type="button" class="pglb__close" data-pglb-close aria-label="Đóng">×</button>
+    <button type="button" class="pglb__nav pglb__prev" data-pglb-prev aria-label="Ảnh trước" hidden>‹</button>
+    <figure class="pglb__fig">
+      <img class="pglb__img" src="" alt="" />
+      <figcaption class="pglb__cap"></figcaption>
+    </figure>
+    <button type="button" class="pglb__nav pglb__next" data-pglb-next aria-label="Ảnh sau" hidden>›</button>
+  </dialog>
+)}
+
+<style>
+  .pg__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--earth);
+    border-top: 1px solid var(--ink);
+    padding-top: 28px;
+    margin-bottom: 28px;
+  }
+  .pg__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .pg__cell {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: var(--bone);
+    cursor: zoom-in;
+    overflow: hidden;
+    border-radius: 2px;
+    aspect-ratio: 4 / 3;
+  }
+  .pg__cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .pg__cell:hover img { transform: scale(1.04); }
+  .pg__cell:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    .pg__cell img { transition: none; }
+    .pg__cell:hover img { transform: none; }
+  }
+  @media (max-width: 768px) {
+    .pg__grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  }
+
+  /* Lightbox */
+  .pglb {
+    border: 0; padding: 0; background: transparent;
+    max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh;
+    display: none; align-items: center; justify-content: center;
+    position: fixed; inset: 0;
+  }
+  .pglb[open] { display: flex; }
+  .pglb::backdrop { background: rgba(20, 16, 12, 0.85); }
+  .pglb__fig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .pglb__img {
+    max-width: 92vw; max-height: 84vh;
+    object-fit: contain; border-radius: 6px;
+    box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.5);
+    background: var(--bone);
+  }
+  .pglb__cap { color: #FBF7F0; font: 400 13px/1.4 var(--font-mono, sans-serif); text-align: center; max-width: 70ch; }
+  .pglb__cap:empty { display: none; }
+  .pglb__close {
+    position: fixed; top: 18px; right: 18px; z-index: 2;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(251, 247, 240, 0.14); color: #FBF7F0;
+    border: 0; cursor: pointer; font-size: 26px; line-height: 1;
+    display: grid; place-items: center; transition: background 0.2s;
+  }
+  .pglb__close:hover { background: rgba(251, 247, 240, 0.3); }
+  .pglb__nav {
+    position: fixed; top: 50%; transform: translateY(-50%); z-index: 2;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: rgba(251, 247, 240, 0.14); color: #FBF7F0;
+    border: 0; cursor: pointer; font-size: 30px; line-height: 1;
+    display: grid; place-items: center; transition: background 0.2s;
+  }
+  .pglb__nav:hover { background: rgba(251, 247, 240, 0.3); }
+  .pglb__prev { left: 16px; }
+  .pglb__next { right: 16px; }
+  @media (max-width: 640px) {
+    .pglb__img { max-width: 100vw; border-radius: 0; }
+    .pglb__nav { width: 42px; height: 42px; }
+    .pglb__prev { left: 8px; }
+    .pglb__next { right: 8px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .pglb[open] .pglb__img { animation: pglbIn 0.22s ease; }
+    @keyframes pglbIn { from { opacity: 0; transform: scale(0.96); } }
+  }
+</style>
+
+<script>
+  (() => {
+    const dialog = document.getElementById('wotu-proj-lightbox') as HTMLDialogElement | null;
+    if (!dialog) return;
+    const img = dialog.querySelector<HTMLImageElement>('.pglb__img');
+    const cap = dialog.querySelector<HTMLElement>('.pglb__cap');
+    const prevBtn = dialog.querySelector<HTMLButtonElement>('[data-pglb-prev]');
+    const nextBtn = dialog.querySelector<HTMLButtonElement>('[data-pglb-next]');
+    const cells = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-pg-open]'));
+    if (!cells.length || !img || !cap) return;
+
+    let index = 0;
+    let lastFocused: HTMLElement | null = null;
+    const multi = cells.length > 1;
+
+    const show = (i: number) => {
+      index = (i + cells.length) % cells.length;
+      const cellImg = cells[index].querySelector('img');
+      if (!cellImg) return;
+      img.src = cellImg.dataset.pgFull || cellImg.currentSrc || cellImg.src;
+      img.alt = cellImg.alt || '';
+      cap.textContent = cellImg.alt || '';
+      if (prevBtn) prevBtn.hidden = !multi;
+      if (nextBtn) nextBtn.hidden = !multi;
+    };
+
+    cells.forEach((cell, i) => {
+      cell.addEventListener('click', () => {
+        lastFocused = cell;
+        show(i);
+        dialog.showModal();
+      });
+    });
+
+    dialog.querySelector('[data-pglb-close]')?.addEventListener('click', () => dialog.close());
+    prevBtn?.addEventListener('click', () => show(index - 1));
+    nextBtn?.addEventListener('click', () => show(index + 1));
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(index - 1);
+      if (e.key === 'ArrowRight') show(index + 1);
+    });
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+    dialog.addEventListener('close', () => {
+      lastFocused?.focus();
+      lastFocused = null;
+    });
+  })();
+</script>
