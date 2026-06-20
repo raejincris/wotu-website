@@ -6,6 +6,7 @@
 
 import { getFile, putFile } from '../github.js';
 import { connectBody } from '../lib/preview-bus.js';
+import { imageSlot, attachAllImages, uploadPendingImages } from '../lib/imagefield.js';
 
 const FILE = 'src/data/shop-sofa-may.yml';
 const BODY = 'editor-sofa-body';
@@ -62,6 +63,17 @@ export async function init({ token, showToast, setLoading }) {
 
   const reviews = obj.reviews?.items || [];
 
+  const galleryDefaults = [
+    { label: 'Cận cảnh', tone: '' },
+    { label: 'Chi tiết vải', tone: 'sage' },
+    { label: 'Trong phòng', tone: '' },
+    { label: 'Chân gỗ sồi', tone: 'sage' },
+  ];
+  const gallery = galleryDefaults.map((def, i) => ({ ...def, ...((obj.gallery || [])[i] || {}) }));
+  const galleryCards = gallery
+    .map((g, i) => imageSlot(`gallery${i}`, g.photo ?? '', `Ảnh ${i + 1} — ${escHtml(g.label)}`))
+    .join('');
+
   const reviewCards = reviews.map((r, i) => `
     <div style="border:1px solid var(--line); border-radius:8px; padding:14px 14px 10px; background:var(--bone);">
       <p class="form-hint" style="margin:0 0 8px; font-weight:700; color:var(--ink-soft);">Đánh giá ${i + 1}</p>
@@ -105,6 +117,12 @@ export async function init({ token, showToast, setLoading }) {
     </div>
 
     <div class="form-card">
+      <p class="form-card-title">Ảnh thật bộ sưu tập (gallery)</p>
+      <p class="form-hint" style="margin-bottom:8px;">Tải ảnh chụp thật cho 4 góc. Để trống → giữ minh hoạ line-art. Ảnh đầu tiên có ảnh thật sẽ là ảnh chính.</p>
+      ${galleryCards}
+    </div>
+
+    <div class="form-card">
       <p class="form-card-title">Đánh giá khách hàng — ${reviews.length} review</p>
       <div style="display:flex; flex-direction:column; gap:12px; margin-top:4px;">
         ${reviewCards || '<p class="form-hint">Không có review nào.</p>'}
@@ -134,6 +152,9 @@ export async function init({ token, showToast, setLoading }) {
   inputs.forEach((i) => i.addEventListener('input', checkDirty));
   checkDirty();
 
+  // Ảnh gallery: chọn/xoá → bật nút Lưu (hidden input không thuộc Map origValues).
+  attachAllImages(body, () => { saveBtn.disabled = false; window.__adminSetDirty?.(true); });
+
   // Xem trước trực tiếp: field có data-cms-key patch vào iframe khi gõ (chỉ production).
   connectBody(body);
 
@@ -143,6 +164,9 @@ export async function init({ token, showToast, setLoading }) {
     setLoading(true);
     saveBtn.disabled = true;
     try {
+      const msgUp = footer.querySelector('#commit-msg-sofa').value.trim() || defaultMsg;
+      await uploadPendingImages({ token, scope: body, area: 'sofa-may', msg: msgUp, onStatus: (s) => showToast(s, 'info', 2500) });
+
       const { sha: freshSha } = await getFile(token, FILE);
       const g = (id) => body.querySelector(`#${id}`)?.value.trim() ?? '';
 
@@ -154,6 +178,12 @@ export async function init({ token, showToast, setLoading }) {
       obj.stockLabel       = g('stockLabel');
       obj.stockStatus      = g('stockStatus');
       obj.badge            = g('badge');
+
+      obj.gallery = gallery.map((gi, i) => ({
+        label: gi.label,
+        tone: gi.tone || '',
+        photo: body.querySelector(`.img-slot input[data-field="gallery${i}"]`)?.value.trim() || '',
+      }));
 
       if (obj.reviews?.items?.length) {
         obj.reviews.items = reviews.map((r, i) => ({

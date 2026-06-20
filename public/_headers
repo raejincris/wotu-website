@@ -51,3 +51,5 @@
   Cache-Control: public, max-age=31536000, immutable
 /uploads/projects/*
   Cache-Control: public, max-age=31536000, immutable
+/uploads/sofa-may/*
+  Cache-Control: public, max-age=31536000, immutable

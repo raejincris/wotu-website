@@ -4,6 +4,7 @@
  */
 
 import { getFile, putFile } from '../github.js';
+import { connectBody } from '../lib/preview-bus.js';
 
 const FILE = 'src/data/site.yml';
 const BODY = 'editor-site-body';
@@ -11,11 +12,12 @@ const FOOTER = 'editor-site-footer';
 
 const yaml = () => window.jsyaml;
 
-function field(id, label, value, type = 'text', hint = '') {
+function field(id, label, value, type = 'text', hint = '', cmsKey = '') {
+  const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
   return `
     <div class="form-row">
       <label class="form-label" for="${id}">${label}</label>
-      <input class="form-input" id="${id}" name="${id}" type="${type}"
+      <input class="form-input" id="${id}" name="${id}" type="${type}"${cms}
              value="${escVal(value)}" autocomplete="off" />
       ${hint ? `<p class="form-hint">${hint}</p>` : ''}
     </div>`;
@@ -54,8 +56,8 @@ export async function init({ token, showToast, setLoading }) {
   body.innerHTML = `
     <div class="form-card">
       <p class="form-card-title">Thông tin liên lạc</p>
-      ${field('hotline', 'Hotline', obj.hotline, 'tel', 'VD: 0933 774 708')}
-      ${field('email', 'Email', obj.email, 'email')}
+      ${field('hotline', 'Hotline', obj.hotline, 'tel', 'VD: 0933 774 708', 'hotline')}
+      ${field('email', 'Email', obj.email, 'email', '', 'email')}
     </div>
     <div class="form-card">
       <p class="form-card-title">Địa chỉ</p>
@@ -93,6 +95,9 @@ export async function init({ token, showToast, setLoading }) {
   }
   inputs.forEach((i) => i.addEventListener('input', checkDirty));
   checkDirty();
+
+  // Xem trước trực tiếp: hotline/email patch vào /studio/ (section Liên hệ) khi gõ (chỉ production).
+  connectBody(body);
 
   window.__adminSaveFn = () => { if (!saveBtn.disabled) saveBtn.click(); };
 

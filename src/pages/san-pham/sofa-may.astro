@@ -17,6 +17,17 @@ const reviews = d.reviews.items as any[];
 const bundleItems = d.bundle as any[];
 const collectionItems = d.collectionGrid.items as any[];
 
+// Gallery ảnh thật (4 góc). Mỗi item gallery[i] có { label, tone, photo }.
+// photo trống → giữ minh hoạ line-art (.shop-ph). Ảnh đầu tiên có photo = ảnh chính.
+const galleryDefaults = [
+  { label: 'Cận cảnh', tone: '' },
+  { label: 'Chi tiết vải', tone: 'sage' },
+  { label: 'Trong phòng', tone: '' },
+  { label: 'Chân gỗ sồi', tone: 'sage' },
+];
+const galleryThumbs = galleryDefaults.map((def, i) => ({ ...def, ...((d.gallery as any[])?.[i] || {}) }));
+const mainSrc = galleryThumbs.find((g) => g.photo)?.photo || '/uploads/products/cat-sofa.webp';
+
 const SITE_URL = 'https://www.wotu.vn';
 const PAGE_URL = `${SITE_URL}/san-pham/sofa-may/`;
 
@@ -85,7 +96,7 @@ const breadcrumbSchema = {
       <div class="gallery">
         <div class="main-image">
           <div class="shop-ph"><span class="shop-ph-label">Sofa văng Mây — góc khách quan, ánh sáng tự nhiên · 1600×1280</span></div>
-          <img class="shop-illo" src="/uploads/products/cat-sofa.webp" alt="Minh hoạ sofa văng Mây — WOTU" loading="eager" fetchpriority="high" decoding="async" data-lightbox data-caption='Sofa văng "Mây" 3 chỗ' />
+          <img class="shop-illo" id="sofaMain" src={mainSrc} alt="Sofa văng Mây — WOTU" loading="eager" fetchpriority="high" decoding="async" data-lightbox data-caption='Sofa văng "Mây" 3 chỗ' />
           <div class="gallery-tags">
             <span class="tag accent" data-cms="badge">{d.badge}</span>
             <span class="tag"><span class="pulse"></span><span data-cms="stockLabel">{d.stockLabel}</span></span>
@@ -96,22 +107,14 @@ const breadcrumbSchema = {
           </span>
         </div>
         <div class="gallery-row">
-          <button class="thumb active" data-i="0" type="button">
-            <div class="shop-ph"><span class="shop-ph-label">Cận cảnh</span></div>
-            <span class="thumb-label">Cận cảnh</span>
-          </button>
-          <button class="thumb" data-i="1" type="button">
-            <div class="shop-ph sage"><span class="shop-ph-label">Vải bố</span></div>
-            <span class="thumb-label">Chi tiết vải</span>
-          </button>
-          <button class="thumb" data-i="2" type="button">
-            <div class="shop-ph"><span class="shop-ph-label">Trong phòng</span></div>
-            <span class="thumb-label">Trong phòng</span>
-          </button>
-          <button class="thumb" data-i="3" type="button">
-            <div class="shop-ph sage"><span class="shop-ph-label">Chân gỗ</span></div>
-            <span class="thumb-label">Chân gỗ sồi</span>
-          </button>
+          {galleryThumbs.map((g, i) => (
+            <button class:list={['thumb', { active: i === 0 }]} data-i={i} type="button" data-src={g.photo || ''}>
+              {g.photo
+                ? <img class="thumb-img" src={g.photo} alt={g.label} loading="lazy" />
+                : <div class:list={['shop-ph', g.tone]}><span class="shop-ph-label">{g.label}</span></div>}
+              <span class="thumb-label">{g.label}</span>
+            </button>
+          ))}
         </div>
       </div>
 
@@ -657,6 +660,7 @@ const breadcrumbSchema = {
   }
   .thumb.active { border-color: var(--ink); }
   .thumb:hover { transform: translateY(-1px); }
+  .thumb-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .thumb .thumb-label { position: absolute; bottom: 6px; left: 8px; right: 8px; background: color-mix(in oklab, var(--bg-card) 80%, transparent); backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; text-align: center; z-index: 2; }
 
   /* product info column */
@@ -884,11 +888,17 @@ const breadcrumbSchema = {
   // Ghi lịch sử "Đã xem gần đây" (id khớp sku trong productSchema + shop-products.yml).
   recordView('p-sofa-may-3');
 
-  // Thumbs
+  // Thumbs — đổi active + swap ảnh chính nếu thumb có ảnh thật (data-src).
+  const sofaMain = document.getElementById('sofaMain') as HTMLImageElement | null;
   document.querySelectorAll<HTMLButtonElement>('.thumb').forEach((t) =>
     t.addEventListener('click', () => {
       document.querySelectorAll<HTMLButtonElement>('.thumb').forEach((x) => x.classList.remove('active'));
       t.classList.add('active');
+      const src = t.dataset.src;
+      if (src && sofaMain) {
+        sofaMain.src = src;
+        sofaMain.setAttribute('data-caption', t.querySelector('.thumb-label')?.textContent?.trim() || '');
+      }
     }),
   );
 

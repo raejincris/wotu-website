@@ -15,6 +15,22 @@ badge: "Bestseller tháng 5"
 stockLabel: "Còn 12 cái"
 stockStatus: "Còn hàng · giao 48h"
 
+# Ảnh thật bộ sưu tập — để trống photo => giữ minh hoạ line-art (degrade an toàn).
+# Ảnh đầu tiên có photo = ảnh chính. Upload qua Custom Admin (area "sofa-may").
+gallery:
+  - label: "Cận cảnh"
+    tone: ""
+    photo: ""
+  - label: "Chi tiết vải"
+    tone: "sage"
+    photo: ""
+  - label: "Trong phòng"
+    tone: ""
+    photo: ""
+  - label: "Chân gỗ sồi"
+    tone: "sage"
+    photo: ""
+
 fabricSwatchesTop:
   - name: "Linen Nâu Đất"
     style: "linear-gradient(135deg,#B77452,#915438)"

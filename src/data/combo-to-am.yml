@@ -48,17 +48,24 @@ heroBadges:
   - "−35% · Tháng 5"
   - "★ Bestseller phòng khách"
 
+# Ảnh thật các góc — để trống photo => giữ minh hoạ line-art. Ảnh đầu tiên có
+# photo = ảnh chính. Upload qua Custom Admin (editor "Combo Tổ Ấm", area "combos").
 gallery:
   - label: "Tổng thể"
     tone: ""
+    photo: ""
   - label: "Sofa"
     tone: sage
+    photo: ""
   - label: "Bàn trà"
     tone: ""
+    photo: ""
   - label: "Kệ TV"
     tone: sage
+    photo: ""
   - label: "Thảm"
     tone: ""
+    photo: ""
 
 colorLabel: "Nâu đất ấm"
 colors:

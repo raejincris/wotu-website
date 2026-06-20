@@ -5,6 +5,7 @@
  */
 import { getFile, putFile } from '../github.js';
 import { repeatable, rfText, bindDirty } from '../lib/repeatable.js';
+import { connectBody } from '../lib/preview-bus.js';
 
 const FILE = 'src/data/footer.yml';
 const BODY = 'editor-footer-body';
@@ -16,19 +17,21 @@ function escVal(v) { return String(v ?? '').replace(/"/g, '&quot;'); }
 function escHtml(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
-function field(id, label, value, hint = '') {
+function field(id, label, value, hint = '', cmsKey = '') {
+  const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
   return `
     <div class="form-row">
       <label class="form-label" for="${id}">${label}</label>
-      <input class="form-input" id="${id}" type="text" value="${escVal(value)}" autocomplete="off" />
+      <input class="form-input" id="${id}" type="text"${cms} value="${escVal(value)}" autocomplete="off" />
       ${hint ? `<p class="form-hint">${hint}</p>` : ''}
     </div>`;
 }
-function textarea(id, label, value, hint = '') {
+function textarea(id, label, value, hint = '', cmsKey = '') {
+  const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
   return `
     <div class="form-row">
       <label class="form-label" for="${id}">${label}</label>
-      <textarea class="form-input form-textarea" id="${id}" rows="3" autocomplete="off">${escHtml(value)}</textarea>
+      <textarea class="form-input form-textarea" id="${id}" rows="3"${cms} autocomplete="off">${escHtml(value)}</textarea>
       ${hint ? `<p class="form-hint">${hint}</p>` : ''}
     </div>`;
 }
@@ -54,9 +57,9 @@ export async function init({ token, showToast, setLoading }) {
   body.innerHTML = `
     <div class="form-card">
       <p class="form-card-title">Giới thiệu &amp; bản quyền</p>
-      ${textarea('tagline', 'Tagline footer', obj.tagline, 'Cho phép &lt;br/&gt; xuống dòng và &lt;em&gt;in nghiêng&lt;/em&gt;.')}
-      ${field('copyright', 'Dòng bản quyền', obj.copyright)}
-      ${field('signature', 'Chữ ký (góc phải)', obj.signature)}
+      ${textarea('tagline', 'Tagline footer', obj.tagline, 'Cho phép &lt;br/&gt; xuống dòng và &lt;em&gt;in nghiêng&lt;/em&gt;.', 'tagline')}
+      ${field('copyright', 'Dòng bản quyền', obj.copyright, '', 'copyright')}
+      ${field('signature', 'Chữ ký (góc phải)', obj.signature, '', 'signature')}
     </div>
     ${columns.map((c, ci) => `
       <div class="form-card">
@@ -81,6 +84,9 @@ export async function init({ token, showToast, setLoading }) {
 
   const saveBtn = footer.querySelector('#save-footer');
   const dirty = bindDirty({ scope: body, saveBtn });
+
+  // Xem trước trực tiếp: tagline/copyright/signature patch vào /studio/ khi gõ (chỉ production).
+  connectBody(body);
 
   const colReps = columns.map((c, ci) => repeatable({
     mount: body.querySelector(`#col${ci}-links`),

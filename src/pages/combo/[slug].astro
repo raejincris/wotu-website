@@ -59,6 +59,12 @@ const dim = detail?.dimensions ?? null;
 const dReviews = detail?.reviews ?? null;
 const dFaq = (detail?.faq ?? []) as any[];
 
+// Gallery ảnh thật (chỉ combo có detail). Mỗi item { label, tone, photo }.
+// Chỉ render thumb khi có ít nhất 1 ảnh thật → 5 combo gọn không đổi (degrade an toàn).
+const galleryShots = ((detail?.gallery ?? []) as any[]).filter((g) => g?.photo);
+const mainSrc = galleryShots[0]?.photo || illo;
+const hasGallery = galleryShots.length > 0;
+
 const readNav: { id: string; label: string }[] = [];
 if (richItems.length) readNav.push({ id: 'items', label: 'Combo gồm' });
 if (descBlocks.length) readNav.push({ id: 'desc', label: 'Mô tả' });
@@ -142,10 +148,20 @@ const breadcrumbSchema = {
       <div class="pd-gallery">
         <div class="pd-main">
           <div class={`shop-ph ${c.tone ?? ''}`}><span class="shop-ph-label">{c.placeholder ?? fullName}</span></div>
-          <img class="shop-illo" src={illo} alt={`${hasPhoto ? '' : 'Minh hoạ '}${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" data-lightbox data-caption={fullName} />
+          <img class="shop-illo" id="comboMain" src={mainSrc} alt={`${hasPhoto || hasGallery ? '' : 'Minh hoạ '}${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" data-lightbox data-caption={fullName} />
           {c.badge && <div class="pd-badges"><span class={`b-tag${c.badgeClass ? ' ' + c.badgeClass : ' dark'}`}>{c.badge}</span></div>}
         </div>
-        {!hasPhoto && <p class="pd-illo-note">Ảnh minh hoạ — ảnh chụp thật đang được cập nhật.</p>}
+        {hasGallery && (
+          <div class="pd-thumbs">
+            {galleryShots.map((g, i) => (
+              <button class:list={['pd-thumb', { active: i === 0 }]} type="button" data-src={g.photo}>
+                <img src={g.photo} alt={g.label} loading="lazy" decoding="async" />
+                <span class="pd-thumb-label">{g.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
+        {!hasPhoto && !hasGallery && <p class="pd-illo-note">Ảnh minh hoạ — ảnh chụp thật đang được cập nhật.</p>}
       </div>
 
       <div class="pd-info">
@@ -233,17 +249,17 @@ const breadcrumbSchema = {
           <div class="bundle-total">
             <div>
               <div class="bt-eyebrow">Tổng giá mua lẻ</div>
-              <div class="bt-strike">{detail.bundleTotalLabel}</div>
+              <div class="bt-strike" data-cms="bundleTotalLabel">{detail.bundleTotalLabel}</div>
             </div>
             <div class="bt-arrow"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--shop-accent)" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7" /></svg></div>
             <div>
               <div class="bt-eyebrow combo">Giá combo</div>
-              <div class="bt-now">{detail.bundlePriceLabel}</div>
+              <div class="bt-now" data-cms="bundlePriceLabel">{detail.bundlePriceLabel}</div>
             </div>
             <div class="bt-arrow"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7" /></svg></div>
             <div>
               <div class="bt-eyebrow save">Tiết kiệm</div>
-              <div class="bt-save">{detail.bundleSaveLabel}</div>
+              <div class="bt-save" data-cms="bundleSaveLabel">{detail.bundleSaveLabel}</div>
             </div>
           </div>
         )}
@@ -518,6 +534,20 @@ const breadcrumbSchema = {
   wireAdd(document.getElementById('pdAdd'));
   wireAdd(document.getElementById('pdAddSticky'));
 
+  // Gallery thumbs → đổi ảnh chính (chỉ khi combo có ảnh thật).
+  const comboMain = document.getElementById('comboMain') as HTMLImageElement | null;
+  document.querySelectorAll<HTMLButtonElement>('.pd-thumb').forEach((t) =>
+    t.addEventListener('click', () => {
+      document.querySelectorAll<HTMLButtonElement>('.pd-thumb').forEach((x) => x.classList.remove('active'));
+      t.classList.add('active');
+      const src = t.dataset.src;
+      if (src && comboMain) {
+        comboMain.src = src;
+        comboMain.setAttribute('data-caption', t.querySelector('.pd-thumb-label')?.textContent?.trim() || '');
+      }
+    }),
+  );
+
   const fav = document.getElementById('pdFav');
   function syncFav() {
     if (!fav) return;
@@ -580,6 +610,13 @@ const breadcrumbSchema = {
   .pd-main { position: relative; aspect-ratio: 4/3; border-radius: var(--shop-radius-lg); overflow: hidden; background: var(--shop-bg-soft); }
   .pd-badges { position: absolute; top: 16px; left: 16px; z-index: 2; }
   .pd-illo-note { margin-top: 12px; font-size: 12px; color: var(--shop-ink-soft); font-style: italic; }
+
+  .pd-thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 12px; }
+  .pd-thumb { aspect-ratio: 1/1; border-radius: 12px; overflow: hidden; cursor: pointer; border: 2px solid transparent; background: var(--shop-bg-soft); position: relative; transition: border-color .2s, transform .2s; padding: 0; }
+  .pd-thumb.active { border-color: var(--shop-ink); }
+  .pd-thumb:hover { transform: translateY(-1px); }
+  .pd-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .pd-thumb-label { position: absolute; bottom: 5px; left: 6px; right: 6px; background: color-mix(in oklab, var(--shop-bg-card) 80%, transparent); backdrop-filter: blur(4px); padding: 3px 6px; border-radius: 6px; font-size: 9.5px; font-weight: 600; text-align: center; z-index: 2; }
 
   .pd-cat { font-size: 13px; letter-spacing: .04em; color: var(--shop-ink-soft); }
   .pd-info :global(h1) { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(34px, 5vw, 54px); line-height: 1.05; margin: 8px 0 16px; }

@@ -21,7 +21,7 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
       <a href="/studio/" aria-label="WOTU Studio — về trang chủ" style="display: inline-block;">
         <img src="/logo-light.svg" alt="WOTU" width="200" height="82" loading="lazy" decoding="async" style="height: 56px; width: auto; display: block;" />
       </a>
-      <p style="margin-top: 16px; font-size: 13px; color: var(--clay); max-width: 32ch; line-height: 1.6;" set:html={footer.tagline}></p>
+      <p style="margin-top: 16px; font-size: 13px; color: var(--clay); max-width: 32ch; line-height: 1.6;" data-cms="tagline" set:html={footer.tagline}></p>
     </div>
     {cols.map((c) => (
       <div>
@@ -40,8 +40,8 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
     ))}
   </div>
   <div class="footer-bottom" style="padding-top: 24px; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; color: var(--taupe); text-transform: uppercase;">
-    <div>{footer.copyright} <span>· v{SITE_VERSION}</span></div>
-    <div>{footer.signature}</div>
+    <div><span data-cms="copyright">{footer.copyright}</span> <span>· v{SITE_VERSION}</span></div>
+    <div data-cms="signature">{footer.signature}</div>
   </div>
 </footer>
 

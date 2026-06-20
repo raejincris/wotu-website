@@ -5,6 +5,8 @@
 
 import { getFile, putFile } from '../github.js';
 import { repeatable, rfText, rfArea, bindDirty } from '../lib/repeatable.js';
+import { imageSlot, attachAllImages, uploadPendingImages } from '../lib/imagefield.js';
+import { connectBody } from '../lib/preview-bus.js';
 
 const FILE = 'src/data/combo-to-am.yml';
 const BODY = 'editor-combo-body';
@@ -13,12 +15,16 @@ const FOOTER = 'editor-combo-footer';
 const yaml = () => window.jsyaml;
 
 function escVal(v) { return String(v ?? '').replace(/"/g, '&quot;'); }
+function escHtml(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 
-function field(id, label, value, hint = '') {
+function field(id, label, value, hint = '', cmsKey = '') {
+  const cms = cmsKey ? ` data-cms-key="${escVal(cmsKey)}"` : '';
   return `
     <div class="form-row">
       <label class="form-label" for="${id}">${label}</label>
-      <input class="form-input" id="${id}" type="text"
+      <input class="form-input" id="${id}" type="text"${cms}
              value="${escVal(value)}" autocomplete="off" />
       ${hint ? `<p class="form-hint">${hint}</p>` : ''}
     </div>`;
@@ -47,6 +53,10 @@ export async function init({ token, showToast, setLoading }) {
 
   const reviews = obj.reviews?.items || [];
   const faq     = obj.faq || [];
+  const gallery = (obj.gallery || []).map((g) => ({ label: g?.label ?? '', tone: g?.tone ?? '', photo: g?.photo ?? '' }));
+  const galleryCards = gallery
+    .map((g, i) => imageSlot(`gallery${i}`, g.photo, `Ảnh ${i + 1} — ${escHtml(g.label || 'Góc chụp')}`))
+    .join('');
 
   body.innerHTML = `
     <div class="form-card">
@@ -61,13 +71,20 @@ export async function init({ token, showToast, setLoading }) {
       </div>
     </div>
 
+    ${gallery.length ? `
+    <div class="form-card">
+      <p class="form-card-title">Ảnh thật các góc (gallery)</p>
+      <p class="form-hint" style="margin-bottom:8px;">Tải ảnh chụp thật cho từng góc. Để trống → giữ minh hoạ. Ảnh đầu tiên có ảnh thật sẽ là ảnh chính trên trang combo.</p>
+      ${galleryCards}
+    </div>` : ''}
+
     <div class="form-card">
       <p class="form-card-title">Nhãn tổng tiền (widget "Mua kèm")</p>
       <div class="form-grid-2">
-        ${field('bundleTotalLabel', 'Tổng giá mua lẻ', obj.bundleTotalLabel)}
-        ${field('bundlePriceLabel', 'Giá combo', obj.bundlePriceLabel)}
+        ${field('bundleTotalLabel', 'Tổng giá mua lẻ', obj.bundleTotalLabel, '', 'bundleTotalLabel')}
+        ${field('bundlePriceLabel', 'Giá combo', obj.bundlePriceLabel, '', 'bundlePriceLabel')}
       </div>
-      ${field('bundleSaveLabel', 'Tiết kiệm', obj.bundleSaveLabel, 'VD: 10.000.000đ')}
+      ${field('bundleSaveLabel', 'Tiết kiệm', obj.bundleSaveLabel, 'VD: 10.000.000đ', 'bundleSaveLabel')}
     </div>
 
     <div class="form-card">
@@ -95,6 +112,12 @@ export async function init({ token, showToast, setLoading }) {
 
   const saveBtn = footer.querySelector('#save-combo');
   const dirty = bindDirty({ scope: body, saveBtn });
+
+  // Ảnh gallery: chọn/xoá → đánh dấu dirty (bật nút Lưu).
+  attachAllImages(body, dirty.mark);
+
+  // Xem trước trực tiếp: nhãn bundle (data-cms-key) patch vào /combo/to-am/ khi gõ (chỉ production).
+  connectBody(body);
 
   const repReviews = repeatable({
     mount: body.querySelector('#combo-reviews'),
@@ -130,6 +153,9 @@ export async function init({ token, showToast, setLoading }) {
     setLoading(true);
     saveBtn.disabled = true;
     try {
+      const msgUp = footer.querySelector('#commit-msg-combo').value.trim() || defaultMsg;
+      await uploadPendingImages({ token, scope: body, area: 'combos', msg: msgUp, onStatus: (s) => showToast(s, 'info', 2500) });
+
       const { sha: freshSha } = await getFile(token, FILE);
       const g = (id) => body.querySelector(`#${id}`)?.value.trim() ?? '';
 
@@ -140,6 +166,14 @@ export async function init({ token, showToast, setLoading }) {
       obj.bundleTotalLabel = g('bundleTotalLabel');
       obj.bundlePriceLabel = g('bundlePriceLabel');
       obj.bundleSaveLabel  = g('bundleSaveLabel');
+
+      if (gallery.length) {
+        obj.gallery = gallery.map((gi, i) => ({
+          label: gi.label,
+          tone: gi.tone || '',
+          photo: body.querySelector(`.img-slot input[data-field="gallery${i}"]`)?.value.trim() || '',
+        }));
+      }
 
       const items = repReviews.collect((f, orig) => ({
         ...orig,

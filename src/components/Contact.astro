@@ -39,11 +39,11 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
         <div>
           <div style="color: var(--taupe); margin-bottom: 8px;">Liên lạc</div>
           <div class="contact-row">
-            <a class="contact-link" href={`tel:${site.hotline.replace(/\s+/g, '')}`} data-hotline>{site.hotline}</a>
+            <a class="contact-link" href={`tel:${site.hotline.replace(/\s+/g, '')}`} data-hotline data-cms="hotline">{site.hotline}</a>
             <button type="button" class="contact-copy" data-copy={site.hotline} aria-label="Sao chép số điện thoại">⧉</button>
           </div>
           <div class="contact-row">
-            <a class="contact-link" href={`mailto:${site.email}`}>{site.email}</a>
+            <a class="contact-link" href={`mailto:${site.email}`} data-cms="email">{site.email}</a>
             <button type="button" class="contact-copy" data-copy={site.email} aria-label="Sao chép email">⧉</button>
           </div>
         </div>
