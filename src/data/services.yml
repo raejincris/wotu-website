@@ -58,7 +58,7 @@ services:
       - "Vải vóc, rèm, đệm và phụ kiện mềm"
       - "Lắp đặt thiết bị & styling hoàn thiện"
       - "Vệ sinh, nghiệm thu và bàn giao chìa khoá trao tay"
-      - "Bảo hành 5 năm cho đồ gỗ nội thất"
+      - "Bảo hành 2 năm cho đồ gỗ nội thất"
     process:
       - { t: "Nhận bản vẽ", d: "Bóc tách khối lượng, lên kế hoạch sản xuất tại xưởng." }
       - { t: "Sản xuất tại xưởng", d: "Đóng đồ gỗ theo kích thước thật, kiểm tra trước khi lắp." }

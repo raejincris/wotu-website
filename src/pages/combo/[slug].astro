@@ -76,7 +76,7 @@ const hasRich = readNav.length > 0;
 
 const SITE_URL = 'https://www.wotu.vn';
 const PAGE_URL = `${SITE_URL}/combo/${slug}/`;
-const desc = `${fullName} — ${c.cat}. ${c.desc ?? ''} Trọn gói thiết kế, sản xuất tại xưởng WOTU Quy Nhơn và lắp đặt tận nơi. Bảo hành 5 năm.`;
+const desc = `${fullName} — ${c.cat}. ${c.desc ?? ''} Trọn gói thiết kế, sản xuất tại xưởng WOTU Quy Nhơn và lắp đặt tận nơi. Bảo hành 2 năm.`;
 
 // Strip HTML cho FAQ schema (Google không nhận HTML trong answer)
 function stripHtml(html: string) {
@@ -195,9 +195,9 @@ const breadcrumbSchema = {
         <a class="pd-zalo" href="https://zalo.me/0933774708" target="_blank" rel="noopener noreferrer">Cần tư vấn combo? Chat Zalo 0933 774 708 →</a>
 
         <ul class="pd-trust">
-          <li>Trọn gói thiết kế + thi công</li>
-          <li>Bảo hành 5 năm</li>
-          <li>Giao &amp; lắp tận nơi</li>
+          <li><a href="/bao-hanh-doi-tra/">Bảo hành 2 năm khung gỗ</a></li>
+          <li><a href="/giao-hang-lap-dat/">Giao &amp; lắp tận nơi</a></li>
+          <li><a href="/cau-hoi-thuong-gap/">Câu hỏi thường gặp</a></li>
         </ul>
         <a class="pd-room-link" href={`/san-pham/?room=${c.room}`}>Xem sản phẩm lẻ cho {roomLabel[c.room] ?? 'không gian này'} →</a>
       </div>
@@ -641,6 +641,8 @@ const breadcrumbSchema = {
   .pd-trust { list-style: none; margin: 26px 0 18px; padding: 22px 0 0; border-top: 1px solid var(--shop-line); display: flex; flex-wrap: wrap; gap: 8px 24px; }
   .pd-trust li { font-size: 13px; color: var(--shop-ink-soft); }
   .pd-trust li::before { content: '✓ '; color: var(--shop-accent); }
+  .pd-trust li a { color: inherit; text-decoration: underline dotted; text-underline-offset: 3px; }
+  .pd-trust li a:hover { color: var(--shop-accent-deep); }
   .pd-room-link { font-size: 14px; color: var(--shop-ink-soft); text-decoration: none; border-bottom: 1px solid var(--shop-line); }
   .pd-room-link:hover { color: var(--shop-accent); }
 

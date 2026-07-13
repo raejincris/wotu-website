@@ -21,13 +21,13 @@ const blocks = ((shopHome as any).blocks ?? []) as any[];
 // Dải marquee "cam kết" (mới) — đặt trước Reviews. Editable qua YAML, có default.
 const mt = (shopHome as any).marqueeTrust;
 const marqueeTrust: string[] = (Array.isArray(mt) && mt.length ? mt : [
-  'Bảo hành 5 năm', 'Giao & lắp đặt tận nơi', 'Gỗ tự nhiên 100%',
+  'Bảo hành 2 năm khung gỗ', 'Giao & lắp đặt tận nơi', 'Gỗ tự nhiên 100%',
   'Thiết kế riêng theo nhà bạn', '7 ngày dọn vào ở',
 ]).map((s: any) => String(s).trim()).filter(Boolean);
 
 // Bố cục: bật/tắt + thứ tự section (sửa qua admin "Bố cục trang").
 const L = resolveLayout((shopHome as any).layout, [
-  'combos', 'bestsellers', 'inspo', 'whyUs', 'reviews', 'cta', 'newsletter',
+  'combos', 'bestsellers', 'inspo', 'whyUs', 'studioBridge', 'reviews', 'cta', 'newsletter',
 ]);
 const secStyle = (id: string) => `order:${L.order(id)};${L.on(id) ? '' : 'display:none;'}`;
 
@@ -269,6 +269,35 @@ const whyIcons: Record<string, string> = {
       </div>
     </div>
   </section>
+
+  <!-- ====== SHOP ↔ STUDIO BRIDGE ====== -->
+  {sections.studioBridge && (
+    <section id="studio-bridge" class="shop-reveal" data-cms-section="studioBridge" style={secStyle('studioBridge')}>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms" data-cms="sections.studioBridge.eyebrow">{sections.studioBridge.eyebrow}</span>
+            <SplitWords tag="h2" text={sections.studioBridge.heading} cms="sections.studioBridge.heading" base={90} step={45} />
+          </div>
+          <div class="right reveal" data-reveal style="--rev-delay: 140ms" set:html={sections.studioBridge.desc} data-cms="sections.studioBridge.desc" />
+        </div>
+
+        <div class="bridge-grid shop-reveal-stagger">
+          {['shop', 'studio'].map((k) => {
+            const p = sections.studioBridge[k];
+            return (
+              <a class={`bridge-card${k === 'studio' ? ' dark' : ''}`} href={p.href}>
+                <span class="bridge-label">{p.label}</span>
+                <h3>{p.title}</h3>
+                <p>{p.desc}</p>
+                <span class="bridge-cta">{p.cta} <span class="arr">→</span></span>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- ====== MARQUEE CAM KẾT (mới) ====== -->
   <div class="shop-marquee alt" style={`order:${L.order('reviews')}`} aria-label="Cam kết WOTU">
@@ -657,6 +686,35 @@ const whyIcons: Record<string, string> = {
   .why-card h3 { font-family: var(--shop-serif); font-size: 24px; margin: 0; line-height: 1.1; font-weight: 400; }
   .why-card p { margin: 0; font-size: 14px; color: var(--shop-ink-soft); line-height: 1.55; }
 
+  /* ===== SHOP ↔ STUDIO BRIDGE ===== */
+  .bridge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .bridge-card {
+    display: flex; flex-direction: column; gap: 14px;
+    background: var(--shop-bg-card); color: var(--shop-ink);
+    border: 1px solid color-mix(in oklab, var(--shop-line) 60%, transparent);
+    border-radius: var(--shop-radius-lg); padding: 40px 36px;
+    text-decoration: none;
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .bridge-card:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -20px rgba(58, 42, 30, .18); }
+  .bridge-card.dark { background: var(--shop-ink); color: var(--shop-bg); border: 0; }
+  .bridge-label {
+    font-size: 11px; letter-spacing: .18em; text-transform: uppercase; font-weight: 600;
+    color: var(--shop-accent-deep);
+  }
+  .bridge-card.dark .bridge-label { color: var(--shop-warm-soft); }
+  .bridge-card h3 { font-family: var(--shop-serif); font-weight: 400; font-size: clamp(26px, 3vw, 34px); line-height: 1.08; margin: 0; }
+  .bridge-card p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--shop-ink-soft); max-width: 44ch; }
+  .bridge-card.dark p { color: color-mix(in oklab, var(--shop-bg) 78%, transparent); }
+  .bridge-cta {
+    margin-top: auto; padding-top: 18px;
+    font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 8px;
+    color: var(--shop-accent-deep);
+  }
+  .bridge-card.dark .bridge-cta { color: var(--shop-bg); }
+  .bridge-cta .arr { transition: transform .2s ease; }
+  .bridge-card:hover .bridge-cta .arr { transform: translateX(4px); }
+
   /* ===== REVIEWS ===== */
   .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
   .review {
@@ -782,7 +840,8 @@ const whyIcons: Record<string, string> = {
     .cta { grid-template-columns: 1fr; }
   }
   @media (max-width: 680px) {
-    .combo-grid, .products-grid, .why-grid, .reviews-grid { grid-template-columns: 1fr; }
+    .combo-grid, .products-grid, .why-grid, .reviews-grid, .bridge-grid { grid-template-columns: 1fr; }
+    .bridge-card { padding: 30px 24px; }
     .combo-card.feature { grid-column: span 1; }
     .combos, .inspo, .cta { margin: 0 12px; padding: 50px 22px; }
     .hero-meta { grid-template-columns: 1fr; gap: 12px; }
