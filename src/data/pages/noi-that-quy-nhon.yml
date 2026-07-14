@@ -4,6 +4,7 @@
 title: "Nội thất Quy Nhơn"
 description: "WOTU — xưởng nội thất tại Quy Nhơn từ 2022. Combo phòng khách, phòng ngủ, phòng ăn đóng sẵn giao trong 48 giờ; thiết kế & thi công trọn gói cả căn. Bảo hành 2 năm khung gỗ, giao lắp miễn phí tại Quy Nhơn, Gia Lai."
 template: shop
+nav: true
 blocks:
   - id: hero
     type: richText
