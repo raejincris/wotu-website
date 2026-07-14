@@ -54,7 +54,7 @@ blocks:
     heading: "Bảo hành &amp; Hậu mãi"
     items:
       - question: "Bảo hành bao lâu và bảo hành những gì?"
-        answer: "<p><strong>5 năm</strong> cho cấu kiện gỗ và khung. <strong>12 tháng</strong> cho lớp sơn/hoàn thiện. <strong>24 tháng</strong> cho phụ kiện (bản lề, ray trượt, tay nắm). Xem đầy đủ tại trang <a href='/bao-hanh-doi-tra/'>Bảo hành &amp; Đổi trả</a>.</p>"
+        answer: "<p><strong>2 năm</strong> cho cấu kiện gỗ và khung. <strong>12 tháng</strong> cho lớp sơn/hoàn thiện và vải/đệm. Phụ kiện (bản lề, ray trượt, tay nắm) bảo hành theo khung 2 năm. Xem đầy đủ tại trang <a href='/bao-hanh-doi-tra/'>Bảo hành &amp; Đổi trả</a>.</p>"
         open: true
       - question: "Tôi muốn đặt thêm ghế cùng bộ sau 1 năm, WOTU có làm được không?"
         answer: "<p>Có. Miễn là bộ gỗ đó vẫn trong danh mục sản xuất. Màu và vân gỗ tự nhiên có thể chênh nhẹ do lô gỗ khác nhau — chúng tôi sẽ thông báo trước khi bạn xác nhận.</p>"

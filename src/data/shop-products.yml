@@ -204,7 +204,7 @@ products:
       - label: "Khả năng chịu tải"
         value: "≤ 40 kg"
       - label: "Bảo hành"
-        value: "5 năm khung gỗ"
+        value: "2 năm khung gỗ"
     tags: [go-soi, nau-dat, in-stock, new]
 
   - id: p-ban-doan-vien
@@ -229,7 +229,7 @@ products:
       - label: "Chất liệu"
         value: "Gỗ sồi nguyên tấm, mộng ghép truyền thống"
       - label: "Bảo hành"
-        value: "5 năm khung gỗ"
+        value: "2 năm khung gỗ"
     tags: [go-soi, nau-dat, in-stock]
 
   - id: p-ghe-sum-vay

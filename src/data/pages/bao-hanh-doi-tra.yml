@@ -1,5 +1,5 @@
 title: "Bảo hành & Đổi trả"
-description: "Chính sách bảo hành 5 năm và đổi trả 30 ngày của WOTU — cam kết rõ ràng, quy trình đơn giản, không phát sinh chi phí ẩn."
+description: "Chính sách bảo hành 2 năm khung gỗ và đổi trả của WOTU — cam kết rõ ràng, quy trình đơn giản, không phát sinh chi phí ẩn."
 template: shop
 blocks:
   - id: hero
@@ -13,7 +13,7 @@ blocks:
     type: stats
     heading: ""
     items:
-      - value: "5 năm"
+      - value: "2 năm"
         label: "Bảo hành cấu kiện gỗ"
       - value: "30 ngày"
         label: "Đổi trả lỗi sản xuất"
@@ -23,8 +23,8 @@ blocks:
   - id: baohanh-detail
     type: richText
     eyebrow: "Chi tiết bảo hành"
-    heading: "Bảo hành <em>5 năm</em>"
-    body: "<p>WOTU bảo hành <strong>5 năm</strong> cho toàn bộ cấu kiện gỗ và khung kim loại của sản phẩm — bao gồm: nứt vỡ do lỗi vật liệu, biến dạng cơ cấu, bung mộng, hỏng bản lề/ray trượt do lỗi lắp ráp.</p><p>Bảo hành <strong>miễn phí sửa chữa tại nhà</strong> trong phạm vi Quy Nhơn và lân cận. Khu vực xa hơn: chúng tôi hướng dẫn qua video hoặc thu phí vận chuyển thực tế.</p>"
+    heading: "Bảo hành <em>2 năm</em>"
+    body: "<p>WOTU bảo hành <strong>2 năm</strong> cho toàn bộ cấu kiện gỗ và khung kim loại của sản phẩm — bao gồm: nứt vỡ do lỗi vật liệu, biến dạng cơ cấu, bung mộng, hỏng bản lề/ray trượt do lỗi lắp ráp.</p><p>Bảo hành <strong>miễn phí sửa chữa tại nhà</strong> trong phạm vi Quy Nhơn và lân cận. Khu vực xa hơn: chúng tôi hướng dẫn qua video hoặc thu phí vận chuyển thực tế.</p>"
     align: left
 
   - id: khong-bao-hanh
