@@ -832,6 +832,10 @@ const whyIcons: Record<string, string> = {
   /* ===== RESPONSIVE ===== */
   @media (max-width: 1100px) {
     .hero-grid { grid-template-columns: 1fr; }
+    /* Glow right:-4% thò khỏi viewport → trang pan ngang được ~16px khi lướt
+       trên touch. right:0 giữ mép phải ≤ viewport suốt vòng heroGlow
+       (scale 1.12 được bù bởi translate -30px). Desktop giữ nguyên. */
+    .hero::before { right: 0; }
     .combo-grid, .products-grid, .why-grid, .reviews-grid { grid-template-columns: repeat(2, 1fr); }
     .combo-card.feature { grid-column: span 2; flex-direction: column; }
     .combo-card.feature .combo-img, .combo-card.feature .combo-body { width: 100%; }
@@ -844,6 +848,9 @@ const whyIcons: Record<string, string> = {
     .bridge-card { padding: 30px 24px; }
     .combo-card.feature { grid-column: span 1; }
     .combos, .inspo, .cta { margin: 0 12px; padding: 50px 22px; }
+    /* Giá (2 mức + note) + cụm nút "Giỏ"/mũi tên không đủ 1 hàng ở card hẹp —
+       không wrap thì cụm nút bị card (overflow hidden) cắt cụt. */
+    .combo-foot { flex-wrap: wrap; row-gap: 10px; }
     .hero-meta { grid-template-columns: 1fr; gap: 12px; }
     .inspo-grid { grid-template-columns: 1fr; grid-template-rows: repeat(5, 200px); }
     .inspo-card.tall { grid-column: span 1; }

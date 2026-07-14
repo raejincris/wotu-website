@@ -592,8 +592,11 @@ const breadcrumbSchema = {
 </ShopLayout>
 
 <style>
-  /* Alias shop tokens so design CSS doesn't need rename */
-  :where(main) {
+  /* Alias shop tokens so design CSS doesn't need rename.
+     PHẢI :global — <main> render ở ShopLayout, không nhận data-astro-cid của
+     page này; selector scoped sẽ không bao giờ match → toàn bộ alias chết
+     (mất gradient banner, sticky-bar/read-nav trong suốt, sai font serif). */
+  :global(main) {
     --bg: var(--shop-bg);
     --bg-soft: var(--shop-bg-soft);
     --bg-card: var(--shop-bg-card);
@@ -880,6 +883,15 @@ const breadcrumbSchema = {
     .key-features { grid-template-columns: 1fr; }
     .bundle-row { grid-template-columns: 22px 60px 1fr; }
     .bundle-row .bundle-price { grid-column: 2 / -1; text-align: left; }
+    /* Combo banner: track 1fr có min auto = min-content của price-card (dòng giá
+       không wrap) → cả grid tràn khỏi viewport 390px. min-width:0 + wrap để co lại. */
+    .combo-banner { padding: 36px 24px; }
+    .combo-banner > div { min-width: 0; }
+    .combo-banner .price-card .row { flex-wrap: wrap; }
+    .combo-banner .price-card .now { font-size: 30px; }
+    /* Sticky bar: đủ chỗ cho giá + nút; title dài làm bar vỡ thành nhiều dòng. */
+    .sticky-bar { gap: 12px; padding: 10px 10px 10px 18px; white-space: nowrap; }
+    .sticky-bar .sb-title { display: none; }
   }
 </style>
 

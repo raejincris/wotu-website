@@ -22,7 +22,8 @@ import Footer from '../components/shop/Footer.astro';
 </ShopLayout>
 
 <style>
-  :where(main) {
+  /* PHẢI :global — <main> ở ShopLayout không nhận cid của page → scoped không match. */
+  :global(main) {
     --bg: var(--shop-bg);
     --bg-soft: var(--shop-bg-soft);
     --bg-card: var(--shop-bg-card);
