@@ -148,6 +148,71 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
   color: var(--shop-ink);
 }
 .shop-icon-btn:hover { background: var(--shop-warm-soft); transform: translateY(-1px); }
+
+/* Nav không được wrap label 2 dòng (9 link từng đè logo — fix 15/07). */
+.shop-nav-links a { white-space: nowrap; }
+
+/* ---- Dropdown "Thêm" (desktop) — <details> native ---- */
+.shop-nav-more { position: relative; }
+.shop-nav-more summary {
+  list-style: none; cursor: pointer; padding: 8px 0;
+  font-size: 14px; font-weight: 500; color: var(--shop-ink);
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.shop-nav-more summary::-webkit-details-marker { display: none; }
+.shop-nav-more summary:hover { color: var(--shop-accent); }
+.shop-nav-more.is-current summary { color: var(--shop-accent-deep); }
+.shop-nav-more .chev { font-size: 10px; transition: transform .2s ease; }
+.shop-nav-more[open] .chev { transform: rotate(180deg); }
+.shop-nav-more-menu {
+  position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  min-width: 220px; z-index: 60;
+  background: var(--shop-bg-card); border: 1px solid var(--shop-line);
+  border-radius: 14px; padding: 8px;
+  box-shadow: 0 18px 40px -18px rgba(20, 16, 12, .25);
+  display: flex; flex-direction: column;
+}
+.shop-nav-more-menu a { padding: 10px 14px; border-radius: 8px; white-space: nowrap; }
+.shop-nav-more-menu a:hover { background: var(--shop-warm-soft); color: var(--shop-ink); }
+.shop-nav-more-menu a[aria-current="page"] { color: var(--shop-accent-deep); font-weight: 600; }
+.shop-nav-more[open] .shop-nav-more-menu { animation: shopMenuIn .18s ease; }
+@keyframes shopMenuIn { from { opacity: 0; transform: translate(-50%, -4px); } }
+@media (prefers-reduced-motion: reduce) {
+  .shop-nav-more .chev { transition: none; }
+  .shop-nav-more[open] .shop-nav-more-menu { animation: none; }
+}
+
+/* ---- Hamburger + drawer mobile (shop trước đây KHÔNG có menu mobile) ---- */
+.shop-nav-toggle { display: none; } /* hiện ≤1100px (block RESPONSIVE) */
+
+.shop-drawer {
+  position: fixed; inset: 0; z-index: 150; /* > .shop-nav (50), < cart-drawer (200) */
+  background: var(--shop-ink); color: var(--shop-bg);
+  overflow-y: auto;
+  /* Ẩn bằng display (KHÔNG opacity-0 — sẽ chặn click toàn site dù vô hình). */
+  display: none;
+  flex-direction: column;
+}
+.shop-drawer:not([hidden]) { display: flex; }
+.shop-drawer-inner { flex: 1; display: flex; flex-direction: column; padding: 12px 18px 24px; }
+.shop-drawer-head {
+  display: flex; justify-content: space-between; align-items: center;
+  min-height: 52px; padding-bottom: 14px;
+  border-bottom: 1px solid color-mix(in oklab, var(--shop-bg) 14%, transparent);
+}
+.shop-drawer-close {
+  width: 44px; height: 44px; border: 0; background: transparent;
+  color: var(--shop-bg); font-size: 32px; line-height: 1; cursor: pointer;
+}
+.shop-drawer-nav { display: flex; flex-direction: column; padding-top: 14px; }
+.shop-drawer-nav a {
+  display: flex; align-items: center; min-height: 52px;
+  font-family: var(--shop-serif); font-size: 28px; color: var(--shop-bg);
+  border-bottom: 1px solid color-mix(in oklab, var(--shop-bg) 10%, transparent);
+}
+.shop-drawer-nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 6px; }
+
+html.wotu-shop-drawer-open { overflow: hidden; }
 .shop-badge-dot {
   background: var(--shop-accent-deep); color: white; font-size: 10px; font-weight: 700;
   border-radius: 999px; min-width: 18px; height: 18px; padding: 0 5px;
@@ -317,11 +382,17 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
    ============================================================ */
 @media (max-width: 1100px) {
   .shop-nav-links { display: none; }
+  .shop-nav-toggle { display: grid; } /* hamburger thế chỗ links */
   .shop-foot-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 680px) {
   .shop-foot-grid { grid-template-columns: 1fr; }
   .shop .container { padding: 0 18px; }
+}
+/* ≤600px: logo + search + cart + pill + hamburger ≈ 396px > 339px khả dụng →
+   tràn ngang. Ẩn pill (CTA "Tư vấn" vẫn có trong drawer + /#contact). */
+@media (max-width: 600px) {
+  .shop-nav-cta .shop-btn-primary { display: none; }
 }
 
 /* Skip link for shop pages (a11y) */

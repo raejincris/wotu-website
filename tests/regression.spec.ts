@@ -67,20 +67,79 @@ test.describe('2 · Shop homepage — smoke', () => {
     await expect(page.locator('h1').first()).toContainText('Trọn bộ');
   });
 
-  test('Nav có đủ 6 links chính (desktop: visible; mobile: attached in DOM)', async ({ page }, testInfo) => {
+  // Nav desktop: link chính top-level, link phụ gom vào dropdown "Thêm" (15/07 —
+  // 9 link phẳng từng làm label bẻ 2 dòng đè logo).
+  const NAV_TOP = ['/combo/', '/san-pham/', '/phong-mau/', '/studio/', '/#contact'];
+  const NAV_MORE = ['/#inspo', '/#why', '/bao-gia/', '/noi-that-quy-nhon/'];
+
+  test('Nav: link chính visible; link phụ trong dropdown "Thêm" (desktop) / attached (mobile)', async ({ page }, testInfo) => {
     await page.goto('/');
     // Scope to the nav-links div to avoid matching the CTA "Đặt tư vấn" button.
-    // On mobile, .shop-nav-links is CSS-hidden — use toBeAttached instead of toBeVisible.
     const navLinks = page.locator('.shop-nav-links');
-    const checkFn = testInfo.project.name === 'desktop' ? 'toBeVisible' : 'toBeAttached';
-    for (const href of ['/combo/', '/san-pham/', '/#inspo', '/#why', '/studio/', '/#contact']) {
-      const link = navLinks.locator(`a[href="${href}"]`);
-      if (checkFn === 'toBeVisible') {
-        await expect(link).toBeVisible();
-      } else {
-        await expect(link).toBeAttached();
+    if (testInfo.project.name === 'desktop') {
+      for (const href of NAV_TOP) {
+        await expect(navLinks.locator(`a[href="${href}"]`)).toBeVisible();
+      }
+      // Link trong dropdown: attached khi đóng → visible sau khi mở.
+      for (const href of NAV_MORE) {
+        await expect(navLinks.locator(`.shop-nav-more a[href="${href}"]`)).toBeAttached();
+      }
+      await navLinks.locator('.shop-nav-more summary').click();
+      for (const href of NAV_MORE) {
+        await expect(navLinks.locator(`.shop-nav-more a[href="${href}"]`)).toBeVisible();
+      }
+    } else {
+      // Mobile: .shop-nav-links CSS-hidden — chỉ cần attached.
+      for (const href of [...NAV_TOP, ...NAV_MORE]) {
+        await expect(navLinks.locator(`a[href="${href}"]`)).toBeAttached();
       }
     }
+  });
+
+  test('Nav dropdown "Thêm": Esc đóng + trả focus; click ngoài đóng (desktop)', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'dropdown chỉ hiện trên desktop');
+    await page.goto('/');
+    const more = page.locator('.shop-nav-more');
+    const summary = more.locator('summary');
+    await summary.click();
+    await expect(more).toHaveAttribute('open', '');
+    await page.keyboard.press('Escape');
+    await expect(more).not.toHaveAttribute('open', '');
+    await expect(summary).toBeFocused();
+    // Mở lại → click ra ngoài (giữa trang) → đóng.
+    await summary.click();
+    await expect(more).toHaveAttribute('open', '');
+    await page.mouse.click(10, 300); // mép trái trang — chắc chắn không trúng link
+    await expect(more).not.toHaveAttribute('open', '');
+  });
+
+  test('Nav drawer mobile: hamburger mở/đóng, đủ 9 link, aria-expanded + focus', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'desktop', 'hamburger chỉ hiện ≤1100px');
+    await page.goto('/');
+    const toggle = page.locator('.shop-nav-toggle');
+    const drawer = page.locator('#wotu-shop-drawer');
+    await expect(toggle).toBeVisible();
+    await expect(drawer).toBeHidden();
+    await toggle.click();
+    await expect(drawer).toBeVisible();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    await expect(drawer.locator('.shop-drawer-nav a')).toHaveCount(9);
+    for (const href of [...NAV_TOP, ...NAV_MORE]) {
+      await expect(drawer.locator(`a[href="${href}"]`)).toBeVisible();
+    }
+    await drawer.locator('.shop-drawer-close').click();
+    await expect(drawer).toBeHidden();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(toggle).toBeFocused();
+  });
+
+  test('Nav mobile: không tràn ngang (scrollWidth ≤ clientWidth)', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'desktop', 'guard cho viewport hẹp');
+    await page.goto('/');
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(1);
   });
 
   test('combo grid hiển thị đủ 6 cards', async ({ page }) => {

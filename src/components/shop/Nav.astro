@@ -11,17 +11,37 @@ interface Props {
 const { active } = Astro.props;
 const pathname = Astro.url.pathname;
 
-const links: NavLink[] = [
+// Desktop: 3 link chính + dropdown "Thêm" + 2 link đuôi — 9 link phẳng làm nav
+// vỡ dòng đè logo (fix 15/07). Trang tuỳ chỉnh (admin, nav:true) vào dropdown
+// để menu không phình khi thêm trang mới.
+const primaryLinks: NavLink[] = [
   { label: 'Combo nội thất', href: '/combo/' },
   { label: 'Sản phẩm', href: '/san-pham/' },
   { label: 'Phòng mẫu', href: '/phong-mau/' },
+];
+const moreLinks: NavLink[] = [
   { label: 'Cảm hứng', href: '/#inspo' },
   { label: 'Bảo hành', href: '/#why' },
-  // Trang tuỳ chỉnh (admin) gắn cờ nav:true cho phần Shop — chèn trước link Studio.
   ...navPages('shop').map((p) => ({ label: p.title, href: `/${p.slug}/` })),
+];
+const tailLinks: NavLink[] = [
   { label: 'Studio ↗', href: '/studio/' },
   { label: 'Tư vấn', href: '/#contact' },
 ];
+// Drawer mobile: đủ mọi link, phẳng, đúng thứ tự cũ.
+const allLinks: NavLink[] = [...primaryLinks, ...moreLinks, ...tailLinks];
+
+const isCurrent = (l: NavLink): boolean => {
+  const isRoute = l.href.startsWith('/') && !l.href.includes('#');
+  return isRoute && (pathname === l.href || pathname.startsWith(l.href));
+};
+const moreIsCurrent = moreLinks.some(isCurrent);
+
+const linkAttrs = (l: NavLink) => ({
+  href: l.href,
+  'aria-current': isCurrent(l) ? ('page' as const) : undefined,
+  style: active === l.label ? 'color: var(--shop-accent-deep);' : undefined,
+});
 ---
 <nav class="shop-nav">
   <div class="container shop-nav-inner">
@@ -29,17 +49,14 @@ const links: NavLink[] = [
       <img src="/logo.svg" alt="WOTU" width="160" height="64" style="height: 32px; width: auto; display: block;" />
     </a>
     <div class="shop-nav-links">
-      {links.map((l) => {
-        const isRoute = l.href.startsWith('/') && !l.href.includes('#');
-        const isCurrent = isRoute && (pathname === l.href || pathname.startsWith(l.href));
-        return (
-          <a
-            href={l.href}
-            aria-current={isCurrent ? 'page' : undefined}
-            style={active === l.label ? 'color: var(--shop-accent-deep);' : undefined}
-          >{l.label}</a>
-        );
-      })}
+      {primaryLinks.map((l) => <a {...linkAttrs(l)}>{l.label}</a>)}
+      <details class:list={['shop-nav-more', { 'is-current': moreIsCurrent }]}>
+        <summary>Thêm <span class="chev" aria-hidden="true">▾</span></summary>
+        <div class="shop-nav-more-menu">
+          {moreLinks.map((l) => <a {...linkAttrs(l)}>{l.label}</a>)}
+        </div>
+      </details>
+      {tailLinks.map((l) => <a {...linkAttrs(l)}>{l.label}</a>)}
     </div>
     <div class="shop-nav-cta">
       <a class="shop-icon-btn" href="/tim-kiem/" aria-label="Tìm kiếm sản phẩm">
@@ -50,9 +67,28 @@ const links: NavLink[] = [
         <span class="shop-badge-dot" id="wotu-cart-badge" hidden>0</span>
       </button>
       <a class="shop-btn shop-btn-primary" href="/#contact">Đặt tư vấn <span class="arr">→</span></a>
+      <button type="button" class="shop-icon-btn shop-nav-toggle" aria-label="Mở menu" aria-expanded="false" aria-controls="wotu-shop-drawer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
     </div>
   </div>
 </nav>
+
+{/* Drawer NGOÀI .shop-nav — nav có view-transition-name: shop-nav, để trong sẽ
+    snapshot cả drawer khi chuyển trang. */}
+<div id="wotu-shop-drawer" class="shop-drawer" role="dialog" aria-modal="true" aria-label="Menu điều hướng" hidden>
+  <div class="shop-drawer-inner">
+    <div class="shop-drawer-head">
+      <a href="/" aria-label="WOTU — trang chủ shop">
+        <img src="/logo-light.svg" alt="WOTU" width="160" height="64" loading="lazy" decoding="async" style="height: 30px; width: auto; display: block;" />
+      </a>
+      <button type="button" class="shop-drawer-close" aria-label="Đóng menu">×</button>
+    </div>
+    <nav class="shop-drawer-nav">
+      {allLinks.map((l) => <a {...linkAttrs(l)}>{l.label}</a>)}
+    </nav>
+  </div>
+</div>
 
 <script>
   import { getCartCount, onChange } from '../../lib/shop-store';
@@ -87,4 +123,63 @@ const links: NavLink[] = [
 
   refreshBadge();
   onChange(refreshBadge);
+
+  // ===== Dropdown "Thêm" (desktop) — <details> native, JS chỉ enhancement =====
+  const more = document.querySelector<HTMLDetailsElement>('.shop-nav-more');
+  if (more) {
+    const summary = more.querySelector<HTMLElement>('summary');
+    document.addEventListener('click', (e) => {
+      if (more.open && !more.contains(e.target as Node)) more.open = false;
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && more.open) {
+        more.open = false;
+        summary?.focus();
+      }
+    });
+    more.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => { more.open = false; }));
+  }
+
+  // ===== Mobile drawer — cùng pattern Nav studio (hidden attr + focus-trap) =====
+  const navToggle = document.querySelector<HTMLButtonElement>('.shop-nav-toggle');
+  const drawer = document.getElementById('wotu-shop-drawer');
+  const drawerClose = drawer?.querySelector<HTMLButtonElement>('.shop-drawer-close');
+
+  const openDrawer = () => {
+    if (!drawer || !navToggle) return;
+    drawer.hidden = false;
+    document.documentElement.classList.add('wotu-shop-drawer-open');
+    navToggle.setAttribute('aria-expanded', 'true');
+    // Đưa focus vào drawer cho keyboard user.
+    requestAnimationFrame(() => drawerClose?.focus());
+  };
+  const closeDrawer = () => {
+    if (!drawer || !navToggle) return;
+    drawer.hidden = true;
+    document.documentElement.classList.remove('wotu-shop-drawer-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.focus();
+  };
+
+  navToggle?.addEventListener('click', openDrawer);
+  drawerClose?.addEventListener('click', closeDrawer);
+  drawer?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => closeDrawer()));
+
+  // Esc đóng + Tab focus-trap (giữ keyboard trong drawer khi mở — WCAG).
+  document.addEventListener('keydown', (e) => {
+    if (!drawer || drawer.hidden) return;
+    if (e.key === 'Escape') { closeDrawer(); return; }
+    if (e.key === 'Tab') {
+      const list = Array.from(
+        drawer.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'),
+      ).filter((el) => el.offsetParent !== null);
+      if (!list.length) return;
+      const first = list[0];
+      const last = list[list.length - 1];
+      const act = document.activeElement;
+      if (e.shiftKey && act === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && act === last) { e.preventDefault(); first.focus(); }
+      else if (!drawer.contains(act)) { e.preventDefault(); first.focus(); }
+    }
+  });
 </script>
