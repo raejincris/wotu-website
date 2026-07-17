@@ -165,7 +165,8 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
 .shop-nav-more .chev { font-size: 10px; transition: transform .2s ease; }
 .shop-nav-more[open] .chev { transform: rotate(180deg); }
 .shop-nav-more-menu {
-  position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  /* Neo mép phải (dropdown là link phải-cùng, sau "Tư vấn") → không tràn viewport. */
+  position: absolute; top: calc(100% + 10px); right: 0;
   min-width: 220px; z-index: 60;
   background: var(--shop-bg-card); border: 1px solid var(--shop-line);
   border-radius: 14px; padding: 8px;
@@ -176,7 +177,7 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
 .shop-nav-more-menu a:hover { background: var(--shop-warm-soft); color: var(--shop-ink); }
 .shop-nav-more-menu a[aria-current="page"] { color: var(--shop-accent-deep); font-weight: 600; }
 .shop-nav-more[open] .shop-nav-more-menu { animation: shopMenuIn .18s ease; }
-@keyframes shopMenuIn { from { opacity: 0; transform: translate(-50%, -4px); } }
+@keyframes shopMenuIn { from { opacity: 0; transform: translateY(-4px); } }
 @media (prefers-reduced-motion: reduce) {
   .shop-nav-more .chev { transition: none; }
   .shop-nav-more[open] .shop-nav-more-menu { animation: none; }

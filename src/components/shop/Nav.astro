@@ -50,13 +50,13 @@ const linkAttrs = (l: NavLink) => ({
     </a>
     <div class="shop-nav-links">
       {primaryLinks.map((l) => <a {...linkAttrs(l)}>{l.label}</a>)}
+      {tailLinks.map((l) => <a {...linkAttrs(l)}>{l.label}</a>)}
       <details class:list={['shop-nav-more', { 'is-current': moreIsCurrent }]}>
-        <summary>Thêm <span class="chev" aria-hidden="true">▾</span></summary>
+        <summary>Xem thêm <span class="chev" aria-hidden="true">▾</span></summary>
         <div class="shop-nav-more-menu">
           {moreLinks.map((l) => <a {...linkAttrs(l)}>{l.label}</a>)}
         </div>
       </details>
-      {tailLinks.map((l) => <a {...linkAttrs(l)}>{l.label}</a>)}
     </div>
     <div class="shop-nav-cta">
       <a class="shop-icon-btn" href="/tim-kiem/" aria-label="Tìm kiếm sản phẩm">
