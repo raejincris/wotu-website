@@ -225,7 +225,7 @@ const PANELS = [
   'panel-site', 'panel-sofa', 'panel-combo', 'panel-shop-home', 'panel-home-hero',
   'panel-shop-hero', 'panel-products', 'panel-phong-mau', 'panel-footer',
   'panel-studio-home', 'panel-services', 'panel-privacy', 'panel-theme',
-  'panel-layout', 'panel-blocks', 'panel-pages',
+  'panel-layout', 'panel-blocks', 'panel-pages', 'panel-tuyen-dung',
 ];
 
 const HASH_MAP = {
@@ -247,6 +247,7 @@ const HASH_MAP = {
   'layout':      'panel-layout',
   'blocks':      'panel-blocks',
   'pages':       'panel-pages',
+  'tuyen-dung':  'panel-tuyen-dung',
 };
 
 const PANEL_META = {
@@ -267,6 +268,7 @@ const PANEL_META = {
   'panel-layout':    { title: 'Bố cục trang',             preview: 'https://www.wotu.vn/' },
   'panel-blocks':    { title: 'Khối nội dung',            preview: 'https://www.wotu.vn/' },
   'panel-pages':     { title: 'Trang tuỳ chỉnh',          preview: null },
+  'panel-tuyen-dung': { title: 'Trang tuyển dụng',        preview: 'https://www.wotu.vn/tuyen-dung/' },
 };
 
 const EDITOR_MAP = {
@@ -286,6 +288,7 @@ const EDITOR_MAP = {
   'layout':     '/admin/editors/layout.js',
   'blocks':     '/admin/editors/blocks.js',
   'pages':      '/admin/editors/pages.js',
+  'tuyen-dung': '/admin/editors/tuyen-dung.js',
 };
 
 const FILE_STATUS_CONFIG = [
@@ -303,6 +306,7 @@ const FILE_STATUS_CONFIG = [
   // Chung · Toàn site
   { name: 'Thông tin liên hệ', path: 'src/data/site.yml',           hash: 'site' },
   { name: 'Footer & Menu',     path: 'src/data/footer.yml',          hash: 'footer' },
+  { name: 'Trang tuyển dụng',  path: 'src/data/tuyen-dung.yml',      hash: 'tuyen-dung' },
   { name: 'Chính sách bảo mật', path: 'src/data/bao-mat.yml',        hash: 'privacy' },
   // Giao diện
   { name: 'Giao diện (Theme)', path: 'src/data/theme.yml',           hash: 'theme' },

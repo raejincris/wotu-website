@@ -47,6 +47,7 @@ test.describe('1 · Routing — all routes return 200', () => {
     '/studio/blog/',
     '/studio/blog/vat-lieu-gia-dep-theo-thoi-gian',
     '/studio/blog/anh-sang-truoc-do-noi-that',
+    '/tuyen-dung/',
     '/bao-mat',
   ];
 
@@ -672,6 +673,51 @@ test.describe('12 · Studio contact form', () => {
     await expect(page.locator('#wotu-contact-form [name="email"]')).toHaveAttribute('required', '');
     const phoneRequired = await page.locator('#wotu-contact-form [name="phone"]').getAttribute('required');
     expect(phoneRequired).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 12b. TRANG TUYỂN DỤNG — form ứng tuyển
+// ---------------------------------------------------------------------------
+test.describe('12b · /tuyen-dung/ — form ứng tuyển', () => {
+  test('hidden fields: subject = "[WOTU] Ứng tuyển", redirect=false', async ({ page }) => {
+    await page.goto('/tuyen-dung/');
+    const form = page.locator('#wotu-apply-form');
+    const subject = form.locator('[name="subject"]');
+    await expect(subject).toHaveAttribute('type', 'hidden');
+    await expect(subject).toHaveAttribute('value', '[WOTU] Ứng tuyển');
+    await expect(form.locator('[name="redirect"]')).toHaveAttribute('value', 'false');
+  });
+
+  test('có ô chọn vị trí + ô link CV', async ({ page }) => {
+    await page.goto('/tuyen-dung/');
+    await expect(page.locator('#wotu-apply-form select[name="position"]')).toBeVisible();
+    await expect(page.locator('#wotu-apply-form [name="cv_link"]')).toBeAttached();
+    // 4 vị trí + "Vị trí khác" + option placeholder disabled = 6 option
+    const opts = page.locator('#wotu-apply-form select[name="position"] option');
+    expect(await opts.count()).toBeGreaterThanOrEqual(5);
+  });
+
+  test('submit với mock fetch → success message', async ({ page }) => {
+    await page.route('https://api.web3forms.com/submit', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true, message: 'OK' }),
+      });
+    });
+    await page.goto('/tuyen-dung/');
+    await page.waitForLoadState('domcontentloaded');
+    await page.locator('#ung-tuyen').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(300);
+    await page.locator('#wotu-apply-form [name="name"]').fill('Trần Thị B');
+    await page.locator('#wotu-apply-form [name="phone"]').fill('0933774708');
+    await page.locator('#wotu-apply-form select[name="position"]').selectOption({ index: 1 });
+    const submitBtn = page.locator('#wotu-apply-submit');
+    await submitBtn.scrollIntoViewIfNeeded();
+    await submitBtn.click({ force: true });
+    await expect(page.locator('#wotu-apply-feedback')).toContainText('Cảm ơn', { timeout: 5000 });
+    await expect(submitBtn).toContainText('Đã gửi');
   });
 });
 

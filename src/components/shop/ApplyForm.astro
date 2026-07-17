@@ -1,0 +1,200 @@
+---
+/**
+ * ApplyForm.astro — form ứng tuyển cho trang /tuyen-dung/.
+ * Clone hạ tầng đã kiểm chứng của Contact.astro (viValidate + honeypot + Web3Forms
+ * fetch JSON + feedback aria-live), nhưng theo shop token + shop toast. Subject riêng
+ * "[WOTU] Ứng tuyển" → tách hồ sơ khỏi lead khách. CSP đã whitelist web3forms → không đổi.
+ */
+import site from '../../data/site.yml';
+
+interface Props {
+  id?: string;
+  heading?: string;
+  intro?: string;
+  successMessage?: string;
+  positions?: { title: string }[];
+  positionOther?: string;
+}
+
+const {
+  id = 'ung-tuyen',
+  heading = 'Nộp hồ sơ ứng tuyển',
+  intro = '',
+  successMessage = 'Cảm ơn bạn đã ứng tuyển — WOTU sẽ liên hệ lại sớm.',
+  positions = [],
+  positionOther = 'Vị trí khác',
+} = Astro.props;
+
+const accessKey = site.forms?.contactAccessKey ?? '';
+const options = [...positions.map((p) => p.title), positionOther];
+---
+<section id={id} class="apply shop-reveal">
+  <div class="container apply-inner">
+    <div class="apply-head">
+      <span class="eyebrow">Ứng tuyển</span>
+      <h2 set:html={heading} />
+      {intro && <p class="apply-intro">{intro}</p>}
+    </div>
+
+    <form id="wotu-apply-form" class="apply-form" data-success-message={successMessage}>
+      <input type="hidden" name="access_key" value={accessKey} />
+      <input type="hidden" name="subject" value="[WOTU] Ứng tuyển" />
+      <input type="hidden" name="from_name" value="WOTU Careers" />
+      <input type="hidden" name="redirect" value="false" />
+
+      {/* Honeypot — bot điền, người thật để trống. */}
+      <div style="position:absolute; left:-10000px; opacity:0; pointer-events:none;" aria-hidden="true">
+        <label>Đừng điền vào ô này</label>
+        <input type="text" name="botcheck" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="apply-row">
+        <div class="apply-field">
+          <label for="apply-name">Họ và tên <span class="req">*</span></label>
+          <input id="apply-name" name="name" type="text" required placeholder="Nguyễn Văn A" autocomplete="name" />
+        </div>
+        <div class="apply-field">
+          <label for="apply-phone">Số điện thoại <span class="req">*</span></label>
+          <input id="apply-phone" name="phone" type="tel" required pattern="[0-9 ]{9,12}" placeholder="09xx xxx xxx" autocomplete="tel" />
+        </div>
+      </div>
+
+      <div class="apply-row">
+        <div class="apply-field">
+          <label for="apply-position">Vị trí ứng tuyển <span class="req">*</span></label>
+          <select id="apply-position" name="position" required>
+            <option value="" disabled selected>— Chọn vị trí —</option>
+            {options.map((o) => <option value={o}>{o}</option>)}
+          </select>
+        </div>
+        <div class="apply-field">
+          <label for="apply-email">Email <span class="opt">(không bắt buộc)</span></label>
+          <input id="apply-email" name="email" type="email" placeholder="ten@gmail.com" autocomplete="email" />
+        </div>
+      </div>
+
+      <div class="apply-field">
+        <label for="apply-cv">Link CV / hồ sơ <span class="opt">(không bắt buộc)</span></label>
+        <input id="apply-cv" name="cv_link" type="url" placeholder="Dán link Google Drive, portfolio… (nếu có)" />
+      </div>
+
+      <div class="apply-field">
+        <label for="apply-note">Giới thiệu ngắn <span class="opt">(không bắt buộc)</span></label>
+        <textarea id="apply-note" name="message" rows="3" placeholder="Kinh nghiệm, mong muốn của bạn…"></textarea>
+      </div>
+
+      <button type="submit" id="wotu-apply-submit" class="shop-btn shop-btn-primary">
+        Gửi hồ sơ <span class="arr">→</span>
+      </button>
+
+      <p id="wotu-apply-feedback" role="status" aria-live="polite" class="apply-feedback"></p>
+      <p class="apply-fallback">
+        Hoặc gửi CV qua <a href={`mailto:${site.email}`}>{site.email}</a> ·
+        gọi <a href={`tel:${site.hotline.replace(/\s+/g, '')}`}>{site.hotline}</a>
+      </p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .apply { padding: 20px 0 var(--shop-section-py); }
+  .apply-inner { max-width: 860px; }
+  .apply-head { text-align: center; margin-bottom: 40px; }
+  .apply-head h2 {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(30px, 5vw, 46px); line-height: 1.05; margin: 12px 0 0;
+    color: var(--shop-ink);
+  }
+  .apply-head :global(h2 em) { font-style: italic; color: var(--shop-accent-deep); }
+  .apply-head .eyebrow { justify-content: center; }
+  .apply-intro { margin: 14px auto 0; max-width: 56ch; color: var(--shop-ink-soft); font-size: 15px; line-height: 1.6; }
+
+  .apply-form {
+    background: var(--shop-bg-card); border: 1px solid var(--shop-line);
+    border-radius: var(--shop-radius-lg); padding: 32px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .apply-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .apply-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .apply-field label {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: var(--shop-ink);
+  }
+  .apply-field .req { color: var(--shop-accent-deep); }
+  .apply-field .opt { color: var(--shop-ink-soft); font-weight: 400; letter-spacing: 0; }
+  .apply-field input,
+  .apply-field select,
+  .apply-field textarea {
+    width: 100%; background: var(--shop-bg); color: var(--shop-ink);
+    border: 1px solid var(--shop-line); border-radius: var(--shop-radius-sm);
+    padding: 12px 14px; font: 400 15px/1.4 var(--shop-sans);
+    outline: none; transition: border-color .2s ease;
+  }
+  .apply-field textarea { resize: vertical; }
+  .apply-field input:focus,
+  .apply-field select:focus,
+  .apply-field textarea:focus { border-color: var(--shop-accent); }
+
+  #wotu-apply-submit { align-self: start; margin-top: 4px; }
+  #wotu-apply-submit[disabled] { opacity: .55; cursor: default; }
+
+  .apply-feedback { min-height: 1em; margin: 0; font-size: 14px; color: var(--shop-ink-soft); }
+  .apply-fallback { margin: 0; font-size: 13px; color: var(--shop-ink-soft); }
+  .apply-fallback a { color: var(--shop-accent-deep); border-bottom: 1px solid currentColor; }
+
+  @media (max-width: 620px) {
+    .apply-form { padding: 22px; }
+    .apply-row { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import { viValidate } from '../../lib/form-vi';
+  import { toast } from '../../lib/shop-store';
+
+  const form = document.getElementById('wotu-apply-form') as HTMLFormElement | null;
+  const submitBtn = document.getElementById('wotu-apply-submit') as HTMLButtonElement | null;
+  const feedback = document.getElementById('wotu-apply-feedback') as HTMLParagraphElement | null;
+
+  if (form) viValidate(form);
+
+  if (form && submitBtn && feedback) {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+
+      // Honeypot — người thật để trống.
+      if ((data.get('botcheck') ?? '').toString().length > 0) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Đang gửi…';
+      feedback.style.color = 'var(--shop-ink-soft)';
+      feedback.textContent = '';
+
+      try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(Object.fromEntries(data)),
+        });
+        const json = await response.json();
+
+        if (response.ok && json.success) {
+          form.reset();
+          feedback.style.color = 'var(--shop-accent-2-deep)';
+          feedback.textContent =
+            form.dataset.successMessage ?? 'Cảm ơn bạn đã ứng tuyển — WOTU sẽ liên hệ lại sớm.';
+          submitBtn.textContent = 'Đã gửi ✓';
+          toast('Đã gửi hồ sơ ✓', { type: 'success' });
+        } else {
+          throw new Error(json.message || 'Server error');
+        }
+      } catch (err) {
+        feedback.style.color = '#94543D';
+        feedback.textContent = 'Có lỗi xảy ra. Vui lòng thử lại hoặc gửi CV qua email.';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Gửi hồ sơ';
+        toast('Gửi không thành công — thử lại nhé', { type: 'error' });
+      }
+    });
+  }
+</script>

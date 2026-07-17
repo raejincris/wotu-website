@@ -1,0 +1,197 @@
+---
+import ShopLayout from '../layouts/ShopLayout.astro';
+import Nav from '../components/shop/Nav.astro';
+import Footer from '../components/shop/Footer.astro';
+import ApplyForm from '../components/shop/ApplyForm.astro';
+import data from '../data/tuyen-dung.yml';
+
+const d = data as any;
+const positions = d.positions as { title: string; summary: string; requirements: string[] }[];
+const culture = d.culture as { icon: string; heading: string; text: string }[];
+const benefits = d.benefits as string[];
+const faq = d.faq as { q: string; a: string }[];
+---
+<ShopLayout title={`${d.title} — WOTU`} description={d.description}>
+  <Nav />
+
+    <!-- HERO -->
+    <header class="tuyen-hero shop-reveal">
+      <div class="container">
+        <span class="eyebrow">{d.hero.eyebrow}</span>
+        <h1 set:html={d.hero.heading} />
+        <p class="tuyen-hero-intro">{d.hero.intro}</p>
+        <a class="shop-btn shop-btn-primary" href="#ung-tuyen">Nộp hồ sơ ngay <span class="arr">→</span></a>
+      </div>
+    </header>
+
+    <!-- VỊ TRÍ ĐANG TUYỂN -->
+    <section class="tuyen-positions shop-reveal">
+      <div class="container">
+        <h2 class="tuyen-h2" set:html={d.positionsHeading} />
+        <div class="pos-grid">
+          {positions.map((p) => (
+            <article class="pos-card">
+              <h3>{p.title}</h3>
+              <p class="pos-summary">{p.summary}</p>
+              <ul class="pos-req">
+                {p.requirements.map((r) => <li>{r}</li>)}
+              </ul>
+              <a class="pos-cta" href="#ung-tuyen">Ứng tuyển vị trí này <span class="arr">→</span></a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- VÌ SAO LÀM Ở WOTU -->
+    <section class="tuyen-culture shop-reveal">
+      <div class="container">
+        <h2 class="tuyen-h2" set:html={d.cultureHeading} />
+        <div class="culture-grid">
+          {culture.map((c) => (
+            <div class="culture-card">
+              <span class="culture-icon" aria-hidden="true">{c.icon}</span>
+              <h3>{c.heading}</h3>
+              <p>{c.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- QUYỀN LỢI -->
+    <section class="tuyen-benefits shop-reveal">
+      <div class="container">
+        <div class="benefits-box">
+          <h2 class="tuyen-h2" set:html={d.benefitsHeading} />
+          {d.benefitsNote && <p class="benefits-note">{d.benefitsNote}</p>}
+          <ul class="benefits-list">
+            {benefits.map((b) => <li>{b}</li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="tuyen-faq shop-reveal">
+      <div class="container">
+        <h2 class="tuyen-h2" set:html={d.faqHeading} />
+        <div class="faq-list">
+          {faq.map((f, i) => (
+            <details class="faq-item" open={i === 0}>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FORM ỨNG TUYỂN -->
+    <ApplyForm
+      id="ung-tuyen"
+      heading={d.formHeading}
+      intro={d.formIntro}
+      successMessage={d.formSuccess}
+      positions={positions}
+      positionOther={d.positionOther}
+    />
+
+  <Footer />
+</ShopLayout>
+
+<style>
+  .container { max-width: var(--shop-maxw); margin: 0 auto; padding: 0 28px; }
+
+  /* HERO */
+  .tuyen-hero { padding: 72px 0 56px; text-align: center; }
+  .tuyen-hero :global(h1) {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(40px, 7vw, 76px); line-height: 1.02; margin: 14px 0 0;
+    color: var(--shop-ink); letter-spacing: -0.01em;
+  }
+  .tuyen-hero :global(h1 em) { font-style: italic; color: var(--shop-accent-deep); }
+  .tuyen-hero-intro {
+    max-width: 60ch; margin: 22px auto 30px; font-size: 17px; line-height: 1.7;
+    color: var(--shop-ink-soft);
+  }
+  .tuyen-hero .eyebrow { justify-content: center; }
+
+  .tuyen-h2 {
+    font-family: var(--shop-serif); font-weight: 400;
+    font-size: clamp(28px, 4.5vw, 42px); line-height: 1.08; margin: 0 0 32px;
+    color: var(--shop-ink); text-align: center;
+  }
+  .tuyen-h2 :global(em) { font-style: italic; color: var(--shop-accent-deep); }
+
+  /* VỊ TRÍ */
+  .tuyen-positions { padding: 40px 0; }
+  .pos-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .pos-card {
+    background: var(--shop-bg-card); border: 1px solid var(--shop-line);
+    border-radius: var(--shop-radius-lg); padding: 28px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .pos-card h3 { font-family: var(--shop-serif); font-weight: 500; font-size: 26px; margin: 0; color: var(--shop-ink); }
+  .pos-summary { margin: 0; font-size: 15px; line-height: 1.6; color: var(--shop-ink-soft); }
+  .pos-req { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .pos-req li { position: relative; padding-left: 22px; font-size: 14px; line-height: 1.5; color: var(--shop-ink); }
+  .pos-req li::before { content: "✓"; position: absolute; left: 0; color: var(--shop-accent-2-deep); font-weight: 700; }
+  .pos-cta {
+    margin-top: auto; padding-top: 6px; font-weight: 600; font-size: 14px;
+    color: var(--shop-accent-deep); display: inline-flex; align-items: center; gap: 8px;
+  }
+  .pos-cta .arr { transition: transform .2s ease; }
+  .pos-cta:hover .arr { transform: translateX(4px); }
+
+  /* VĂN HOÁ */
+  .tuyen-culture { padding: 60px 0; background: var(--shop-bg-soft); margin: 40px 0; }
+  .culture-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .culture-card { text-align: center; padding: 8px; }
+  .culture-icon { font-size: 40px; line-height: 1; display: block; margin-bottom: 14px; }
+  .culture-card h3 { font-family: var(--shop-serif); font-weight: 500; font-size: 21px; margin: 0 0 8px; color: var(--shop-ink); }
+  .culture-card p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--shop-ink-soft); }
+
+  /* QUYỀN LỢI */
+  .tuyen-benefits { padding: 40px 0; }
+  .benefits-box {
+    max-width: 760px; margin: 0 auto;
+    background: var(--shop-bg-card); border: 1px solid var(--shop-line);
+    border-radius: var(--shop-radius-lg); padding: 40px;
+  }
+  .benefits-note { text-align: center; margin: -18px 0 24px; font-size: 14px; color: var(--shop-ink-soft); }
+  .benefits-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .benefits-list li { position: relative; padding-left: 30px; font-size: 15px; line-height: 1.6; color: var(--shop-ink); }
+  .benefits-list li::before {
+    content: "◆"; position: absolute; left: 0; top: 1px;
+    color: var(--shop-accent); font-size: 13px;
+  }
+
+  /* FAQ */
+  .tuyen-faq { padding: 40px 0; }
+  .faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+  .faq-item {
+    background: var(--shop-bg-card); border: 1px solid var(--shop-line);
+    border-radius: var(--shop-radius); padding: 4px 22px;
+  }
+  .faq-item summary {
+    cursor: pointer; list-style: none; padding: 18px 0;
+    font-family: var(--shop-serif); font-size: 20px; color: var(--shop-ink);
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: "+"; color: var(--shop-accent-deep); font-size: 24px; flex-shrink: 0; }
+  .faq-item[open] summary::after { content: "–"; }
+  .faq-item p { margin: 0 0 18px; font-size: 15px; line-height: 1.65; color: var(--shop-ink-soft); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .culture-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 620px) {
+    .pos-grid { grid-template-columns: 1fr; }
+    .culture-grid { grid-template-columns: 1fr; }
+    .benefits-box { padding: 26px; }
+    .tuyen-culture { padding: 44px 0; }
+  }
+</style>

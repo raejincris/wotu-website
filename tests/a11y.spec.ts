@@ -11,7 +11,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const ROUTES = ['/', '/san-pham/', '/phong-mau/', '/phong-mau/to-am/', '/studio/'];
+const ROUTES = ['/', '/san-pham/', '/phong-mau/', '/phong-mau/to-am/', '/studio/', '/tuyen-dung/'];
 const BLOCKING = new Set(['serious', 'critical']);
 const MONITOR_ONLY = new Set<string>(); // rỗng — color-contrast đã bật chặn (12/06)
 
