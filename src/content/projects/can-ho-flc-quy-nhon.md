@@ -6,7 +6,7 @@ cat: "Căn hộ"
 year: 2024
 tone: deep
 ratio: "3/4"
-order: 0
+order: 1
 excerpt: "Full nội thất Indochine cho căn hộ cho thuê — thiết kế, đóng đồ tại xưởng và thi công trong 1 tháng, chi phí ~285 triệu."
 photo: "/uploads/projects/can-ho-flc-quy-nhon-phong-khach-indochine.webp"
 photoDetail: "/uploads/projects/can-ho-flc-quy-nhon-phong-khach-sofa.webp"

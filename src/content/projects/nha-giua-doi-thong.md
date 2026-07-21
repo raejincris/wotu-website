@@ -6,7 +6,7 @@ cat: "Nhà ở"
 year: 2025
 tone: warm
 ratio: "4/5"
-order: 1
+order: 2
 excerpt: "Một căn nhà gỗ và đá nằm khuất giữa rừng thông, mở ra phía Tây để đón ánh chiều cuối ngày."
 photo: "1627750168257-9a7d3965ef8b"
 photoDetail: "1768836180164-070b4c1a8f94"
