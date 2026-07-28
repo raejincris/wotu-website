@@ -6,7 +6,7 @@ cat: "Cải tạo"
 year: 2023
 tone: warm
 ratio: "3/4"
-order: 5
+order: 6
 excerpt: "Cải tạo căn nhà ba mẹ xây năm 1992 — giữ lại tinh thần, thay mới những gì cần."
 photo: "1764445274425-f6bcdd84bbd4"
 photoDetail: "1712169603032-7b7b2ff1ea2f"

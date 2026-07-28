@@ -6,7 +6,7 @@ cat: "Căn hộ"
 year: 2026
 tone: deep
 ratio: "3/4"
-order: 0
+order: 1
 excerpt: "Full nội thất cho căn studio 35–40m² khai thác cho thuê — gỗ sồi sáng, mảng xanh sâu, thi công 3 tuần, chi phí ~80–100 triệu."
 photo: "/uploads/projects/can-ho-studio-tms-quy-nhon-tong-the-goc-an.webp"
 photoDetail: "/uploads/projects/can-ho-studio-tms-quy-nhon-ban-an-tron.webp"

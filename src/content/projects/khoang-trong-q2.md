@@ -6,7 +6,7 @@ cat: "Căn hộ"
 year: 2024
 tone: light
 ratio: "3/4"
-order: 3
+order: 4
 excerpt: "Một căn hộ 86m² ở Thảo Điền — bỏ đi nhiều hơn thêm vào, để khoảng trống làm chủ."
 photo: "1700474568247-2bf81611b293"
 photoDetail: "1637412816281-f80ec9948fea"

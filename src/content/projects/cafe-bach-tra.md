@@ -6,7 +6,7 @@ cat: "F&B"
 year: 2024
 tone: deep
 ratio: "4/5"
-order: 4
+order: 5
 excerpt: "Một quán trà nhỏ trong hẻm cũ, nơi ánh sáng xuyên qua khe ngói rơi thành những vệt thẳng trên sàn xi-măng đánh bóng."
 photo: "1622620645400-7ad92fcd9515"
 photoDetail: "1591633767356-bbf4d2a3a833"
