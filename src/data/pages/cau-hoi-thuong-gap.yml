@@ -1,12 +1,12 @@
 title: "Câu hỏi thường gặp"
-description: "Giải đáp thắc mắc về sản phẩm, đặt hàng, giao hàng và dịch vụ WOTU — tất cả những gì bạn cần biết trước khi quyết định."
+description: "Giải đáp thắc mắc về sản phẩm, đặt hàng, giao hàng và dịch vụ WOTU: tất cả những gì bạn cần biết trước khi quyết định."
 template: shop
 blocks:
   - id: hero
     type: richText
     eyebrow: "Hỗ trợ"
     heading: "Câu hỏi <em>thường gặp</em>"
-    body: "<p>Dưới đây là những câu hỏi khách hàng hay gặp nhất. Không thấy câu hỏi của mình? Gọi <strong>0933 774 708</strong> hoặc nhắn vào Facebook — chúng tôi phản hồi trong giờ hành chính.</p>"
+    body: "<p>Dưới đây là những câu hỏi khách hàng hay gặp nhất. Không thấy câu hỏi của mình? Gọi <strong>0933 774 708</strong> hoặc nhắn vào Facebook, chúng tôi phản hồi trong giờ hành chính.</p>"
     align: left
 
   - id: faq-san-pham
@@ -14,12 +14,12 @@ blocks:
     heading: "Sản phẩm &amp; Chất lượng"
     items:
       - question: "Gỗ WOTU dùng là loại gỗ gì?"
-        answer: "<p>Chúng tôi chủ yếu dùng <strong>gỗ cao su</strong> (rubber wood) và <strong>gỗ tần bì</strong> (ash) cho nội thất sinh hoạt — bền, ít cong vênh, vân đẹp. Một số dòng cao cấp dùng gỗ óc chó (walnut) hoặc gỗ sồi (oak) theo yêu cầu. Mọi sản phẩm đều qua sấy đạt độ ẩm 8–12% trước khi gia công.</p>"
+        answer: "<p>Chúng tôi chủ yếu dùng <strong>gỗ cao su</strong> (rubber wood) và <strong>gỗ tần bì</strong> (ash) cho nội thất sinh hoạt, bền, ít cong vênh, vân đẹp. Một số dòng cao cấp dùng gỗ óc chó (walnut) hoặc gỗ sồi (oak) theo yêu cầu. Mọi sản phẩm đều qua sấy đạt độ ẩm 8–12% trước khi gia công.</p>"
         open: true
       - question: "Vải bọc sofa có bền không, vết bẩn có dễ tẩy không?"
-        answer: "<p>WOTU dùng vải microfiber và vải linen pha cotton — bền màu, chống mài mòn tốt. Đối với vết bẩn thông thường: lau ngay bằng khăn ẩm là đủ. Vết dầu hoặc vết màu: dùng nước tẩy vải chuyên dụng, tránh thuốc tẩy gốc clo.</p>"
+        answer: "<p>WOTU dùng vải microfiber và vải linen pha cotton, bền màu, chống mài mòn tốt. Đối với vết bẩn thông thường: lau ngay bằng khăn ẩm là đủ. Vết dầu hoặc vết màu: dùng nước tẩy vải chuyên dụng, tránh thuốc tẩy gốc clo.</p>"
       - question: "Màu sắc thực tế có khác ảnh trên web không?"
-        answer: "<p>Chênh lệch nhỏ là không thể tránh do màn hình mỗi người hiển thị khác nhau. Để chắc chắn, bạn có thể yêu cầu mẫu vật liệu (chip vải, tấm gỗ mẫu) gửi qua đường bưu điện — miễn phí trong nội tỉnh Bình Định.</p>"
+        answer: "<p>Chênh lệch nhỏ là không thể tránh do màn hình mỗi người hiển thị khác nhau. Để chắc chắn, bạn có thể yêu cầu mẫu vật liệu (chip vải, tấm gỗ mẫu) gửi qua đường bưu điện, miễn phí trong nội tỉnh Bình Định.</p>"
       - question: "Tôi có thể đặt kích thước tuỳ chỉnh không?"
         answer: "<p>Có. WOTU nhận đặt hàng theo kích thước riêng cho hầu hết sản phẩm gỗ. Thời gian sản xuất thêm 5–10 ngày so với hàng catalog. Giá tuỳ chỉnh báo sau khi xác nhận bản vẽ.</p>"
 
@@ -45,9 +45,9 @@ blocks:
         answer: "<p>Hàng có sẵn trong catalog: <strong>5–10 ngày</strong>. Đặt riêng theo yêu cầu: <strong>20–30 ngày</strong>. Thời gian chạy từ khi ký hợp đồng và đặt cọc.</p>"
         open: true
       - question: "Giao hàng ngoài Quy Nhơn có được không?"
-        answer: "<p>Có. WOTU giao toàn quốc qua xe tải chuyên dụng. Phí vận chuyển tính theo khoảng cách và khối lượng — chúng tôi báo cụ thể trước khi bạn xác nhận.</p>"
+        answer: "<p>Có. WOTU giao toàn quốc qua xe tải chuyên dụng. Phí vận chuyển tính theo khoảng cách và khối lượng, chúng tôi báo cụ thể trước khi bạn xác nhận.</p>"
       - question: "Nhà tôi ở tầng cao không có thang máy thì sao?"
-        answer: "<p>Đội thợ WOTU có kinh nghiệm vác đồ qua cầu thang. Tuy nhiên, với đồ cồng kềnh (giường king, tủ lớn), chúng tôi sẽ trao đổi trước để lên phương án phù hợp — đôi khi cần thêm nhân lực và phát sinh thêm phí nhỏ.</p>"
+        answer: "<p>Đội thợ WOTU có kinh nghiệm vác đồ qua cầu thang. Tuy nhiên, với đồ cồng kềnh (giường king, tủ lớn), chúng tôi sẽ trao đổi trước để lên phương án phù hợp, đôi khi cần thêm nhân lực và phát sinh thêm phí nhỏ.</p>"
 
   - id: faq-baohanh
     type: faq
@@ -57,14 +57,14 @@ blocks:
         answer: "<p><strong>2 năm</strong> cho cấu kiện gỗ và khung. <strong>12 tháng</strong> cho lớp sơn/hoàn thiện và vải/đệm. Phụ kiện (bản lề, ray trượt, tay nắm) bảo hành theo khung 2 năm. Xem đầy đủ tại trang <a href='/bao-hanh-doi-tra/'>Bảo hành &amp; Đổi trả</a>.</p>"
         open: true
       - question: "Tôi muốn đặt thêm ghế cùng bộ sau 1 năm, WOTU có làm được không?"
-        answer: "<p>Có. Miễn là bộ gỗ đó vẫn trong danh mục sản xuất. Màu và vân gỗ tự nhiên có thể chênh nhẹ do lô gỗ khác nhau — chúng tôi sẽ thông báo trước khi bạn xác nhận.</p>"
+        answer: "<p>Có. Miễn là bộ gỗ đó vẫn trong danh mục sản xuất. Màu và vân gỗ tự nhiên có thể chênh nhẹ do lô gỗ khác nhau, chúng tôi sẽ thông báo trước khi bạn xác nhận.</p>"
       - question: "Liên hệ bảo hành bằng cách nào?"
         answer: "<p>Gọi <strong>0933 774 708</strong>, email <strong>hello@wotu.vn</strong>, hoặc nhắn vào Facebook WOTU. Vui lòng cung cấp số hợp đồng hoặc ngày mua và mô tả vắn tắt vấn đề.</p>"
 
   - id: cta-faq
     type: bannerCta
     heading: "Vẫn còn thắc mắc?"
-    sub: "Gọi ngay 0933 774 708 hoặc để lại số — chúng tôi gọi lại trong 15 phút."
+    sub: "Gọi ngay 0933 774 708 hoặc để lại số, chúng tôi gọi lại trong 15 phút."
     btnLabel: "Đặt tư vấn"
     btnHref: "/#contact"
     tone: soft

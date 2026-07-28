@@ -74,7 +74,7 @@ const whyIcons: Record<string, string> = {
       </div>
 
       <div class="hero-visual" data-hero-item>
-        <div class="shop-ph"><span class="shop-ph-label">Phòng khách combo WOTU — 1600×2000</span></div>
+        <div class="shop-ph"><span class="shop-ph-label">Phòng khách combo WOTU · 1600×2000</span></div>
         <img class="shop-illo" data-cms-img="hero.photo" data-parallax data-parallax-speed="24" src={hero.photo || `${ILLO}/combo-phong-khach.webp`} alt={hero.photoAlt || 'Minh hoạ combo phòng khách WOTU'} loading="eager" fetchpriority="high" decoding="async" />
         <div class="sticker">
           {hero.sticker}<small>{hero.stickerSub}</small>
@@ -163,7 +163,7 @@ const whyIcons: Record<string, string> = {
         ))}
       </div>
 
-      <p class="combo-empty" id="combo-empty" hidden>Chưa có combo phù hợp danh mục này — chúng tôi đang chuẩn bị. Để lại số ở <a href="#contact">phần liên hệ</a> để được tư vấn riêng.</p>
+      <p class="combo-empty" id="combo-empty" hidden>Chưa có combo phù hợp danh mục này, chúng tôi đang chuẩn bị. Để lại số ở <a href="#contact">phần liên hệ</a> để được tư vấn riêng.</p>
 
       <div style="text-align: center; margin-top: 44px;">
         <a class="shop-btn shop-btn-outline" href="/combo/"><span data-cms="sections.combos.ctaAll">{sections.combos.ctaAll}</span> <span class="arr">→</span></a>
@@ -802,7 +802,7 @@ const whyIcons: Record<string, string> = {
   .product-card[data-tilt]:hover { --lift: -4px; }
 
   /* Ảnh card: zoom-settle khi cuộn vào + Ken Burns khi hover.
-     CHỈ ảnh trong card (stagger) — KHÔNG đụng .shop-illo hero (đang parallax inline). */
+     CHỈ ảnh trong card (stagger), KHÔNG đụng .shop-illo hero (đang parallax inline). */
   .shop-reveal-stagger .shop-illo {
     transform: scale(1.07);
     transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);

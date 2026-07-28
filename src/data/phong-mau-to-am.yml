@@ -1,7 +1,7 @@
 hero:
   title: Phòng khách
   titleEm: Tổ Ấm
-  subtitle: Một phòng khách Japandi ấm cho căn hộ 2PN — gỗ sồi tự nhiên, vải bố mềm và ánh sáng dịu. Bố cục được KTS WOTU cân chỉnh để vừa vặn 16–22 m².
+  subtitle: Một phòng khách Japandi ấm cho căn hộ 2PN, gỗ sồi tự nhiên, vải bố mềm và ánh sáng dịu. Bố cục được KTS WOTU cân chỉnh để vừa vặn 16–22 m².
   area: 17–22 m²
   style: Japandi ấm
   room: phong-khach
@@ -10,8 +10,8 @@ hero:
     - ★ Bestseller phòng khách
 iso:
   image: ""
-  alt: Phối cảnh isometric phòng khách Tổ Ấm — WOTU
-  caption: Phối cảnh 3D — chạm vào từng điểm để xem chi tiết sản phẩm.
+  alt: Phối cảnh isometric phòng khách Tổ Ấm, WOTU
+  caption: Phối cảnh 3D, chạm vào từng điểm để xem chi tiết sản phẩm.
   hotspots:
     - x: 42
       "y": 64
@@ -30,7 +30,7 @@ iso:
       productId: p-tham-soi
       label: Thảm dệt tay
 floorplan:
-  caption: Sơ đồ bố trí điển hình cho phòng khách căn hộ 2PN — bạn có thể gửi mặt bằng để WOTU dựng riêng.
+  caption: Sơ đồ bố trí điển hình cho phòng khách căn hộ 2PN, bạn có thể gửi mặt bằng để WOTU dựng riêng.
   heading: Bố trí trên <em>16–22 m²</em>.
   svg: |
     <svg class="dim-svg" viewBox="0 0 540 340" preserveAspectRatio="xMidYMid meet">
@@ -66,7 +66,7 @@ floorplan:
       kind: line
 palette:
   heading: Bảng vật liệu & tông màu
-  desc: "Bốn chất liệu nền của phòng — chọn theo nguyên tắc Japandi: gỗ ấm, vải mộc, tông trung tính."
+  desc: "Bốn chất liệu nền của phòng, chọn theo nguyên tắc Japandi: gỗ ấm, vải mộc, tông trung tính."
   swatches:
     - name: Gỗ sồi tự nhiên
       note: Khung sofa, bàn trà & kệ TV

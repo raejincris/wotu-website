@@ -71,7 +71,7 @@ const itemListSchema = {
   })),
 };
 ---
-<ShopLayout title="Tất cả combo nội thất — WOTU Nội thất Việt" description="Combo nội thất trọn bộ WOTU — phòng khách, phòng ngủ, phòng ăn, làm việc, căn hộ studio, phòng trẻ em. Mua trọn bộ tiết kiệm tới 35% so với mua lẻ, giao 48h tại Quy Nhơn và lân cận.">
+<ShopLayout title="Tất cả combo nội thất · WOTU Nội thất Việt" description="Combo nội thất trọn bộ WOTU, phòng khách, phòng ngủ, phòng ăn, làm việc, căn hộ studio, phòng trẻ em. Mua trọn bộ tiết kiệm tới 35% so với mua lẻ, giao 48h tại Quy Nhơn và lân cận.">
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
     <script type="application/ld+json" set:html={jsonLd(itemListSchema)} />
@@ -91,12 +91,12 @@ const itemListSchema = {
   <header class="ph-head container shop-reveal">
     <div class="ph-head-grid">
       <div>
-        <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Cửa hàng — combo trọn bộ 2026</span>
+        <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Cửa hàng, combo trọn bộ 2026</span>
         <SplitWords tag="h1" text="Tất cả <em>combo</em>." base={90} step={55} />
       </div>
       <div>
         <p class="meta">
-          WOTU có <b>{TOTAL} combo nội thất trọn bộ</b> cho từng không gian — từ phòng khách, phòng ngủ đến căn hộ studio. Mua trọn combo <b>tiết kiệm tới 35%</b> so với sắm lẻ. Xưởng tại Quy Nhơn, giao tận nhà trong vùng Bình Định &amp; các tỉnh lân cận trong 48 giờ.
+          WOTU có <b>{TOTAL} combo nội thất trọn bộ</b> cho từng không gian, từ phòng khách, phòng ngủ đến căn hộ studio. Mua trọn combo <b>tiết kiệm tới 35%</b> so với sắm lẻ. Xưởng tại Quy Nhơn, giao tận nhà trong vùng Bình Định &amp; các tỉnh lân cận trong 48 giờ.
         </p>
         <div class="meta-row">
           <div><b>{TOTAL}</b><span>combo</span></div>
@@ -219,7 +219,7 @@ const itemListSchema = {
           >
             <div class="card-img">
               <div class="shop-ph"><span class="shop-ph-label">{feature.placeholder}</span></div>
-              <img class="card-illo" src={feature.photo || '/uploads/products/cat-combo.webp'} alt={`${feature.photo ? '' : 'Minh hoạ '}${feature.placeholder} — WOTU`} loading="lazy" decoding="async" />
+              <img class="card-illo" src={feature.photo || '/uploads/products/cat-combo.webp'} alt={`${feature.photo ? '' : 'Minh hoạ '}${feature.placeholder} · WOTU`} loading="lazy" decoding="async" />
               {feature.badge && (
                 <div class="card-badges"><span class={`b-tag${feature.badgeClass ? ' ' + feature.badgeClass : ''}`} style={feature.badgeStyle || undefined}>{feature.badge}</span></div>
               )}
@@ -249,7 +249,7 @@ const itemListSchema = {
             <a href={c.href} style="text-decoration: none; color: inherit; display: contents;">
               <div class="card-img">
                 <div class={`shop-ph ${c.tone ?? ''}`}><span class="shop-ph-label">{c.placeholder}</span></div>
-                <img class="card-illo" src={c.photo || `/uploads/products/cat-combo.webp`} alt={`${c.photo ? '' : 'Minh hoạ '}${c.placeholder} — WOTU`} loading="lazy" decoding="async" />
+                <img class="card-illo" src={c.photo || `/uploads/products/cat-combo.webp`} alt={`${c.photo ? '' : 'Minh hoạ '}${c.placeholder} · WOTU`} loading="lazy" decoding="async" />
                 {c.badge && (
                   <div class="card-badges"><span class={`b-tag${c.badgeClass ? ' ' + c.badgeClass : ''}`} style={c.badgeStyle || undefined}>{c.badge}</span></div>
                 )}
@@ -275,7 +275,7 @@ const itemListSchema = {
           <div>
             <span class="eyebrow">Tư vấn KTS · miễn phí</span>
             <h4>Chưa biết chọn combo nào? <em>KTS WOTU</em> dựng 3D cho bạn xem trước.</h4>
-            <p>Gửi mặt bằng phòng — chúng tôi gợi ý combo phù hợp, dựng phòng 3D trong 24h. Hoàn toàn miễn phí, không ràng buộc.</p>
+            <p>Gửi mặt bằng phòng, chúng tôi gợi ý combo phù hợp, dựng phòng 3D trong 24h. Hoàn toàn miễn phí, không ràng buộc.</p>
           </div>
           <div class="actions">
             <a class="shop-btn shop-btn-primary" style="padding: 14px 22px; font-size: 14px;" href="/#contact">Đặt KTS tư vấn <span class="arr">→</span></a>
@@ -285,7 +285,7 @@ const itemListSchema = {
 
       </div>
 
-      <p class="combo-empty" id="combo-empty" hidden>Chưa có combo phù hợp bộ lọc này — chúng tôi đang chuẩn bị thêm. Để lại số ở <a href="/#contact">phần liên hệ</a> để được tư vấn riêng.</p>
+      <p class="combo-empty" id="combo-empty" hidden>Chưa có combo phù hợp bộ lọc này, chúng tôi đang chuẩn bị thêm. Để lại số ở <a href="/#contact">phần liên hệ</a> để được tư vấn riêng.</p>
 
       <!-- Tổng kết (toàn bộ combo trên 1 trang — chưa cần phân trang) -->
       <div class="pager">

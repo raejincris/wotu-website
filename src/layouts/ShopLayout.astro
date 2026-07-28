@@ -14,10 +14,10 @@ interface Props {
 }
 
 const {
-  title = `WOTU — Nội thất cho tổ ấm Việt`,
-  description = 'WOTU — combo nội thất phòng khách, phòng ngủ, phòng ăn. Gỗ tự nhiên, bảo hành 2 năm, giao và lắp đặt tận nơi tại Quy Nhơn.',
+  title = `WOTU · Nội thất cho tổ ấm Việt`,
+  description = 'WOTU: combo nội thất phòng khách, phòng ngủ, phòng ăn. Gỗ tự nhiên, bảo hành 2 năm, giao và lắp đặt tận nơi tại Quy Nhơn.',
   ogImage,
-  ogImageAlt = 'WOTU — Nội thất Quy Nhơn',
+  ogImageAlt = 'WOTU · Nội thất Quy Nhơn',
   ogType = 'website',
 } = Astro.props;
 
@@ -91,7 +91,7 @@ const shopAccentCss = [
     {shopAccentCss && <style set:html={`body.shop{${shopAccentCss}}`} />}
   </head>
   <body class="shop" data-shop-palette={shopPalette} data-shop-density={shopDensity}>
-    <a href="#main" class="skip-to-main">Bỏ qua điều hướng — đến nội dung chính</a>
+    <a href="#main" class="skip-to-main">Bỏ qua điều hướng, đến nội dung chính</a>
     <main id="main" data-pagefind-body><slot /></main>
     <CartDrawer />
 

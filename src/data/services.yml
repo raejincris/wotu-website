@@ -1,4 +1,4 @@
-# 3 trang dịch vụ Studio (local SEO landing) — /studio/dich-vu/[slug]
+# 3 trang dịch vụ Studio (local SEO landing), /studio/dich-vu/[slug]
 # Nội dung text, không phụ thuộc ảnh thật. Render qua [slug].astro.
 # Mỗi dịch vụ là dịch vụ THẬT của WOTU (xem .claude/rules/company-info.md).
 
@@ -9,11 +9,11 @@ services:
     navName: "Thiết kế"
     title: "Thiết kế kiến trúc & nội thất"
     titleEm: "nội thất"
-    metaTitle: "Thiết kế nội thất Quy Nhơn — kiến trúc & nội thất | WOTU"
-    metaDescription: "WOTU thiết kế kiến trúc và nội thất tại Quy Nhơn, Gia Lai (Bình Định cũ) và toàn quốc — từ concept, quy hoạch không gian đến bản vẽ kỹ thuật và 3D. Đặt ánh sáng tự nhiên lên trước."
-    lede: "Chúng tôi vẽ ánh sáng trước khi vẽ đồ đạc. Một bản thiết kế tốt không bắt đầu từ catalogue nội thất — nó bắt đầu từ hướng nắng, độ sâu hiên và nhịp sống thật của gia đình bạn."
+    metaTitle: "Thiết kế nội thất Quy Nhơn, kiến trúc & nội thất | WOTU"
+    metaDescription: "WOTU thiết kế kiến trúc và nội thất tại Quy Nhơn, Gia Lai (Bình Định cũ) và toàn quốc, từ concept, quy hoạch không gian đến bản vẽ kỹ thuật và 3D. Đặt ánh sáng tự nhiên lên trước."
+    lede: "Chúng tôi vẽ ánh sáng trước khi vẽ đồ đạc. Một bản thiết kế tốt không bắt đầu từ catalogue nội thất. Nó bắt đầu từ hướng nắng, độ sâu hiên và nhịp sống thật của gia đình bạn."
     intro:
-      - "Tại WOTU, thiết kế là giai đoạn quyết định 80% chất lượng của ngôi nhà. Chúng tôi quy hoạch không gian dựa trên ba thứ: ánh sáng tự nhiên, công năng thực tế và thói quen sinh hoạt của người ở — không phải xu hướng trên Pinterest."
+      - "Tại WOTU, thiết kế là giai đoạn quyết định 80% chất lượng của ngôi nhà. Chúng tôi quy hoạch không gian dựa trên ba thứ: ánh sáng tự nhiên, công năng thực tế và thói quen sinh hoạt của người ở, không phải xu hướng trên Pinterest."
       - "Mỗi hồ sơ thiết kế đều có bản vẽ kỹ thuật đủ để thi công chính xác và bản 3D để bạn nhìn thấy không gian trước khi đặt viên gạch đầu tiên. Studio đặt tại Quy Nhơn, nhận dự án tại Gia Lai (Bình Định cũ) và các tỉnh lân cận."
     includesTitle: "Bao gồm trong dịch vụ thiết kế"
     includes:
@@ -45,11 +45,11 @@ services:
     navName: "Thi công"
     title: "Thi công nội thất hoàn thiện"
     titleEm: "hoàn thiện"
-    metaTitle: "Thi công nội thất Quy Nhơn — đồ gỗ đặt riêng | WOTU"
+    metaTitle: "Thi công nội thất Quy Nhơn, đồ gỗ đặt riêng | WOTU"
     metaDescription: "WOTU thi công nội thất hoàn thiện tại Quy Nhơn: đồ gỗ đặt riêng từ xưởng nội bộ, ánh sáng, vải vóc và styling. Chìa khoá trao tay, bảo hành 2 năm khung gỗ."
-    lede: "Chìa khoá trao tay — bạn chỉ cần mở cửa và bước vào. Từ tấm ván gỗ thô đến căn nhà sẵn sàng để sống, mọi thứ làm tại xưởng nội bộ của chúng tôi ở Quy Nhơn."
+    lede: "Chìa khoá trao tay. Bạn chỉ cần mở cửa và bước vào. Từ tấm ván gỗ thô đến căn nhà sẵn sàng để sống, mọi thứ làm tại xưởng nội bộ của chúng tôi ở Quy Nhơn."
     intro:
-      - "WOTU sở hữu xưởng sản xuất riêng tại Quy Nhơn — nơi đồ gỗ được đóng theo đúng kích thước bản vẽ, không phải hàng có sẵn cắt cho vừa. Điều này cho phép kiểm soát chất lượng vân gỗ, mối nối và lớp hoàn thiện đến từng chi tiết."
+      - "WOTU sở hữu xưởng sản xuất riêng tại Quy Nhơn, nơi đồ gỗ được đóng theo đúng kích thước bản vẽ, không phải hàng có sẵn cắt cho vừa. Điều này cho phép kiểm soát chất lượng vân gỗ, mối nối và lớp hoàn thiện đến từng chi tiết."
       - "Hoàn thiện nội thất không chỉ là kê đồ. Đó là ánh sáng đúng nhiệt độ màu, vải vóc đúng chất, và cách mọi thứ ăn nhập với nhau. Chúng tôi thi công trọn gói để không gian khi bàn giao đúng như bản 3D đã duyệt."
     includesTitle: "Bao gồm trong dịch vụ thi công"
     includes:
@@ -83,9 +83,9 @@ services:
     titleEm: "cải tạo"
     metaTitle: "Xây dựng & cải tạo nhà Quy Nhơn, Bình Định | WOTU"
     metaDescription: "WOTU thi công xây dựng phần thô và cải tạo nhà tại Quy Nhơn, Gia Lai (Bình Định cũ): quản lý dự án minh bạch theo tuần, giám sát chất lượng, bảo hành kết cấu."
-    lede: "Một ngôi nhà bền không nằm ở lớp sơn ngoài cùng. Nó nằm ở phần bạn không nhìn thấy — kết cấu, vật liệu thô và cách đội thi công làm việc khi không ai giám sát."
+    lede: "Một ngôi nhà bền không nằm ở lớp sơn ngoài cùng. Nó nằm ở phần bạn không nhìn thấy: kết cấu, vật liệu thô và cách đội thi công làm việc khi không ai giám sát."
     intro:
-      - "WOTU nhận thi công phần thô và cải tạo nhà tại Quy Nhơn và các tỉnh lân cận. Đội thi công làm việc tại chỗ, quản lý chất lượng vật liệu và báo cáo tiến độ minh bạch theo từng tuần — bạn luôn biết tiền và thời gian đang đi đâu."
+      - "WOTU nhận thi công phần thô và cải tạo nhà tại Quy Nhơn và các tỉnh lân cận. Đội thi công làm việc tại chỗ, quản lý chất lượng vật liệu và báo cáo tiến độ minh bạch theo từng tuần, bạn luôn biết tiền và thời gian đang đi đâu."
       - "Với nhà cũ, cải tạo đôi khi khó hơn xây mới: phải đọc được kết cấu hiện trạng và giữ lại những gì đáng giữ. Chúng tôi tiếp cận mỗi công trình cải tạo bằng sự tôn trọng với những gì ngôi nhà đã là."
     includesTitle: "Bao gồm trong dịch vụ xây dựng"
     includes:
@@ -102,11 +102,11 @@ services:
       - { t: "Nghiệm thu & bảo hành", d: "Bàn giao đúng cam kết, bảo hành kết cấu." }
     faq:
       - q: "WOTU có nhận cải tạo nhà cũ không?"
-        a: "Có. Cải tạo là một trong những thế mạnh của chúng tôi — từ nâng cấp công năng, mở rộng không gian đến làm mới toàn bộ. Chúng tôi khảo sát kết cấu hiện trạng trước khi đề xuất phương án."
+        a: "Có. Cải tạo là một trong những thế mạnh của chúng tôi, từ nâng cấp công năng, mở rộng không gian đến làm mới toàn bộ. Chúng tôi khảo sát kết cấu hiện trạng trước khi đề xuất phương án."
       - q: "Tiến độ thi công được báo cáo thế nào?"
         a: "Chúng tôi báo cáo tiến độ minh bạch theo tuần, kèm hình ảnh thực tế tại công trình. Bạn luôn nắm được hạng mục đang làm, vật tư đang dùng và chi phí phát sinh (nếu có)."
       - q: "Có làm trọn gói cả xây dựng, thiết kế và nội thất không?"
-        a: "Có. Đây là cách WOTU làm tốt nhất — một đầu mối từ bản vẽ đến chìa khoá trao tay, tránh đùn đẩy trách nhiệm giữa các nhà thầu và đảm bảo công trình đúng như thiết kế."
+        a: "Có. Đây là cách WOTU làm tốt nhất, một đầu mối từ bản vẽ đến chìa khoá trao tay, tránh đùn đẩy trách nhiệm giữa các nhà thầu và đảm bảo công trình đúng như thiết kế."
       - q: "Khu vực nhận thi công xây dựng?"
         a: "Chúng tôi nhận công trình tại Quy Nhơn, Gia Lai (Bình Định cũ) và các tỉnh lân cận. Liên hệ hotline 0933 774 708 để được khảo sát."
     relatedHeading: "Công trình tiêu biểu"

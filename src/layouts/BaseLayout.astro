@@ -15,10 +15,10 @@ interface Props {
 }
 
 const {
-  title = `WOTU — ${site.tagline}`,
+  title = `WOTU · ${site.tagline}`,
   description = site.description,
   ogImage,
-  ogImageAlt = 'WOTU — Studio thiết kế & thi công nội thất, Quy Nhơn',
+  ogImageAlt = 'WOTU · Studio thiết kế & thi công nội thất, Quy Nhơn',
   schemaType = 'website',
   schemaDate,
 } = Astro.props;
@@ -95,7 +95,7 @@ const studioThemeCss = `html[data-theme]{--earth:${studioEarth};--accent:${studi
     <link rel="preload" href="/fonts/inter-normal-400-vn.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
-    <a href="#main" class="skip-to-main">Bỏ qua điều hướng — đến nội dung chính</a>
+    <a href="#main" class="skip-to-main">Bỏ qua điều hướng, đến nội dung chính</a>
     <main id="main"><slot /></main>
 
     <script>

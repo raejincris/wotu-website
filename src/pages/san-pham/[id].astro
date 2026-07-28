@@ -50,7 +50,7 @@ const related = allP.filter((x: any) => x.catKey === p.catKey && x.id !== p.id).
 
 const SITE_URL = 'https://www.wotu.vn';
 const PAGE_URL = `${SITE_URL}/san-pham/${slug}/`;
-const desc = `${fullName} — ${p.cat}.`
+const desc = `${fullName} · ${p.cat}.`
   + (materials.length ? ` Chất liệu: ${materials.join(', ')}.` : '')
   + ` Đặt làm tại xưởng WOTU Quy Nhơn, bảo hành 2 năm khung gỗ, giao và lắp tận nơi.`;
 
@@ -95,7 +95,7 @@ const breadcrumbSchema = {
   ],
 };
 ---
-<ShopLayout title={`${fullName} — WOTU`} description={desc}>
+<ShopLayout title={`${fullName} · WOTU`} description={desc}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(productSchema)} />
     <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
@@ -111,14 +111,14 @@ const breadcrumbSchema = {
       <div class="pd-gallery">
         <div class="pd-main">
           <div class={`shop-ph ${p.tone ?? ''}`}><span class="shop-ph-label">{p.placeholder ?? fullName}</span></div>
-          <img class="shop-illo" src={illo} alt={`${hasPhoto ? '' : 'Minh hoạ '}${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" data-lightbox data-caption={fullName} />
+          <img class="shop-illo" src={illo} alt={`${hasPhoto ? '' : 'Minh hoạ '}${fullName} · WOTU`} loading="eager" fetchpriority="high" decoding="async" data-lightbox data-caption={fullName} />
           {p.badges && (
             <div class="pd-badges">
               {p.badges.map((b: any) => <span class={`b-tag${b.cls ? ' ' + b.cls : ''}`}>{b.label}</span>)}
             </div>
           )}
         </div>
-        {!hasPhoto && <p class="pd-illo-note">Ảnh minh hoạ — ảnh chụp thật đang được cập nhật.</p>}
+        {!hasPhoto && <p class="pd-illo-note">Ảnh minh hoạ, ảnh chụp thật đang được cập nhật.</p>}
       </div>
 
       <div class="pd-info">

@@ -19,7 +19,7 @@ const rooms = (data.rooms ?? []) as any[];
 
 const SITE_URL = 'https://www.wotu.vn';
 const PAGE_URL = `${SITE_URL}/phong-mau/`;
-const desc = 'Khám phá phòng mẫu WOTU — sơ đồ mặt bằng, phối cảnh 3D và chi tiết từng món nội thất. Phòng khách, phòng ngủ, bếp & phòng ăn được dựng sẵn để bạn lấy cảm hứng.';
+const desc = 'Khám phá phòng mẫu WOTU, sơ đồ mặt bằng, phối cảnh 3D và chi tiết từng món nội thất. Phòng khách, phòng ngủ, bếp & phòng ăn được dựng sẵn để bạn lấy cảm hứng.';
 
 const liveRooms = rooms.filter((r) => !r.soon && r.href);
 
@@ -49,7 +49,7 @@ const listSchema = liveRooms.length
     }
   : null;
 ---
-<ShopLayout title="Phòng mẫu — Khám phá không gian WOTU" description={desc}>
+<ShopLayout title="Phòng mẫu, Khám phá không gian WOTU" description={desc}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
     {listSchema && <script type="application/ld+json" set:html={jsonLd(listSchema)} />}
@@ -134,7 +134,7 @@ const listSchema = liveRooms.length
         </div>
         <figure class="pm-fp-card reveal-img" data-reveal data-parallax data-parallax-speed="-18">
           {fp.image
-            ? <img src={fp.image} alt={fp.imageAlt || 'Bản vẽ mặt bằng — WOTU'} loading="lazy" decoding="async" />
+            ? <img src={fp.image} alt={fp.imageAlt || 'Bản vẽ mặt bằng · WOTU'} loading="lazy" decoding="async" />
             : <div class="pm-fp-empty"><span>Bản vẽ mặt bằng đang được cập nhật</span></div>
           }
           {fp.caption && <figcaption>{fp.caption}</figcaption>}
@@ -184,7 +184,7 @@ const listSchema = liveRooms.length
       <div class="pm-cta reveal" data-reveal>
         <div>
           <h2>Muốn một phòng <em>của riêng bạn</em>?</h2>
-          <p>Gửi mặt bằng căn nhà — WOTU dựng phối cảnh 3D miễn phí và gợi ý combo phù hợp trong 24h.</p>
+          <p>Gửi mặt bằng căn nhà · WOTU dựng phối cảnh 3D miễn phí và gợi ý combo phù hợp trong 24h.</p>
         </div>
         <a class="shop-btn shop-btn-primary" href="/#contact" data-magnetic>Đặt tư vấn 3D <span class="arr">→</span></a>
       </div>
@@ -222,7 +222,7 @@ const listSchema = liveRooms.length
     const n = Math.max(copies.length, imgs.length);
     let i = 0;
     let timer: ReturnType<typeof setInterval> | null = null;
-    let paused = false; // user chủ động dừng (WCAG 2.2.2) — không tự chạy lại
+    let paused = false; // user chủ động dừng (WCAG 2.2.2), không tự chạy lại
 
     function show(k: number, dir = 1) {
       i = (k + n) % n;

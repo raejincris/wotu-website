@@ -1,16 +1,16 @@
-# Trang trụ cột SEO — target keyword "nội thất quy nhơn".
+# Trang trụ cột SEO, target keyword "nội thất quy nhơn".
 # Mọi số liệu dùng canonical facts (trust audit 13/07): 2022/4+ năm, 4.9★/184,
 # bảo hành 2 năm khung gỗ, giá combo niêm yết thật. KHÔNG bịa số liệu mới.
 title: "Nội thất Quy Nhơn"
-description: "WOTU — xưởng nội thất tại Quy Nhơn từ 2022. Combo phòng khách, phòng ngủ, phòng ăn đóng sẵn giao trong 48 giờ; thiết kế & thi công trọn gói cả căn. Bảo hành 2 năm khung gỗ, giao lắp miễn phí tại Quy Nhơn, Gia Lai."
+description: "WOTU là xưởng nội thất tại Quy Nhơn từ 2022. Combo phòng khách, phòng ngủ, phòng ăn đóng sẵn giao trong 48 giờ; thiết kế & thi công trọn gói cả căn. Bảo hành 2 năm khung gỗ, giao lắp miễn phí tại Quy Nhơn, Gia Lai."
 template: shop
 nav: true
 blocks:
   - id: hero
     type: richText
     eyebrow: "Nội thất Quy Nhơn"
-    heading: "Nội thất Quy Nhơn — <em>từ xưởng</em> WOTU"
-    body: "<p><strong>WOTU là xưởng nội thất tại Quy Nhơn (Lô 17-18 Hoa Lư, Quy Nhơn, Gia Lai), làm nội thất từ 2022.</strong> Chúng tôi phục vụ theo hai cách: <a href='/combo/'>combo nội thất đóng sẵn</a> — chọn hôm nay, dọn vào ở trong 7–28 ngày; hoặc <a href='/studio/'>thiết kế &amp; thi công riêng</a> cả căn nhà, từ bản vẽ đến bàn giao, đồ gỗ đóng tại chính xưởng của mình.</p><p>Không qua trung gian, không hàng trôi nổi — bạn có thể ghé xưởng xem tận tay tấm gỗ sẽ thành tủ áo nhà mình. Đó là cách một đơn vị nội thất địa phương nên làm việc.</p>"
+    heading: "Nội thất Quy Nhơn: <em>từ xưởng</em> WOTU"
+    body: "<p><strong>WOTU là xưởng nội thất tại Quy Nhơn (Lô 17-18 Hoa Lư, Quy Nhơn, Gia Lai), làm nội thất từ 2022.</strong> Chúng tôi phục vụ theo hai cách: <a href='/combo/'>combo nội thất đóng sẵn</a>: chọn hôm nay, dọn vào ở trong 7–28 ngày; hoặc <a href='/studio/'>thiết kế &amp; thi công riêng</a> cả căn nhà, từ bản vẽ đến bàn giao, đồ gỗ đóng tại chính xưởng của mình.</p><p>Không qua trung gian, không hàng trôi nổi. Bạn có thể ghé xưởng xem tận tay tấm gỗ sẽ thành tủ áo nhà mình. Đó là cách một đơn vị nội thất địa phương nên làm việc.</p>"
     align: left
 
   - id: stats
@@ -24,7 +24,7 @@ blocks:
       - value: "48h"
         label: "Giao đồ có sẵn trong nội thành Quy Nhơn"
       - value: "2 năm"
-        label: "Bảo hành khung gỗ — gấp đôi mặt bằng chung"
+        label: "Bảo hành khung gỗ, gấp đôi mặt bằng chung"
 
   - id: dich-vu
     type: features
@@ -32,13 +32,13 @@ blocks:
     items:
       - icon: "🛋️"
         heading: "Combo nội thất đóng sẵn"
-        text: "6 combo phòng khách, phòng ngủ, phòng ăn, làm việc, trẻ em và căn hộ studio — chuẩn tỉ lệ, đồng bộ tông màu, giá niêm yết rõ ràng. Hợp với căn hộ cần dọn vào ở nhanh."
+        text: "6 combo phòng khách, phòng ngủ, phòng ăn, làm việc, trẻ em và căn hộ studio, chuẩn tỉ lệ, đồng bộ tông màu, giá niêm yết rõ ràng. Hợp với căn hộ cần dọn vào ở nhanh."
       - icon: "🪑"
         heading: "Sản phẩm lẻ có sẵn"
-        text: "18 món bán chạy — sofa, bàn ăn, giường, tủ áo — có sẵn tại xưởng, giao trong 48 giờ ở Quy Nhơn và các khu vực lân cận."
+        text: "18 món bán chạy gồm sofa, bàn ăn, giường, tủ áo, có sẵn tại xưởng, giao trong 48 giờ ở Quy Nhơn và các khu vực lân cận."
       - icon: "📐"
         heading: "Thiết kế & thi công trọn gói"
-        text: "WOTU Studio đo đạc, dựng 3D, thiết kế theo đúng căn nhà bạn rồi đóng đồ tại xưởng — nhà phố, biệt thự, cải tạo trọn gói từ thô đến hoàn thiện."
+        text: "WOTU Studio đo đạc, dựng 3D, thiết kế theo đúng căn nhà bạn rồi đóng đồ tại xưởng: nhà phố, biệt thự, cải tạo trọn gói từ thô đến hoàn thiện."
       - icon: "🪚"
         heading: "Xưởng gỗ tại Hoa Lư"
         text: "Gỗ cao su, tần bì sấy đạt độ ẩm 8–12% trước khi gia công; dòng cao cấp có óc chó, sồi theo yêu cầu. Ghé xem mẫu thứ 2–7, 8h–17h30."
@@ -47,7 +47,7 @@ blocks:
     type: richText
     eyebrow: "Giá tham khảo"
     heading: "Nội thất Quy Nhơn <em>giá bao nhiêu?</em>"
-    body: "<p>Giá niêm yết công khai — đây là mức thật đang bán, không phải giá quảng cáo để gọi điện chèo kéo:</p><table style='width:100%; border-collapse:collapse; font-size:15px;'><thead><tr><th style='text-align:left; padding:10px 12px; border-bottom:2px solid currentColor;'>Combo trọn phòng</th><th style='text-align:left; padding:10px 12px; border-bottom:2px solid currentColor;'>Gồm những gì</th><th style='text-align:right; padding:10px 12px; border-bottom:2px solid currentColor;'>Giá hiện tại</th></tr></thead><tbody><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/tap-trung/'>Tập Trung</a> — góc làm việc</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Bàn 1m4 · ghế công thái học · kệ sách · đèn</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>8.900.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/sum-vay/'>Sum Vầy</a> — phòng ăn 6 chỗ</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Bàn gỗ sồi 1m6 · 6 ghế nệm · tủ chén</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>12.800.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/vuon-co-tich/'>Vườn Cổ Tích</a> — phòng trẻ em</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Giường tầng · bàn học · kệ đồ chơi</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>14.500.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/to-am/'>Tổ Ấm</a> — phòng khách</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Sofa văng 3 chỗ · bàn trà sồi · kệ TV 1m8 · thảm</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>18.900.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/an-yen/'>An Yên</a> — phòng ngủ master</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Giường 1m8 · tủ áo 4 cánh · bàn trang điểm</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>22.500.000đ</strong></td></tr><tr><td style='padding:10px 12px;'><a href='/combo/an-cu/'>An Cư</a> — full căn studio 30m²</td><td style='padding:10px 12px;'>Trọn bộ 11 món, trả góp 0% — 12 tháng</td><td style='padding:10px 12px; text-align:right;'><strong>45.000.000đ</strong></td></tr></tbody></table><p style='margin-top:14px;'>Cần thiết kế &amp; thi công riêng cả căn? Chi phí phụ thuộc diện tích, vật liệu và hạng mục — WOTU đo đạc, dựng 3D và <strong>báo giá chi tiết trong 24 giờ</strong>, miễn phí, không ràng buộc. <a href='/studio/'>Xem cách Studio làm việc →</a></p>"
+    body: "<p>Giá niêm yết công khai. Đây là mức thật đang bán, không phải giá quảng cáo để gọi điện chèo kéo:</p><table style='width:100%; border-collapse:collapse; font-size:15px;'><thead><tr><th style='text-align:left; padding:10px 12px; border-bottom:2px solid currentColor;'>Combo trọn phòng</th><th style='text-align:left; padding:10px 12px; border-bottom:2px solid currentColor;'>Gồm những gì</th><th style='text-align:right; padding:10px 12px; border-bottom:2px solid currentColor;'>Giá hiện tại</th></tr></thead><tbody><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/tap-trung/'>Tập Trung</a>, góc làm việc</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Bàn 1m4 · ghế công thái học · kệ sách · đèn</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>8.900.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/sum-vay/'>Sum Vầy</a>, phòng ăn 6 chỗ</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Bàn gỗ sồi 1m6 · 6 ghế nệm · tủ chén</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>12.800.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/vuon-co-tich/'>Vườn Cổ Tích</a>, phòng trẻ em</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Giường tầng · bàn học · kệ đồ chơi</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>14.500.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/to-am/'>Tổ Ấm</a>, phòng khách</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Sofa văng 3 chỗ · bàn trà sồi · kệ TV 1m8 · thảm</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>18.900.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/an-yen/'>An Yên</a>, phòng ngủ master</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Giường 1m8 · tủ áo 4 cánh · bàn trang điểm</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>22.500.000đ</strong></td></tr><tr><td style='padding:10px 12px;'><a href='/combo/an-cu/'>An Cư</a>, full căn studio 30m²</td><td style='padding:10px 12px;'>Trọn bộ 11 món, trả góp 0% trong 12 tháng</td><td style='padding:10px 12px; text-align:right;'><strong>45.000.000đ</strong></td></tr></tbody></table><p style='margin-top:14px;'>Cần thiết kế &amp; thi công riêng cả căn? Chi phí phụ thuộc diện tích, vật liệu và hạng mục. WOTU đo đạc, dựng 3D và <strong>báo giá chi tiết trong 24 giờ</strong>, miễn phí, không ràng buộc. <a href='/studio/'>Xem cách Studio làm việc →</a></p>"
     align: left
 
   - id: xuong
@@ -57,41 +57,41 @@ blocks:
     image: "/uploads/hero/hero-1780206085267-dije9.webp"
     imageAlt: "Combo phòng khách WOTU lắp đặt thực tế tại Quy Nhơn"
     imageSide: right
-    body: "<p>Xưởng WOTU nằm ở <strong>Lô 17-18 Hoa Lư, Quy Nhơn, Gia Lai</strong> — mở cửa thứ 2 đến thứ 7, 8h–17h30. Bạn có thể đến xem mẫu vật liệu, màu sơn, ngồi thử sofa trước khi quyết định. Gọi trước <a href='tel:+84933774708'>0933 774 708</a> để có người tư vấn đón bạn.</p><p>Mua đồ đóng sẵn thì xem <a href='/combo/'>combo</a> và <a href='/san-pham/'>sản phẩm</a>; làm cả căn thì bắt đầu từ <a href='/studio/'>WOTU Studio</a>.</p>"
+    body: "<p>Xưởng WOTU nằm ở <strong>Lô 17-18 Hoa Lư, Quy Nhơn, Gia Lai</strong>, mở cửa thứ 2 đến thứ 7, 8h–17h30. Bạn có thể đến xem mẫu vật liệu, màu sơn, ngồi thử sofa trước khi quyết định. Gọi trước <a href='tel:+84933774708'>0933 774 708</a> để có người tư vấn đón bạn.</p><p>Mua đồ đóng sẵn thì xem <a href='/combo/'>combo</a> và <a href='/san-pham/'>sản phẩm</a>; làm cả căn thì bắt đầu từ <a href='/studio/'>WOTU Studio</a>.</p>"
     btnLabel: "Chỉ đường trên Google Maps"
     btnHref: "https://maps.app.goo.gl/eovTsyCiwiSP5YAA6"
 
   - id: review
     type: quote
     text: "Đặt nguyên combo Tổ Ấm, đội WOTU giao và lắp trong buổi sáng. Cuối ngày là đã ngồi xem TV với gia đình. Quá tiện cho người mới về nhà mới."
-    author: "Nguyễn Hà My — Nhơn Bình, Quy Nhơn"
+    author: "Nguyễn Hà My, Nhơn Bình, Quy Nhơn"
 
   - id: faq
     type: faq
     heading: "Hỏi nhanh về <em>nội thất Quy Nhơn</em>"
     items:
       - question: "Mua nội thất ở Quy Nhơn thì đến đâu xem trực tiếp được?"
-        answer: "<p>Ghé xưởng WOTU tại <strong>Lô 17-18 Hoa Lư, Quy Nhơn, Gia Lai</strong> — mở cửa thứ 2–thứ 7, 8h–17h30. Có mẫu vật liệu, màu sơn và sản phẩm thật để xem tận tay. Gọi trước <strong>0933 774 708</strong> để có tư vấn viên đón bạn.</p>"
+        answer: "<p>Ghé xưởng WOTU tại <strong>Lô 17-18 Hoa Lư, Quy Nhơn, Gia Lai</strong>, mở cửa thứ 2–thứ 7, 8h–17h30. Có mẫu vật liệu, màu sơn và sản phẩm thật để xem tận tay. Gọi trước <strong>0933 774 708</strong> để có tư vấn viên đón bạn.</p>"
         open: true
       - question: "Một bộ nội thất trọn phòng ở Quy Nhơn giá khoảng bao nhiêu?"
         answer: "<p>Combo WOTU niêm yết từ <strong>8.900.000đ</strong> (góc làm việc) đến <strong>45.000.000đ</strong> (full căn hộ studio 30m², 11 món, trả góp 0%). Phòng khách trọn bộ 18.900.000đ, phòng ngủ master 22.500.000đ. Xem đầy đủ tại <a href='/combo/'>trang combo</a>.</p>"
       - question: "Đặt hôm nay thì bao lâu có đồ?"
         answer: "<p>Hàng có sẵn: giao trong <strong>48 giờ</strong> ở Quy Nhơn. Hàng catalog: 5–10 ngày. Đóng riêng theo kích thước: 20–30 ngày. Combo trọn phòng: dọn vào ở trong 7–28 ngày tuỳ gói.</p>"
       - question: "WOTU có nhận thiết kế và thi công trọn gói cả căn không?"
-        answer: "<p>Có — đó là <a href='/studio/'>WOTU Studio</a>: kiến trúc sư đo đạc, dựng 3D cho xem trước, thiết kế theo đúng căn nhà bạn, rồi đồ gỗ đóng tại xưởng WOTU. Nhận nhà phố, biệt thự, căn hộ và cải tạo trọn gói từ thô đến hoàn thiện.</p>"
+        answer: "<p>Có, đó là <a href='/studio/'>WOTU Studio</a>: kiến trúc sư đo đạc, dựng 3D cho xem trước, thiết kế theo đúng căn nhà bạn, rồi đồ gỗ đóng tại xưởng WOTU. Nhận nhà phố, biệt thự, căn hộ và cải tạo trọn gói từ thô đến hoàn thiện.</p>"
       - question: "Giao và lắp đặt có mất phí không? Ngoài Quy Nhơn có giao không?"
-        answer: "<p>Miễn phí giao và lắp đặt tận nhà tại <strong>Quy Nhơn, Gia Lai</strong> — đội kỹ thuật riêng của WOTU, không qua bên thứ ba. Ngoài tỉnh vẫn giao toàn quốc bằng xe chuyên dụng, phí tính theo khoảng cách và báo trước khi bạn xác nhận. Chi tiết: <a href='/giao-hang-lap-dat/'>Giao hàng &amp; lắp đặt</a>.</p>"
+        answer: "<p>Miễn phí giao và lắp đặt tận nhà tại <strong>Quy Nhơn, Gia Lai</strong> với đội kỹ thuật riêng của WOTU, không qua bên thứ ba. Ngoài tỉnh vẫn giao toàn quốc bằng xe chuyên dụng, phí tính theo khoảng cách và báo trước khi bạn xác nhận. Chi tiết: <a href='/giao-hang-lap-dat/'>Giao hàng &amp; lắp đặt</a>.</p>"
       - question: "Bảo hành thế nào nếu đồ có vấn đề?"
-        answer: "<p>Khung gỗ và cấu trúc chính bảo hành <strong>2 năm</strong> — gấp đôi mặt bằng thị trường. Nội thất rời không vừa ý được đổi trả trong <strong>7 ngày</strong>. Chi tiết từng hạng mục: <a href='/bao-hanh-doi-tra/'>Bảo hành &amp; đổi trả</a>.</p>"
+        answer: "<p>Khung gỗ và cấu trúc chính bảo hành <strong>2 năm</strong>, gấp đôi mặt bằng thị trường. Nội thất rời không vừa ý được đổi trả trong <strong>7 ngày</strong>. Chi tiết từng hạng mục: <a href='/bao-hanh-doi-tra/'>Bảo hành &amp; đổi trả</a>.</p>"
       - question: "Gỗ WOTU dùng là gỗ gì, có phải gỗ tự nhiên không?"
-        answer: "<p>Chủ yếu là <strong>gỗ cao su</strong> và <strong>gỗ tần bì</strong> tự nhiên — bền, ít cong vênh, vân đẹp — sấy đạt độ ẩm 8–12% trước khi gia công. Dòng cao cấp có óc chó, sồi theo yêu cầu. Ván công nghiệp (nếu dùng cho hạng mục phù hợp) có hoá đơn 100%.</p>"
+        answer: "<p>Chủ yếu là <strong>gỗ cao su</strong> và <strong>gỗ tần bì</strong> tự nhiên, bền, ít cong vênh, vân đẹp, sấy đạt độ ẩm 8–12% trước khi gia công. Dòng cao cấp có óc chó, sồi theo yêu cầu. Ván công nghiệp (nếu dùng cho hạng mục phù hợp) có hoá đơn 100%.</p>"
       - question: "Đặt hàng cần cọc bao nhiêu, thanh toán ra sao?"
         answer: "<p>Quy trình: báo giá trong 24h → ký hợp đồng, cọc <strong>30%</strong> → sản xuất → giao lắp → thanh toán phần còn lại khi nghiệm thu. Nhận chuyển khoản, MoMo hoặc tiền mặt tại xưởng.</p>"
 
   - id: cta
     type: bannerCta
     heading: "Bắt đầu từ một cuộc gọi 15 phút"
-    sub: "Để lại số — WOTU gọi lại trong 15 phút, tư vấn 1:1 miễn phí, gợi ý combo hoặc hẹn đo đạc tận nhà. Không ràng buộc mua."
+    sub: "Để lại số, WOTU gọi lại trong 15 phút, tư vấn 1:1 miễn phí, gợi ý combo hoặc hẹn đo đạc tận nhà. Không ràng buộc mua."
     btnLabel: "Đặt tư vấn miễn phí"
     btnHref: "/#contact"
     tone: soft

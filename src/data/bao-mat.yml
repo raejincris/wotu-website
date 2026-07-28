@@ -1,5 +1,5 @@
 # Nội dung trang Chính sách bảo mật (/bao-mat).
-# Render qua src/pages/bao-mat.astro — mỗi section là { heading, body }.
+# Render qua src/pages/bao-mat.astro, mỗi section là { heading, body }.
 # body cho phép HTML (p, ul, li, strong, code, a, em).
 # Token động (thay từ site.yml lúc build): {{email}} {{hotline}} {{hotlineTel}}
 #   {{addressLine1}} {{addressCity}}. Đừng sửa tên token.
@@ -14,10 +14,10 @@ sections:
     body: |
       <p>Khi bạn gửi form liên hệ trên website, chúng tôi nhận:</p>
       <ul>
-        <li><strong>Họ và tên</strong> — để xưng hô.</li>
-        <li><strong>Email</strong> — để phản hồi.</li>
-        <li><strong>Số điện thoại</strong> (tùy chọn) — để gọi tư vấn nếu bạn ưu tiên.</li>
-        <li><strong>Mô tả dự án</strong> — để chúng tôi hiểu nhu cầu trước khi gặp mặt.</li>
+        <li><strong>Họ và tên</strong>: để xưng hô.</li>
+        <li><strong>Email</strong>: để phản hồi.</li>
+        <li><strong>Số điện thoại</strong> (tùy chọn), để gọi tư vấn nếu bạn ưu tiên.</li>
+        <li><strong>Mô tả dự án</strong>: để chúng tôi hiểu nhu cầu trước khi gặp mặt.</li>
       </ul>
       <p>Khi bạn duyệt website, hệ thống tự động ghi nhận một số thông tin kỹ thuật ẩn danh: trình duyệt, hệ điều hành, quốc gia (chỉ cấp quốc gia, không định vị chính xác), trang đã xem. Dữ liệu này <strong>không gắn với danh tính cá nhân</strong>, không sử dụng cookie tracking, và được cung cấp bởi Cloudflare Web Analytics.</p>
 
@@ -34,16 +34,16 @@ sections:
     body: |
       <p>Form liên hệ chuyển dữ liệu qua các dịch vụ sau:</p>
       <ul>
-        <li><strong>Web3Forms</strong> (web3forms.com) — chuyển nội dung form từ website đến hộp thư email của studio. Dữ liệu lưu tạm trên server Web3Forms ≤ 7 ngày.</li>
-        <li><strong>Cloudflare</strong> (cloudflare.com) — hosting, CDN, và Web Analytics ẩn danh.</li>
-        <li><strong>GitHub</strong> (github.com) — lưu trữ source code website (không chứa dữ liệu khách hàng).</li>
+        <li><strong>Web3Forms</strong> (web3forms.com), chuyển nội dung form từ website đến hộp thư email của studio. Dữ liệu lưu tạm trên server Web3Forms ≤ 7 ngày.</li>
+        <li><strong>Cloudflare</strong> (cloudflare.com), hosting, CDN, và Web Analytics ẩn danh.</li>
+        <li><strong>GitHub</strong> (github.com), lưu trữ source code website (không chứa dữ liệu khách hàng).</li>
       </ul>
       <p>Tất cả các bên trên đều có chính sách bảo mật riêng và tuân thủ tiêu chuẩn quốc tế.</p>
 
   - heading: "4. Lưu trữ và bảo mật"
     body: |
       <ul>
-        <li>Email liên hệ của khách lưu trong hộp thư <code>{{email}}</code> — chỉ thành viên studio truy cập được.</li>
+        <li>Email liên hệ của khách lưu trong hộp thư <code>{{email}}</code>, chỉ thành viên studio truy cập được.</li>
         <li>Sau khi dự án kết thúc, chúng tôi giữ thông tin liên hệ của khách hàng tối đa <strong>3 năm</strong> để liên lạc bảo hành / chăm sóc, sau đó xoá.</li>
         <li>Chúng tôi áp dụng các biện pháp kỹ thuật hợp lý (mật khẩu mạnh, two-factor auth, mã hoá trên đường truyền) để bảo vệ dữ liệu.</li>
       </ul>
@@ -52,16 +52,16 @@ sections:
     body: |
       <p>Theo Nghị định 13/2023, bạn có các quyền sau với dữ liệu cá nhân:</p>
       <ul>
-        <li><strong>Quyền truy cập</strong> — yêu cầu xem dữ liệu chúng tôi đang giữ về bạn.</li>
-        <li><strong>Quyền chỉnh sửa</strong> — yêu cầu cập nhật thông tin sai/lỗi thời.</li>
-        <li><strong>Quyền xoá</strong> — yêu cầu xoá toàn bộ dữ liệu (ngoại trừ những gì pháp luật bắt buộc lưu giữ).</li>
-        <li><strong>Quyền rút lại đồng ý</strong> — bất cứ lúc nào.</li>
+        <li><strong>Quyền truy cập</strong>: yêu cầu xem dữ liệu chúng tôi đang giữ về bạn.</li>
+        <li><strong>Quyền chỉnh sửa</strong>: yêu cầu cập nhật thông tin sai/lỗi thời.</li>
+        <li><strong>Quyền xoá</strong>: yêu cầu xoá toàn bộ dữ liệu (ngoại trừ những gì pháp luật bắt buộc lưu giữ).</li>
+        <li><strong>Quyền rút lại đồng ý</strong>: bất cứ lúc nào.</li>
       </ul>
       <p>Để thực hiện các quyền trên, gửi email tới <a href="mailto:{{email}}" style="color: var(--accent); text-decoration: underline;">{{email}}</a> với tiêu đề <em>"Yêu cầu dữ liệu cá nhân"</em>. Chúng tôi sẽ phản hồi trong vòng 7 ngày làm việc.</p>
 
   - heading: "6. Cookie"
     body: |
-      <p>Website không sử dụng cookie cho mục đích tracking hay quảng cáo. Một số cookie kỹ thuật có thể được tạo bởi trình duyệt để lưu lựa chọn hiển thị (ví dụ: density preference của bạn) — các cookie này không gửi về server và bạn có thể xoá bất kỳ lúc nào trong cài đặt trình duyệt.</p>
+      <p>Website không sử dụng cookie cho mục đích tracking hay quảng cáo. Một số cookie kỹ thuật có thể được tạo bởi trình duyệt để lưu lựa chọn hiển thị (ví dụ: density preference của bạn), các cookie này không gửi về server và bạn có thể xoá bất kỳ lúc nào trong cài đặt trình duyệt.</p>
 
   - heading: "7. Thay đổi chính sách"
     body: |

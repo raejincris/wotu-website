@@ -1,7 +1,7 @@
-# Trang báo giá — target "báo giá nội thất quy nhơn" (intent cao nhất).
+# Trang báo giá, target "báo giá nội thất quy nhơn" (intent cao nhất).
 # Số liệu: chỉ dùng giá niêm yết thật + quy trình canonical. KHÔNG bịa đơn giá m².
 title: "Báo giá nội thất"
-description: "Báo giá nội thất tại Quy Nhơn — combo trọn phòng giá niêm yết từ 8,9 triệu, thiết kế & thi công riêng báo giá chi tiết trong 24 giờ. Miễn phí đo đạc, dựng 3D, không ràng buộc."
+description: "Báo giá nội thất tại Quy Nhơn: combo trọn phòng giá niêm yết từ 8,9 triệu, thiết kế & thi công riêng báo giá chi tiết trong 24 giờ. Miễn phí đo đạc, dựng 3D, không ràng buộc."
 template: shop
 nav: true
 blocks:
@@ -9,38 +9,38 @@ blocks:
     type: richText
     eyebrow: "Báo giá"
     heading: "Báo giá nội thất <em>không vòng vo</em>"
-    body: "<p>Ở WOTU có hai kiểu giá — cả hai đều minh bạch. <strong>Đồ đóng sẵn</strong> (combo và sản phẩm lẻ): giá niêm yết công khai ngay trên web, xem là biết, không cần gọi. <strong>Thiết kế &amp; thi công riêng</strong>: WOTU đo đạc tận nơi, dựng 3D và gửi báo giá chi tiết từng hạng mục trong <strong>24 giờ</strong> — miễn phí, không ràng buộc mua.</p><p>Trang này gom cả hai, kèm giải thích báo giá của WOTU gồm những gì — để bạn so sánh được với bất kỳ đơn vị nào khác ở Quy Nhơn.</p>"
+    body: "<p>Ở WOTU có hai kiểu giá, cả hai đều minh bạch. <strong>Đồ đóng sẵn</strong> (combo và sản phẩm lẻ): giá niêm yết công khai ngay trên web, xem là biết, không cần gọi. <strong>Thiết kế &amp; thi công riêng</strong>: WOTU đo đạc tận nơi, dựng 3D và gửi báo giá chi tiết từng hạng mục trong <strong>24 giờ</strong>, miễn phí, không ràng buộc mua.</p><p>Trang này gom cả hai, kèm giải thích báo giá của WOTU gồm những gì, để bạn so sánh được với bất kỳ đơn vị nào khác ở Quy Nhơn.</p>"
     align: left
 
   - id: bang-gia-combo
     type: richText
     eyebrow: "Giá niêm yết"
-    heading: "Combo trọn phòng — <em>giá đang bán</em>"
-    body: "<table style='width:100%; border-collapse:collapse; font-size:15px;'><thead><tr><th style='text-align:left; padding:10px 12px; border-bottom:2px solid currentColor;'>Combo</th><th style='text-align:left; padding:10px 12px; border-bottom:2px solid currentColor;'>Phòng</th><th style='text-align:right; padding:10px 12px; border-bottom:2px solid currentColor;'>Giá</th></tr></thead><tbody><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/tap-trung/'>Tập Trung</a></td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Góc làm việc</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>8.900.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/sum-vay/'>Sum Vầy</a></td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Phòng ăn 6 chỗ</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>12.800.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/vuon-co-tich/'>Vườn Cổ Tích</a></td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Phòng trẻ em</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>14.500.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/to-am/'>Tổ Ấm</a></td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Phòng khách</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>18.900.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/an-yen/'>An Yên</a></td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Phòng ngủ master</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>22.500.000đ</strong></td></tr><tr><td style='padding:10px 12px;'><a href='/combo/an-cu/'>An Cư</a></td><td style='padding:10px 12px;'>Full căn studio 30m² — 11 món</td><td style='padding:10px 12px; text-align:right;'><strong>45.000.000đ</strong> · trả góp 0%</td></tr></tbody></table><p style='margin-top:14px;'>Tham khảo mức thực tế cho thiết kế riêng: <a href='/studio/projects/can-ho-flc-quy-nhon/'>căn hộ 2 phòng ngủ tại FLC Sea Tower</a> — full nội thất Indochine thiết kế + đóng riêng, thi công 1 tháng, khoảng <strong>285 triệu</strong>.</p>"
+    heading: "Combo trọn phòng: <em>giá đang bán</em>"
+    body: "<table style='width:100%; border-collapse:collapse; font-size:15px;'><thead><tr><th style='text-align:left; padding:10px 12px; border-bottom:2px solid currentColor;'>Combo</th><th style='text-align:left; padding:10px 12px; border-bottom:2px solid currentColor;'>Phòng</th><th style='text-align:right; padding:10px 12px; border-bottom:2px solid currentColor;'>Giá</th></tr></thead><tbody><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/tap-trung/'>Tập Trung</a></td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Góc làm việc</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>8.900.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/sum-vay/'>Sum Vầy</a></td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Phòng ăn 6 chỗ</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>12.800.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/vuon-co-tich/'>Vườn Cổ Tích</a></td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Phòng trẻ em</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>14.500.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/to-am/'>Tổ Ấm</a></td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Phòng khách</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>18.900.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/an-yen/'>An Yên</a></td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Phòng ngủ master</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>22.500.000đ</strong></td></tr><tr><td style='padding:10px 12px;'><a href='/combo/an-cu/'>An Cư</a></td><td style='padding:10px 12px;'>Full căn studio 30m², 11 món</td><td style='padding:10px 12px; text-align:right;'><strong>45.000.000đ</strong> · trả góp 0%</td></tr></tbody></table><p style='margin-top:14px;'>Tham khảo mức thực tế cho thiết kế riêng: <a href='/studio/projects/can-ho-flc-quy-nhon/'>căn hộ 2 phòng ngủ tại FLC Sea Tower</a>: full nội thất Indochine thiết kế + đóng riêng, thi công 1 tháng, khoảng <strong>285 triệu</strong>.</p>"
     align: left
 
   - id: quy-trinh
     type: features
-    heading: "Báo giá thiết kế riêng — <em>4 bước, 24 giờ</em>"
+    heading: "Báo giá thiết kế riêng: <em>4 bước, 24 giờ</em>"
     items:
       - icon: "📞"
         heading: "1. Bạn liên hệ"
-        text: "Gọi 0933 774 708 hoặc để lại số ở form cuối trang — WOTU gọi lại trong 15 phút, hỏi nhanh về căn nhà và nhu cầu của bạn."
+        text: "Gọi 0933 774 708 hoặc để lại số ở form cuối trang. WOTU gọi lại trong 15 phút, hỏi nhanh về căn nhà và nhu cầu của bạn."
       - icon: "📏"
         heading: "2. Đo đạc miễn phí"
-        text: "Hẹn lịch đến tận nơi đo đạc hiện trạng — trong Quy Nhơn và lân cận, không tính phí, không bắt buộc phải ký gì."
+        text: "Hẹn lịch đến tận nơi đo đạc hiện trạng. Trong Quy Nhơn và lân cận, không tính phí, không bắt buộc phải ký gì."
       - icon: "🖥️"
         heading: "3. Dựng 3D cho xem trước"
-        text: "Concept dựng 3D theo đúng căn của bạn — thấy trước không gian rồi mới bàn tiền, đổi phương án trên màn hình rẻ hơn đổi ngoài đời."
+        text: "Concept dựng 3D theo đúng căn của bạn, thấy trước không gian rồi mới bàn tiền, đổi phương án trên màn hình rẻ hơn đổi ngoài đời."
       - icon: "📄"
         heading: "4. Báo giá trong 24h"
-        text: "Báo giá chi tiết theo từng hạng mục: món gì, vật liệu gì, bao nhiêu tiền — nhận rồi so sánh thoải mái, không ràng buộc."
+        text: "Báo giá chi tiết theo từng hạng mục: món gì, vật liệu gì, bao nhiêu tiền, nhận rồi so sánh thoải mái, không ràng buộc."
 
   - id: minh-bach
     type: richText
     eyebrow: "Đọc báo giá thế nào"
     heading: "Báo giá WOTU <em>gồm những gì</em>"
-    body: "<p>Một tờ báo giá tử tế phải trả lời được ba câu: <strong>làm món gì, bằng vật liệu gì, giá từng món bao nhiêu</strong>. Báo giá WOTU liệt kê từng hạng mục với chủng loại ván/gỗ cụ thể (ván có hoá đơn 100%, gỗ cao su, tần bì sấy đạt độ ẩm 8–12%), kích thước và đơn giá riêng — không gộp một cục \"trọn gói\" rồi tính sau.</p><p>Những thứ đã nằm trong giá: <strong>giao và lắp đặt miễn phí</strong> tại Quy Nhơn, Gia Lai; <strong>bảo hành 2 năm khung gỗ</strong> ghi thành điều khoản hợp đồng. Thanh toán: cọc <strong>30%</strong> khi ký, phần còn lại khi nghiệm thu — nghĩa là WOTU chỉ nhận đủ tiền khi bạn đã hài lòng.</p><p>Và một điều chúng tôi giữ từ ngày đầu: nếu mong muốn của bạn vượt ngân sách thực tế, WOTU nói thẳng ngay từ buổi tư vấn — thà mất một khách vì trung thực còn hơn giữ một khách bằng con số không có thật.</p>"
+    body: "<p>Một tờ báo giá tử tế phải trả lời được ba câu: <strong>làm món gì, bằng vật liệu gì, giá từng món bao nhiêu</strong>. Báo giá WOTU liệt kê từng hạng mục với chủng loại ván/gỗ cụ thể (ván có hoá đơn 100%, gỗ cao su, tần bì sấy đạt độ ẩm 8–12%), kích thước và đơn giá riêng, không gộp một cục \"trọn gói\" rồi tính sau.</p><p>Những thứ đã nằm trong giá: <strong>giao và lắp đặt miễn phí</strong> tại Quy Nhơn, Gia Lai; <strong>bảo hành 2 năm khung gỗ</strong> ghi thành điều khoản hợp đồng. Thanh toán: cọc <strong>30%</strong> khi ký, phần còn lại khi nghiệm thu, nghĩa là WOTU chỉ nhận đủ tiền khi bạn đã hài lòng.</p><p>Và một điều chúng tôi giữ từ ngày đầu: nếu mong muốn của bạn vượt ngân sách thực tế, WOTU nói thẳng ngay từ buổi tư vấn. Thà mất một khách vì trung thực còn hơn giữ một khách bằng con số không có thật.</p>"
     align: left
 
   - id: faq
@@ -51,18 +51,18 @@ blocks:
         answer: "<p>Không. Tư vấn, đo đạc tại Quy Nhơn và lân cận, dựng 3D và báo giá chi tiết đều <strong>miễn phí, không ràng buộc</strong>. Bạn nhận báo giá rồi so sánh với đơn vị khác thoải mái.</p>"
         open: true
       - question: "Bao lâu thì nhận được báo giá?"
-        answer: "<p><strong>Trong 24 giờ</strong> kể từ khi có đủ thông tin (diện tích, hạng mục, mặt bằng). Với đồ đóng sẵn thì không cần chờ — giá niêm yết ngay trên <a href='/combo/'>trang combo</a> và <a href='/san-pham/'>sản phẩm</a>.</p>"
+        answer: "<p><strong>Trong 24 giờ</strong> kể từ khi có đủ thông tin (diện tích, hạng mục, mặt bằng). Với đồ đóng sẵn thì không cần chờ, giá niêm yết ngay trên <a href='/combo/'>trang combo</a> và <a href='/san-pham/'>sản phẩm</a>.</p>"
       - question: "Cần chuẩn bị gì để được báo giá nhanh?"
-        answer: "<p>Chỉ cần: diện tích hoặc mặt bằng căn nhà (bản vẽ càng tốt, không có cũng được — WOTU đến đo), hạng mục muốn làm, và khoảng ngân sách dự kiến. Có ảnh hiện trạng gửi qua Zalo thì báo giá sơ bộ được ngay trước cả khi đo.</p>"
+        answer: "<p>Chỉ cần: diện tích hoặc mặt bằng căn nhà (bản vẽ càng tốt, không có cũng được, WOTU đến đo), hạng mục muốn làm, và khoảng ngân sách dự kiến. Có ảnh hiện trạng gửi qua Zalo thì báo giá sơ bộ được ngay trước cả khi đo.</p>"
       - question: "Giá trong báo giá có phát sinh khi thi công không?"
-        answer: "<p>Báo giá chi tiết theo từng hạng mục và chốt trong hợp đồng. Phát sinh chỉ xảy ra khi <em>bạn</em> đổi yêu cầu giữa chừng — và mọi thay đổi đều được báo giá bổ sung bằng văn bản trước khi làm, không có chuyện nghiệm thu xong mới xuất hiện con số lạ.</p>"
+        answer: "<p>Báo giá chi tiết theo từng hạng mục và chốt trong hợp đồng. Phát sinh chỉ xảy ra khi <em>bạn</em> đổi yêu cầu giữa chừng, và mọi thay đổi đều được báo giá bổ sung bằng văn bản trước khi làm, không có chuyện nghiệm thu xong mới xuất hiện con số lạ.</p>"
       - question: "Làm nội thất trọn căn ở Quy Nhơn khoảng bao nhiêu tiền?"
-        answer: "<p>Mức tham khảo từ giá thật: căn studio 30m² đồ đóng sẵn — <strong>45 triệu</strong> (<a href='/combo/an-cu/'>combo An Cư</a>, trả góp 0%); căn 2 phòng ngủ ghép từ combo niêm yết — khoảng <strong>65–70 triệu</strong>; căn 2 phòng ngủ thiết kế + đóng riêng toàn bộ như <a href='/studio/projects/can-ho-flc-quy-nhon/'>công trình FLC Sea Tower</a> — khoảng <strong>285 triệu</strong>. Con số chính xác cho căn của bạn: sau buổi đo đạc miễn phí.</p>"
+        answer: "<p>Mức tham khảo từ giá thật: căn studio 30m² đồ đóng sẵn là <strong>45 triệu</strong> (<a href='/combo/an-cu/'>combo An Cư</a>, trả góp 0%); căn 2 phòng ngủ ghép từ combo niêm yết khoảng <strong>65–70 triệu</strong>; căn 2 phòng ngủ thiết kế + đóng riêng toàn bộ như <a href='/studio/projects/can-ho-flc-quy-nhon/'>công trình FLC Sea Tower</a> khoảng <strong>285 triệu</strong>. Con số chính xác cho căn của bạn: sau buổi đo đạc miễn phí.</p>"
 
   - id: cta
     type: bannerCta
     heading: "Nhận báo giá trong 24 giờ"
-    sub: "Để lại số — WOTU gọi lại trong 15 phút, hẹn đo đạc miễn phí và gửi báo giá chi tiết từng hạng mục. Không ràng buộc."
+    sub: "Để lại số, WOTU gọi lại trong 15 phút, hẹn đo đạc miễn phí và gửi báo giá chi tiết từng hạng mục. Không ràng buộc."
     btnLabel: "Đặt lịch báo giá miễn phí"
     btnHref: "/#contact"
     tone: accent

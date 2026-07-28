@@ -32,7 +32,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
         <span>Tạm tính</span>
         <strong id="cart-total">0đ</strong>
       </div>
-      <p class="cart-note">Phí giao + lắp đặt miễn phí trong Quy Nhơn &amp; vùng lân cận. Ngoài khu vực — chúng tôi báo thêm khi xác nhận.</p>
+      <p class="cart-note">Phí giao + lắp đặt miễn phí trong Quy Nhơn &amp; vùng lân cận. Ngoài khu vực, chúng tôi báo thêm khi xác nhận.</p>
 
       <form
         class="cart-form"
@@ -382,7 +382,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
       if (!res.ok) throw new Error('HTTP ' + res.status);
       form.classList.add('submitted');
       const hint = form.querySelector('.cart-form-hint');
-      if (hint) hint.textContent = '✓ Đã nhận yêu cầu — chúng tôi gọi trong 15 phút.';
+      if (hint) hint.textContent = '✓ Đã nhận yêu cầu, chúng tôi gọi trong 15 phút.';
       if (submitBtn) submitBtn.innerHTML = 'Đã gửi ✓';
       form.querySelectorAll<HTMLInputElement>('input[type="text"], input[type="tel"], textarea').forEach(
         (el) => (el.value = ''),
@@ -394,7 +394,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
       console.error('Cart submit failed:', err);
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Lỗi gửi — thử lại';
+        submitBtn.innerHTML = 'Lỗi gửi, thử lại';
       }
       submitting = false;
     }

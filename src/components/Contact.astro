@@ -50,7 +50,7 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
       </div>
 
       <a class="contact-map contact-map--noimg" href={site.address.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label="Mở vị trí studio trên Google Maps">
-        <img class="contact-map__img" src="/uploads/studio-map.webp" alt={`Bản đồ vị trí studio WOTU — ${site.address.line1}, ${site.address.city}`} loading="lazy" decoding="async" hidden />
+        <img class="contact-map__img" src="/uploads/studio-map.webp" alt={`Bản đồ vị trí studio WOTU · ${site.address.line1}, ${site.address.city}`} loading="lazy" decoding="async" hidden />
         <span class="contact-map__overlay">
           <span class="contact-map__pin" aria-hidden="true">◎</span>
           <span class="contact-map__text">{site.address.line1}, {site.address.city}</span>
@@ -119,7 +119,7 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
     btn.addEventListener('click', async () => {
       const text = btn.dataset.copy || '';
       const ok = await copyLink(text);
-      studioToast(ok ? `Đã sao chép: ${text}` : 'Không sao chép được — hãy thử lại');
+      studioToast(ok ? `Đã sao chép: ${text}` : 'Không sao chép được, hãy thử lại');
     });
   });
 
@@ -172,7 +172,7 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
           feedback.style.color = 'var(--accent)';
           const msg =
             (form.dataset.successMessage as string | undefined) ??
-            'Cảm ơn bạn — chúng tôi sẽ liên hệ trong 24h.';
+            'Cảm ơn bạn, chúng tôi sẽ liên hệ trong 24h.';
           feedback.textContent = msg;
           submitBtn.textContent = 'Đã gửi ✓';
           studioToast('Đã gửi yêu cầu ✓');
@@ -188,7 +188,7 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
         submitBtn.disabled = false;
         submitBtn.style.opacity = '1';
         submitBtn.textContent = (form.dataset.submitLabel as string | undefined) ?? 'Gửi yêu cầu';
-        studioToast('Gửi không thành công — vui lòng thử lại');
+        studioToast('Gửi không thành công, vui lòng thử lại');
       }
     });
   }

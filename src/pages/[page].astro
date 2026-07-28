@@ -27,7 +27,7 @@ const blocks = (Array.isArray(data.blocks) ? data.blocks : []) as any[];
 const L = resolveLayout(data.layout, blocks.map((b: any) => b.id));
 const secStyle = (id: string) => `order:${L.order(id)};${L.on(id) ? '' : 'display:none;'}`;
 const isStudio = data.template === 'studio';
-const title = data.title ? `${data.title} — WOTU` : undefined;
+const title = data.title ? `${data.title} · WOTU` : undefined;
 const description = data.description || undefined;
 ---
 {isStudio ? (

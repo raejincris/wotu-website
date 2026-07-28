@@ -20,7 +20,7 @@ const {
   id = 'ung-tuyen',
   heading = 'Nộp hồ sơ ứng tuyển',
   intro = '',
-  successMessage = 'Cảm ơn bạn đã ứng tuyển — WOTU sẽ liên hệ lại sớm.',
+  successMessage = 'Cảm ơn bạn đã ứng tuyển · WOTU sẽ liên hệ lại sớm.',
   positions = [],
   positionOther = 'Vị trí khác',
 } = Astro.props;
@@ -63,7 +63,7 @@ const options = [...positions.map((p) => p.title), positionOther];
         <div class="apply-field">
           <label for="apply-position">Vị trí ứng tuyển <span class="req">*</span></label>
           <select id="apply-position" name="position" required>
-            <option value="" disabled selected>— Chọn vị trí —</option>
+            <option value="" disabled selected>Chọn vị trí</option>
             {options.map((o) => <option value={o}>{o}</option>)}
           </select>
         </div>
@@ -182,7 +182,7 @@ const options = [...positions.map((p) => p.title), positionOther];
           form.reset();
           feedback.style.color = 'var(--shop-accent-2-deep)';
           feedback.textContent =
-            form.dataset.successMessage ?? 'Cảm ơn bạn đã ứng tuyển — WOTU sẽ liên hệ lại sớm.';
+            form.dataset.successMessage ?? 'Cảm ơn bạn đã ứng tuyển · WOTU sẽ liên hệ lại sớm.';
           submitBtn.textContent = 'Đã gửi ✓';
           toast('Đã gửi hồ sơ ✓', { type: 'success' });
         } else {
@@ -193,7 +193,7 @@ const options = [...positions.map((p) => p.title), positionOther];
         feedback.textContent = 'Có lỗi xảy ra. Vui lòng thử lại hoặc gửi CV qua email.';
         submitBtn.disabled = false;
         submitBtn.textContent = 'Gửi hồ sơ';
-        toast('Gửi không thành công — thử lại nhé', { type: 'error' });
+        toast('Gửi không thành công, thử lại nhé', { type: 'error' });
       }
     });
   }

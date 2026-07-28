@@ -76,7 +76,7 @@ const hasRich = readNav.length > 0;
 
 const SITE_URL = 'https://www.wotu.vn';
 const PAGE_URL = `${SITE_URL}/combo/${slug}/`;
-const desc = `${fullName} — ${c.cat}. ${c.desc ?? ''} Trọn gói thiết kế, sản xuất tại xưởng WOTU Quy Nhơn và lắp đặt tận nơi. Bảo hành 2 năm.`;
+const desc = `${fullName}, ${c.cat}. ${c.desc ?? ''} Trọn gói thiết kế, sản xuất tại xưởng WOTU Quy Nhơn và lắp đặt tận nơi. Bảo hành 2 năm.`;
 
 // Strip HTML cho FAQ schema (Google không nhận HTML trong answer)
 function stripHtml(html: string) {
@@ -131,7 +131,7 @@ const breadcrumbSchema = {
   ],
 };
 ---
-<ShopLayout title={`${fullName} — Combo ${roomLabel[c.room] ?? 'nội thất'} — WOTU`} description={desc} ogType="product">
+<ShopLayout title={`${fullName}, Combo ${roomLabel[c.room] ?? 'nội thất'} · WOTU`} description={desc} ogType="product">
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(productSchema)} />
     {faqSchema && <script type="application/ld+json" set:html={jsonLd(faqSchema)} />}
@@ -148,7 +148,7 @@ const breadcrumbSchema = {
       <div class="pd-gallery">
         <div class="pd-main">
           <div class={`shop-ph ${c.tone ?? ''}`}><span class="shop-ph-label">{c.placeholder ?? fullName}</span></div>
-          <img class="shop-illo" id="comboMain" src={mainSrc} alt={`${hasPhoto || hasGallery ? '' : 'Minh hoạ '}${fullName} — WOTU`} loading="eager" fetchpriority="high" decoding="async" data-lightbox data-caption={fullName} />
+          <img class="shop-illo" id="comboMain" src={mainSrc} alt={`${hasPhoto || hasGallery ? '' : 'Minh hoạ '}${fullName} · WOTU`} loading="eager" fetchpriority="high" decoding="async" data-lightbox data-caption={fullName} />
           {c.badge && <div class="pd-badges"><span class={`b-tag${c.badgeClass ? ' ' + c.badgeClass : ' dark'}`}>{c.badge}</span></div>}
         </div>
         {hasGallery && (
@@ -161,7 +161,7 @@ const breadcrumbSchema = {
             ))}
           </div>
         )}
-        {!hasPhoto && !hasGallery && <p class="pd-illo-note">Ảnh minh hoạ — ảnh chụp thật đang được cập nhật.</p>}
+        {!hasPhoto && !hasGallery && <p class="pd-illo-note">Ảnh minh hoạ, ảnh chụp thật đang được cập nhật.</p>}
       </div>
 
       <div class="pd-info">
@@ -218,9 +218,9 @@ const breadcrumbSchema = {
         <div class="block-head">
           <div>
             <span class="eyebrow">Combo gồm {richItems.length} món</span>
-            <h2>Mua trọn bộ — <em>tiết kiệm {detail.bundleSaveLabel}</em>.</h2>
+            <h2>Mua trọn bộ, <em>tiết kiệm {detail.bundleSaveLabel}</em>.</h2>
           </div>
-          <div class="right">Mỗi món đều có thể mua lẻ, nhưng combo đồng bộ chất liệu &amp; tỉ lệ — được KTS Wotu tinh chỉnh.</div>
+          <div class="right">Mỗi món đều có thể mua lẻ, nhưng combo đồng bộ chất liệu &amp; tỉ lệ, được KTS Wotu tinh chỉnh.</div>
         </div>
 
         <div class="items-grid">
@@ -306,7 +306,7 @@ const breadcrumbSchema = {
             <span class="eyebrow">Thông số kỹ thuật</span>
             <h2>Bóc tách <em>từng centimet</em>.</h2>
           </div>
-          <div class="right">Tất cả số đo, chất liệu và chứng nhận đều minh bạch — bạn không phải đoán.</div>
+          <div class="right">Tất cả số đo, chất liệu và chứng nhận đều minh bạch, bạn không phải đoán.</div>
         </div>
         <div class="specs-grid">
           {specs.map((sp: any) => (
@@ -422,7 +422,7 @@ const breadcrumbSchema = {
             <article class="pq-card">
               <div class="pq-img">
                 <div class={`shop-ph ${c.tone ?? ''}`}><span class="shop-ph-label">{it.name}</span></div>
-                {it.photo && <img class="shop-illo" src={it.photo} alt={`${it.name} — ${fullName}`} loading="lazy" decoding="async" />}
+                {it.photo && <img class="shop-illo" src={it.photo} alt={`${it.name}, ${fullName}`} loading="lazy" decoding="async" />}
               </div>
               <div class="pq-body">
                 <h4><span class="pq-no">{String(i + 1).padStart(2, '0')}.</span> {it.name}</h4>
@@ -462,7 +462,7 @@ const breadcrumbSchema = {
             <span class="eyebrow">Câu hỏi thường gặp</span>
             <h2>Trước khi mua, <em>bạn thường hỏi</em>.</h2>
           </div>
-          <div class="right">Không thấy câu trả lời bạn cần? Gọi 0933 774 708 hoặc chat Zalo — KTS trực 8h–21h.</div>
+          <div class="right">Không thấy câu trả lời bạn cần? Gọi 0933 774 708 hoặc chat Zalo, KTS trực 8h–21h.</div>
         </div>
         <div class="faq">
           {dFaq.map((f: any) => (

@@ -38,7 +38,7 @@ const breadcrumbSchema = {
   ],
 };
 ---
-<ShopLayout title="Tất cả sản phẩm — WOTU Nội thất Việt" description="Cửa hàng nội thất WOTU — sofa, bàn ăn, giường, tủ, kệ, đèn. Đồ gỗ tự nhiên, giao 48h tại Quy Nhơn và các tỉnh lân cận.">
+<ShopLayout title="Tất cả sản phẩm · WOTU Nội thất Việt" description="Cửa hàng nội thất WOTU, sofa, bàn ăn, giường, tủ, kệ, đèn. Đồ gỗ tự nhiên, giao 48h tại Quy Nhơn và các tỉnh lân cận.">
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
   </Fragment>
@@ -57,12 +57,12 @@ const breadcrumbSchema = {
   <header class="ph-head container shop-reveal">
     <div class="ph-head-grid">
       <div>
-        <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Cửa hàng — bộ sưu tập 2026</span>
+        <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Cửa hàng, bộ sưu tập 2026</span>
         <SplitWords tag="h1" text="Tất cả <em>sản phẩm</em>." base={90} step={55} />
       </div>
       <div>
         <p class="meta">
-          WOTU hiện có <b>{TOTAL} sản phẩm</b> trong {catGroupCount} nhóm — từ sofa, bàn ăn, giường đến phụ kiện trang trí. Xưởng tại Quy Nhơn, giao tận nhà trong vùng Bình Định &amp; các tỉnh lân cận trong 48 giờ.
+          WOTU hiện có <b>{TOTAL} sản phẩm</b> trong {catGroupCount} nhóm, từ sofa, bàn ăn, giường đến phụ kiện trang trí. Xưởng tại Quy Nhơn, giao tận nhà trong vùng Bình Định &amp; các tỉnh lân cận trong 48 giờ.
         </p>
         <div class="meta-row">
           <div><b>{TOTAL}</b><span>sản phẩm</span></div>
@@ -135,7 +135,7 @@ const breadcrumbSchema = {
       </div>
 
       <!-- "Danh mục" duplicate với cat tiles trên cùng (cat-tiles section).
-           Reviewer feedback: bỏ sidebar version để tránh state desync — user
+           Reviewer feedback: bỏ sidebar version để tránh state desync, user
            dùng cat tiles cho category, sidebar chỉ giữ filter còn lại. -->
 
       <details class="fgrp" open>
@@ -214,7 +214,7 @@ const breadcrumbSchema = {
         <a class="card feature" href="/combo/to-am/">
           <div class="card-img">
             <div class="shop-ph"><span class="shop-ph-label">Combo Tổ Ấm phòng khách</span></div>
-            <img class="card-illo" src="/uploads/products/cat-combo.webp" alt="Minh hoạ combo phòng khách Tổ Ấm — WOTU" loading="lazy" decoding="async" />
+            <img class="card-illo" src="/uploads/products/cat-combo.webp" alt="Minh hoạ combo phòng khách Tổ Ấm · WOTU" loading="lazy" decoding="async" />
             <div class="card-badges"><span class="b-tag" style="background: var(--shop-bg); color: var(--shop-ink);">★ BESTSELLER</span></div>
           </div>
           <div class="card-body">
@@ -242,7 +242,7 @@ const breadcrumbSchema = {
             <a href={p.href} style="text-decoration: none; color: inherit; display: contents;">
               <div class="card-img">
                 <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
-                <img class="card-illo" src={p.photo || `/uploads/products/cat-${p.catKey}.webp`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name} ${p.nameEm ?? ''}`.trim() + ' — WOTU'} loading="lazy" decoding="async" />
+                <img class="card-illo" src={p.photo || `/uploads/products/cat-${p.catKey}.webp`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name} ${p.nameEm ?? ''}`.trim() + ' · WOTU'} loading="lazy" decoding="async" />
                 {p.badges && (
                   <div class="card-badges">
                     {p.badges.map((b) => <span class={`b-tag${b.cls ? ' ' + b.cls : ''}`}>{b.label}</span>)}
@@ -285,7 +285,7 @@ const breadcrumbSchema = {
           <div>
             <span class="eyebrow">Tư vấn KTS · miễn phí</span>
             <h4>Chưa biết chọn gì? <em>KTS WOTU</em> dựng 3D cho bạn xem trước.</h4>
-            <p>Gửi mặt bằng phòng — chúng tôi gợi ý combo, dựng phòng 3D trong 24h. Hoàn toàn miễn phí, không ràng buộc.</p>
+            <p>Gửi mặt bằng phòng, chúng tôi gợi ý combo, dựng phòng 3D trong 24h. Hoàn toàn miễn phí, không ràng buộc.</p>
           </div>
           <div class="actions">
             <a class="shop-btn shop-btn-primary" style="padding: 14px 22px; font-size: 14px;" href="/#contact">Đặt KTS tư vấn <span class="arr">→</span></a>
@@ -294,7 +294,7 @@ const breadcrumbSchema = {
         </div>
 
         {/* Cùng cấu trúc card chính (.product-card-item + data + fav/add) để
-            filter/sort/đếm/giỏ hàng áp dụng được — trước đây là <a class="card">
+            filter/sort/đếm/giỏ hàng áp dụng được, trước đây là <a class="card">
             trơ, không bị lọc (luôn hiện) và fav/add no-op. */}
         {productsAfterCta.map((p) => (
           <article
@@ -310,7 +310,7 @@ const breadcrumbSchema = {
             <a href={p.href} style="text-decoration: none; color: inherit; display: contents;">
               <div class="card-img">
                 <div class={`shop-ph ${p.tone}`}><span class="shop-ph-label">{p.placeholder}</span></div>
-                <img class="card-illo" src={p.photo || `/uploads/products/cat-${p.catKey}.webp`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name} ${p.nameEm ?? ''}`.trim() + ' — WOTU'} loading="lazy" decoding="async" />
+                <img class="card-illo" src={p.photo || `/uploads/products/cat-${p.catKey}.webp`} alt={`${p.photo ? '' : 'Minh hoạ '}${p.name} ${p.nameEm ?? ''}`.trim() + ' · WOTU'} loading="lazy" decoding="async" />
                 {p.badges && (
                   <div class="card-badges">
                     {p.badges.map((b) => <span class={`b-tag${b.cls ? ' ' + b.cls : ''}`}>{b.label}</span>)}
@@ -353,7 +353,7 @@ const breadcrumbSchema = {
       <!-- Empty state khi bộ lọc cho ra 0 kết quả -->
       <div class="catalog-empty" id="catalog-empty" hidden>
         <h3>Không có sản phẩm khớp bộ lọc</h3>
-        <p>Thử nới khoảng giá hoặc bỏ bớt điều kiện — hoặc xoá hết bộ lọc để xem lại toàn bộ {TOTAL} sản phẩm.</p>
+        <p>Thử nới khoảng giá hoặc bỏ bớt điều kiện, hoặc xoá hết bộ lọc để xem lại toàn bộ {TOTAL} sản phẩm.</p>
         <button type="button" class="shop-btn shop-btn-outline" id="catalog-empty-clear">Xoá bộ lọc</button>
       </div>
 

@@ -1,4 +1,4 @@
-# Bố cục trang chủ Studio — bật/tắt + sắp xếp section (sửa qua admin "Bố cục trang").
+# Bố cục trang chủ Studio, bật/tắt + sắp xếp section (sửa qua admin "Bố cục trang").
 # Hero + Marquee + Footer cố định, không nằm trong danh sách này.
 layout:
   - { id: philosophy, on: true }
@@ -16,7 +16,7 @@ blocks: []
 hero:
   eyebrow: Studio · Thiết kế & Thi công nội thất Quy Nhơn
   title: Một <em>khoảng</em> lặng,<br/>giữa đời <em>vội</em>.
-  intro: WOTU thiết kế và thi công những không gian sống nơi ánh sáng, vật liệu và sự tĩnh lặng có chỗ riêng — để trở về thật sự là trở về.
+  intro: WOTU thiết kế và thi công những không gian sống nơi ánh sáng, vật liệu và sự tĩnh lặng có chỗ riêng, để trở về thật sự là trở về.
   cta: Khám phá studio
   heroImage: 1768836180164-070b4c1a8f94
   heroAlt: Phòng ăn ấm áp trong ánh sáng tự nhiên
@@ -31,9 +31,9 @@ marquee:
 philosophy:
   number: /01
   label: Triết lý
-  heading: Chúng tôi không thiết kế để được <em>nhìn ngắm</em> — chúng tôi thiết kế để được <em class="accent">sống trong</em>.
+  heading: Chúng tôi không thiết kế để được <em>nhìn ngắm</em>, mà thiết kế để được <em class="accent">sống trong</em>.
   paragraphs:
-    - Mỗi dự án bắt đầu bằng việc lắng nghe — không gian, gia chủ, ánh sáng buổi sớm và tiếng ồn bên ngoài cửa sổ. Từ đó, hình hài của ngôi nhà mới hiện ra một cách tự nhiên, không cần phải gắng sức.
+    - Mỗi dự án bắt đầu bằng việc lắng nghe không gian, gia chủ, ánh sáng buổi sớm và tiếng ồn bên ngoài cửa sổ. Từ đó, hình hài của ngôi nhà mới hiện ra một cách tự nhiên, không cần phải gắng sức.
     - Vật liệu được lựa chọn vì nó già đẹp theo thời gian. Chi tiết được giữ lại vì nó cần thiết. Khoảng trống được dành chỗ vì đó là nơi ánh sáng đi qua và để lại một câu chuyện.
 services:
   number: /02
@@ -66,7 +66,7 @@ services:
     - num: /03
       title: Thi công
       em: nội thất hoàn thiện
-      desc: Đồ gỗ đặt riêng tại xưởng nội bộ, ánh sáng, vải vóc và stylings. Chìa khoá trao tay — bạn chỉ cần mở cửa và bước vào.
+      desc: Đồ gỗ đặt riêng tại xưởng nội bộ, ánh sáng, vải vóc và stylings. Chìa khoá trao tay. Bạn chỉ cần mở cửa và bước vào.
       tags:
         - Đồ gỗ riêng
         - Ánh sáng
@@ -83,7 +83,7 @@ process:
   number: /04
   label: Quy trình
   heading: Năm <em>chương</em>,<br/>một câu chuyện.
-  intro: Trung bình một dự án nhà ở tại WOTU kéo dài 6–9 tháng. Chúng tôi không vội — vì những thứ bền lâu thì cần thời gian.
+  intro: Trung bình một dự án nhà ở tại WOTU kéo dài 6–9 tháng. Chúng tôi không vội, vì những thứ bền lâu thì cần thời gian.
   steps:
     - n: '01'
       t: Lắng nghe
@@ -104,7 +104,7 @@ about:
   number: /05
   label: Studio
   heading: Một studio<br/>nhỏ, <em>kỹ tính</em>.
-  body: WOTU là studio thiết kế và thi công nội thất, đặt cơ sở tại Quy Nhơn từ 2022. Chúng tôi nhận có giới hạn — để mỗi dự án đều được dõi theo bằng đôi mắt của chính những người đã vẽ ra chúng.
+  body: WOTU là studio thiết kế và thi công nội thất, đặt cơ sở tại Quy Nhơn từ 2022. Chúng tôi nhận có giới hạn, để mỗi dự án đều được dõi theo bằng đôi mắt của chính những người đã vẽ ra chúng.
   ctaLabel: Về chúng tôi
   stats:
     - n: '042'
@@ -118,14 +118,14 @@ about:
 quote:
   number: /06
   label: Lời kể của khách
-  text: WOTU không bán cho tôi một thiết kế. Họ ngồi xuống, hỏi tôi về buổi sáng yêu thích — và rồi sáu tháng sau, họ trao lại tôi đúng buổi sáng ấy, dưới một mái nhà.
-  author: NGUYỄN ANH M. — gia chủ dự án 014, Quy Nhơn.
+  text: WOTU không bán cho tôi một thiết kế. Họ ngồi xuống, hỏi tôi về buổi sáng yêu thích, và rồi sáu tháng sau, họ trao lại tôi đúng buổi sáng ấy, dưới một mái nhà.
+  author: NGUYỄN ANH M. gia chủ dự án 014, Quy Nhơn.
   year: '2025'
 contact:
   number: /07
   label: Bắt đầu
   heading: Kể cho<br/>chúng tôi về<br/><em>không gian</em><br/>của bạn.
-  successMessage: Cảm ơn bạn — chúng tôi sẽ liên hệ trong 24h.
+  successMessage: Cảm ơn bạn, chúng tôi sẽ liên hệ trong 24h.
   submitLabel: Gửi yêu cầu
   fields:
     - label: Họ và tên

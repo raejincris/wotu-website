@@ -60,7 +60,7 @@ const fullName = `${hero.title ?? room.name} ${hero.titleEm ?? room.nameEm ?? ''
 
 const SITE_URL = 'https://www.wotu.vn';
 const PAGE_URL = `${SITE_URL}/phong-mau/${slug}/`;
-const desc = `${fullName} — phòng mẫu ${room.style ?? ''} ${room.area ?? ''} của WOTU. ${hero.subtitle ?? ''} Xem sơ đồ mặt bằng, phối cảnh 3D và chi tiết từng món nội thất.`.replace(/\s+/g, ' ').trim();
+const desc = `${fullName}, phòng mẫu ${room.style ?? ''} ${room.area ?? ''} của WOTU. ${hero.subtitle ?? ''} Xem sơ đồ mặt bằng, phối cảnh 3D và chi tiết từng món nội thất.`.replace(/\s+/g, ' ').trim();
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
@@ -72,7 +72,7 @@ const breadcrumbSchema = {
   ],
 };
 ---
-<ShopLayout title={`${fullName} — Phòng mẫu WOTU`} description={desc}>
+<ShopLayout title={`${fullName}, Phòng mẫu WOTU`} description={desc}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
   </Fragment>
@@ -108,7 +108,7 @@ const breadcrumbSchema = {
             <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Phối cảnh 3D</span>
             <h2 class="reveal" data-reveal style="--rev-delay: 120ms">Nhìn từ <em>trên xuống</em>.</h2>
           </div>
-          <div class="right reveal" data-reveal style="--rev-delay: 180ms">Góc nhìn isometric của cả phòng — chạm vào từng điểm để mở chi tiết món đồ.</div>
+          <div class="right reveal" data-reveal style="--rev-delay: 180ms">Góc nhìn isometric của cả phòng, chạm vào từng điểm để mở chi tiết món đồ.</div>
         </div>
         <RoomHotspots iso={iso} byId={byId} />
       </section>
@@ -174,7 +174,7 @@ const breadcrumbSchema = {
         <div class="block-head">
           <div>
             <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Trong phòng có gì</span>
-            <h2 class="reveal" data-reveal style="--rev-delay: 120ms">{productRefs.length} món — <em>mua lẻ hay trọn bộ</em>.</h2>
+            <h2 class="reveal" data-reveal style="--rev-delay: 120ms">{productRefs.length} món, <em>mua lẻ hay trọn bộ</em>.</h2>
           </div>
           <div class="right reveal" data-reveal style="--rev-delay: 180ms">Mỗi món đều có thể đặt riêng. Bấm "+ Giỏ" để thêm nhanh hoặc xem trang chi tiết.</div>
         </div>

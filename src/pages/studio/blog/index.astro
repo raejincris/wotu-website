@@ -18,7 +18,7 @@ const readingTime = (body?: string) =>
 // Danh sách category (giữ thứ tự xuất hiện) cho bộ lọc chip.
 const categories = [...new Set(posts.map((p) => p.data.category))];
 ---
-<BaseLayout title="Nhật ký — WOTU" description="Ghi chép về vật liệu, ánh sáng và những thứ không gấp.">
+<BaseLayout title="Nhật ký · WOTU" description="Ghi chép về vật liệu, ánh sáng và những thứ không gấp.">
   <Nav variant="inner" homeRoute="/studio/" />
 
   <header style="padding: 160px var(--pad-x) 56px;">
@@ -67,7 +67,7 @@ const categories = [...new Set(posts.map((p) => p.data.category))];
     </p>
   </section>
 
-  <Newsletter variant="studio" heading="Đọc WOTU đều đặn" sub="Nhận ghi chép mới về vật liệu, ánh sáng và nghề làm nhà — gửi thưa thớt, không spam." />
+  <Newsletter variant="studio" heading="Đọc WOTU đều đặn" sub="Nhận ghi chép mới về vật liệu, ánh sáng và nghề làm nhà, gửi thưa thớt, không spam." />
   <Footer />
 </BaseLayout>
 

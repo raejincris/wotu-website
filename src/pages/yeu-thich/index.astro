@@ -10,7 +10,7 @@ import Footer from '../../components/shop/Footer.astro';
 import { catalogJson } from '../../lib/shop-catalog';
 const catalogJsonStr = catalogJson();
 ---
-<ShopLayout title="Yêu thích — WOTU" description="Sản phẩm và combo bạn đã đánh dấu yêu thích. Lưu trong trình duyệt — không cần đăng nhập.">
+<ShopLayout title="Yêu thích · WOTU" description="Sản phẩm và combo bạn đã đánh dấu yêu thích. Lưu trong trình duyệt, không cần đăng nhập.">
   <Nav />
 
   <div class="container crumb">
@@ -24,7 +24,7 @@ const catalogJsonStr = catalogJson();
   <header class="wl-head container shop-reveal">
     <span class="eyebrow reveal" data-reveal style="--rev-delay: 0ms">Của riêng bạn</span>
     <SplitWords tag="h1" text="Yêu thích <em>của bạn</em>." base={80} step={50} />
-    <p class="wl-sub reveal" data-reveal style="--rev-delay: 160ms">Mọi sản phẩm và combo bạn đánh dấu ♥ trên các trang khác sẽ xuất hiện ở đây. Danh sách lưu trong trình duyệt — không cần đăng nhập, đồng bộ tự động giữa các tab.</p>
+    <p class="wl-sub reveal" data-reveal style="--rev-delay: 160ms">Mọi sản phẩm và combo bạn đánh dấu ♥ trên các trang khác sẽ xuất hiện ở đây. Danh sách lưu trong trình duyệt, không cần đăng nhập, đồng bộ tự động giữa các tab.</p>
   </header>
 
   <section class="container shop-reveal" style="padding: 24px 28px var(--shop-section-py);">
