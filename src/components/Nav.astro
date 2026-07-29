@@ -21,7 +21,9 @@ const links = navLinks.map((l) => {
     ? (l.route ? l.route : `#${l.anchor}`)
     : (l.route ? l.route : `${homeRoute}#${l.anchor}`);
   const isRoute = href.startsWith('/') && !href.includes('#');
-  const isCurrent = isRoute && (pathname === href || pathname.startsWith(href));
+  // href '/' (Shop ↗) chỉ current khi ĐÚNG '/', không dùng startsWith (mọi path
+  // đều startsWith '/' → sẽ active nhầm trên toàn Studio).
+  const isCurrent = isRoute && (pathname === href || (href !== '/' && pathname.startsWith(href)));
   return { label: l.label, href, isCurrent };
 });
 
@@ -36,7 +38,7 @@ navPages('studio').forEach((p) => {
     <img src="/logo.svg" alt="WOTU" width="118" height="48" />
   </a>
 
-  <div class="wotu-nav-links" style="display: flex; gap: 36px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;">
+  <div class="wotu-nav-links" style="display: flex; gap: 30px; font-family: var(--font-sans); font-size: 14px; font-weight: 500;">
     {links.map((l) => <a href={l.href} aria-current={l.isCurrent ? 'page' : undefined}>{l.label}</a>)}
   </div>
 
@@ -75,13 +77,11 @@ navPages('studio').forEach((p) => {
 </div>
 
 <style>
-  /* Translucent backdrop so the logo + links stay readable when Nav crosses
-     dark sections (Process, Contact, Footer). */
+  /* Nền đặc + viền dưới — thống nhất với header Shop (bỏ blur mờ editorial cũ)
+     để chuyển giữa 2 phần không bị cảm giác tách biệt. */
   .wotu-nav {
-    background: linear-gradient(to bottom, rgba(245, 240, 232, 0.92), rgba(245, 240, 232, 0.75));
-    backdrop-filter: saturate(140%) blur(8px);
-    -webkit-backdrop-filter: saturate(140%) blur(8px);
-    border-bottom: 1px solid rgba(43, 35, 28, 0.06);
+    background: var(--bone);
+    border-bottom: 1px solid rgba(43, 35, 28, 0.10);
   }
 
   .wotu-nav-logo {
@@ -94,6 +94,19 @@ navPages('studio').forEach((p) => {
     width: auto;
     display: block;
   }
+
+  /* Link nav: Inter chữ thường như Shop (.shop-nav-links). Hover → accent;
+     trang hiện tại gạch chân accent (accent #AC7344 đạt 3:1 cho gạch/UI, nên
+     GIỮ chữ màu ink để text đạt 4.5:1 — không tô accent lên chữ 14px). */
+  .wotu-nav-links a {
+    padding: 8px 0;
+    color: var(--ink);
+    border-bottom: 1.5px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .wotu-nav-links a:hover,
+  .wotu-nav-links a:focus-visible { color: var(--accent); }
+  .wotu-nav-links a[aria-current="page"] { border-bottom-color: var(--accent); }
 
   /* Hamburger button — only visible on mobile */
   .wotu-nav-toggle {
