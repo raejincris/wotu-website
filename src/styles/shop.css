@@ -185,21 +185,35 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
 
 /* ===== Inline search — thanh input trượt ra bên trái nút search ===== */
 .shop-search { position: relative; display: flex; align-items: center; }
-/* Input neo mép phải (bên trái nút), width 0 → mở rộng sang TRÁI; absolute nên
-   không đẩy cart/CTA. Nền đặc để phủ sạch phần nav phía sau khi mở. */
+/* Input LUÔN ở kích thước đầy đủ; clip-path che sang phải khi đóng → mở = "vén"
+   sang trái. Dùng clip-path (GPU-composited, KHÔNG reflow như animate width) →
+   mượt, chữ không xô. Absolute nên không đẩy cart/CTA. Shadow mềm cho thanh nổi
+   (đồng bộ với panel kết quả + dropdown). */
 .shop-search-input {
   position: absolute; right: 46px; top: 50%; transform: translateY(-50%);
-  width: 0; max-width: 72vw; height: 40px; padding: 0;
+  width: 288px; max-width: 72vw; height: 42px; padding: 0 18px;
   border: 1px solid var(--shop-line); border-radius: 999px;
   background: var(--shop-bg-card); color: var(--shop-ink);
-  font: 400 14px/1 var(--shop-sans); opacity: 0; pointer-events: none;
-  transition: width .34s cubic-bezier(.32,.72,0,1), opacity .2s ease, padding .34s cubic-bezier(.32,.72,0,1);
+  font: 400 14px/1 var(--shop-sans);
+  box-shadow: 0 6px 22px -12px rgba(20, 16, 12, .28);
+  opacity: 0; pointer-events: none;
+  clip-path: inset(0 0 0 100% round 999px);
+  transition: clip-path .42s cubic-bezier(.22, .61, .36, 1), opacity .28s ease;
+  will-change: clip-path;
 }
 .shop-search-input::placeholder { color: var(--shop-ink-soft); }
 .shop-search.open .shop-search-input {
-  width: 280px; padding: 0 18px; opacity: 1; pointer-events: auto;
+  opacity: 1; pointer-events: auto;
+  clip-path: inset(0 0 0 0 round 999px);
 }
-.shop-search.open .shop-search-toggle { background: var(--shop-warm-soft); }
+/* Focus: viền accent + quầng mềm thay vòng outline cứng (đúng tông, gọn hơn). */
+.shop-search-input:focus-visible {
+  outline: none !important;
+  border-color: var(--shop-accent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--shop-accent) 20%, transparent), 0 6px 22px -12px rgba(20, 16, 12, .28);
+}
+.shop-search-toggle { transition: background .22s ease, color .22s ease; }
+.shop-search.open .shop-search-toggle { background: var(--shop-warm-soft); color: var(--shop-accent-deep); }
 
 .shop-search-panel {
   position: absolute; top: calc(100% + 12px); right: 0; z-index: 60;
@@ -232,9 +246,9 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
     position: fixed; top: 64px; left: 12px; right: 12px; width: auto;
   }
   /* Width bám viewport để mép trái ô luôn ~12px (right:46px neo theo mép phải ô
-     search, mà bên phải còn cart+hamburger ~126px). Trước width 280px cố định →
-     tràn trái ~62px, placeholder bị cắt. */
-  .shop-search.open .shop-search-input {
+     search, mà bên phải còn cart+hamburger ~126px). Width cố định 288px → tràn
+     trái, placeholder bị cắt. Đây là width NỀN (clip-path lo phần mở). */
+  .shop-search-input {
     width: calc(100vw - 184px); max-width: none;
   }
 }
