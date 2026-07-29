@@ -6,13 +6,14 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
-  # font/style/connect googleapis+gstatic: CHỈ để Sveltia CMS (/admin/cms/) tải
-  # icon Material Symbols + font từ Google. Site pages KHÔNG bị nới thật — mỗi page
-  # còn 1 meta CSP `font-src 'self'` (BaseLayout/ShopLayout) → browser áp giao 2 lớp
-  # → vẫn self-host. Chỉ 2 trang admin (không có meta CSP) hưởng phần nới này.
-  # (Không thể scope qua rule /admin/cms/* riêng: Cloudflare GỘP header trùng tên →
-  #  2 CSP → browser áp giao → font vẫn bị chặn.)
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-inline' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://avatars.githubusercontent.com; connect-src 'self' https://api.github.com https://github.com https://unpkg.com https://api.web3forms.com https://cloudflareinsights.com https://fonts.googleapis.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://github.com https://api.web3forms.com;
+  # font/style/connect: CHỈ để Sveltia CMS (/admin/cms/) tải icon Material Symbols +
+  # font. Sveltia ≤0.173 dùng Google (googleapis+gstatic); ≥0.174 chuyển Fontsource
+  # (cdn.jsdelivr.net). Cho phép CẢ HAI → nâng/hạ version Sveltia không phải sửa CSP.
+  # Site pages KHÔNG bị nới thật — mỗi page còn 1 meta CSP `font-src 'self'`
+  # (BaseLayout/ShopLayout) → browser áp giao 2 lớp → vẫn self-host. Chỉ 2 trang admin
+  # (không có meta CSP) hưởng phần nới. (Không scope được qua rule /admin/cms/* riêng:
+  #  Cloudflare GỘP header trùng tên → 2 CSP → browser áp giao → font vẫn bị chặn.)
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-inline' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https://images.unsplash.com https://avatars.githubusercontent.com; connect-src 'self' https://api.github.com https://github.com https://unpkg.com https://api.web3forms.com https://cloudflareinsights.com https://fonts.googleapis.com https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://github.com https://api.web3forms.com;
 
 # Admin dashboard + CMS — noindex, no-cache
 /admin/*
