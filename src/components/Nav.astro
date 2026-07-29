@@ -135,7 +135,9 @@ navPages('studio').forEach((p) => {
     position: fixed;
     inset: 0;
     z-index: 60;
-    background: var(--cocoa);
+    /* --ink (#2B231C) ≈ --shop-ink của drawer Shop (nâu ấm) — khớp nền 2 drawer;
+       trước là --cocoa gần đen nên lệch tông với drawer Shop. */
+    background: var(--ink);
     color: var(--bone);
     flex-direction: column;
     overflow-y: auto;
@@ -180,11 +182,11 @@ navPages('studio').forEach((p) => {
   .wotu-mobile-drawer__nav a {
     display: flex;
     align-items: center;
-    min-height: 56px;
+    min-height: 52px;
     padding: 16px 0;
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: 36px;
+    font-size: 28px; /* khớp .shop-drawer-nav a (28px) — trước 36px */
     color: var(--bone);
     border-bottom: 1px solid rgba(245, 240, 232, 0.08);
     transition: color 200ms ease;
