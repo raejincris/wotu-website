@@ -40,10 +40,10 @@ test.describe('1 · Routing — all routes return 200', () => {
     '/yeu-thich/',
     '/studio/',
     '/studio/projects/',
-    '/studio/projects/nha-giua-doi-thong',
-    '/studio/projects/khoang-trong-q2',
+    '/studio/projects/can-ho-flc-quy-nhon',
+    '/studio/projects/can-ho-studio-tms-quy-nhon',
     '/studio/projects/cafe-bach-tra',
-    '/studio/projects/nha-cua-me',
+    '/studio/projects/nha-anh-phuc-phu-tai',
     '/studio/blog/',
     '/studio/blog/vat-lieu-gia-dep-theo-thoi-gian',
     '/studio/blog/anh-sang-truoc-do-noi-that',
@@ -493,18 +493,18 @@ test.describe('9 · Studio content collections', () => {
 
   test('/studio/projects/ có link đến 4 dự án', async ({ page }) => {
     await page.goto('/studio/projects/');
-    await expect(page.locator('a[href="/studio/projects/nha-giua-doi-thong"]')).toBeAttached();
-    await expect(page.locator('a[href="/studio/projects/khoang-trong-q2"]')).toBeAttached();
+    await expect(page.locator('a[href="/studio/projects/can-ho-flc-quy-nhon"]')).toBeAttached();
+    await expect(page.locator('a[href="/studio/projects/can-ho-studio-tms-quy-nhon"]')).toBeAttached();
     await expect(page.locator('a[href="/studio/projects/cafe-bach-tra"]')).toBeAttached();
-    await expect(page.locator('a[href="/studio/projects/nha-cua-me"]')).toBeAttached();
+    await expect(page.locator('a[href="/studio/projects/nha-anh-phuc-phu-tai"]')).toBeAttached();
   });
 
-  test('/studio/projects/nha-giua-doi-thong — frontmatter render đúng', async ({ page }) => {
-    await page.goto('/studio/projects/nha-giua-doi-thong');
-    await expect(page.getByRole('heading', { name: 'Nhà giữa đồi thông' })).toBeVisible();
+  test('/studio/projects/can-ho-flc-quy-nhon — frontmatter render đúng', async ({ page }) => {
+    await page.goto('/studio/projects/can-ho-flc-quy-nhon');
+    await expect(page.getByRole('heading', { name: 'Căn hộ FLC Sea Tower' })).toBeVisible();
     const body = await page.content();
-    expect(body).toContain('Đà Lạt');
-    expect(body).toContain('2025');
+    expect(body).toContain('Quy Nhơn');
+    expect(body).toContain('2024');
   });
 
   test('/studio/projects/cafe-bach-tra — back link về /studio/projects/', async ({ page }) => {
@@ -532,11 +532,11 @@ test.describe('9 · Studio content collections', () => {
   test('click project card navigates to detail page', async ({ page }) => {
     await page.goto('/studio/projects/');
     await page.waitForLoadState('networkidle');
-    const projectLink = page.locator('a[href="/studio/projects/nha-giua-doi-thong"]').first();
+    const projectLink = page.locator('a[href="/studio/projects/can-ho-flc-quy-nhon"]').first();
     await projectLink.scrollIntoViewIfNeeded();
     await projectLink.click({ force: true });
-    await expect(page).toHaveURL(/\/studio\/projects\/nha-giua-doi-thong/);
-    await expect(page.getByRole('heading', { name: 'Nhà giữa đồi thông' })).toBeVisible();
+    await expect(page).toHaveURL(/\/studio\/projects\/can-ho-flc-quy-nhon/);
+    await expect(page.getByRole('heading', { name: 'Căn hộ FLC Sea Tower' })).toBeVisible();
   });
 });
 
@@ -779,8 +779,8 @@ test.describe('13 · SEO & meta tags', () => {
   });
 
   test('/studio/ project detail có title chứa tên dự án', async ({ page }) => {
-    await page.goto('/studio/projects/nha-giua-doi-thong');
-    await expect(page).toHaveTitle(/Nhà giữa đồi thông/);
+    await page.goto('/studio/projects/can-ho-flc-quy-nhon');
+    await expect(page).toHaveTitle(/Căn hộ FLC Sea Tower/);
   });
 
   test('/studio/ blog detail có title chứa "Vật liệu"', async ({ page }) => {
@@ -859,7 +859,7 @@ test.describe('15 · Reveal animations & accessibility', () => {
   });
 
   test('all img trên /studio/ có alt attribute không rỗng', async ({ page }) => {
-    const routes = ['/studio/', '/studio/projects/', '/studio/projects/nha-giua-doi-thong', '/studio/blog/'];
+    const routes = ['/studio/', '/studio/projects/', '/studio/projects/can-ho-flc-quy-nhon', '/studio/blog/'];
     for (const route of routes) {
       await page.goto(route);
       const imgs = await page.locator('img').all();
@@ -1269,7 +1269,7 @@ test.describe('22 · Studio reading & gallery', () => {
   });
 
   test('Project gallery: click ô ảnh → lightbox mở; Escape → đóng', async ({ page }) => {
-    await page.goto('/studio/projects/nha-cua-me');
+    await page.goto('/studio/projects/can-ho-flc-quy-nhon');
     await page.waitForLoadState('domcontentloaded');
 
     const cell = page.locator('[data-pg-open]').first();
@@ -1385,5 +1385,53 @@ test.describe('24 · Shop Sprint 4', () => {
     await page.keyboard.press('ArrowRight');
     const after = await lo.getAttribute('aria-valuenow');
     expect(Number(after)).toBeGreaterThan(Number(before));
+  });
+});
+
+test.describe('25 · Search nâng cấp — product index + Pagefind', () => {
+  test('/search-index.json: 28 entries (18 SP + 6 combo + 4 phòng), kw không dấu', async ({ request }) => {
+    const res = await request.get('/search-index.json');
+    expect(res.ok()).toBeTruthy();
+    const data = await res.json();
+    expect(data.length).toBe(28);
+    const byType: Record<string, number> = {};
+    for (const e of data) byType[e.type] = (byType[e.type] ?? 0) + 1;
+    expect(byType).toMatchObject({ product: 18, combo: 6, room: 4 });
+    expect(data.every((e: any) => !/[àáảãạăâêôơưđ]/i.test(e.kw))).toBeTruthy();
+  });
+
+  test('/tim-kiem/: trống → 28 card; lọc Combo → URL ?cat=combo; còn hàng thu hẹp', async ({ page }) => {
+    await page.goto('/tim-kiem/');
+    await expect(page.locator('#ts-products .ts-card')).toHaveCount(28, { timeout: 8000 });
+    await page.locator('.ts-chips[data-group="cat"] .ts-chip[data-val="combo"]').click();
+    await expect(page.locator('#ts-products .ts-card')).toHaveCount(6);
+    await expect(page).toHaveURL(/[?&]cat=combo/);
+    await page.locator('#ts-clear').click();
+    const all = await page.locator('#ts-products .ts-card').count();
+    await page.locator('#ts-stock').check();
+    expect(await page.locator('#ts-products .ts-card').count()).toBeLessThan(all);
+  });
+
+  test('/tim-kiem/: tìm KHÔNG DẤU "sofa may" ra Sofa Mây + nhóm nội dung Pagefind', async ({ page }) => {
+    await page.goto('/tim-kiem/?q=sofa%20may');
+    const cards = page.locator('#ts-products .ts-card');
+    await expect(cards.first()).toBeVisible({ timeout: 8000 });
+    await expect(cards.first().locator('.ts-card-title')).toContainText('Mây');
+    await expect(cards.first().locator('.ts-card-price')).toContainText('đ');
+    await expect(page.locator('#ts-content-sec')).toBeVisible({ timeout: 8000 });
+  });
+
+  test('Nav search: Cmd/Ctrl+K mở + chip gợi ý; gõ "sofa may" ra SP có giá; Enter → /tim-kiem/?q=', async ({ page }) => {
+    await page.goto('/');
+    const wrap = page.locator('[data-shop-search]');
+    await page.keyboard.press('Control+k');
+    await expect(wrap).toHaveClass(/open/);
+    await expect(wrap.locator('.shop-search-chip').first()).toBeVisible();
+    await wrap.locator('.shop-search-input').fill('sofa may');
+    const prod = wrap.locator('.shop-search-result.ssp');
+    await expect(prod.first()).toBeVisible({ timeout: 6000 });
+    await expect(prod.first().locator('.ssp-price')).toContainText('đ');
+    await wrap.locator('.shop-search-input').press('Enter');
+    await page.waitForURL(/\/tim-kiem\/\?q=/, { timeout: 6000 });
   });
 });
