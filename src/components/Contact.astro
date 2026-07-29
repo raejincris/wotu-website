@@ -253,6 +253,9 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
     border: 1px solid rgba(245, 240, 232, 0.18);
   }
   .contact-map__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* `hidden` (mặc định, JS bỏ khi ảnh load OK) PHẢI thắng display:block ở trên —
+     CSS author đè [hidden] của UA nên ảnh 404 vẫn hiện alt text. Ẩn hẳn khi hidden. */
+  .contact-map__img[hidden] { display: none; }
   /* Fallback khi chưa có ảnh bản đồ thật: gradient ấm dạng "bản đồ". */
   .contact-map--noimg {
     background:
