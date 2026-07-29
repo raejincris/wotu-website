@@ -215,7 +215,8 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
    viền 1px hiện; nên dùng border-color làm chỉ báo focus, không dựa vào ring. */
 .shop .shop-search-input:focus-visible {
   outline: none !important;
-  border-color: var(--shop-ink-soft);
+  /* Viền đỏ thương hiệu (terracotta) — mảnh, bo tròn (KHÁC outline vuông cứng cũ). */
+  border-color: var(--shop-accent);
   /* GIỮ pill: rule focus chung set border-radius:3px (thắng 999px base ở lúc focus)
      → góc viền vuông, lệch khỏi nền bo tròn (clip-path round 999px). Ép lại 999px. */
   border-radius: 999px;
