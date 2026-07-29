@@ -15,7 +15,7 @@ const items = (Array.isArray(raw) && raw.length ? raw : DEFAULTS)
   .map((it: any) => ({ text: String(it?.text ?? '').trim(), italic: !!it?.italic }))
   .filter((it: any) => it.text);
 ---
-<div class="shop-marquee">
+<div class="shop-marquee" data-pagefind-ignore>
   <div class="shop-marquee-track">
     <span>
       {items.map((item: any) => (

@@ -14,7 +14,7 @@ interface Props {
 const { target = '.blog-body' } = Astro.props;
 const r = (site as any).reading ?? {};
 ---
-<nav class="toc" data-toc-target={target} aria-label={r.tocLabel ?? 'Mục lục'} hidden>
+<nav class="toc" data-pagefind-ignore data-toc-target={target} aria-label={r.tocLabel ?? 'Mục lục'} hidden>
   <div class="toc__label">{r.tocLabel ?? 'Trong bài này'}</div>
   <ol class="toc__list"></ol>
 </nav>

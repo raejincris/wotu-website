@@ -2,76 +2,271 @@
 import ShopLayout from '../layouts/ShopLayout.astro';
 import Nav from '../components/shop/Nav.astro';
 import Footer from '../components/shop/Footer.astro';
+import shopProducts from '../data/shop-products.yml';
+
+const data = shopProducts as any;
+// Chip danh mục: danh mục SP thật (bỏ mục "Tất cả" gốc, tự thêm lại) + Combo + Phòng mẫu.
+const cats = [
+  { val: '', label: 'Tất cả' },
+  ...((data.categories ?? []) as any[]).filter((c) => c.key).map((c) => ({ val: c.key, label: c.name })),
+  { val: 'combo', label: 'Combo' },
+  { val: 'phong-mau', label: 'Phòng mẫu' },
+];
+const rooms = [
+  { val: '', label: 'Mọi phòng' },
+  ...((data.filters?.rooms ?? []) as any[]).map((r) => ({ val: r.key, label: r.label })),
+];
+const prices = [
+  { val: '', label: 'Mọi giá' },
+  { val: 'lt3', label: 'Dưới 3 triệu' },
+  { val: '3-6', label: '3 – 6 triệu' },
+  { val: '6-10', label: '6 – 10 triệu' },
+  { val: 'gt10', label: 'Trên 10 triệu' },
+];
 ---
 <ShopLayout
   title="Tìm kiếm · WOTU Nội thất"
-  description="Tìm kiếm sản phẩm, combo nội thất WOTU. Sofa, bàn ăn, giường, kệ TV, thảm, gỗ tự nhiên, bảo hành 2 năm."
+  description="Tìm sản phẩm, combo, phòng mẫu và bài viết WOTU. Lọc theo danh mục, giá, phòng, còn hàng. Sofa, bàn ăn, giường, kệ, thảm — bảo hành 2 năm."
+  noSearchIndex
 >
   <Nav />
 
-  <div class="container search-wrap">
-    <div class="search-head">
+  <div class="container ts-wrap">
+    <div class="ts-head">
       <span class="eyebrow">Tìm kiếm</span>
-      <h1>Tìm <em>đồ bạn cần</em>.</h1>
+      <h1 class="serif">Tìm <em>đồ bạn cần</em>.</h1>
+      <div class="ts-search-box">
+        <svg class="ts-search-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="ts-input" class="ts-input" type="search" placeholder="Bạn muốn tìm gì? (sofa, bàn ăn, combo phòng ngủ…)"
+               aria-label="Tìm kiếm" autocomplete="off" enterkeyhint="search" />
+      </div>
     </div>
 
-    <div id="search" class="pagefind-ui-wrap"></div>
+    <div class="ts-layout">
+      <aside class="ts-filters" aria-label="Bộ lọc">
+        <div class="ts-fgroup">
+          <h2 class="ts-flabel">Danh mục</h2>
+          <div class="ts-chips" data-group="cat">
+            {cats.map((c) => (
+              <button type="button" class="ts-chip" data-val={c.val} aria-pressed={c.val === '' ? 'true' : 'false'}>{c.label}</button>
+            ))}
+          </div>
+        </div>
+        <div class="ts-fgroup">
+          <h2 class="ts-flabel">Khoảng giá</h2>
+          <div class="ts-chips" data-group="price">
+            {prices.map((c) => (
+              <button type="button" class="ts-chip" data-val={c.val} aria-pressed={c.val === '' ? 'true' : 'false'}>{c.label}</button>
+            ))}
+          </div>
+        </div>
+        <div class="ts-fgroup">
+          <h2 class="ts-flabel">Phòng</h2>
+          <div class="ts-chips" data-group="room">
+            {rooms.map((c) => (
+              <button type="button" class="ts-chip" data-val={c.val} aria-pressed={c.val === '' ? 'true' : 'false'}>{c.label}</button>
+            ))}
+          </div>
+        </div>
+        <div class="ts-fgroup">
+          <label class="ts-stock">
+            <input type="checkbox" id="ts-stock" />
+            <span>Chỉ hàng còn (giao 48h)</span>
+          </label>
+        </div>
+        <button type="button" id="ts-clear" class="ts-clear">Xoá bộ lọc</button>
+      </aside>
+
+      <div class="ts-results">
+        <p class="ts-count" id="ts-count" aria-live="polite"></p>
+
+        <section class="ts-section" id="ts-products-sec">
+          <h2 class="ts-shead">Sản phẩm &amp; Combo <span id="ts-pcount" class="ts-badge"></span></h2>
+          <div class="ts-grid" id="ts-products"></div>
+          <p class="ts-empty" id="ts-products-empty" hidden>Không có sản phẩm khớp bộ lọc. <button type="button" id="ts-clear2" class="ts-link">Xoá bộ lọc</button></p>
+        </section>
+
+        <section class="ts-section" id="ts-content-sec" hidden>
+          <h2 class="ts-shead">Bài viết &amp; Trang <span id="ts-ccount" class="ts-badge"></span></h2>
+          <div class="ts-content-list" id="ts-content"></div>
+        </section>
+
+        <noscript><p class="ts-empty">Tìm kiếm cần JavaScript. Anh/chị bật JS hoặc xem <a href="/san-pham/">tất cả sản phẩm</a>.</p></noscript>
+      </div>
+    </div>
   </div>
 
   <Footer />
 </ShopLayout>
 
 <style>
-  /* PHẢI :global — <main> ở ShopLayout không nhận cid của page → scoped không match. */
-  :global(main) {
-    --bg: var(--shop-bg);
-    --bg-soft: var(--shop-bg-soft);
-    --bg-card: var(--shop-bg-card);
-    --ink: var(--shop-ink);
-    --ink-soft: var(--shop-ink-soft);
-    --line: var(--shop-line);
-    --accent: var(--shop-accent);
-    --accent-deep: var(--shop-accent-deep);
-    --serif: var(--shop-serif);
-    --sans: var(--shop-sans);
-    --radius: var(--shop-radius);
-    --maxw: var(--shop-maxw);
-  }
-
-  .search-wrap { padding: 60px 0 100px; min-height: 60vh; }
-  .search-head { margin-bottom: 40px; }
-  .search-head h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 5vw, 64px); line-height: 1; margin: 10px 0 0; }
-  .search-head h1 em { font-style: italic; color: var(--accent); }
-
-  /* Override Pagefind default styles cho phù hợp brand */
-  .pagefind-ui-wrap {
-    --pagefind-ui-scale: 1;
-    --pagefind-ui-primary: var(--shop-accent);
-    --pagefind-ui-text: var(--shop-ink);
-    --pagefind-ui-background: var(--shop-bg-card);
-    --pagefind-ui-border: var(--shop-line);
-    --pagefind-ui-tag: var(--shop-warm-soft);
-    --pagefind-ui-border-width: 1px;
-    --pagefind-ui-border-radius: 12px;
-    --pagefind-ui-font: var(--shop-sans);
-  }
+  /* Alias token cho main của ShopLayout (scoped không match main ở layout). */
+  :global(main) { --accent: var(--shop-accent); }
+  .ts-wrap { padding: 44px 0 96px; min-height: 60vh; }
+  .ts-head { margin-bottom: 36px; max-width: 720px; }
+  .ts-head h1 { font-size: clamp(38px, 5vw, 60px); line-height: 1; margin: 8px 0 24px; }
+  .ts-head h1 em { font-style: italic; color: var(--shop-accent); }
 </style>
 
-<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
-<script src="/pagefind/pagefind-ui.js" is:inline></script>
-<script is:inline>
-  window.addEventListener('DOMContentLoaded', function () {
-    new PagefindUI({
-      element: '#search',
-      showSubResults: false,
-      showImages: false,
-      translations: {
-        placeholder: 'Tìm sofa, combo, thảm...',
-        zero_results: 'Không tìm thấy "[SEARCH_TERM]"',
-        many_results: '[COUNT] kết quả cho "[SEARCH_TERM]"',
-        one_result: '1 kết quả cho "[SEARCH_TERM]"',
-        load_more: 'Xem thêm',
-      },
+<script>
+  import { loadIndex, filterProducts, type SearchEntry, type ProductFilters } from '../lib/search/client';
+
+  const esc = (s: string) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const typeLabel: Record<string, string> = { product: '', combo: 'Combo', room: 'Phòng mẫu' };
+
+  const input = document.getElementById('ts-input') as HTMLInputElement | null;
+  if (input) {
+    const stockEl = document.getElementById('ts-stock') as HTMLInputElement;
+    const pWrap = document.getElementById('ts-products')!;
+    const pEmpty = document.getElementById('ts-products-empty')!;
+    const pCount = document.getElementById('ts-pcount')!;
+    const cWrap = document.getElementById('ts-content')!;
+    const cSec = document.getElementById('ts-content-sec')!;
+    const cCount = document.getElementById('ts-ccount')!;
+    const countEl = document.getElementById('ts-count')!;
+
+    const state: ProductFilters = { q: '', cat: '', price: '', room: '', stock: false };
+
+    // ---- URL <-> state ----
+    const readUrl = () => {
+      const p = new URLSearchParams(location.search);
+      state.q = p.get('q') ?? '';
+      state.cat = p.get('cat') ?? '';
+      state.price = p.get('gia') ?? '';
+      state.room = p.get('phong') ?? '';
+      state.stock = p.get('con') === '1';
+      input.value = state.q;
+      stockEl.checked = !!state.stock;
+      syncChips();
+    };
+    const writeUrl = () => {
+      const p = new URLSearchParams();
+      if (state.q) p.set('q', state.q);
+      if (state.cat) p.set('cat', state.cat);
+      if (state.price) p.set('gia', state.price);
+      if (state.room) p.set('phong', state.room);
+      if (state.stock) p.set('con', '1');
+      const qs = p.toString();
+      history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+    };
+    const syncChips = () => {
+      document.querySelectorAll<HTMLElement>('.ts-chips').forEach((grp) => {
+        const key = grp.dataset.group as 'cat' | 'price' | 'room';
+        const cur = key === 'price' ? state.price : key === 'room' ? state.room : state.cat;
+        grp.querySelectorAll<HTMLButtonElement>('.ts-chip').forEach((b) => {
+          const on = (b.dataset.val ?? '') === (cur ?? '');
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+      });
+    };
+
+    // ---- Render sản phẩm ----
+    const cardHtml = (e: SearchEntry) => {
+      const media = e.img
+        ? `<img class="shop-illo" src="${esc(e.img)}" alt="${esc(e.title)}" loading="lazy" />`
+        : `<div class="shop-ph"><span class="shop-ph-label">${esc(e.cat || e.title)}</span></div>`;
+      const tl = typeLabel[e.type];
+      const badge = tl ? `<span class="ts-card-type">${esc(tl)}</span>` : '';
+      const rating = e.rating ? `<span class="ts-card-rating">★ ${e.rating}</span>` : '';
+      return `<a class="ts-card" href="${esc(e.url)}">
+        <div class="ts-card-media reveal-img is-visible">${media}${badge}</div>
+        <div class="ts-card-body">
+          <p class="ts-card-cat">${esc(e.cat)}</p>
+          <h3 class="ts-card-title">${esc(e.title)}</h3>
+          <div class="ts-card-foot"><span class="ts-card-price">${esc(e.priceText)}</span>${rating}</div>
+        </div></a>`;
+    };
+
+    let INDEX: SearchEntry[] = [];
+    const renderProducts = () => {
+      const list = filterProducts(INDEX, state);
+      pWrap.innerHTML = list.map(cardHtml).join('');
+      pCount.textContent = String(list.length);
+      pEmpty.hidden = list.length > 0;
+      return list.length;
+    };
+
+    // ---- Pagefind (nội dung) — lazy, chỉ khi có query ----
+    let pf: any = null, pfLoading: Promise<any> | null = null;
+    const loadPf = () => {
+      if (pf) return Promise.resolve(pf);
+      if (!pfLoading) {
+        // Biến (không literal) → @vite-ignore hiệu lực, Rollup không resolve lúc build.
+        const src = '/pagefind/pagefind.js';
+        pfLoading = import(/* @vite-ignore */ src)
+          .then(async (m: any) => { await m.init?.(); pf = m; return m; })
+          .catch(() => null);
+      }
+      return pfLoading;
+    };
+    const contentHtml = (d: any) => {
+      const img = d.meta?.image ? `<img class="ts-content-thumb" src="${esc(d.meta.image)}" alt="" loading="lazy" />` : '';
+      const type = d.meta?.type || 'Trang';
+      return `<a class="ts-content-item" href="${esc(d.url)}">
+        ${img}
+        <div class="ts-content-txt">
+          <span class="ts-content-type">${esc(type)}</span>
+          <h3>${esc(d.meta?.title || d.url)}</h3>
+          <p>${d.excerpt || ''}</p>
+        </div></a>`;
+    };
+    const renderContent = async (q: string) => {
+      if (!q) { cSec.hidden = true; cWrap.innerHTML = ''; cCount.textContent = ''; return 0; }
+      const m = await loadPf();
+      if (!m) { cSec.hidden = true; return 0; }
+      const s = await m.search(q);
+      if (input.value.trim() !== q) return -1; // query đổi khi đang chờ
+      const top = await Promise.all(s.results.slice(0, 8).map((x: any) => x.data()));
+      cWrap.innerHTML = top.map(contentHtml).join('');
+      cCount.textContent = String(top.length);
+      cSec.hidden = top.length === 0;
+      return top.length;
+    };
+
+    // ---- Cập nhật tổng ----
+    let timer: number | undefined;
+    const render = () => {
+      const np = renderProducts();
+      renderContent(state.q).then((nc) => {
+        if (nc < 0) return;
+        const q = state.q.trim();
+        countEl.textContent = q
+          ? `${np + Math.max(nc, 0)} kết quả cho “${q}”`
+          : `${np} sản phẩm`;
+      });
+      writeUrl();
+    };
+    const debouncedRender = () => { window.clearTimeout(timer); timer = window.setTimeout(render, 160); };
+
+    // ---- Wire events ----
+    input.addEventListener('input', () => { state.q = input.value; debouncedRender(); });
+    stockEl.addEventListener('change', () => { state.stock = stockEl.checked; render(); });
+    document.querySelectorAll<HTMLElement>('.ts-chips').forEach((grp) => {
+      grp.addEventListener('click', (ev) => {
+        const btn = (ev.target as HTMLElement).closest('.ts-chip') as HTMLButtonElement | null;
+        if (!btn) return;
+        const key = grp.dataset.group as 'cat' | 'price' | 'room';
+        const val = btn.dataset.val ?? '';
+        if (key === 'price') state.price = val; else if (key === 'room') state.room = val; else state.cat = val;
+        syncChips();
+        render();
+      });
     });
-  });
+    const clearAll = () => {
+      state.cat = ''; state.price = ''; state.room = ''; state.stock = false;
+      stockEl.checked = false; syncChips(); render();
+    };
+    document.getElementById('ts-clear')?.addEventListener('click', clearAll);
+    document.getElementById('ts-clear2')?.addEventListener('click', clearAll);
+    window.addEventListener('popstate', () => { readUrl(); render(); });
+
+    // ---- Init ----
+    loadIndex().then((idx) => {
+      INDEX = idx;
+      readUrl();
+      render();
+      if (state.q) loadPf(); // ấm sẵn nếu vào từ Nav với ?q=
+      input.focus();
+    });
+  }
 </script>

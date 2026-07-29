@@ -43,7 +43,7 @@ const linkAttrs = (l: NavLink) => ({
   style: active === l.label ? 'color: var(--shop-accent-deep);' : undefined,
 });
 ---
-<nav class="shop-nav">
+<nav class="shop-nav" data-pagefind-ignore>
   <div class="container shop-nav-inner">
     <a href="/" class="shop-brand" aria-label="WOTU, trang chủ shop">
       <img src="/logo.svg" alt="WOTU" width="160" height="64" style="height: 32px; width: auto; display: block;" />
@@ -102,6 +102,7 @@ const linkAttrs = (l: NavLink) => ({
 
 <script>
   import { getCartCount, onChange } from '../../lib/shop-store';
+  import { loadIndex, filterProducts, type SearchEntry } from '../../lib/search/client';
 
   const btn = document.getElementById('wotu-cart-btn');
   const badge = document.getElementById('wotu-cart-badge');
@@ -193,7 +194,7 @@ const linkAttrs = (l: NavLink) => ({
     }
   });
 
-  // ===== Inline search — click nút → thanh input trượt ra, tìm ngay (Pagefind) =====
+  // ===== Inline search — blend Sản phẩm (product index, không dấu) + Nội dung (Pagefind) =====
   const searchWrap = document.querySelector<HTMLElement>('[data-shop-search]');
   if (searchWrap) {
     const sToggle = searchWrap.querySelector<HTMLAnchorElement>('.shop-search-toggle')!;
@@ -201,10 +202,24 @@ const linkAttrs = (l: NavLink) => ({
     const sPanel = searchWrap.querySelector<HTMLElement>('.shop-search-panel')!;
     const sResults = searchWrap.querySelector<HTMLElement>('.shop-search-results')!;
 
-    // Pagefind (WASM + worker) chỉ có ở bản build (dist), không có khi `npm run dev`.
-    // Nạp LƯỜI lần đầu mở search; dev / lỗi → fallback link trang tìm kiếm.
-    let pf: any = null;
-    let pfLoading: Promise<any> | null = null;
+    const PRODUCT_CAP = 4, CONTENT_CAP = 4;
+    const SUGGEST = ['Sofa', 'Combo', 'Bàn ăn', 'Giường', 'Thảm', 'Kệ TV'];
+    const RKEY = 'wotu-recent-search';
+    const getRecent = (): string[] => { try { return (JSON.parse(localStorage.getItem(RKEY) || '[]') as string[]).slice(0, 6); } catch { return []; } };
+    const pushRecent = (q: string) => {
+      q = q.trim(); if (!q) return;
+      try {
+        const cur = getRecent().filter((x) => x.toLowerCase() !== q.toLowerCase());
+        cur.unshift(q);
+        localStorage.setItem(RKEY, JSON.stringify(cur.slice(0, 6)));
+      } catch {}
+    };
+
+    // Product index (fetch 1 lần, cache ở module client). Pagefind cho nội dung.
+    let INDEX: SearchEntry[] = [];
+    loadIndex().then((idx) => { INDEX = idx; });
+    // Pagefind (WASM+worker) chỉ có ở bản build; dev/lỗi → bỏ qua nhóm nội dung.
+    let pf: any = null, pfLoading: Promise<any> | null = null;
     const loadPf = () => {
       if (pf) return Promise.resolve(pf);
       if (!pfLoading) {
@@ -216,11 +231,75 @@ const linkAttrs = (l: NavLink) => ({
       return pfLoading;
     };
 
+    const esc = (s: string) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const show = (html: string) => { sResults.innerHTML = html; sPanel.hidden = false; };
+    const goSearch = () => {
+      const q = sInput.value.trim();
+      if (q) pushRecent(q);
+      window.location.href = q ? `/tim-kiem/?q=${encodeURIComponent(q)}` : '/tim-kiem/';
+    };
+
+    const prodHtml = (e: SearchEntry) => {
+      const media = e.img
+        ? `<img src="${esc(e.img)}" alt="" loading="lazy" />`
+        : `<span class="ssp-ph"></span>`;
+      const price = e.priceText ? `<span class="ssp-price">${esc(e.priceText)}</span>` : '';
+      return `<a class="shop-search-result ssp" href="${esc(e.url)}">
+        <span class="ssp-thumb">${media}</span>
+        <span class="ssp-txt"><b>${esc(e.title)}</b><span>${esc(e.cat)}</span></span>${price}</a>`;
+    };
+    // excerpt của Pagefind chứa <mark> (build-time, an toàn) → giữ để tô đậm.
+    const contHtml = (d: any) =>
+      `<a class="shop-search-result" href="${esc(d.url)}"><b>${esc(d.meta?.title || d.url)}</b><span>${d.excerpt || ''}</span></a>`;
+
+    const renderEmpty = () => {
+      const rec = getRecent();
+      let html = '';
+      if (rec.length) {
+        html += `<div class="shop-search-group"><p class="shop-search-gh">Tìm gần đây</p><div class="shop-search-chips">`
+          + rec.map((q) => `<button type="button" class="shop-search-chip" data-q="${esc(q)}">↺ ${esc(q)}</button>`).join('')
+          + `</div></div>`;
+      }
+      html += `<div class="shop-search-group"><p class="shop-search-gh">Gợi ý</p><div class="shop-search-chips">`
+        + SUGGEST.map((q) => `<button type="button" class="shop-search-chip" data-q="${esc(q)}">${esc(q)}</button>`).join('')
+        + `</div></div>`;
+      show(html);
+    };
+
+    const buildResults = (prods: SearchEntry[], conts: any[], q: string): string | null => {
+      if (!prods.length && !conts.length) return null;
+      let html = '';
+      if (prods.length) html += `<div class="shop-search-group"><p class="shop-search-gh">Sản phẩm</p>` + prods.map(prodHtml).join('') + `</div>`;
+      if (conts.length) html += `<div class="shop-search-group"><p class="shop-search-gh">Bài viết &amp; trang</p>` + conts.map(contHtml).join('') + `</div>`;
+      html += `<a class="shop-search-all" href="/tim-kiem/?q=${encodeURIComponent(q)}">Xem tất cả kết quả cho “${esc(q)}” →</a>`;
+      return html;
+    };
+
+    let timer: number | undefined;
+    const renderQuery = (q: string) => {
+      const prods = filterProducts(INDEX, { q }).slice(0, PRODUCT_CAP);
+      // Sản phẩm hiện NGAY (không chờ Pagefind); nội dung bồi thêm khi sẵn sàng.
+      const first = buildResults(prods, [], q);
+      show(first ?? `<p class="shop-search-state">Đang tìm…</p>`);
+      loadPf().then(async (m) => {
+        let conts: any[] = [];
+        if (m) {
+          const s = await m.search(q);
+          if (sInput.value.trim() !== q) return; // query đổi khi đang chờ
+          conts = await Promise.all(s.results.slice(0, CONTENT_CAP).map((x: any) => x.data()));
+        }
+        if (sInput.value.trim() !== q) return;
+        const full = buildResults(prods, conts, q);
+        show(full ?? `<p class="shop-search-state">Không thấy kết quả cho “${esc(q)}”. <a href="/tim-kiem/?q=${encodeURIComponent(q)}">Tìm rộng hơn</a>.</p>`);
+      });
+    };
+
     const openSearch = () => {
       searchWrap.classList.add('open');
       sToggle.setAttribute('aria-expanded', 'true');
       sInput.tabIndex = 0;
       loadPf();
+      if (!sInput.value.trim()) renderEmpty(); else renderQuery(sInput.value.trim());
       requestAnimationFrame(() => sInput.focus());
     };
     const closeSearch = () => {
@@ -238,38 +317,31 @@ const linkAttrs = (l: NavLink) => ({
       } else openSearch();
     });
 
-    const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const setState = (html: string) => {
-      sResults.innerHTML = `<p class="shop-search-state">${html}</p>`;
-      sPanel.hidden = false;
-    };
-
-    let timer: number | undefined;
     sInput.addEventListener('input', () => {
       const q = sInput.value.trim();
       window.clearTimeout(timer);
-      if (!q) { sPanel.hidden = true; sResults.innerHTML = ''; return; }
-      setState('Đang tìm…');
-      timer = window.setTimeout(async () => {
-        const m = await loadPf();
-        if (!m) { setState('Tìm kiếm chưa sẵn sàng — <a href="/tim-kiem/">mở trang tìm kiếm</a>.'); return; }
-        const search = await m.search(q);
-        if (sInput.value.trim() !== q) return; // query đã đổi trong lúc chờ
-        const top = await Promise.all(search.results.slice(0, 6).map((x: any) => x.data()));
-        if (!top.length) { setState('Không tìm thấy kết quả phù hợp.'); return; }
-        // excerpt của Pagefind chứa <mark> (build-time, an toàn) → giữ để tô đậm từ khoá.
-        sResults.innerHTML = top.map((d: any) =>
-          `<a class="shop-search-result" href="${esc(d.url)}"><b>${esc(d.meta?.title || d.url)}</b><span>${d.excerpt || ''}</span></a>`,
-        ).join('');
-        sPanel.hidden = false;
-      }, 200);
+      if (!q) { renderEmpty(); return; }
+      timer = window.setTimeout(() => renderQuery(q), 160);
     });
 
     sInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') { closeSearch(); sToggle.focus(); }
-      else if (e.key === 'Enter') {
-        const first = sResults.querySelector<HTMLAnchorElement>('a.shop-search-result');
-        if (first) { e.preventDefault(); window.location.href = first.href; }
+      else if (e.key === 'Enter') { e.preventDefault(); goSearch(); }
+    });
+
+    // Chip gợi ý / lịch sử → đổ vào input & tìm ngay.
+    sResults.addEventListener('click', (e) => {
+      const chip = (e.target as HTMLElement).closest('.shop-search-chip') as HTMLElement | null;
+      if (chip) { sInput.value = chip.dataset.q ?? ''; sInput.focus(); renderQuery(sInput.value.trim()); return; }
+      const link = (e.target as HTMLElement).closest('a[href]');
+      if (link) pushRecent(sInput.value); // lưu lịch sử khi chọn 1 kết quả
+    });
+
+    // Cmd/Ctrl+K → mở search toàn site.
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        if (searchWrap.classList.contains('open')) sInput.focus(); else openSearch();
       }
     });
 

@@ -33,7 +33,7 @@ navPages('studio').forEach((p) => {
   links.push({ label: p.title, href, isCurrent: pathname === href || pathname.startsWith(href) });
 });
 ---
-<nav class="wotu-nav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 16px var(--pad-x); display: flex; justify-content: space-between; align-items: center; color: var(--ink);">
+<nav data-pagefind-ignore class="wotu-nav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 16px var(--pad-x); display: flex; justify-content: space-between; align-items: center; color: var(--ink);">
   <a href={homeAnchor} class="wotu-nav-logo" aria-label="WOTU, về trang chủ">
     <img src="/logo.svg" alt="WOTU" width="118" height="48" />
   </a>

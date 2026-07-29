@@ -96,7 +96,7 @@ const studioThemeCss = `html[data-theme]{--earth:${studioEarth};--accent:${studi
   </head>
   <body>
     <a href="#main" class="skip-to-main">Bỏ qua điều hướng, đến nội dung chính</a>
-    <main id="main"><slot /></main>
+    <main id="main" data-pagefind-body><slot /></main>
 
     <script>
       import { initReveal } from '../lib/reveal';

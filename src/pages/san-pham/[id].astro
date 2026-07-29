@@ -95,7 +95,7 @@ const breadcrumbSchema = {
   ],
 };
 ---
-<ShopLayout title={`${fullName} · WOTU`} description={desc}>
+<ShopLayout title={`${fullName} · WOTU`} description={desc} noSearchIndex>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(productSchema)} />
     <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />

@@ -249,6 +249,40 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
 .shop-search-state { margin: 0; padding: 18px 16px; font-size: 13px; color: var(--shop-ink-soft); text-align: center; }
 .shop-search-state a { color: var(--shop-accent-deep); border-bottom: 1px solid currentColor; }
 
+/* Blend groups + product rows + chips (empty-state) trong panel Nav search. */
+.shop-search-gh {
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--shop-ink-soft); font-weight: 700; margin: 0; padding: 10px 16px 4px;
+}
+.shop-search-result.ssp { flex-direction: row; align-items: center; gap: 12px; }
+.ssp-thumb {
+  width: 46px; height: 46px; border-radius: 8px; overflow: hidden;
+  flex-shrink: 0; background: var(--shop-bg-soft);
+}
+.ssp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ssp-ph {
+  display: block; width: 100%; height: 100%;
+  background:
+    repeating-linear-gradient(135deg, color-mix(in oklab, var(--shop-accent) 16%, transparent) 0 2px, transparent 2px 9px),
+    linear-gradient(135deg, var(--shop-warm-soft), var(--shop-bg-soft));
+}
+.ssp-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.ssp-txt b { font: 600 14px/1.3 var(--shop-sans); color: var(--shop-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ssp-txt span { font-size: 12px; color: var(--shop-ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ssp-price { font-weight: 700; font-size: 13px; color: var(--shop-accent-deep); white-space: nowrap; flex-shrink: 0; }
+.shop-search-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 16px 12px; }
+.shop-search-chip {
+  padding: 6px 12px; border: 1px solid var(--shop-line); border-radius: 999px;
+  font-size: 13px; color: var(--shop-ink); background: var(--shop-bg-card); cursor: pointer;
+  transition: border-color .16s ease, color .16s ease;
+}
+.shop-search-chip:hover { border-color: var(--shop-accent); color: var(--shop-accent-deep); }
+.shop-search-all {
+  display: block; padding: 12px 16px; font-size: 13px; font-weight: 600;
+  color: var(--shop-accent-deep); border-top: 1px solid var(--shop-line);
+}
+.shop-search-all:hover { background: var(--shop-warm-soft); }
+
 /* Mobile: panel neo theo viewport (không theo ô search — bên phải còn cart/hamburger
    nên right:0 sẽ đẩy panel tràn mép trái, cắt chữ). Fixed, lề 12px 2 bên, dưới nav. */
 @media (max-width: 640px) {
@@ -621,4 +655,120 @@ html.wotu-shop-drawer-open { overflow: hidden; }
   @view-transition { navigation: auto; }
   ::view-transition-old(root),
   ::view-transition-new(root) { animation-duration: 180ms; }
+}
+
+/* ============================================================
+   TRANG TÌM KIẾM /tim-kiem/ (.ts-*) — unified: product index + Pagefind.
+   ============================================================ */
+.shop .ts-search-box {
+  position: relative; display: flex; align-items: center; max-width: 640px;
+}
+.shop .ts-search-ico {
+  position: absolute; left: 18px; color: var(--shop-ink-soft); pointer-events: none;
+}
+.shop .ts-input {
+  width: 100%; height: 54px; padding: 0 18px 0 46px;
+  border: 1px solid var(--shop-line); border-radius: 999px;
+  background: var(--shop-bg-card); color: var(--shop-ink);
+  font: 400 16px/1 var(--shop-sans);
+  box-shadow: 0 6px 22px -14px rgba(20, 16, 12, .28);
+}
+.shop .ts-input::placeholder { color: var(--shop-ink-soft); }
+.shop .ts-input:focus-visible {
+  outline: none !important; border-color: var(--shop-accent); border-radius: 999px;
+}
+
+.shop .ts-layout { display: grid; grid-template-columns: 232px 1fr; gap: 44px; align-items: start; }
+
+.shop .ts-filters { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 22px; }
+.shop .ts-fgroup { display: flex; flex-direction: column; gap: 10px; }
+.shop .ts-flabel {
+  font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--shop-ink-soft); font-weight: 700; margin: 0;
+}
+.shop .ts-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.shop .ts-chip {
+  padding: 7px 13px; border: 1px solid var(--shop-line); border-radius: 999px;
+  font-size: 13px; font-weight: 500; color: var(--shop-ink);
+  background: var(--shop-bg-card); cursor: pointer;
+  transition: background .16s ease, color .16s ease, border-color .16s ease;
+}
+.shop .ts-chip:hover { border-color: var(--shop-accent); color: var(--shop-accent-deep); }
+.shop .ts-chip[aria-pressed="true"] {
+  background: var(--shop-ink); color: var(--shop-bg); border-color: var(--shop-ink);
+}
+.shop .ts-stock { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; cursor: pointer; }
+.shop .ts-stock input { width: 17px; height: 17px; accent-color: var(--shop-accent-deep); }
+.shop .ts-clear {
+  align-self: flex-start; font-size: 13px; color: var(--shop-accent-deep);
+  border-bottom: 1px solid currentColor; padding: 2px 0; cursor: pointer; background: none;
+}
+
+.shop .ts-count { font-size: 14px; color: var(--shop-ink-soft); margin: 0 0 24px; }
+.shop .ts-section { margin-bottom: 48px; }
+.shop .ts-shead {
+  font-family: var(--shop-serif); font-weight: 400; font-size: 26px;
+  margin: 0 0 20px; display: flex; align-items: baseline; gap: 10px;
+}
+.shop .ts-badge {
+  font-family: var(--shop-sans); font-size: 12px; font-weight: 600;
+  color: var(--shop-ink-soft); background: var(--shop-warm-soft);
+  padding: 2px 9px; border-radius: 999px;
+}
+.shop .ts-empty { color: var(--shop-ink-soft); font-size: 15px; padding: 8px 0; }
+.shop .ts-link { color: var(--shop-accent-deep); border-bottom: 1px solid currentColor; cursor: pointer; background: none; font-size: inherit; }
+
+.shop .ts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 24px; }
+.shop .ts-card { display: flex; flex-direction: column; }
+.shop .ts-card-media {
+  position: relative; aspect-ratio: 4 / 3; overflow: hidden;
+  border-radius: 14px; background: var(--shop-bg-soft);
+}
+.shop .ts-card-media .shop-illo { transition: transform .5s cubic-bezier(.22,.61,.36,1); }
+.shop .ts-card:hover .ts-card-media .shop-illo { transform: scale(1.05); }
+.shop .ts-card-type {
+  position: absolute; top: 10px; left: 10px; z-index: 3;
+  font-size: 11px; font-weight: 700; letter-spacing: .04em;
+  background: var(--shop-ink); color: var(--shop-bg); padding: 4px 9px; border-radius: 999px;
+}
+.shop .ts-card-body { padding: 12px 2px 0; }
+.shop .ts-card-cat { font-size: 12px; color: var(--shop-ink-soft); margin: 0 0 3px; }
+.shop .ts-card-title {
+  font-family: var(--shop-serif); font-weight: 400; font-size: 19px; line-height: 1.15;
+  margin: 0 0 8px; color: var(--shop-ink);
+}
+.shop .ts-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.shop .ts-card-price { font-weight: 700; font-size: 15px; color: var(--shop-accent-deep); }
+.shop .ts-card-rating { font-size: 13px; color: var(--shop-ink-soft); white-space: nowrap; }
+
+.shop .ts-content-list { display: flex; flex-direction: column; gap: 4px; }
+.shop .ts-content-item {
+  display: flex; gap: 16px; padding: 14px; border-radius: 14px;
+  transition: background .16s ease;
+}
+.shop .ts-content-item:hover { background: var(--shop-warm-soft); }
+.shop .ts-content-thumb {
+  width: 96px; height: 72px; object-fit: cover; border-radius: 10px; flex-shrink: 0;
+}
+.shop .ts-content-txt { min-width: 0; }
+.shop .ts-content-type {
+  font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--shop-accent-deep); font-weight: 700;
+}
+.shop .ts-content-txt h3 {
+  font-family: var(--shop-serif); font-weight: 400; font-size: 20px; line-height: 1.2;
+  margin: 3px 0 4px; color: var(--shop-ink);
+}
+.shop .ts-content-txt p {
+  font-size: 13px; color: var(--shop-ink-soft); line-height: 1.5; margin: 0;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.shop .ts-content-txt mark { background: var(--shop-warm-soft); color: var(--shop-accent-deep); padding: 0 2px; border-radius: 2px; }
+
+@media (max-width: 860px) {
+  .shop .ts-layout { grid-template-columns: 1fr; gap: 28px; }
+  .shop .ts-filters { position: static; }
+}
+@media (max-width: 560px) {
+  .shop .ts-content-thumb { width: 68px; height: 56px; }
 }

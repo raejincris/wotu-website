@@ -10,7 +10,7 @@ import Footer from '../../components/shop/Footer.astro';
 import { catalogJson } from '../../lib/shop-catalog';
 const catalogJsonStr = catalogJson();
 ---
-<ShopLayout title="Yêu thích · WOTU" description="Sản phẩm và combo bạn đã đánh dấu yêu thích. Lưu trong trình duyệt, không cần đăng nhập.">
+<ShopLayout title="Yêu thích · WOTU" description="Sản phẩm và combo bạn đã đánh dấu yêu thích. Lưu trong trình duyệt, không cần đăng nhập." noSearchIndex>
   <Nav />
 
   <div class="container crumb">
