@@ -1,37 +1,37 @@
 ---
-name: "Nhà anh Phúc"
-id: "018"
-loc: "Phú Tài, Quy Nhơn · 2026"
-cat: "Nhà ở"
+name: Nhà anh Phúc
+id: '018'
+loc: Phú Tài, Quy Nhơn · 2026
+cat: Nhà ở
 year: 2026
 tone: deep
-ratio: "4/3"
+ratio: 4/3
 order: 0
-excerpt: "Full nội thất nhà phố Phú Tài theo tông trắng đen bóng: ốp tường kịch trần, trần gương, hệ bếp và cầu thang ốp đá vân vàng. Thi công 1 tháng, chi phí khoảng 380 triệu."
-photo: "/uploads/projects/nha-anh-phuc-phu-tai-phong-khach-tong-the.webp"
-photoDetail: "/uploads/projects/nha-anh-phuc-phu-tai-cau-thang-da-den.webp"
-photoAlt: "Nhà phố Phú Tài Quy Nhơn, phòng khách tông trắng đen với sofa da đen và hệ ốp tường chạy suốt"
+excerpt: 'Full nội thất nhà phố Phú Tài theo tông trắng đen bóng: ốp tường kịch trần, trần gương, hệ bếp và cầu thang ốp đá vân vàng. Thi công 1 tháng, chi phí khoảng 380 triệu.'
+photo: /uploads/projects/1784726634655_869340148064578887_g9059100407906284783_31c9c7c549a940a60c9fe3b3f8d7ea96.jpg
+photoDetail: /uploads/projects/nha-anh-phuc-phu-tai-cau-thang-da-den.webp
+photoAlt: Nhà phố Phú Tài Quy Nhơn, phòng khách tông trắng đen với sofa da đen và hệ ốp tường chạy suốt
 gallery:
-  - src: "/uploads/projects/nha-anh-phuc-phu-tai-phong-khach-tong-the.webp"
-    alt: "Toàn cảnh phòng khách nhà phố Phú Tài, sofa da đen dài và hệ tủ trắng chạy dọc thân nhà"
-  - src: "/uploads/projects/nha-anh-phuc-phu-tai-sofa-op-tuong.webp"
-    alt: "Sofa da đen đặt trước mảng ốp tường trắng rãnh dọc kịch trần"
-  - src: "/uploads/projects/nha-anh-phuc-phu-tai-ke-tv-vom-den.webp"
-    alt: "Kệ TV treo tường với hệ hốc vòm đèn hắt vàng bên cạnh"
-  - src: "/uploads/projects/nha-anh-phuc-phu-tai-tran-guong.webp"
-    alt: "Trần gương đen phản chiếu hệ đèn LED âm trần chạy dọc lối đi"
-  - src: "/uploads/projects/nha-anh-phuc-phu-tai-bep-trang-da-den.webp"
-    alt: "Bếp tủ trắng bóng kịch trần với đá ốp tường màu đen vân vàng"
-  - src: "/uploads/projects/nha-anh-phuc-phu-tai-bep-ban-an.webp"
-    alt: "Khu bếp nối liền bàn ăn mặt đá trắng và ghế bọc nỉ xám"
-  - src: "/uploads/projects/nha-anh-phuc-phu-tai-chi-tiet-da-bep.webp"
-    alt: "Chi tiết chậu rửa âm bàn trên mặt đá đen vân vàng, vòi rửa đen mờ"
-  - src: "/uploads/projects/nha-anh-phuc-phu-tai-cau-thang-da-den.webp"
-    alt: "Cầu thang ốp đá đen vân vàng với đèn hắt từng bậc và lan can kính"
-  - src: "/uploads/projects/nha-anh-phuc-phu-tai-phong-ngu-master.webp"
-    alt: "Phòng ngủ master, đầu giường bọc da, mảng gương đen và gương vòm có đèn viền"
-  - src: "/uploads/projects/nha-anh-phuc-phu-tai-phong-ngu-tu-ao.webp"
-    alt: "Phòng ngủ phụ với tủ áo trắng kịch trần và bàn làm việc gắn tường"
+  - src: /uploads/projects/nha-anh-phuc-phu-tai-phong-khach-tong-the.webp
+    alt: Toàn cảnh phòng khách nhà phố Phú Tài, sofa da đen dài và hệ tủ trắng chạy dọc thân nhà
+  - src: /uploads/projects/nha-anh-phuc-phu-tai-sofa-op-tuong.webp
+    alt: Sofa da đen đặt trước mảng ốp tường trắng rãnh dọc kịch trần
+  - src: /uploads/projects/nha-anh-phuc-phu-tai-ke-tv-vom-den.webp
+    alt: Kệ TV treo tường với hệ hốc vòm đèn hắt vàng bên cạnh
+  - src: /uploads/projects/nha-anh-phuc-phu-tai-tran-guong.webp
+    alt: Trần gương đen phản chiếu hệ đèn LED âm trần chạy dọc lối đi
+  - src: /uploads/projects/nha-anh-phuc-phu-tai-bep-trang-da-den.webp
+    alt: Bếp tủ trắng bóng kịch trần với đá ốp tường màu đen vân vàng
+  - src: /uploads/projects/nha-anh-phuc-phu-tai-bep-ban-an.webp
+    alt: Khu bếp nối liền bàn ăn mặt đá trắng và ghế bọc nỉ xám
+  - src: /uploads/projects/nha-anh-phuc-phu-tai-chi-tiet-da-bep.webp
+    alt: Chi tiết chậu rửa âm bàn trên mặt đá đen vân vàng, vòi rửa đen mờ
+  - src: /uploads/projects/nha-anh-phuc-phu-tai-cau-thang-da-den.webp
+    alt: Cầu thang ốp đá đen vân vàng với đèn hắt từng bậc và lan can kính
+  - src: /uploads/projects/nha-anh-phuc-phu-tai-phong-ngu-master.webp
+    alt: Phòng ngủ master, đầu giường bọc da, mảng gương đen và gương vòm có đèn viền
+  - src: /uploads/projects/nha-anh-phuc-phu-tai-phong-ngu-tu-ao.webp
+    alt: Phòng ngủ phụ với tủ áo trắng kịch trần và bàn làm việc gắn tường
 ---
 
 Nhà phố ở Phú Tài có một đặc điểm ai làm nội thất cũng biết: sâu và hẹp. Ánh sáng chỉ vào được từ hai đầu, còn khúc giữa thì tối. Cách nhiều nhà xử lý là bật đèn cho sáng lên. Ở căn này, anh Phúc muốn đi xa hơn thế.
