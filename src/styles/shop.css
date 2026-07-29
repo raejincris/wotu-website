@@ -183,6 +183,67 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
   .shop-nav-more[open] .shop-nav-more-menu { animation: none; }
 }
 
+/* ===== Inline search — thanh input trượt ra bên trái nút search ===== */
+.shop-search { position: relative; display: flex; align-items: center; }
+/* Input neo mép phải (bên trái nút), width 0 → mở rộng sang TRÁI; absolute nên
+   không đẩy cart/CTA. Nền đặc để phủ sạch phần nav phía sau khi mở. */
+.shop-search-input {
+  position: absolute; right: 46px; top: 50%; transform: translateY(-50%);
+  width: 0; max-width: 72vw; height: 40px; padding: 0;
+  border: 1px solid var(--shop-line); border-radius: 999px;
+  background: var(--shop-bg-card); color: var(--shop-ink);
+  font: 400 14px/1 var(--shop-sans); opacity: 0; pointer-events: none;
+  transition: width .34s cubic-bezier(.32,.72,0,1), opacity .2s ease, padding .34s cubic-bezier(.32,.72,0,1);
+}
+.shop-search-input::placeholder { color: var(--shop-ink-soft); }
+.shop-search.open .shop-search-input {
+  width: 280px; padding: 0 18px; opacity: 1; pointer-events: auto;
+}
+.shop-search.open .shop-search-toggle { background: var(--shop-warm-soft); }
+
+.shop-search-panel {
+  position: absolute; top: calc(100% + 12px); right: 0; z-index: 60;
+  width: min(380px, 86vw);
+  background: var(--shop-bg-card); border: 1px solid var(--shop-line);
+  border-radius: 14px; box-shadow: 0 18px 40px -18px rgba(20, 16, 12, .28);
+  overflow: hidden; animation: shopMenuIn .18s ease;
+}
+.shop-search-results { max-height: min(60vh, 440px); overflow-y: auto; }
+.shop-search-result {
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 12px 16px; border-bottom: 1px solid var(--shop-line);
+}
+.shop-search-result:last-child { border-bottom: 0; }
+.shop-search-result:hover,
+.shop-search-result:focus-visible { background: var(--shop-warm-soft); outline: none; }
+.shop-search-result b { font: 600 14px/1.3 var(--shop-sans); color: var(--shop-ink); }
+.shop-search-result span {
+  font-size: 12px; color: var(--shop-ink-soft); line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.shop-search-result mark { background: var(--shop-warm-soft); color: var(--shop-accent-deep); padding: 0 1px; border-radius: 2px; }
+.shop-search-state { margin: 0; padding: 18px 16px; font-size: 13px; color: var(--shop-ink-soft); text-align: center; }
+.shop-search-state a { color: var(--shop-accent-deep); border-bottom: 1px solid currentColor; }
+
+/* Mobile: panel neo theo viewport (không theo ô search — bên phải còn cart/hamburger
+   nên right:0 sẽ đẩy panel tràn mép trái, cắt chữ). Fixed, lề 12px 2 bên, dưới nav. */
+@media (max-width: 640px) {
+  .shop-search-panel {
+    position: fixed; top: 64px; left: 12px; right: 12px; width: auto;
+  }
+  /* Width bám viewport để mép trái ô luôn ~12px (right:46px neo theo mép phải ô
+     search, mà bên phải còn cart+hamburger ~126px). Trước width 280px cố định →
+     tràn trái ~62px, placeholder bị cắt. */
+  .shop-search.open .shop-search-input {
+    width: calc(100vw - 184px); max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shop-search-input { transition: opacity .15s ease; }
+  .shop-search-panel { animation: none; }
+}
+
 /* ---- Hamburger + drawer mobile (shop trước đây KHÔNG có menu mobile) ---- */
 .shop-nav-toggle { display: none; } /* hiện ≤1100px (block RESPONSIVE) */
 

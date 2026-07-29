@@ -59,9 +59,19 @@ const linkAttrs = (l: NavLink) => ({
       </details>
     </div>
     <div class="shop-nav-cta">
-      <a class="shop-icon-btn" href="/tim-kiem/" aria-label="Tìm kiếm sản phẩm">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      </a>
+      {/* Search: click → thanh input trượt ra bên trái, tìm ngay tại chỗ (Pagefind).
+          Toggle vẫn là <a href="/tim-kiem/"> → no-JS về trang tìm kiếm; JS chặn để mở inline. */}
+      <div class="shop-search" data-shop-search>
+        <input class="shop-search-input" type="search" placeholder="Tìm sofa, combo, bàn ăn…"
+               aria-label="Tìm kiếm sản phẩm" autocomplete="off" enterkeyhint="search" tabindex="-1" />
+        <a class="shop-icon-btn shop-search-toggle" href="/tim-kiem/" aria-label="Tìm kiếm sản phẩm"
+           aria-expanded="false" aria-controls="shop-search-panel">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </a>
+        <div class="shop-search-panel" id="shop-search-panel" hidden>
+          <div class="shop-search-results"></div>
+        </div>
+      </div>
       <button class="shop-icon-btn" id="wotu-cart-btn" aria-label="Mở giỏ hàng" type="button" style="position: relative;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         <span class="shop-badge-dot" id="wotu-cart-badge" hidden>0</span>
@@ -182,4 +192,89 @@ const linkAttrs = (l: NavLink) => ({
       else if (!drawer.contains(act)) { e.preventDefault(); first.focus(); }
     }
   });
+
+  // ===== Inline search — click nút → thanh input trượt ra, tìm ngay (Pagefind) =====
+  const searchWrap = document.querySelector<HTMLElement>('[data-shop-search]');
+  if (searchWrap) {
+    const sToggle = searchWrap.querySelector<HTMLAnchorElement>('.shop-search-toggle')!;
+    const sInput = searchWrap.querySelector<HTMLInputElement>('.shop-search-input')!;
+    const sPanel = searchWrap.querySelector<HTMLElement>('.shop-search-panel')!;
+    const sResults = searchWrap.querySelector<HTMLElement>('.shop-search-results')!;
+
+    // Pagefind (WASM + worker) chỉ có ở bản build (dist), không có khi `npm run dev`.
+    // Nạp LƯỜI lần đầu mở search; dev / lỗi → fallback link trang tìm kiếm.
+    let pf: any = null;
+    let pfLoading: Promise<any> | null = null;
+    const loadPf = () => {
+      if (pf) return Promise.resolve(pf);
+      if (!pfLoading) {
+        const src = '/pagefind/pagefind.js';
+        pfLoading = import(/* @vite-ignore */ src)
+          .then(async (m: any) => { await m.init?.(); pf = m; return m; })
+          .catch(() => null);
+      }
+      return pfLoading;
+    };
+
+    const openSearch = () => {
+      searchWrap.classList.add('open');
+      sToggle.setAttribute('aria-expanded', 'true');
+      sInput.tabIndex = 0;
+      loadPf();
+      requestAnimationFrame(() => sInput.focus());
+    };
+    const closeSearch = () => {
+      searchWrap.classList.remove('open');
+      sToggle.setAttribute('aria-expanded', 'false');
+      sInput.tabIndex = -1;
+      sPanel.hidden = true;
+    };
+
+    sToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (searchWrap.classList.contains('open')) {
+        if (sInput.value.trim()) sInput.focus();
+        else closeSearch();
+      } else openSearch();
+    });
+
+    const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const setState = (html: string) => {
+      sResults.innerHTML = `<p class="shop-search-state">${html}</p>`;
+      sPanel.hidden = false;
+    };
+
+    let timer: number | undefined;
+    sInput.addEventListener('input', () => {
+      const q = sInput.value.trim();
+      window.clearTimeout(timer);
+      if (!q) { sPanel.hidden = true; sResults.innerHTML = ''; return; }
+      setState('Đang tìm…');
+      timer = window.setTimeout(async () => {
+        const m = await loadPf();
+        if (!m) { setState('Tìm kiếm chưa sẵn sàng — <a href="/tim-kiem/">mở trang tìm kiếm</a>.'); return; }
+        const search = await m.search(q);
+        if (sInput.value.trim() !== q) return; // query đã đổi trong lúc chờ
+        const top = await Promise.all(search.results.slice(0, 6).map((x: any) => x.data()));
+        if (!top.length) { setState('Không tìm thấy kết quả phù hợp.'); return; }
+        // excerpt của Pagefind chứa <mark> (build-time, an toàn) → giữ để tô đậm từ khoá.
+        sResults.innerHTML = top.map((d: any) =>
+          `<a class="shop-search-result" href="${esc(d.url)}"><b>${esc(d.meta?.title || d.url)}</b><span>${d.excerpt || ''}</span></a>`,
+        ).join('');
+        sPanel.hidden = false;
+      }, 200);
+    });
+
+    sInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeSearch(); sToggle.focus(); }
+      else if (e.key === 'Enter') {
+        const first = sResults.querySelector<HTMLAnchorElement>('a.shop-search-result');
+        if (first) { e.preventDefault(); window.location.href = first.href; }
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (searchWrap.classList.contains('open') && !searchWrap.contains(e.target as Node)) closeSearch();
+    });
+  }
 </script>

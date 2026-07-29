@@ -143,6 +143,26 @@ test.describe('2 · Shop homepage — smoke', () => {
     expect(overflow).toBeLessThanOrEqual(1);
   });
 
+  test('Nav search inline: mở thanh → gõ "sofa" → ra kết quả Pagefind; Esc đóng', async ({ page }) => {
+    await page.goto('/');
+    const wrap = page.locator('[data-shop-search]');
+    const input = wrap.locator('.shop-search-input');
+    const panel = wrap.locator('.shop-search-panel');
+    // Mở: click nút search → KHÔNG điều hướng sang /tim-kiem/, thanh input hiện.
+    await wrap.locator('.shop-search-toggle').click();
+    await expect(page).toHaveURL(/\/$/); // vẫn ở trang chủ
+    await expect(wrap).toHaveClass(/open/);
+    await expect(input).toBeVisible();
+    // Gõ query → panel kết quả có link tới sản phẩm (Pagefind chạy ở bản build).
+    await input.fill('sofa');
+    await expect(panel).toBeVisible({ timeout: 6000 });
+    await expect(panel.locator('a.shop-search-result').first()).toBeVisible({ timeout: 6000 });
+    // Esc → đóng.
+    await input.press('Escape');
+    await expect(wrap).not.toHaveClass(/open/);
+    await expect(panel).toBeHidden();
+  });
+
   test('combo grid hiển thị đủ 6 cards', async ({ page }) => {
     await page.goto('/');
     // combo-card count in the combo-grid
