@@ -206,8 +206,11 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
   opacity: 1; pointer-events: auto;
   clip-path: inset(0 0 0 0 round 999px);
 }
-/* Focus: viền accent + quầng mềm thay vòng outline cứng (đúng tông, gọn hơn). */
-.shop-search-input:focus-visible {
+/* Focus: viền accent + quầng mềm thay vòng outline cứng (đúng tông, gọn hơn).
+   `.shop ` prefix → specificity (0,3,0) thắng rule focus chung ở dưới (.shop
+   :where(...):focus-visible = (0,2,0), đứng SAU nên nếu bằng điểm sẽ thắng và
+   vẽ outline accent 2px "viền đỏ"). Quầng box-shadow đủ làm chỉ báo focus (a11y). */
+.shop .shop-search-input:focus-visible {
   outline: none !important;
   border-color: var(--shop-accent);
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--shop-accent) 20%, transparent), 0 6px 22px -12px rgba(20, 16, 12, .28);
