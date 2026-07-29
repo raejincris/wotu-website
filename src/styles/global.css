@@ -19,6 +19,7 @@
   --ink:      #2B231C;
   --cocoa:    #1A1410;
   --accent:   #AC7344;  /* Darkened from #B8835A — đạt 3:1 large-text trên bone (axe 12/06). */
+  --accent-deep: #94543D;  /* = --shop-accent-deep. Đạt 4.5:1 trên bone → dùng cho TEXT chức năng (nav active). Đồng bộ màu active với Shop. */
   --line:      rgba(43, 35, 28, 0.12);
   --line-soft: rgba(43, 35, 28, 0.06);
 

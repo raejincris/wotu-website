@@ -95,18 +95,18 @@ navPages('studio').forEach((p) => {
     display: block;
   }
 
-  /* Link nav: Inter chữ thường như Shop (.shop-nav-links). Hover → accent;
-     trang hiện tại gạch chân accent (accent #AC7344 đạt 3:1 cho gạch/UI, nên
-     GIỮ chữ màu ink để text đạt 4.5:1 — không tô accent lên chữ 14px). */
+  /* Link nav: Inter chữ thường như Shop (.shop-nav-links). Hover + trang hiện
+     tại ĐỔI MÀU (như Shop) thay vì gạch chân. Active dùng --accent-deep #94543D
+     (≈5:1 trên bone, = màu active của Shop) → chữ 14px đạt 4.5:1. --shop-accent-deep
+     KHÔNG khả dụng ở trang Studio (chỉ có trong shop.css) nên dùng token global. */
   .wotu-nav-links a {
     padding: 8px 0;
     color: var(--ink);
-    border-bottom: 1.5px solid transparent;
-    transition: color 0.2s ease, border-color 0.2s ease;
+    transition: color 0.2s ease;
   }
   .wotu-nav-links a:hover,
   .wotu-nav-links a:focus-visible { color: var(--accent); }
-  .wotu-nav-links a[aria-current="page"] { border-bottom-color: var(--accent); }
+  .wotu-nav-links a[aria-current="page"] { color: var(--accent-deep); }
 
   /* Hamburger button — only visible on mobile */
   .wotu-nav-toggle {
