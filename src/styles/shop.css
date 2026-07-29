@@ -207,14 +207,15 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
   opacity: 1; pointer-events: auto;
   clip-path: inset(0 0 0 0 round 999px);
 }
-/* Focus: viền MỰC trung tính (KHÔNG accent đỏ — user không muốn viền đỏ), rõ để
-   a11y. `.shop ` prefix → specificity (0,3,0) thắng rule focus chung ở dưới (.shop
-   :where(...):focus-visible = (0,2,0), đứng SAU nên nếu bằng điểm sẽ vẽ outline
-   accent 2px). LƯU Ý: clip-path khi mở CẮT box-shadow/outline ngoài border-box →
-   chỉ viền 1px hiện; nên dùng border-color làm chỉ báo focus, không dựa vào ring. */
+/* Focus: viền mảnh ĐẬM NHẸ (--shop-ink-soft nâu-xám mềm — KHÔNG đen đậm, KHÔNG
+   accent đỏ), sạch mắt mà vẫn rõ cho a11y (nghỉ = --shop-line kem nhạt → focus đậm
+   nhẹ = đổi rõ). `.shop ` prefix → specificity (0,3,0) thắng rule focus chung ở dưới
+   (.shop :where(...):focus-visible = (0,2,0), đứng SAU nên bằng điểm sẽ vẽ outline
+   accent 2px). LƯU Ý: clip-path khi mở CẮT box-shadow/outline ngoài border-box → chỉ
+   viền 1px hiện; nên dùng border-color làm chỉ báo focus, không dựa vào ring. */
 .shop .shop-search-input:focus-visible {
   outline: none !important;
-  border-color: var(--shop-ink);
+  border-color: var(--shop-ink-soft);
   box-shadow: 0 6px 22px -12px rgba(20, 16, 12, .28);
 }
 .shop-search-toggle { transition: background .22s ease, color .22s ease; }
