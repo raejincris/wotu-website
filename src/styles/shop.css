@@ -190,7 +190,8 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
    mượt, chữ không xô. Absolute nên không đẩy cart/CTA. Shadow mềm cho thanh nổi
    (đồng bộ với panel kết quả + dropdown). */
 .shop-search-input {
-  position: absolute; right: 46px; top: 50%; transform: translateY(-50%);
+  /* right: nút search rộng 40px → chừa gap để ô KHÔNG dính vào icon (46→54 = gap ~14px). */
+  position: absolute; right: 54px; top: 50%; transform: translateY(-50%);
   width: 288px; max-width: 72vw; height: 42px; padding: 0 18px;
   border: 1px solid var(--shop-line); border-radius: 999px;
   background: var(--shop-bg-card); color: var(--shop-ink);
@@ -206,14 +207,15 @@ body.shop button { font-family: inherit; cursor: pointer; border: 0; background:
   opacity: 1; pointer-events: auto;
   clip-path: inset(0 0 0 0 round 999px);
 }
-/* Focus: viền accent + quầng mềm thay vòng outline cứng (đúng tông, gọn hơn).
-   `.shop ` prefix → specificity (0,3,0) thắng rule focus chung ở dưới (.shop
-   :where(...):focus-visible = (0,2,0), đứng SAU nên nếu bằng điểm sẽ thắng và
-   vẽ outline accent 2px "viền đỏ"). Quầng box-shadow đủ làm chỉ báo focus (a11y). */
+/* Focus: viền MỰC trung tính (KHÔNG accent đỏ — user không muốn viền đỏ), rõ để
+   a11y. `.shop ` prefix → specificity (0,3,0) thắng rule focus chung ở dưới (.shop
+   :where(...):focus-visible = (0,2,0), đứng SAU nên nếu bằng điểm sẽ vẽ outline
+   accent 2px). LƯU Ý: clip-path khi mở CẮT box-shadow/outline ngoài border-box →
+   chỉ viền 1px hiện; nên dùng border-color làm chỉ báo focus, không dựa vào ring. */
 .shop .shop-search-input:focus-visible {
   outline: none !important;
-  border-color: var(--shop-accent);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--shop-accent) 20%, transparent), 0 6px 22px -12px rgba(20, 16, 12, .28);
+  border-color: var(--shop-ink);
+  box-shadow: 0 6px 22px -12px rgba(20, 16, 12, .28);
 }
 .shop-search-toggle { transition: background .22s ease, color .22s ease; }
 .shop-search.open .shop-search-toggle { background: var(--shop-warm-soft); color: var(--shop-accent-deep); }
