@@ -9,7 +9,7 @@ ratio: 4/3
 order: 0
 excerpt: 'Full nội thất nhà phố Phú Tài theo tông trắng đen bóng: ốp tường kịch trần, trần gương, hệ bếp và cầu thang ốp đá vân vàng. Thi công 1 tháng, chi phí khoảng 380 triệu.'
 photo: /uploads/projects/1784726634655_869340148064578887_g9059100407906284783_31c9c7c549a940a60c9fe3b3f8d7ea96.jpg
-photoDetail: /uploads/projects/nha-anh-phuc-phu-tai-cau-thang-da-den.webp
+photoDetail: /uploads/projects/1784726634460_869340148064578887_g9059100407906284783_bfc12a72bf6863d7a459659cb0319685.jpg
 photoAlt: Nhà phố Phú Tài Quy Nhơn, phòng khách tông trắng đen với sofa da đen và hệ ốp tường chạy suốt
 gallery:
   - src: /uploads/projects/nha-anh-phuc-phu-tai-phong-khach-tong-the.webp
