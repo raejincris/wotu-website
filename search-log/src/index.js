@@ -66,15 +66,18 @@ export default {
       const limit = Math.max(1, Math.min(20, parseInt(searchParams.get('limit'), 10) || 8));
       const days = Math.max(1, Math.min(365, parseInt(searchParams.get('days'), 10) || 90));
       const zero = searchParams.get('zero') === '1';
+      // min: ngưỡng số lần lặp để lộ ra (chống đầu độc gợi ý). Mặc định 1 (giữ
+      // insight 0-kết-quả đầy đủ cho chủ site); client trending gọi ?min=3.
+      const min = Math.max(1, Math.min(1000, parseInt(searchParams.get('min'), 10) || 1));
       const since = Date.now() - days * 86400_000;
       const cond = zero ? 'n = 0' : 'n > 0';
       try {
         const { results } = await env.DB.prepare(
           `SELECT q, COUNT(*) AS c FROM searches
            WHERE ts > ? AND ${cond}
-           GROUP BY LOWER(q) ORDER BY c DESC, MAX(ts) DESC LIMIT ?`,
+           GROUP BY LOWER(q) HAVING COUNT(*) >= ? ORDER BY c DESC, MAX(ts) DESC LIMIT ?`,
         )
-          .bind(since, limit)
+          .bind(since, min, limit)
           .all();
         return json(results ?? [], 200, cors);
       } catch {

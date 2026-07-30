@@ -6,6 +6,7 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   # font/style/connect: CHỈ để Sveltia CMS (/admin/cms/) tải icon Material Symbols +
   # font. Sveltia ≤0.173 dùng Google (googleapis+gstatic); ≥0.174 chuyển Fontsource
   # (cdn.jsdelivr.net). Cho phép CẢ HAI → nâng/hạ version Sveltia không phải sửa CSP.
