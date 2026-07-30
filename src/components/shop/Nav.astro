@@ -102,7 +102,7 @@ const linkAttrs = (l: NavLink) => ({
 
 <script>
   import { getCartCount, onChange } from '../../lib/shop-store';
-  import { loadIndex, filterProducts, highlightMatch, type SearchEntry } from '../../lib/search/client';
+  import { loadIndex, filterProducts, highlightMatch, logSearch, loadTop, type SearchEntry } from '../../lib/search/client';
 
   const btn = document.getElementById('wotu-cart-btn');
   const badge = document.getElementById('wotu-cart-badge');
@@ -218,6 +218,9 @@ const linkAttrs = (l: NavLink) => ({
     // Product index (fetch 1 lần, cache ở module client). Pagefind cho nội dung.
     let INDEX: SearchEntry[] = [];
     loadIndex().then((idx) => { INDEX = idx; });
+    // #9 Trending: top từ khoá thật (worker log). Chưa có → fallback SUGGEST.
+    let TOP: string[] = [];
+    loadTop().then((t) => { TOP = t; });
     // Pagefind (WASM+worker) chỉ có ở bản build; dev/lỗi → bỏ qua nhóm nội dung.
     let pf: any = null, pfLoading: Promise<any> | null = null;
     const loadPf = () => {
@@ -244,7 +247,7 @@ const linkAttrs = (l: NavLink) => ({
     };
     const goSearch = () => {
       const q = sInput.value.trim();
-      if (q) pushRecent(q);
+      if (q) { pushRecent(q); logSearch(q, filterProducts(INDEX, { q }).length); }
       window.location.href = q ? `/tim-kiem/?q=${encodeURIComponent(q)}` : '/tim-kiem/';
     };
 
@@ -270,8 +273,11 @@ const linkAttrs = (l: NavLink) => ({
           + rec.map((q) => `<button type="button" class="shop-search-chip" data-q="${esc(q)}">↺ ${esc(q)}</button>`).join('')
           + `</div></div>`;
       }
-      html += `<div class="shop-search-group"><p class="shop-search-gh">Gợi ý</p><div class="shop-search-chips">`
-        + SUGGEST.map((q) => `<button type="button" class="shop-search-chip" data-q="${esc(q)}">${esc(q)}</button>`).join('')
+      // Gợi ý = top từ khoá thật (nếu worker log đã có ≥3) ; ngược lại danh sách cứng.
+      const suggest = TOP.length >= 3 ? TOP : SUGGEST;
+      const gh = TOP.length >= 3 ? 'Phổ biến' : 'Gợi ý';
+      html += `<div class="shop-search-group"><p class="shop-search-gh">${gh}</p><div class="shop-search-chips">`
+        + suggest.map((q) => `<button type="button" class="shop-search-chip" data-q="${esc(q)}">${esc(q)}</button>`).join('')
         + `</div></div>`;
       show(html);
     };

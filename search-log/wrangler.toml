@@ -1,0 +1,14 @@
+name = "wotu-search-log"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+# D1: lưu log truy vấn tìm kiếm (chỉ query + số kết quả + timestamp — KHÔNG PII,
+# KHÔNG IP, KHÔNG cookie). Tạo DB rồi dán database_id vào đây (xem README).
+[[d1_databases]]
+binding = "DB"
+database_name = "wotu-search-log"
+database_id = "SET_AFTER_D1_CREATE"
+
+[vars]
+# Chỉ nhận POST /log từ các origin này (chống spam chéo domain).
+ALLOWED_ORIGINS = "https://www.wotu.vn,https://wotu.vn,https://wotu-website.raejin-cris.workers.dev"

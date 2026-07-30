@@ -128,7 +128,7 @@ const prices = [
 </style>
 
 <script>
-  import { loadIndex, filterProducts, highlightMatch, type SearchEntry, type ProductFilters, type SortKey } from '../lib/search/client';
+  import { loadIndex, filterProducts, highlightMatch, logSearch, type SearchEntry, type ProductFilters, type SortKey } from '../lib/search/client';
 
   const esc = (s: string) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const typeLabel: Record<string, string> = { product: '', combo: 'Combo', room: 'Phòng mẫu' };
@@ -265,18 +265,29 @@ const prices = [
 
     // ---- Cập nhật tổng ----
     let timer: number | undefined;
+    let lastTotal = 0;
     const render = () => {
       const np = renderProducts();
       renderContent(state.q).then((nc) => {
         if (nc < 0) return;
         const q = state.q.trim();
+        lastTotal = np + Math.max(nc, 0);
         countEl.textContent = q
-          ? `${np + Math.max(nc, 0)} kết quả cho “${q}”`
+          ? `${lastTotal} kết quả cho “${q}”`
           : `${np} sản phẩm`;
       });
       writeUrl();
     };
     const debouncedRender = () => { window.clearTimeout(timer); timer = window.setTimeout(render, 160); };
+
+    // #8 Log truy vấn khi "settle" (1.2s sau lần gõ cuối) — kèm tổng kết quả.
+    let logTimer: number | undefined;
+    const scheduleLog = () => {
+      window.clearTimeout(logTimer);
+      const q = state.q.trim();
+      if (q.length < 2) return;
+      logTimer = window.setTimeout(() => logSearch(q, lastTotal), 1200);
+    };
 
     // ---- Mobile filter sheet (#7) ----
     const aside = document.getElementById('ts-filters')!;
@@ -289,7 +300,7 @@ const prices = [
     document.getElementById('ts-filter-close')?.addEventListener('click', closeFilters);
 
     // ---- Wire events ----
-    input.addEventListener('input', () => { state.q = input.value; debouncedRender(); });
+    input.addEventListener('input', () => { state.q = input.value; debouncedRender(); scheduleLog(); });
     stockEl.addEventListener('change', () => { state.stock = stockEl.checked; render(); });
     sortEl.addEventListener('change', () => { state.sort = sortEl.value as SortKey; render(); });
     document.querySelectorAll<HTMLElement>('.ts-chips').forEach((grp) => {
