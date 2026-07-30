@@ -102,7 +102,7 @@ const linkAttrs = (l: NavLink) => ({
 
 <script>
   import { getCartCount, onChange } from '../../lib/shop-store';
-  import { loadIndex, filterProducts, type SearchEntry } from '../../lib/search/client';
+  import { loadIndex, filterProducts, highlightMatch, type SearchEntry } from '../../lib/search/client';
 
   const btn = document.getElementById('wotu-cart-btn');
   const badge = document.getElementById('wotu-cart-badge');
@@ -232,21 +232,31 @@ const linkAttrs = (l: NavLink) => ({
     };
 
     const esc = (s: string) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    const show = (html: string) => { sResults.innerHTML = html; sPanel.hidden = false; };
+    let activeIdx = -1; // #2 keyboard nav: chỉ số kết quả đang chọn (-1 = không)
+    const show = (html: string) => { sResults.innerHTML = html; sPanel.hidden = false; activeIdx = -1; };
+    const resultLinks = () => Array.from(sResults.querySelectorAll<HTMLAnchorElement>('a.shop-search-result'));
+    const setActive = (idx: number) => {
+      const links = resultLinks();
+      if (!links.length) return;
+      activeIdx = Math.max(-1, Math.min(idx, links.length - 1));
+      links.forEach((a, i) => a.classList.toggle('is-active', i === activeIdx));
+      if (activeIdx >= 0) links[activeIdx].scrollIntoView({ block: 'nearest' });
+    };
     const goSearch = () => {
       const q = sInput.value.trim();
       if (q) pushRecent(q);
       window.location.href = q ? `/tim-kiem/?q=${encodeURIComponent(q)}` : '/tim-kiem/';
     };
 
-    const prodHtml = (e: SearchEntry) => {
+    const prodHtml = (e: SearchEntry, q: string) => {
       const media = e.img
         ? `<img src="${esc(e.img)}" alt="" loading="lazy" />`
         : `<span class="ssp-ph"></span>`;
       const price = e.priceText ? `<span class="ssp-price">${esc(e.priceText)}</span>` : '';
+      // Tên SP tô đậm từ khoá (không dấu-aware); cat để thường.
       return `<a class="shop-search-result ssp" href="${esc(e.url)}">
         <span class="ssp-thumb">${media}</span>
-        <span class="ssp-txt"><b>${esc(e.title)}</b><span>${esc(e.cat)}</span></span>${price}</a>`;
+        <span class="ssp-txt"><b>${highlightMatch(e.title, q)}</b><span>${esc(e.cat)}</span></span>${price}</a>`;
     };
     // excerpt của Pagefind chứa <mark> (build-time, an toàn) → giữ để tô đậm.
     const contHtml = (d: any) =>
@@ -269,7 +279,7 @@ const linkAttrs = (l: NavLink) => ({
     const buildResults = (prods: SearchEntry[], conts: any[], q: string): string | null => {
       if (!prods.length && !conts.length) return null;
       let html = '';
-      if (prods.length) html += `<div class="shop-search-group"><p class="shop-search-gh">Sản phẩm</p>` + prods.map(prodHtml).join('') + `</div>`;
+      if (prods.length) html += `<div class="shop-search-group"><p class="shop-search-gh">Sản phẩm</p>` + prods.map((e) => prodHtml(e, q)).join('') + `</div>`;
       if (conts.length) html += `<div class="shop-search-group"><p class="shop-search-gh">Bài viết &amp; trang</p>` + conts.map(contHtml).join('') + `</div>`;
       html += `<a class="shop-search-all" href="/tim-kiem/?q=${encodeURIComponent(q)}">Xem tất cả kết quả cho “${esc(q)}” →</a>`;
       return html;
@@ -326,7 +336,14 @@ const linkAttrs = (l: NavLink) => ({
 
     sInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') { closeSearch(); sToggle.focus(); }
-      else if (e.key === 'Enter') { e.preventDefault(); goSearch(); }
+      else if (e.key === 'ArrowDown') { e.preventDefault(); setActive(activeIdx + 1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(activeIdx - 1); }
+      else if (e.key === 'Enter') {
+        e.preventDefault();
+        const links = resultLinks();
+        if (activeIdx >= 0 && links[activeIdx]) window.location.href = links[activeIdx].href;
+        else goSearch();
+      }
     });
 
     // Chip gợi ý / lịch sử → đổ vào input & tìm ngay.

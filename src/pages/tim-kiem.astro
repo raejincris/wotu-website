@@ -43,12 +43,16 @@ const prices = [
     </div>
 
     <div class="ts-layout">
-      <aside class="ts-filters" aria-label="Bộ lọc">
+      <aside class="ts-filters" id="ts-filters" aria-label="Bộ lọc">
+        <div class="ts-filters-head">
+          <span>Bộ lọc</span>
+          <button type="button" class="ts-filter-close" id="ts-filter-close" aria-label="Đóng bộ lọc">×</button>
+        </div>
         <div class="ts-fgroup">
           <h2 class="ts-flabel">Danh mục</h2>
           <div class="ts-chips" data-group="cat">
             {cats.map((c) => (
-              <button type="button" class="ts-chip" data-val={c.val} aria-pressed={c.val === '' ? 'true' : 'false'}>{c.label}</button>
+              <button type="button" class="ts-chip" data-val={c.val} aria-pressed={c.val === '' ? 'true' : 'false'}>{c.label}<span class="ts-chip-n"></span></button>
             ))}
           </div>
         </div>
@@ -56,7 +60,7 @@ const prices = [
           <h2 class="ts-flabel">Khoảng giá</h2>
           <div class="ts-chips" data-group="price">
             {prices.map((c) => (
-              <button type="button" class="ts-chip" data-val={c.val} aria-pressed={c.val === '' ? 'true' : 'false'}>{c.label}</button>
+              <button type="button" class="ts-chip" data-val={c.val} aria-pressed={c.val === '' ? 'true' : 'false'}>{c.label}<span class="ts-chip-n"></span></button>
             ))}
           </div>
         </div>
@@ -64,7 +68,7 @@ const prices = [
           <h2 class="ts-flabel">Phòng</h2>
           <div class="ts-chips" data-group="room">
             {rooms.map((c) => (
-              <button type="button" class="ts-chip" data-val={c.val} aria-pressed={c.val === '' ? 'true' : 'false'}>{c.label}</button>
+              <button type="button" class="ts-chip" data-val={c.val} aria-pressed={c.val === '' ? 'true' : 'false'}>{c.label}<span class="ts-chip-n"></span></button>
             ))}
           </div>
         </div>
@@ -78,7 +82,21 @@ const prices = [
       </aside>
 
       <div class="ts-results">
-        <p class="ts-count" id="ts-count" aria-live="polite"></p>
+        <div class="ts-toolbar">
+          <button type="button" class="ts-filter-toggle" id="ts-filter-toggle" aria-expanded="false" aria-controls="ts-filters">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg> Lọc
+          </button>
+          <p class="ts-count" id="ts-count" aria-live="polite"></p>
+          <label class="ts-sort">
+            <span>Sắp xếp</span>
+            <select id="ts-sort">
+              <option value="relevance">Liên quan</option>
+              <option value="price-asc">Giá thấp → cao</option>
+              <option value="price-desc">Giá cao → thấp</option>
+              <option value="rating">Đánh giá cao</option>
+            </select>
+          </label>
+        </div>
 
         <section class="ts-section" id="ts-products-sec">
           <h2 class="ts-shead">Sản phẩm &amp; Combo <span id="ts-pcount" class="ts-badge"></span></h2>
@@ -94,6 +112,7 @@ const prices = [
         <noscript><p class="ts-empty">Tìm kiếm cần JavaScript. Anh/chị bật JS hoặc xem <a href="/san-pham/">tất cả sản phẩm</a>.</p></noscript>
       </div>
     </div>
+    <div class="ts-filter-overlay" id="ts-filter-overlay" hidden></div>
   </div>
 
   <Footer />
@@ -109,7 +128,7 @@ const prices = [
 </style>
 
 <script>
-  import { loadIndex, filterProducts, type SearchEntry, type ProductFilters } from '../lib/search/client';
+  import { loadIndex, filterProducts, highlightMatch, type SearchEntry, type ProductFilters, type SortKey } from '../lib/search/client';
 
   const esc = (s: string) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const typeLabel: Record<string, string> = { product: '', combo: 'Combo', room: 'Phòng mẫu' };
@@ -124,8 +143,9 @@ const prices = [
     const cSec = document.getElementById('ts-content-sec')!;
     const cCount = document.getElementById('ts-ccount')!;
     const countEl = document.getElementById('ts-count')!;
+    const sortEl = document.getElementById('ts-sort') as HTMLSelectElement;
 
-    const state: ProductFilters = { q: '', cat: '', price: '', room: '', stock: false };
+    const state: ProductFilters = { q: '', cat: '', price: '', room: '', stock: false, sort: 'relevance' };
 
     // ---- URL <-> state ----
     const readUrl = () => {
@@ -135,8 +155,10 @@ const prices = [
       state.price = p.get('gia') ?? '';
       state.room = p.get('phong') ?? '';
       state.stock = p.get('con') === '1';
+      state.sort = (p.get('sap') as SortKey) || 'relevance';
       input.value = state.q;
       stockEl.checked = !!state.stock;
+      sortEl.value = state.sort;
       syncChips();
     };
     const writeUrl = () => {
@@ -146,6 +168,7 @@ const prices = [
       if (state.price) p.set('gia', state.price);
       if (state.room) p.set('phong', state.room);
       if (state.stock) p.set('con', '1');
+      if (state.sort && state.sort !== 'relevance') p.set('sap', state.sort);
       const qs = p.toString();
       history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
     };
@@ -160,8 +183,8 @@ const prices = [
       });
     };
 
-    // ---- Render sản phẩm ----
-    const cardHtml = (e: SearchEntry) => {
+    // ---- Render sản phẩm (tên tô đậm từ khoá, không dấu-aware) ----
+    const cardHtml = (e: SearchEntry, q: string) => {
       const media = e.img
         ? `<img class="shop-illo" src="${esc(e.img)}" alt="${esc(e.title)}" loading="lazy" />`
         : `<div class="shop-ph"><span class="shop-ph-label">${esc(e.cat || e.title)}</span></div>`;
@@ -172,17 +195,34 @@ const prices = [
         <div class="ts-card-media reveal-img is-visible">${media}${badge}</div>
         <div class="ts-card-body">
           <p class="ts-card-cat">${esc(e.cat)}</p>
-          <h3 class="ts-card-title">${esc(e.title)}</h3>
+          <h3 class="ts-card-title">${highlightMatch(e.title, q)}</h3>
           <div class="ts-card-foot"><span class="ts-card-price">${esc(e.priceText)}</span>${rating}</div>
         </div></a>`;
     };
 
     let INDEX: SearchEntry[] = [];
+
+    // #5 Facet counts: mỗi chip hiện số SP nếu chọn nó (giữ các bộ lọc KHÁC + query).
+    const updateFacets = () => {
+      document.querySelectorAll<HTMLElement>('.ts-chips').forEach((grp) => {
+        const key = grp.dataset.group as 'cat' | 'price' | 'room';
+        grp.querySelectorAll<HTMLButtonElement>('.ts-chip').forEach((b) => {
+          const val = b.dataset.val ?? '';
+          const override = key === 'price' ? { price: val } : key === 'room' ? { room: val } : { cat: val };
+          const n = filterProducts(INDEX, { ...state, ...override, sort: undefined }).length;
+          const nEl = b.querySelector<HTMLElement>('.ts-chip-n');
+          if (nEl) nEl.textContent = n ? String(n) : '';
+          b.toggleAttribute('data-empty', n === 0);
+        });
+      });
+    };
+
     const renderProducts = () => {
       const list = filterProducts(INDEX, state);
-      pWrap.innerHTML = list.map(cardHtml).join('');
+      pWrap.innerHTML = list.map((e) => cardHtml(e, state.q ?? '')).join('');
       pCount.textContent = String(list.length);
       pEmpty.hidden = list.length > 0;
+      updateFacets();
       return list.length;
     };
 
@@ -238,9 +278,20 @@ const prices = [
     };
     const debouncedRender = () => { window.clearTimeout(timer); timer = window.setTimeout(render, 160); };
 
+    // ---- Mobile filter sheet (#7) ----
+    const aside = document.getElementById('ts-filters')!;
+    const overlay = document.getElementById('ts-filter-overlay') as HTMLElement;
+    const fToggle = document.getElementById('ts-filter-toggle')!;
+    const openFilters = () => { aside.classList.add('is-open'); overlay.hidden = false; fToggle.setAttribute('aria-expanded', 'true'); };
+    const closeFilters = () => { aside.classList.remove('is-open'); overlay.hidden = true; fToggle.setAttribute('aria-expanded', 'false'); };
+    fToggle.addEventListener('click', openFilters);
+    overlay.addEventListener('click', closeFilters);
+    document.getElementById('ts-filter-close')?.addEventListener('click', closeFilters);
+
     // ---- Wire events ----
     input.addEventListener('input', () => { state.q = input.value; debouncedRender(); });
     stockEl.addEventListener('change', () => { state.stock = stockEl.checked; render(); });
+    sortEl.addEventListener('change', () => { state.sort = sortEl.value as SortKey; render(); });
     document.querySelectorAll<HTMLElement>('.ts-chips').forEach((grp) => {
       grp.addEventListener('click', (ev) => {
         const btn = (ev.target as HTMLElement).closest('.ts-chip') as HTMLButtonElement | null;

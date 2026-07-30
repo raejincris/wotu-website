@@ -1403,6 +1403,9 @@ test.describe('25 · Search nâng cấp — product index + Pagefind', () => {
   test('/tim-kiem/: trống → 28 card; lọc Combo → URL ?cat=combo; còn hàng thu hẹp', async ({ page }) => {
     await page.goto('/tim-kiem/');
     await expect(page.locator('#ts-products .ts-card')).toHaveCount(28, { timeout: 8000 });
+    // Mobile: filter nằm trong bảng trượt → mở nút "Lọc" trước khi chạm chip.
+    const toggle = page.locator('#ts-filter-toggle');
+    if (await toggle.isVisible()) await toggle.click();
     await page.locator('.ts-chips[data-group="cat"] .ts-chip[data-val="combo"]').click();
     await expect(page.locator('#ts-products .ts-card')).toHaveCount(6);
     await expect(page).toHaveURL(/[?&]cat=combo/);
@@ -1433,5 +1436,46 @@ test.describe('25 · Search nâng cấp — product index + Pagefind', () => {
     await expect(prod.first().locator('.ssp-price')).toContainText('đ');
     await wrap.locator('.shop-search-input').press('Enter');
     await page.waitForURL(/\/tim-kiem\/\?q=/, { timeout: 6000 });
+  });
+
+  test('/tim-kiem/: đồng nghĩa "salon"→sofa, fuzzy "sofaa", sort giá tăng, facet count, highlight', async ({ page }) => {
+    await page.goto('/tim-kiem/');
+    await page.waitForFunction(() => document.querySelectorAll('#ts-products .ts-card').length > 0, null, { timeout: 8000 });
+    // #1 đồng nghĩa
+    await page.locator('#ts-input').fill('salon');
+    await expect(page.locator('#ts-products .ts-card-title').first()).toContainText('Sofa', { timeout: 4000 });
+    // #3 fuzzy (thừa 1 ký tự)
+    await page.locator('#ts-input').fill('sofaa');
+    await expect(page.locator('#ts-products .ts-card').first()).toBeVisible({ timeout: 4000 });
+    // #6 highlight
+    await page.locator('#ts-input').fill('sofa may');
+    await expect(page.locator('#ts-products .ts-card-title mark').first()).toBeVisible({ timeout: 4000 });
+    // #5 facet count trên chip
+    await expect(page.locator('.ts-chips[data-group="cat"] .ts-chip .ts-chip-n').first()).toHaveText(/\d/);
+    // #4 sort giá tăng → URL + card đầu rẻ nhất (Ghế Sum Vầy 850k)
+    await page.locator('#ts-input').fill('');
+    await page.locator('#ts-sort').selectOption('price-asc');
+    await expect(page).toHaveURL(/sap=price-asc/);
+    await expect(page.locator('.ts-card-price').first()).toHaveText('850.000đ');
+  });
+
+  test('/tim-kiem/ mobile: nút Lọc mở bảng filter trượt', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'mobile', 'chỉ mobile');
+    await page.goto('/tim-kiem/');
+    await expect(page.locator('#ts-filter-toggle')).toBeVisible();
+    await page.locator('#ts-filter-toggle').click();
+    await expect(page.locator('#ts-filters')).toHaveClass(/is-open/);
+    await page.locator('#ts-filter-close').click();
+    await expect(page.locator('#ts-filters')).not.toHaveClass(/is-open/);
+  });
+
+  test('Nav search: phím ↓ chọn kết quả (is-active)', async ({ page }) => {
+    await page.goto('/');
+    const wrap = page.locator('[data-shop-search]');
+    await page.keyboard.press('Control+k');
+    await wrap.locator('.shop-search-input').fill('ban');
+    await expect(wrap.locator('.shop-search-result').first()).toBeVisible({ timeout: 6000 });
+    await wrap.locator('.shop-search-input').press('ArrowDown');
+    await expect(wrap.locator('.shop-search-result.is-active')).toHaveCount(1);
   });
 });
