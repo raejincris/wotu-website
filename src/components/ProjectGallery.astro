@@ -30,7 +30,7 @@ const full = (s: string) => (isLocal(s) ? s : img(s, 2000, '16/9'));
           <img
             src={thumb(it.src)}
             data-pg-full={full(it.src)}
-            alt={it.alt ?? `${projectName} · ảnh ${i + 1}`}
+            alt={it.alt?.trim() ? it.alt : `${projectName} · ảnh ${i + 1}`}
             loading="lazy"
             decoding="async"
           />

@@ -26,6 +26,29 @@ local_backend: true
 media_folder: 'public/uploads'
 public_folder: '/uploads'
 
+# Tối ưu ảnh NGAY TRONG TRÌNH DUYỆT khi chọn file (Sveltia image optimizer):
+#   JPEG/PNG/HEIC → WebP q85, thu về tối đa 2048px, strip EXIF
+#   SVG          → minify qua SVGO
+# Nhờ vậy anh kéo thẳng ảnh gốc từ điện thoại/máy ảnh vào CMS, không cần nén tay
+# (Custom Admin ở /admin/ đã tự nén từ trước — nay Sveltia CMS ngang hàng).
+# Thứ tự xử lý (verify trong bundle 0.175.1): transform TRƯỚC → mới so max_file_size
+# → ảnh 8MB gốc vẫn qua được vì sau nén chỉ còn ~200-500KB.
+# Chạy bằng OffscreenCanvas trên main thread → KHÔNG cần nới CSP (không spawn
+# blob worker; `img-src blob:` đã có sẵn từ phiên 29/07).
+media_libraries:
+  default:
+    config:
+      max_file_size: 5242880 # 5 MB — tính SAU khi nén
+      slugify_filename: true # "Phòng khách 2.jpg" → "phong-khach-2.jpg" (URL an toàn)
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 2048
+          height: 2048
+        svg:
+          optimize: true
+
 # Branding panel admin
 site_url: https://www.wotu.vn
 display_url: https://www.wotu.vn
@@ -76,9 +99,30 @@ collections:
         label: 'Ảnh bìa (card)'
         widget: image
         required: false
-        hint: 'Upload ảnh dự án. Để trống nếu muốn dùng Unsplash ID phía dưới.'
+        hint: 'Ảnh dọc 4/5 — hiện ở lưới dự án trang /studio/projects/. Để trống → dùng nền gradient placeholder.'
       - { name: photoDetail, label: 'Ảnh hero trang chi tiết', widget: image, required: false, hint: 'Ảnh ngang 16:9 cho trang chi tiết' }
       - { name: photoAlt, label: 'Mô tả ảnh (alt text, SEO)', widget: string, required: false }
+      # Khối "THƯ VIỆN CÔNG TRÌNH" ở cuối trang chi tiết dự án (ProjectGallery.astro
+      # → lưới 3 cột + lightbox). Field này TỪNG THIẾU trong config: gallery có trong
+      # schema + 3 file .md nhưng CMS không khai báo → không sửa được qua CMS, và save
+      # dự án qua CMS có nguy cơ ghi đè mất cả khối. Khai báo ở đây để hết cả hai.
+      - name: gallery
+        label: 'Thư viện ảnh công trình'
+        widget: list
+        required: false
+        label_singular: 'Ảnh'
+        collapsed: true
+        summary: '{{fields.src}}'
+        allow_add: true
+        allow_reorder: true
+        hint: 'Ảnh chụp thực tế công trình. Thứ tự trong danh sách = thứ tự hiển thị (kéo tay cầm để đổi chỗ). Bấm "Ảnh" mở từng dòng để xem/đổi ảnh.'
+        fields:
+          - { name: src, label: 'Ảnh', widget: image }
+          - name: alt
+            label: 'Mô tả ảnh (alt text, SEO)'
+            widget: string
+            required: false
+            hint: 'Nên có — Google Images đọc dòng này. VD: "Phòng khách Indochine với mảng tường mộc lan xanh". Bỏ trống cũng được: site tự dùng "Tên dự án · ảnh 3".'
       - { name: body, label: 'Nội dung dự án', widget: markdown, hint: 'Câu chuyện về dự án, vật liệu, ánh sáng...' }
 
   # ============================================================

@@ -98,6 +98,21 @@ URL admin: **https://www.wotu.vn/admin/**
 2. Cuộn xuống ô ảnh → click ảnh cũ → chọn **Replace** hoặc upload ảnh mới.
 3. Save → Publish.
 
+> Ảnh gốc từ điện thoại/máy ảnh kéo thẳng vào được — CMS **tự nén sang WebP** và thu về tối đa 2048px ngay trên máy anh trước khi commit. Không cần qua tinypng nữa.
+
+### G. Thêm / đổi / sắp xếp ảnh "Thư viện công trình"
+
+Khối lưới ảnh ở **cuối trang chi tiết dự án** (click ảnh → mở lightbox xem to, bấm ‹ › để lật).
+
+1. Click **Dự án** → chọn dự án → cuộn tới **"Thư viện ảnh công trình"**.
+2. **Thêm ảnh**: bấm nút thêm (dấu +) → mở dòng mới → ô **Ảnh** → upload hoặc chọn ảnh có sẵn trong media library.
+3. **Mô tả ảnh (alt text)**: gõ 1 câu tiếng Việt tả ảnh — Google Images đọc dòng này, nên có nếu muốn lên tìm kiếm ảnh. Bỏ trống cũng chạy (site tự dùng "Tên dự án · ảnh 3").
+4. **Đổi thứ tự**: kéo tay cầm của dòng lên/xuống — thứ tự trong danh sách = thứ tự hiển thị trên trang.
+5. **Xoá ảnh**: mở menu của dòng → Remove. (Xoá dòng chỉ bỏ ảnh khỏi dự án, file vẫn còn trong media library.)
+6. Save → Publish → 1-2 phút sau live.
+
+Mỗi dòng khi thu gọn hiện tên file để anh nhận ra ảnh; bấm vào dòng để mở xem ảnh.
+
 ## Quy trình rollback (huỷ bỏ thay đổi vừa publish)
 
 Nếu lỡ publish nhầm, không có nút "undo" trong CMS. Cách rollback:
@@ -111,8 +126,8 @@ Nếu lỡ publish nhầm, không có nút "undo" trong CMS. Cách rollback:
 
 | Item | Rule |
 |---|---|
-| Ảnh upload | < 5 MB / file để giữ repo gọn. Lý tưởng 1-2 MB. JPG hoặc WebP. Có thể nén qua [tinypng.com](https://tinypng.com) trước khi upload. |
-| Số lượng ảnh trong 1 dự án | Hiện tại schema chỉ có 2 ảnh (cover + detail hero). Nếu cần gallery nhiều ảnh, báo dev mở rộng schema. |
+| Ảnh upload | Kéo thẳng ảnh gốc vào được — CMS tự nén WebP q85 + thu về ≤2048px trước khi commit. Giới hạn **5 MB tính SAU khi nén** (ảnh chụp thường sau nén chỉ 200-500KB → không bao giờ chạm). Tên file có dấu/khoảng trắng cũng được, CMS tự đổi thành `phong-khach-2.webp`. |
+| Số lượng ảnh trong 1 dự án | Không giới hạn: ảnh bìa + ảnh hero + **Thư viện công trình** (list ảnh, xem mục G). |
 | Markdown body | Dùng được headings (`## Tiêu đề`), bold (`**chữ đậm**`), italic (`*chữ nghiêng*`), list (`- item`), link (`[text](url)`). Không dùng được embed iframe / video tự ý vì có CSP. |
 | Multi-user | Hiện chỉ user GitHub có quyền push lên repo mới edit được. Muốn thêm người, vào GitHub repo → Settings → Collaborators → Add. |
 | Preview trước publish | CMS hiện tại save = publish luôn. Nếu cần "draft → review" workflow, báo dev bật `publish_mode: editorial_workflow`. |
@@ -125,7 +140,7 @@ Nếu lỡ publish nhầm, không có nút "undo" trong CMS. Cách rollback:
 | Save xong nhưng site không update sau 5 phút | Vào dashboard deploy platform (Cloudflare Pages / Netlify / Vercel) xem build log có lỗi gì. Nếu build fail → revert commit cuối qua GitHub. |
 | Ảnh upload nhưng không hiện trên site | Chờ build xong (1-2 phút). Nếu vẫn không hiện, check tên file (không có dấu / khoảng trắng — Sveltia tự xử lý nhưng ảnh tên cũ thì cần đổi tên). |
 | Lỡ xoá nhầm dự án / bài blog | Vào GitHub commits → revert commit "Delete entry" → entry quay lại. |
-| Form contact / cart không gửi email | Form đã wire Web3Forms (250 submit/m free) → email `hello@wotu.vn`. Check access key trong `site.yml`. Nếu quá quota tháng, đổi sang plan paid hoặc đổi access key mới. |
+| Form contact / cart không gửi email | Form đã wire Web3Forms (250 submit/m free) → email `wotu.decor@gmail.com` (đổi 15/07 qua dashboard Web3Forms). Check access key trong `site.yml`. Nếu quá quota tháng, đổi sang plan paid hoặc đổi access key mới. |
 
 ## Backup
 
