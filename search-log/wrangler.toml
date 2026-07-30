@@ -7,7 +7,7 @@ compatibility_date = "2026-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "wotu-search-log"
-database_id = "SET_AFTER_D1_CREATE"
+database_id = "f40afe44-5d3f-4ed9-acef-4820a59e2d73"
 
 [vars]
 # Chỉ nhận POST /log từ các origin này (chống spam chéo domain).
