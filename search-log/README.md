@@ -19,9 +19,14 @@ npx wrangler d1 create wotu-search-log
 # 2) Tạo bảng (chạy schema lên D1 remote)
 npx wrangler d1 execute wotu-search-log --remote --file=./schema.sql
 
-# 3) Deploy worker
-npx wrangler deploy
+# 3) Deploy worker — BẮT BUỘC -c wrangler.toml
+npx wrangler deploy -c wrangler.toml
 ```
+
+⚠️ **PHẢI có `-c wrangler.toml`**: wrangler đi ngược lên thư mục cha, gặp
+`site/wrangler.jsonc` trước → nếu KHÔNG chỉ định config, `wrangler deploy` sẽ
+deploy nhầm **site (`wotu-website`)** thay vì worker này (giống bẫy `cms-auth`).
+Luôn `cd search-log` + `-c wrangler.toml`.
 
 Sau deploy, worker chạy tại `https://wotu-search-log.raejin-cris.workers.dev`
 (khớp `LOG_ENDPOINT` trong [`src/lib/search/client.ts`](../src/lib/search/client.ts) +
