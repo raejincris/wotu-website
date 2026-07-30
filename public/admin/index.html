@@ -7,8 +7,11 @@
   <title>WOTU Admin</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="stylesheet" href="/admin/style.css" />
-  <!-- js-yaml phải load trước app.js (UMD → window.jsyaml) -->
-  <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <!-- js-yaml phải load trước app.js (UMD → window.jsyaml).
+       SRI khớp @4.1.0; đổi version phải tính lại hash (xem chú thích ở /admin/cms/index.html). -->
+  <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"
+    integrity="sha384-+pxiN6T7yvpryuJmE1gM9PX7yQit15auDb+ZwwvJOd/4be2Cie5/IuVXgQb/S9du"
+    crossorigin="anonymous"></script>
   <script type="module" src="/admin/app.js"></script>
 </head>
 <body>

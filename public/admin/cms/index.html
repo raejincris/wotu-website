@@ -10,6 +10,11 @@
   <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
 </head>
 <body>
-  <script type="module" src="https://unpkg.com/@sveltia/cms@0.175.1/dist/sveltia-cms.js"></script>
+  <!-- SRI: hash khớp ĐÚNG bản @0.175.1. Khi nâng version (xem commands-infra.md)
+       PHẢI tính lại: curl -sSL <url> | openssl dgst -sha384 -binary | openssl base64 -A
+       Sai hash → browser CHẶN script → admin trắng. crossorigin bắt buộc cho SRI cross-origin. -->
+  <script type="module" src="https://unpkg.com/@sveltia/cms@0.175.1/dist/sveltia-cms.js"
+    integrity="sha384-b6o5APwsjm1LTXxPrq5Mas+fKyiR0Ywwpojq8pP4iDdw0dqrcCH55dUIcqBgYloL"
+    crossorigin="anonymous"></script>
 </body>
 </html>
