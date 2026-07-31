@@ -1479,3 +1479,167 @@ test.describe('25 · Search nâng cấp — product index + Pagefind', () => {
     await expect(wrap.locator('.shop-search-result.is-active')).toHaveCount(1);
   });
 });
+
+// ---------------------------------------------------------------------------
+// 26 · Admin: chốt chặn nháp cũ đè bản mới trên web (31/07)
+//
+// Case thật 30/07: nháp trong localStorage (bản trước trust audit 13/07) được
+// bấm "Đăng" → ghi đè shop-home.yml đang chạy, quay ngược bảo hành 2→5 năm,
+// 6→24 combo, xoá khối reviewsSummary. publishDrafts dựng tree từ HEAD rồi ghi
+// đè, KHÔNG so sánh gì → nay checkDraftConflicts() chặn trước.
+//
+// Chạy thẳng module admin trong trang (same-origin, CSP 'self' cho phép),
+// window.fetch stub nên không đụng GitHub API thật.
+// ---------------------------------------------------------------------------
+test.describe('26 · Admin — chốt chặn nháp cũ đè bản mới', () => {
+  const KEY = 'wotu-admin-drafts-v1';
+
+  /** Cài stub GitHub API: contents/<path> → sha đang có trên repo (thiếu = 404). */
+  async function stubGithub(page: import('@playwright/test').Page, shas: Record<string, string>) {
+    await page.goto('/admin/');
+    await page.evaluate((shaByPath) => {
+      window.fetch = (async (url: RequestInfo | URL) => {
+        const u = String(url);
+        const m = u.match(/contents\/([^?]+)/);
+        if (m) {
+          const sha = shaByPath[decodeURIComponent(m[1])];
+          if (!sha) return new Response('{}', { status: 404 });
+          return new Response(JSON.stringify({ sha, content: btoa('a: 1') }), { status: 200 });
+        }
+        if (u.includes('/commits')) {
+          return new Response(JSON.stringify([{
+            sha: 'abcdef1234',
+            commit: { author: { date: '2026-07-30T15:03:00Z' }, message: 'quan-tri: đăng 1 thay đổi — 22:03 30/07' },
+          }]), { status: 200 });
+        }
+        return new Response('{}', { status: 200 });
+      }) as typeof fetch;
+    }, shas);
+  }
+
+  const check = (page: import('@playwright/test').Page, key: string, drafts: Record<string, unknown>) =>
+    page.evaluate(async ({ k, d }) => {
+      localStorage.setItem(k, JSON.stringify(d));
+      const gh = await import('/admin/github.js');
+      return gh.checkDraftConflicts('tok');
+    }, { k: key, d: drafts });
+
+  test('nháp khớp sha hiện tại → đăng thẳng, không cảnh báo', async ({ page }) => {
+    await stubGithub(page, { 'src/data/shop-home.yml': 'SHA_A' });
+    const conflicts = await check(page, KEY, {
+      'src/data/shop-home.yml': { type: 'text', content: 'x: 1', baseSha: 'SHA_A', savedAt: Date.now() },
+    });
+    expect(conflicts).toEqual([]);
+  });
+
+  test('file trên web đã đổi sau khi lưu nháp → báo "changed" kèm commit cuối', async ({ page }) => {
+    await stubGithub(page, { 'src/data/shop-home.yml': 'SHA_MOI' });
+    const conflicts = await check(page, KEY, {
+      'src/data/shop-home.yml': { type: 'text', content: 'x: 1', baseSha: 'SHA_CU', savedAt: 1753900000000 },
+    });
+    expect(conflicts).toHaveLength(1);
+    expect(conflicts[0].path).toBe('src/data/shop-home.yml');
+    expect(conflicts[0].reason).toBe('changed');
+    expect(conflicts[0].lastCommit.message).toContain('quan-tri');
+  });
+
+  test('nháp cũ không có mốc baseSha → báo "unknown" (đúng case 30/07)', async ({ page }) => {
+    await stubGithub(page, { 'src/data/shop-home.yml': 'SHA_MOI' });
+    const conflicts = await check(page, KEY, {
+      'src/data/shop-home.yml': { type: 'text', content: 'x: 1' }, // shape nháp CŨ
+    });
+    expect(conflicts).toHaveLength(1);
+    expect(conflicts[0].reason).toBe('unknown');
+  });
+
+  test('file chưa có trên repo (tạo mới) → không cảnh báo', async ({ page }) => {
+    await stubGithub(page, {});
+    const conflicts = await check(page, KEY, {
+      'src/data/pages/trang-moi.yml': { type: 'text', content: 'x: 1', baseSha: null, savedAt: Date.now() },
+    });
+    expect(conflicts).toEqual([]);
+  });
+
+  test('getFile → putFile ghi mốc baseSha vào nháp; lưu lần 2 giữ nguyên mốc', async ({ page }) => {
+    await stubGithub(page, { 'src/data/site.yml': 'SHA_LUC_MO' });
+    const draft = await page.evaluate(async (k) => {
+      localStorage.removeItem(k);
+      const gh = await import('/admin/github.js');
+      await gh.getFile('tok', 'src/data/site.yml');         // editor mở file
+      await gh.putFile('tok', 'src/data/site.yml', 'y: 2'); // lưu nháp
+      await gh.putFile('tok', 'src/data/site.yml', 'y: 3'); // lưu tiếp, KHÔNG đọc lại
+      return JSON.parse(localStorage.getItem(k)!)['src/data/site.yml'];
+    }, KEY);
+
+    expect(draft.baseSha).toBe('SHA_LUC_MO');
+    expect(draft.content).toBe('y: 3');
+    expect(draft.savedAt).toBeGreaterThan(0);
+  });
+});
+
+// Dialog cảnh báo (UI thật): nạp session giả + nháp lệch → bấm "Đăng lên web".
+test.describe('26b · Admin — dialog cảnh báo khi Đăng', () => {
+  async function bootAdmin(page: import('@playwright/test').Page, sha: string) {
+    await page.addInitScript(({ s }) => {
+      sessionStorage.setItem('wotu_admin_session', JSON.stringify({
+        token: 'tok', login: 'tester', avatar_url: '', expires_at: Date.now() + 3600e3,
+      }));
+      localStorage.setItem('wotu-admin-drafts-v1', JSON.stringify({
+        'src/data/shop-home.yml': { type: 'text', content: 'x: 1', baseSha: 'SHA_CU', savedAt: 1753900000000 },
+      }));
+      const realFetch = window.fetch;
+      window.fetch = (async (url: RequestInfo | URL, init?: RequestInit) => {
+        const u = String(url);
+        if (!u.includes('api.github.com')) return realFetch(url, init);
+        if (u.includes('contents/')) {
+          return new Response(JSON.stringify({ sha: s, content: btoa('a: 1') }), { status: 200 });
+        }
+        if (u.includes('/commits')) {
+          return new Response(JSON.stringify([{
+            sha: 'abcdef1234',
+            commit: { author: { date: '2026-07-30T15:03:00Z' }, message: 'quan-tri: đăng 1 thay đổi — 22:03 30/07' },
+          }]), { status: 200 });
+        }
+        return new Response('[]', { status: 200 });
+      }) as typeof fetch;
+    }, { s: sha });
+    await page.goto('/admin/');
+    // Chặn confirm() "Đăng N thay đổi?" trước dialog xung đột.
+    page.on('dialog', (d) => d.accept());
+  }
+
+  test('nháp lệch → hiện dialog, "Huỷ" KHÔNG commit gì', async ({ page }) => {
+    await bootAdmin(page, 'SHA_MOI');
+    const publish = page.locator('#btn-publish');
+    await expect(publish).toBeVisible();
+    await publish.click();
+
+    const dlg = page.locator('dialog.conflict-dialog');
+    await expect(dlg).toBeVisible();
+    await expect(dlg).toContainText('Trang chủ Shop');
+    await expect(dlg).toContainText('quan-tri: đăng 1 thay đổi');
+
+    await dlg.locator('[data-act="cancel"]').click();
+    await expect(dlg).toHaveCount(0);
+    // Nháp còn nguyên → nút Đăng vẫn hiện.
+    await expect(publish).toBeVisible();
+    expect(await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('wotu-admin-drafts-v1') || '{}')).length)).toBe(1);
+  });
+
+  test('"Bỏ nháp này" → xoá nháp lệch, không còn gì để đăng', async ({ page }) => {
+    await bootAdmin(page, 'SHA_MOI');
+    await page.locator('#btn-publish').click();
+    const dlg = page.locator('dialog.conflict-dialog');
+    await expect(dlg).toBeVisible();
+    await dlg.locator('[data-act="drop"]').click();
+    await expect(dlg).toHaveCount(0);
+    expect(await page.evaluate(() => localStorage.getItem('wotu-admin-drafts-v1'))).toBe('{}');
+    await expect(page.locator('#btn-publish')).toBeHidden();
+  });
+
+  test('nháp khớp sha → KHÔNG hiện dialog', async ({ page }) => {
+    await bootAdmin(page, 'SHA_CU');
+    await page.locator('#btn-publish').click();
+    await expect(page.locator('dialog.conflict-dialog')).toHaveCount(0);
+  });
+});

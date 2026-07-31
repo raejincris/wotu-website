@@ -22,6 +22,13 @@ function ghHeaders(token) {
   };
 }
 
+/**
+ * sha blob của file trên repo tại lần đọc gần nhất trong phiên này — mốc gắn vào
+ * nháp để lúc Đăng phát hiện file đã bị đổi trên web (xem checkDraftConflicts).
+ * Chỉ ghi khi đọc THẬT từ GitHub; đọc trúng nháp KHÔNG đụng vào cache.
+ */
+const _baseSha = new Map();
+
 /** Decode base64 (GitHub API) → UTF-8 string (hỗ trợ tiếng Việt) */
 function b64Decode(b64) {
   return decodeURIComponent(
@@ -68,6 +75,7 @@ export async function getFile(token, path) {
   );
   if (!res.ok) await ghThrow(res);
   const data = await res.json();
+  _baseSha.set(path, data.sha);
   return {
     yamlString: b64Decode(data.content),
     sha: data.sha,
@@ -79,7 +87,7 @@ export async function getFile(token, path) {
  * @returns {{ commitUrl: string, draft: boolean }}
  */
 export async function putFile(token, path, yamlString, _sha, _message) {
-  setTextDraft(path, yamlString);
+  setTextDraft(path, yamlString, _baseSha.get(path) ?? null);
   return { commitUrl: '', draft: true };
 }
 
@@ -89,7 +97,7 @@ export async function putFile(token, path, yamlString, _sha, _message) {
  * @returns {{ commitUrl: string, draft: boolean }}
  */
 export async function putFiles(token, files, _message) {
-  files.forEach((f) => setTextDraft(f.path, f.content));
+  files.forEach((f) => setTextDraft(f.path, f.content, _baseSha.get(f.path) ?? null));
   return { commitUrl: '', draft: true };
 }
 
@@ -146,7 +154,49 @@ async function _commitItems(token, items, message) {
 }
 
 /**
+ * Đối chiếu nháp đang chờ với bản HIỆN TẠI trên repo, TRƯỚC khi đăng.
+ *
+ * Vì sao cần: `publishDrafts` dựng tree từ HEAD rồi ghi đè nội dung nháp lên —
+ * KHÔNG có bước so sánh nào. Nháp nằm trong localStorage nhiều ngày (hoặc ở máy
+ * khác) vẫn đăng được và **âm thầm quay ngược** mọi thay đổi xảy ra sau đó.
+ * Case thật 30/07/2026: nháp cũ đè `shop-home.yml` về bản trước trust audit
+ * 13/07 (bảo hành 5 năm, 24 combo, xoá cả khối reviewsSummary).
+ *
+ * @returns {Promise<{path, reason, savedAt, lastCommit}[]>} — rỗng = an toàn.
+ *   reason: 'changed'  file trên web đã đổi sau khi nháp được tạo
+ *           'unknown'  nháp không có mốc baseSha (tạo trước bản vá này / máy khác)
+ *           'deleted'  file đã bị xoá khỏi repo
+ */
+export async function checkDraftConflicts(token) {
+  const drafts = listDrafts();
+  const out = [];
+
+  for (const d of drafts) {
+    let cur = null;
+    try {
+      cur = await getFileMeta(token, d.path);
+    } catch {
+      continue; // lỗi mạng/quota → không chặn việc đăng, bước commit sẽ tự báo lỗi
+    }
+
+    // File chưa có trên repo: nháp là file MỚI → không có gì để đè.
+    if (!cur) {
+      if (d.type !== 'delete' && d.baseSha) out.push({ ...d, reason: 'deleted', lastCommit: null });
+      continue;
+    }
+    if (d.baseSha && d.baseSha === cur.sha) continue; // khớp mốc → an toàn
+    if (!d.baseSha && d.type === 'binary') continue;  // ảnh mới upload đè ảnh cùng tên: có chủ đích
+
+    const reason = d.baseSha ? 'changed' : 'unknown';
+    const lastCommit = await getFileLastCommit(token, d.path).catch(() => null);
+    out.push({ path: d.path, type: d.type, savedAt: d.savedAt ?? null, reason, lastCommit });
+  }
+  return out;
+}
+
+/**
  * ĐĂNG tất cả nháp đang chờ lên web — gom thành 1 commit (1 build CF).
+ * ⚠️ Ghi đè không hỏi. Gọi `checkDraftConflicts` TRƯỚC (app.js đang làm vậy).
  * @returns {{ commitUrl: string, count: number } | { none: true }}
  */
 export async function publishDrafts(token, message) {
@@ -164,7 +214,7 @@ export async function publishDrafts(token, message) {
   return { commitUrl, count: drafts.length };
 }
 
-export { draftCount, listDrafts, clearDrafts } from './lib/drafts.js';
+export { draftCount, listDrafts, clearDrafts, dropDrafts } from './lib/drafts.js';
 
 /** Lấy sha hiện tại của file (null nếu chưa tồn tại) — dùng trước khi ghi đè ảnh. */
 export async function getFileMeta(token, path) {
@@ -175,6 +225,7 @@ export async function getFileMeta(token, path) {
   if (res.status === 404) return null;
   if (!res.ok) await ghThrow(res);
   const data = await res.json();
+  _baseSha.set(path, data.sha);
   return { sha: data.sha };
 }
 
@@ -184,7 +235,7 @@ export async function getFileMeta(token, path) {
  * @param {string} base64 - phần base64 sau dấu phẩy của dataURL
  */
 export async function putBinaryFile(token, path, base64, _sha, _message) {
-  setBinaryDraft(path, base64);
+  setBinaryDraft(path, base64, _baseSha.get(path) ?? null);
   return { commitUrl: '', path, draft: true };
 }
 
@@ -207,7 +258,7 @@ export async function listDir(token, path) {
 
 /** "Xoá" 1 file → ghi nháp xoá (chỉ thực thi khi Đăng). @returns {{ commitUrl, draft }} */
 export async function deleteFile(token, path, _sha, _message) {
-  setDeleteDraft(path);
+  setDeleteDraft(path, _baseSha.get(path) ?? null);
   return { commitUrl: '', draft: true };
 }
 

@@ -5,8 +5,8 @@
  */
 
 import { getSession, clearSession, openAuthPopup } from './auth.js';
-import { getCommits, getFileLastCommit, publishDrafts } from './github.js';
-import { draftCount } from './lib/drafts.js';
+import { getCommits, getFileLastCommit, publishDrafts, checkDraftConflicts } from './github.js';
+import { draftCount, dropDrafts } from './lib/drafts.js';
 import * as previewBus from './lib/preview-bus.js';
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
@@ -161,6 +161,75 @@ function setupPreview() {
 
 // ─── Publish (Đăng lên web) ─────────────────────────────────────────────────────
 
+/** Tên dễ đọc cho vài file hay sửa — fallback là chính đường dẫn. */
+const FILE_LABEL = {
+  'src/data/shop-home.yml': 'Trang chủ Shop',
+  'src/data/home.yml': 'Trang chủ Studio',
+  'src/data/site.yml': 'Thông tin chung',
+  'src/data/footer.yml': 'Chân trang',
+  'src/data/shop-products.yml': 'Sản phẩm',
+  'src/data/theme.yml': 'Giao diện',
+  'src/data/services.yml': 'Dịch vụ',
+  'src/data/tuyen-dung.yml': 'Trang tuyển dụng',
+  'src/data/phong-mau.yml': 'Phòng mẫu',
+};
+const fileLabel = (p) => (FILE_LABEL[p] ? `${FILE_LABEL[p]} (${p})` : p);
+
+/** "14:20 29/07" — đồng nhất với format commit message của nút Đăng. */
+function fmtWhen(ts) {
+  if (!ts) return null;
+  const d = new Date(ts);
+  if (Number.isNaN(d.getTime())) return null;
+  const p = (n) => String(n).padStart(2, '0');
+  return `${p(d.getHours())}:${p(d.getMinutes())} ${p(d.getDate())}/${p(d.getMonth() + 1)}`;
+}
+
+/**
+ * Hỏi user khi nháp dựa trên bản CŨ hơn bản đang có trên web.
+ * @returns {Promise<'overwrite'|'drop'|'cancel'>}
+ *   overwrite = đè bản trên web · drop = bỏ các nháp lệch, đăng phần còn lại
+ */
+function askConflict(conflicts) {
+  return new Promise((resolve) => {
+    const dlg = document.createElement('dialog');
+    dlg.className = 'conflict-dialog';
+    const rows = conflicts.map((c) => {
+      const when = fmtWhen(c.savedAt);
+      const lc = c.lastCommit;
+      const web = c.reason === 'deleted'
+        ? '<em>file đã bị xoá khỏi web</em>'
+        : lc
+          ? `web sửa lúc ${escHtml(fmtWhen(new Date(lc.date).getTime()) || '')} — “${escHtml(lc.message)}”`
+          : '<em>bản trên web mới hơn</em>';
+      const note = c.reason === 'unknown'
+        ? 'chưa rõ nháp dựa trên bản nào (lưu từ trước bản vá này, hoặc từ máy/tab khác)'
+        : web;
+      const meta = [when ? `nháp lưu lúc ${escHtml(when)}` : null, note].filter(Boolean).join(' · ');
+      return `<li><b>${escHtml(fileLabel(c.path))}</b><br><span class="cf-meta">${meta}</span></li>`;
+    }).join('');
+
+    dlg.innerHTML = `
+      <h3>⚠️ Nội dung trên web đã đổi sau khi anh lưu nháp</h3>
+      <p>Đăng tiếp sẽ <b>ghi đè</b> bản đang chạy trên web bằng bản nháp cũ — mọi thay đổi trong khoảng đó sẽ mất.</p>
+      <ul class="cf-list">${rows}</ul>
+      <div class="cf-actions">
+        <button class="btn btn-primary" data-act="cancel">Huỷ, để tôi xem lại</button>
+        <button class="btn btn-ghost" data-act="drop">Bỏ ${conflicts.length} nháp này, đăng phần còn lại</button>
+        <button class="btn cf-danger" data-act="overwrite">Vẫn đè lên bản trên web</button>
+      </div>`;
+    document.body.appendChild(dlg);
+
+    let answered = false;
+    const done = (v) => { if (answered) return; answered = true; resolve(v); dlg.close(); dlg.remove(); };
+    dlg.querySelectorAll('button[data-act]').forEach((b) => {
+      b.addEventListener('click', () => done(b.dataset.act));
+    });
+    dlg.addEventListener('cancel', (e) => { e.preventDefault(); done('cancel'); }); // Esc = huỷ
+    dlg.showModal();
+    dlg.querySelector('[data-act="cancel"]').focus();
+  });
+}
+
 function updatePublishUI() {
   const btn = document.getElementById('btn-publish');
   if (!btn) return;
@@ -185,9 +254,27 @@ function setupPublish() {
     setLoading(true);
     btn.disabled = true;
     try {
+      // Chốt chặn quay ngược nội dung: nháp cũ (localStorage) đè bản mới trên web.
+      const conflicts = await checkDraftConflicts(session.token);
+      if (conflicts.length) {
+        setLoading(false);
+        const act = await askConflict(conflicts);
+        if (act === 'cancel') return;
+        if (act === 'drop') {
+          dropDrafts(conflicts.map((c) => c.path));
+          if (!draftCount()) {
+            showToast('Đã bỏ các nháp cũ — không còn thay đổi nào để đăng.', 'info');
+            updatePublishUI();
+            return;
+          }
+        }
+        setLoading(true);
+      }
+
+      const count = draftCount();
       const now = new Date();
       const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} ${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}`;
-      const r = await publishDrafts(session.token, `quan-tri: đăng ${n} thay đổi — ${ts}`);
+      const r = await publishDrafts(session.token, `quan-tri: đăng ${count} thay đổi — ${ts}`);
       if (r.none) { showToast('Không có thay đổi nào để đăng.', 'info'); return; }
       showToast(
         `✅ Đã đăng ${r.count} thay đổi! Website cập nhật sau ~1–2 phút. <a href="${r.commitUrl}" target="_blank">Xem commit →</a>`,
