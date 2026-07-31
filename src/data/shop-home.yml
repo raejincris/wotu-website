@@ -1,19 +1,19 @@
 hero:
-  pill: Ưu đãi tháng 5 · giảm đến 35%
+  pill: Combo trọn gói · tiết kiệm đến 35%
   eyebrow: Bộ sưu tập 2026
   title: Trọn bộ <em>nội thất</em><br/>cho <span class="stroke">tổ ấm</span>
-  sub: WOTU tuyển chọn từng gói combo phòng khách, phòng ngủ, phòng ăn — sẵn sàng dọn vào ở chỉ trong 7 - 28 ngày. Bảo hành 2 năm, giao và lắp đặt tận nơi.
+  sub: WOTU đóng sẵn từng gói combo phòng khách, phòng ngủ, phòng ăn, chuẩn tỉ lệ, đồng bộ tông màu, dọn vào ở trong 7–28 ngày. Bảo hành 2 năm, giao và lắp đặt tận nơi tại Quy Nhơn.
   cta1: Xem combo nổi bật
   cta2: Khám phá phòng mẫu
   stats:
     - num: 4+
-      label: Năm kinh nghiệm
-    - num: 1000+
-      label: Tổ ấm ở Quy Nhơn tin chọn
-    - num: 5★
-      label: Đánh giá khách hàng
+      label: Năm làm nội thất tại Quy Nhơn
+    - num: 4.9★
+      label: 184 đánh giá trên Shopee & Google
+    - num: 500+
+      label: Tổ ấm đã hoàn thiện và đưa vào sử dụng
   sticker: −35%
-  stickerSub: Combo tháng 6
+  stickerSub: Combo trọn gói
   photo: /uploads/hero/hero-1780206085267-dije9.webp
   photoAlt: Minh hoạ combo phòng khách WOTU
   tagLabel: Combo Phòng khách · Tổ Ấm
@@ -25,11 +25,11 @@ marquee:
   - text: Bảo hành 2 năm
   - text: Miễn phí giao & lắp đặt
   - text: Đổi trả trong 7 ngày
-  - text: Combo trọn gói — 21 ngày dọn vào ở
+  - text: Combo trọn gói, 21 ngày dọn vào ở
     italic: true
   - text: Tư vấn 1:1 miễn phí
 marqueeTrust:
-  - Bảo hành 5 năm
+  - Bảo hành 2 năm khung gỗ
   - Giao & lắp đặt tận nơi
   - Gỗ tự nhiên 100%
   - Thiết kế riêng theo nhà bạn
@@ -37,42 +37,58 @@ marqueeTrust:
 sections:
   combos:
     eyebrow: Combo nội thất
-    heading: Mua trọn bộ — về <em>là ở ngay</em>.
-    desc: Mỗi combo WOTU được thiết kế bởi đội ngũ nội thất giàu kinh nghiệm — chuẩn tỉ lệ, đồng bộ chất liệu & tông màu. Bạn không phải mất hàng tuần đi chọn từng món.
-    ctaAll: Xem tất cả 24 combo
+    heading: Mua trọn bộ, về <em>là ở ngay</em>.
+    desc: Mỗi combo do đội nội thất WOTU tự dựng và đóng tại xưởng Quy Nhơn, chuẩn tỉ lệ, đồng bộ chất liệu & tông màu. Bạn không phải mất hàng tuần đi gom từng món cho khớp nhau.
+    ctaAll: Xem tất cả 6 combo
   bestsellers:
     eyebrow: Sản phẩm bán chạy
     heading: Mua lẻ <em>cũng tinh tế</em>.
-    desc: Những món được khách hàng WOTU đặt mua nhiều nhất 30 ngày qua. Có sẵn — giao trong 48 giờ tại Quy Nhơn & các tỉnh lân cận.
+    desc: Những món được khách hàng WOTU đặt mua nhiều nhất 30 ngày qua. Có sẵn, giao trong 48 giờ tại Quy Nhơn & các tỉnh lân cận.
   inspo:
     eyebrow: Phòng cảm hứng
     heading: Trông trước, <em>hình dung sau.</em>
-    desc: Lướt qua những căn phòng thật của khách hàng WOTU — chụp tại các căn hộ và nhà phố ở Quy Nhơn · Bình Định.
+    desc: Lướt qua những căn phòng thật của khách hàng WOTU, chụp tại các căn hộ và nhà phố ở Quy Nhơn · Bình Định.
   whyUs:
     eyebrow: Tại sao chọn Wotu
     heading: Cam kết <em>vững như gỗ</em>.
-    desc: Chúng tôi không bán đồ — chúng tôi đồng hành cùng bạn xây tổ ấm. 4 cam kết dưới đây là điều mọi khách hàng WOTU đều nhận được.
+    desc: Bốn điều dưới đây được viết thành cam kết, không phải khẩu hiệu. Mọi đơn hàng WOTU đều có, kể cả khi bạn chỉ mua một món lẻ.
     items:
       - icon: shield
         title: Bảo hành 2 năm
-        desc: Khung gỗ và cấu trúc chính được bảo hành 2 năm — gấp đôi mặt bằng thị trường nội thất Việt.
+        desc: Khung gỗ và cấu trúc chính được bảo hành 2 năm, gấp đôi mặt bằng thị trường nội thất Việt.
       - icon: truck
         title: Giao & lắp miễn phí
-        desc: Miễn phí giao và lắp đặt tận nhà tại Quy Nhơn, Gia Lai — đội kỹ thuật riêng, không qua bên thứ ba.
+        desc: Miễn phí giao và lắp đặt tận nhà tại Quy Nhơn, Gia Lai, đội kỹ thuật riêng, không qua bên thứ ba.
       - icon: refresh
         title: Đổi trả 07 ngày
-        desc: Không vừa ý vì bất kỳ lý do gì? Đổi trả miễn phí trong 07 ngày — cho những nội thất rời.
+        desc: Không vừa ý vì bất kỳ lý do gì? Đổi trả miễn phí trong 07 ngày, cho những nội thất rời.
       - icon: chat
         title: Tư vấn 1:1
-        desc: WOTU tư vấn miễn phí qua Zalo — đo đạc, dựng 3D phòng & gợi ý combo phù hợp.
+        desc: WOTU tư vấn miễn phí qua Zalo, đo đạc, dựng 3D phòng & gợi ý combo phù hợp.
   reviews:
     eyebrow: Khách hàng nói gì
-    heading: 500+ tổ ấm <em>đã chọn</em>.
-    desc: Trung bình 4.9/5 sao trên 2.300+ đánh giá Shopee, Google, Facebook — chúng tôi để khách hàng nói thay.
+    heading: Nghe khách hàng <em>kể lại</em>.
+    desc: Trung bình 4.9/5 sao từ 184 đánh giá thật trên Shopee, Google và Facebook, chúng tôi để khách hàng nói thay.
+  studioBridge:
+    eyebrow: Bạn đang cần gì?
+    heading: Hai cách để <em>bắt đầu</em>.
+    desc: WOTU có một cửa hàng và một studio, cùng một xưởng, hai cách phục vụ. Chọn lối phù hợp với bạn.
+    shop:
+      label: Bạn đang ở đây
+      title: Mua nội thất đóng sẵn
+      desc: Combo và món lẻ thiết kế sẵn, giá niêm yết rõ ràng, giao & lắp trong 7–28 ngày. Hợp với căn hộ cần dọn vào ở nhanh.
+      cta: Xem combo
+      href: /combo/
+    studio:
+      label: WOTU Studio
+      title: Thiết kế & thi công riêng cả căn
+      desc: Kiến trúc sư đo đạc, thiết kế theo nhà bạn, đồ gỗ đóng riêng tại xưởng. Hợp với nhà phố, biệt thự, cải tạo trọn gói.
+      cta: Khám phá Studio
+      href: /studio/
   cta:
     eyebrow: Đặt tư vấn miễn phí
     heading: Để chuyên gia WOTU<br/>chọn combo <em>cho tổ ấm</em> của bạn.
-    desc: Để lại số điện thoại — chúng tôi gọi trong 15 phút, tặng bạn 1 buổi tư vấn 1:1 và bản dựng 3D miễn phí cho căn hộ của bạn khi bạn đặt cọc. Hoặc gọi trực tiếp hay email cho chúng tôi.
+    desc: Để lại số điện thoại, chúng tôi gọi lại trong 15 phút, tư vấn 1:1 và gợi ý combo hợp căn nhà bạn, hoàn toàn miễn phí, không ràng buộc mua. Cần thiết kế & thi công riêng cho cả căn? Ghé thêm WOTU Studio.
 layout:
   - id: combos
     "on": true
@@ -81,6 +97,8 @@ layout:
   - id: inspo
     "on": true
   - id: whyUs
+    "on": true
+  - id: studioBridge
     "on": true
   - id: reviews
     "on": true
@@ -101,10 +119,10 @@ combos:
     priceOld: 59.900.000đ
     priceNew: 45.000.000đ
     price: 45000000
-    priceNote: · trả góp 0% — 12 tháng
+    priceNote: · trả góp 0% trong 12 tháng
     badge: ★ Bestseller
     badgeStyle: "background: var(--shop-bg); color: var(--shop-ink);"
-    placeholder: Combo Căn hộ studio 30m² — full nội thất
+    placeholder: Combo Căn hộ studio 30m², full nội thất
     tone: ""
     href: /combo/an-cu/
     photo: /uploads/combos/combos-1780205697249-y4ewy.webp
@@ -269,6 +287,15 @@ inspo:
   - label: Phòng bé · Vườn Cổ Tích
     placeholder: Phòng trẻ em Vườn Cổ Tích
     href: /san-pham/?room=tre-em
+reviewsSummary:
+  average: 4.9
+  total: 184
+  distribution:
+    - 93
+    - 5
+    - 1
+    - 1
+    - 0
 reviews:
   - quote: Đặt nguyên combo Tổ Ấm, đội WOTU giao và lắp trong buổi sáng. Cuối ngày là đã ngồi xem TV với gia đình. Quá tiện cho người mới về nhà mới.
     name: Nguyễn Hà My

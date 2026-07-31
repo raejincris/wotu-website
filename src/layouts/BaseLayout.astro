@@ -12,6 +12,11 @@ interface Props {
   /** Schema.org type — defaults to website. Use 'article' for blog, 'project' for case study. */
   schemaType?: 'website' | 'article' | 'project';
   schemaDate?: string;
+  /**
+   * Nhãn loại hiện trên kết quả /tim-kiem (khối "Bài viết & Trang"). Bỏ trống →
+   * fallback "Trang". Trang blog/dự án tự khai meta riêng ở header nên không cần.
+   */
+  searchType?: string;
 }
 
 const {
@@ -21,6 +26,7 @@ const {
   ogImageAlt = 'WOTU · Studio thiết kế & thi công nội thất, Quy Nhơn',
   schemaType = 'website',
   schemaDate,
+  searchType,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
@@ -96,7 +102,7 @@ const studioThemeCss = `html[data-theme]{--earth:${studioEarth};--accent:${studi
   </head>
   <body>
     <a href="#main" class="skip-to-main">Bỏ qua điều hướng, đến nội dung chính</a>
-    <main id="main" data-pagefind-body><slot /></main>
+    <main id="main" data-pagefind-body data-pagefind-meta={searchType ? `type:${searchType}` : undefined}><slot /></main>
 
     <script>
       import { initReveal } from '../lib/reveal';

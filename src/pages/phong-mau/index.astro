@@ -49,7 +49,7 @@ const listSchema = liveRooms.length
     }
   : null;
 ---
-<ShopLayout title="Phòng mẫu, Khám phá không gian WOTU" description={desc}>
+<ShopLayout title="Phòng mẫu, Khám phá không gian WOTU" description={desc} searchType="Phòng mẫu">
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />
     {listSchema && <script type="application/ld+json" set:html={jsonLd(listSchema)} />}

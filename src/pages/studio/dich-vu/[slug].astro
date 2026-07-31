@@ -53,7 +53,7 @@ const serviceSchema = {
   url: `${SITE_URL}/studio/dich-vu/${s.slug}`,
 };
 ---
-<BaseLayout title={s.metaTitle} description={s.metaDescription}>
+<BaseLayout title={s.metaTitle} description={s.metaDescription} searchType="Dịch vụ">
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(serviceSchema)} />
     <script type="application/ld+json" set:html={jsonLd(faqSchema)} />
