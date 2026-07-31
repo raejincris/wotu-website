@@ -679,7 +679,10 @@ html.wotu-shop-drawer-open { overflow: hidden; }
   outline: none !important; border-color: var(--shop-accent); border-radius: 999px;
 }
 
-.shop .ts-layout { display: grid; grid-template-columns: 232px 1fr; gap: 44px; align-items: start; }
+/* `min-width: 0`: grid item mặc định min-width:auto → track 1fr phình theo min-content
+   của lưới kết quả (auto-fill) và đẩy trang tràn ngang ở ≤1440px. */
+.shop .ts-layout { display: grid; grid-template-columns: 232px minmax(0, 1fr); gap: 44px; align-items: start; }
+.shop .ts-results { min-width: 0; }
 
 .shop .ts-filters { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 22px; }
 .shop .ts-fgroup { display: flex; flex-direction: column; gap: 10px; }
@@ -722,7 +725,9 @@ html.wotu-shop-drawer-open { overflow: hidden; }
 .shop .ts-card-title mark { background: var(--shop-warm-soft); color: var(--shop-accent-deep); padding: 0 1px; border-radius: 2px; }
 .shop .ts-filters-head { display: none; }
 .shop .ts-filter-overlay { position: fixed; inset: 0; z-index: 140; background: rgba(20,16,12,.4); }
-.shop .ts-section { margin-bottom: 48px; }
+/* Reset padding 100px của `.shop section` — trang tìm kiếm dùng nhịp riêng. */
+.shop .ts-section { padding: 0; margin-bottom: 48px; }
+.shop .ts-section:last-of-type { margin-bottom: 0; }
 .shop .ts-shead {
   font-family: var(--shop-serif); font-weight: 400; font-size: 26px;
   margin: 0 0 20px; display: flex; align-items: baseline; gap: 10px;
@@ -771,6 +776,8 @@ html.wotu-shop-drawer-open { overflow: hidden; }
 .shop .ts-content-type {
   font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
   color: var(--shop-accent-deep); font-weight: 700;
+  /* Chuỗi meta lạ (URL dài) không được phép đẩy trang tràn ngang. */
+  display: block; overflow-wrap: anywhere;
 }
 .shop .ts-content-txt h3 {
   font-family: var(--shop-serif); font-weight: 400; font-size: 20px; line-height: 1.2;

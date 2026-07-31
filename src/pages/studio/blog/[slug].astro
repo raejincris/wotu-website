@@ -42,9 +42,10 @@ const cover = entry.data.photo;
 const ogImage = cover && (cover.startsWith('/') || cover.startsWith('http'))
   ? new URL(cover, Astro.site).href
   : undefined;
-// Meta cho Pagefind → /tim-kiem hiện nhãn loại + thumbnail. Ảnh chỉ set khi có
-// URL local resolve được (bỏ Unsplash ID để không trỏ ảnh hỏng).
-const pfImageMeta = ogImage ? `, image:${ogImage}` : '';
+// Meta cho Pagefind → /tim-kiem hiện nhãn loại. KHÔNG nhồi `, image:URL` vào cùng
+// attribute: Pagefind không tách cặp thứ 2 khi value chứa `://` → cả chuỗi rơi vào
+// `type` (nhãn in nguyên URL, không ngắt dòng → tràn ngang). Thumbnail đã có sẵn từ
+// meta `image` Pagefind tự lấy từ ảnh đầu trang.
 ---
 <BaseLayout
   title={`${entry.data.title} · WOTU`}
@@ -59,7 +60,7 @@ const pfImageMeta = ogImage ? `, image:${ogImage}` : '';
   <Breadcrumb maxWidth="880px" items={[{ name: 'Studio', href: '/studio/' }, { name: 'Nhật ký', href: '/studio/blog' }, { name: entry.data.title }]} />
 
   <header style="padding: 40px var(--pad-x) 64px; max-width: 880px; margin: 0 auto;"
-    data-pagefind-meta={`type:Nhật ký${pfImageMeta}`} data-pagefind-filter="type:Nhật ký">
+    data-pagefind-meta="type:Nhật ký" data-pagefind-filter="type:Nhật ký">
     <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">
       {fmt.format(entry.data.date)} · Nhật ký
     </div>

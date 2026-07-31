@@ -58,8 +58,10 @@ const ogImage = heroPhoto
       ? new URL(heroPhoto, Astro.site).href
       : img(heroPhoto, 1200, '16/9'))
   : undefined;
-// Meta cho Pagefind → /tim-kiem hiện nhãn loại + thumbnail dự án.
-const pfImageMeta = ogImage ? `, image:${ogImage}` : '';
+// Meta cho Pagefind → /tim-kiem hiện nhãn loại. KHÔNG nhồi `, image:URL` vào cùng
+// attribute: Pagefind không tách cặp thứ 2 khi value chứa `://` → cả chuỗi rơi vào
+// `type` (nhãn in nguyên URL, không ngắt dòng → tràn ngang). Thumbnail đã có sẵn từ
+// meta `image` Pagefind tự lấy từ ảnh đầu trang.
 ---
 <BaseLayout title={`${p.name} · WOTU`} description={p.excerpt} ogImage={ogImage} schemaType="project">
   <Nav variant="inner" homeRoute="/studio/" />
@@ -67,7 +69,7 @@ const pfImageMeta = ogImage ? `, image:${ogImage}` : '';
   <Breadcrumb items={[{ name: 'Studio', href: '/studio/' }, { name: 'Dự án', href: '/studio/projects' }, { name: p.name }]} />
 
   <header style="padding: 40px var(--pad-x) 64px;"
-    data-pagefind-meta={`type:Dự án${pfImageMeta}`} data-pagefind-filter="type:Dự án">
+    data-pagefind-meta="type:Dự án" data-pagefind-filter="type:Dự án">
     <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; margin-bottom: 16px;">
       DỰ ÁN {p.id} · {p.cat}
     </div>
