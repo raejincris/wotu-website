@@ -43,12 +43,47 @@ blocks:
         heading: "Xưởng gỗ tại Hoa Lư"
         text: "Gỗ cao su, tần bì sấy đạt độ ẩm 8–12% trước khi gia công; dòng cao cấp có óc chó, sồi theo yêu cầu. Ghé xem mẫu thứ 2–7, 8h–17h30."
 
+  - id: chon-huong
+    type: richText
+    eyebrow: "Bắt đầu từ đâu"
+    heading: "Mua đồ có sẵn <em>hay đóng riêng?</em>"
+    body: "<p>Gần như mọi khách gọi đến WOTU đều mắc ở đúng câu hỏi này. Câu trả lời không nằm ở ngân sách, mà ở <strong>căn nhà của bạn có kích thước khó hay không</strong>, và bạn còn bao nhiêu thời gian.</p><p><strong>Chọn combo hoặc sản phẩm có sẵn</strong> nếu căn hộ của bạn theo mặt bằng phổ thông (chung cư, căn hộ cho thuê, nhà mới nhận bàn giao), bạn muốn dọn vào ở trong vài tuần, và bạn thích biết chính xác mình trả bao nhiêu trước khi đặt. Đồ đã đóng sẵn tại xưởng, tỉ lệ và tông màu đã được cân với nhau, không phải chắp vá nhiều nơi. Hàng có sẵn giao trong 48 giờ ở Quy Nhơn; combo trọn phòng vào nhà trong 7–28 ngày tuỳ gói.</p><p><strong>Chọn thiết kế và thi công riêng</strong> nếu nhà bạn có góc chéo, trần thấp, gác lửng, ô cầu thang khó, nếu bạn muốn cả căn cùng một tông, hoặc đang cải tạo từ phần thô. Ở hướng này, đồ được vẽ theo đúng số đo nhà bạn rồi mới đóng, nên không có khoảng hở thừa hay tủ kê hụt 12 phân. Đổi lại, bạn cần khoảng 3–6 tuần cho thiết kế và sản xuất.</p><p>Chưa chắc thuộc nhóm nào? Gửi mặt bằng hoặc vài tấm ảnh chụp phòng qua <a href='tel:+84933774708'>0933 774 708</a>, chúng tôi nói thẳng hướng nào hợp lý hơn cho nhà bạn, kể cả khi câu trả lời là mua đồ lẻ cho rẻ.</p>"
+    align: left
+
   - id: bang-gia
     type: richText
     eyebrow: "Giá tham khảo"
     heading: "Nội thất Quy Nhơn <em>giá bao nhiêu?</em>"
     body: "<p>Giá niêm yết công khai. Đây là mức thật đang bán, không phải giá quảng cáo để gọi điện chèo kéo:</p><table style='width:100%; border-collapse:collapse; font-size:15px;'><thead><tr><th style='text-align:left; padding:10px 12px; border-bottom:2px solid currentColor;'>Combo trọn phòng</th><th style='text-align:left; padding:10px 12px; border-bottom:2px solid currentColor;'>Gồm những gì</th><th style='text-align:right; padding:10px 12px; border-bottom:2px solid currentColor;'>Giá hiện tại</th></tr></thead><tbody><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/tap-trung/'>Tập Trung</a>, góc làm việc</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Bàn 1m4 · ghế công thái học · kệ sách · đèn</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>8.900.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/sum-vay/'>Sum Vầy</a>, phòng ăn 6 chỗ</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Bàn gỗ sồi 1m6 · 6 ghế nệm · tủ chén</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>12.800.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/vuon-co-tich/'>Vườn Cổ Tích</a>, phòng trẻ em</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Giường tầng · bàn học · kệ đồ chơi</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>14.500.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/to-am/'>Tổ Ấm</a>, phòng khách</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Sofa văng 3 chỗ · bàn trà sồi · kệ TV 1m8 · thảm</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>18.900.000đ</strong></td></tr><tr><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'><a href='/combo/an-yen/'>An Yên</a>, phòng ngủ master</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08);'>Giường 1m8 · tủ áo 4 cánh · bàn trang điểm</td><td style='padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.08); text-align:right;'><strong>22.500.000đ</strong></td></tr><tr><td style='padding:10px 12px;'><a href='/combo/an-cu/'>An Cư</a>, full căn studio 30m²</td><td style='padding:10px 12px;'>Trọn bộ 11 món, trả góp 0% trong 12 tháng</td><td style='padding:10px 12px; text-align:right;'><strong>45.000.000đ</strong></td></tr></tbody></table><p style='margin-top:14px;'>Cần thiết kế &amp; thi công riêng cả căn? Chi phí phụ thuộc diện tích, vật liệu và hạng mục. WOTU đo đạc, dựng 3D và <strong>báo giá chi tiết trong 24 giờ</strong>, miễn phí, không ràng buộc. <a href='/studio/'>Xem cách Studio làm việc →</a></p>"
     align: left
+
+  - id: quy-trinh
+    type: richText
+    eyebrow: "Cách làm việc"
+    heading: "Từ cuộc gọi đầu tiên <em>đến ngày bàn giao</em>"
+    body: "<p>Làm nội thất là chuyện vài chục triệu đến vài trăm triệu, nên bạn có quyền biết trước từng bước sẽ diễn ra thế nào.</p><ol style='margin:0; padding-left:20px; line-height:1.75;'><li><strong>Tiếp nhận yêu cầu.</strong> Bạn gọi, nhắn Facebook hoặc ghé xưởng. Chúng tôi hỏi diện tích, hiện trạng, thời điểm cần dùng và khoảng ngân sách bạn thấy thoải mái.</li><li><strong>Khảo sát và đo đạc.</strong> Với đồ đóng riêng, kỹ thuật đến tận nhà đo, chụp hiện trạng, ghi lại ổ điện và vị trí cửa. Trong nội thành Quy Nhơn, bước này miễn phí.</li><li><strong>Báo giá trong 24 giờ.</strong> Bảng giá tách từng hạng mục: gỗ gì, phụ kiện hãng nào, bao nhiêu mét dài, nhân công bao nhiêu. Không có dòng &quot;trọn gói&quot; chung chung.</li><li><strong>Thiết kế và duyệt bản vẽ 3D.</strong> Bạn xem trước phòng của mình trên ảnh dựng, sửa đến khi ưng. Chốt bản vẽ rồi mới cắt gỗ.</li><li><strong>Ký hợp đồng, cọc 30%.</strong> Hợp đồng ghi rõ vật liệu, thời hạn, điều khoản bảo hành. Cam kết bằng giấy, không bằng lời hứa.</li><li><strong>Sản xuất tại xưởng Hoa Lư.</strong> Đồ đóng ngay tại Quy Nhơn nên bạn ghé xem tiến độ giữa chừng được, và có sai sót thì sửa ngay chứ không phải chờ chuyển hàng từ nơi khác về.</li><li><strong>Thi công và lắp đặt.</strong> Đội kỹ thuật của WOTU tự làm, không thuê ngoài. Che chắn sàn, dọn sạch trước khi rời đi.</li><li><strong>Nghiệm thu và bàn giao.</strong> Đi từng món cùng bạn, chỉnh cánh, chỉnh ray, hướng dẫn vệ sinh bảo quản. Thanh toán phần còn lại sau khi bạn hài lòng.</li><li><strong>Bảo hành 2 năm khung gỗ.</strong> Có vấn đề thì gọi thẳng số cũ, không qua tổng đài. Ở cùng thành phố nên chúng tôi đến trong ngày.</li></ol>"
+    align: left
+
+  - id: du-an
+    type: richText
+    eyebrow: "Đã làm thật"
+    heading: "Vài căn WOTU <em>đã hoàn thiện</em> ở Quy Nhơn"
+    body: "<p>Ảnh dưới đây là công trình thật, chụp sau khi bàn giao, không phải ảnh dựng hay ảnh mua trên mạng. Kèm chi phí thật để bạn có mốc so sánh, vì mức giá là thứ khó hỏi nhất khi mới bắt đầu.</p><ul style='margin:0; padding-left:20px; line-height:1.75;'><li><strong><a href='/studio/projects/nha-anh-phuc-phu-tai/'>Nhà anh Phúc, Phú Tài</a></strong> (2026): full nội thất nhà phố tông trắng đen bóng, ốp tường kịch trần, trần gương, hệ bếp và cầu thang ốp đá vân vàng. Thi công 1 tháng, khoảng <strong>380 triệu</strong>.</li><li><strong><a href='/studio/projects/can-ho-flc-quy-nhon/'>Căn hộ FLC Sea Tower</a></strong> (2024): full nội thất Indochine cho căn hộ khai thác cho thuê, thiết kế và đóng đồ tại xưởng rồi thi công trong 1 tháng, khoảng <strong>285 triệu</strong>.</li><li><strong><a href='/studio/projects/can-ho-studio-tms-quy-nhon/'>Căn studio TMS</a></strong> (2026): căn 35–40m² cho thuê, gỗ sồi sáng phối mảng xanh sâu, thi công 3 tuần, khoảng <strong>80–100 triệu</strong>.</li><li><strong><a href='/studio/projects/cafe-bach-tra/'>Café Bạch Trà</a></strong> (2024): quán trà nhỏ trong hẻm cũ, làm với ánh sáng tự nhiên và sàn xi-măng đánh bóng, cho thấy WOTU nhận cả mặt bằng thương mại chứ không riêng nhà ở.</li></ul><p style='margin-top:14px;'>Xem đầy đủ hình từng dự án tại <a href='/studio/projects/'>trang dự án</a>.</p>"
+    align: left
+
+  - id: anh-du-an
+    type: gallery
+    columns: 3
+    items:
+      - image: "/uploads/projects/nha-anh-phuc-phu-tai-phong-khach-tong-the.webp"
+        alt: "Phòng khách nhà phố Phú Tài, Quy Nhơn: sofa da đen dài và hệ tủ trắng chạy dọc thân nhà"
+        caption: "Nhà anh Phúc, Phú Tài · 2026"
+      - image: "/uploads/projects/can-ho-flc-quy-nhon-phong-khach-indochine.webp"
+        alt: "Phòng khách Indochine căn hộ FLC Sea Tower Quy Nhơn với mảng tường mộc lan xanh"
+        caption: "Căn hộ FLC Sea Tower · 2024"
+      - image: "/uploads/projects/can-ho-studio-tms-quy-nhon-tong-the-goc-an.webp"
+        alt: "Căn hộ studio TMS Quy Nhơn, góc bàn ăn và khu ngủ trong một không gian mở"
+        caption: "Căn studio TMS · 2026"
 
   - id: xuong
     type: imageText
@@ -60,6 +95,13 @@ blocks:
     body: "<p>Xưởng WOTU nằm ở <strong>Lô 17-18 Hoa Lư, Quy Nhơn, Gia Lai</strong>, mở cửa thứ 2 đến thứ 7, 8h–17h30. Bạn có thể đến xem mẫu vật liệu, màu sơn, ngồi thử sofa trước khi quyết định. Gọi trước <a href='tel:+84933774708'>0933 774 708</a> để có người tư vấn đón bạn.</p><p>Mua đồ đóng sẵn thì xem <a href='/combo/'>combo</a> và <a href='/san-pham/'>sản phẩm</a>; làm cả căn thì bắt đầu từ <a href='/studio/'>WOTU Studio</a>.</p>"
     btnLabel: "Chỉ đường trên Google Maps"
     btnHref: "https://maps.app.goo.gl/eovTsyCiwiSP5YAA6"
+
+  - id: vat-lieu
+    type: richText
+    eyebrow: "Gỗ và khí hậu"
+    heading: "Làm nội thất ở <em>thành phố biển</em>"
+    body: "<p>Quy Nhơn cách biển vài cây số, và không khí ở đây mang theo hai thứ mà phòng trưng bày máy lạnh không cho bạn thấy: <strong>độ ẩm cao và hơi muối</strong>. Đồ gỗ làm ẩu ở khí hậu này sẽ tự khai báo sau một mùa mưa: cánh tủ vênh nhẹ không đóng khít, chân bàn ngậm nước phồng mép, bản lề rẻ tiền bắt đầu rỉ ở khe.</p><p>Vì vậy gỗ về xưởng WOTU đều được <strong>sấy đạt độ ẩm 8–12%</strong> trước khi gia công, không đóng gỗ tươi cho kịp đơn. Chủ yếu dùng <strong>gỗ cao su</strong> và <strong>gỗ tần bì</strong> tự nhiên, bền, ít cong vênh, vân đẹp; dòng cao cấp có óc chó và sồi theo yêu cầu. Ván công nghiệp chỉ dùng cho hạng mục phù hợp và có hoá đơn đầy đủ, bạn hỏi là chúng tôi đưa.</p><p>Phần bạn nên cân nhắc kỹ nhất là <strong>bề mặt tiếp xúc hằng ngày</strong>. Vỏ bọc vải tháo giặt được sẽ dễ sống hơn ở nơi hơi muối bám lên mọi thứ; da thì lau một đường là sạch nhưng cần dưỡng định kỳ, nếu bỏ mặc sẽ khô nứt nhanh hơn trong khí hậu mặn ẩm. Chúng tôi gửi <strong>mẫu vải miễn phí</strong> về tận nhà để bạn sờ thử dưới đúng ánh sáng phòng khách của mình, vì vải nhìn trên màn hình và vải dưới nắng chiều Quy Nhơn là hai thứ khác nhau.</p><p>Bảo hành: <strong>2 năm khung gỗ</strong> và cấu trúc chính, <strong>1 năm vải và đệm</strong>, ghi trong hợp đồng chứ không nói miệng.</p>"
+    align: left
 
   - id: review
     type: quote
@@ -87,6 +129,21 @@ blocks:
         answer: "<p>Chủ yếu là <strong>gỗ cao su</strong> và <strong>gỗ tần bì</strong> tự nhiên, bền, ít cong vênh, vân đẹp, sấy đạt độ ẩm 8–12% trước khi gia công. Dòng cao cấp có óc chó, sồi theo yêu cầu. Ván công nghiệp (nếu dùng cho hạng mục phù hợp) có hoá đơn 100%.</p>"
       - question: "Đặt hàng cần cọc bao nhiêu, thanh toán ra sao?"
         answer: "<p>Quy trình: báo giá trong 24h → ký hợp đồng, cọc <strong>30%</strong> → sản xuất → giao lắp → thanh toán phần còn lại khi nghiệm thu. Nhận chuyển khoản, MoMo hoặc tiền mặt tại xưởng.</p>"
+      - question: "Làm nội thất trọn gói một căn nhà ở Quy Nhơn mất bao lâu?"
+        answer: "<p>Tuỳ quy mô. Theo các dự án WOTU đã bàn giao: căn studio 35–40m² khoảng <strong>3 tuần</strong>; căn hộ full nội thất khoảng <strong>1 tháng</strong>; nhà phố nguyên căn có ốp tường, hệ bếp và cầu thang cũng khoảng <strong>1 tháng</strong> thi công, chưa kể thời gian thiết kế và duyệt bản vẽ trước đó.</p>"
+      - question: "Nhà ở Quy Nhơn gần biển, đồ gỗ có nhanh hỏng không?"
+        answer: "<p>Độ ẩm cao và hơi muối là có thật, và đồ gỗ đóng bằng gỗ chưa sấy kỹ sẽ vênh sau một mùa mưa. Gỗ ở WOTU được sấy đạt độ ẩm <strong>8–12%</strong> trước khi gia công nên ổn định hơn nhiều. Với bề mặt tiếp xúc hằng ngày, vỏ bọc vải tháo giặt được thường dễ sống hơn da trong khí hậu này, trừ khi bạn chịu khó dưỡng da định kỳ.</p>"
+      - question: "WOTU có làm nội thất cho quán cà phê, văn phòng không?"
+        answer: "<p>Có. Ngoài nhà ở và căn hộ, WOTU đã làm mặt bằng thương mại, ví dụ <a href='/studio/projects/cafe-bach-tra/'>Café Bạch Trà</a>. Quy trình tương tự nhà ở nhưng tiến độ bám theo lịch khai trương của bạn.</p>"
+      - question: "Chưa có bản vẽ, mới nhận nhà thô thì bắt đầu thế nào?"
+        answer: "<p>Gọi <strong>0933 774 708</strong> hoặc gửi mặt bằng qua Facebook. Kỹ thuật WOTU đến đo đạc tận nơi (miễn phí trong nội thành Quy Nhơn), dựng 3D cho bạn xem trước rồi mới báo giá chi tiết trong 24 giờ. Bạn không cần chuẩn bị gì ngoài việc biết mình muốn ở thế nào.</p>"
+
+  - id: doc-them
+    type: richText
+    eyebrow: "Đọc thêm"
+    heading: "Trước khi bạn <em>đặt cọc</em>"
+    body: "<p>Chúng tôi viết lại những câu khách hay hỏi nhất thành bài riêng, đọc mất vài phút nhưng tiết kiệm được kha khá tiền và phiền phức:</p><ul style='margin:0; padding-left:20px; line-height:1.8;'><li><a href='/studio/blog/chon-xuong-noi-that-quy-nhon-5-cau-hoi/'>Chọn xưởng nội thất ở Quy Nhơn: 5 câu nên hỏi trước khi đặt cọc</a></li><li><a href='/studio/blog/noi-that-tron-goi-quy-nhon-gom-nhung-gi/'>Nội thất trọn gói ở Quy Nhơn gồm những gì</a></li><li><a href='/studio/blog/noi-that-chung-cu-quy-nhon-gia-bao-nhieu/'>Nội thất chung cư ở Quy Nhơn giá bao nhiêu</a></li><li><a href='/studio/blog/dong-tu-bep-quy-nhon-hoi-gia-the-nao/'>Đóng tủ bếp ở Quy Nhơn: hỏi giá thế nào cho đúng</a></li><li><a href='/studio/blog/noi-that-can-ho-cho-thue-quy-nhon-chi-phi/'>Nội thất căn hộ cho thuê ở Quy Nhơn: chi phí bao nhiêu thì hợp lý</a></li><li><a href='/studio/blog/sofa-vai-hay-sofa-da-khi-hau-bien/'>Sofa vải hay sofa da cho khí hậu biển</a></li><li><a href='/studio/blog/lan-dau-lam-noi-that-nen-biet-gi/'>Lần đầu làm nội thất nên biết gì</a></li></ul>"
+    align: left
 
   - id: cta
     type: bannerCta
