@@ -93,6 +93,40 @@ const serviceSchema = {
     </div>
   </section>
 
+  {/* Bảng giá — optional, chỉ render khi service khai `pricing`.
+      <table> thật (không div) để Google/AI trích được số liệu — xem
+      WOTU SEO/ke-hoach-seo-aeo-geo-wotu.md giai đoạn 4 mục 2 & 6. */}
+  {s.pricing?.length > 0 && (
+    <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 1280px; margin: 0 auto;">
+      <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; border-top: 1px solid var(--ink); padding-top: 28px; margin-bottom: 32px;">
+        {s.pricingTitle ?? 'Giá tham khảo'}
+      </div>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 15px; min-width: 420px;">
+          <thead>
+            <tr>
+              <th style="text-align: left; padding: 10px 12px; border-bottom: 2px solid currentColor; font-weight: 400; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;">Hạng mục</th>
+              <th style="text-align: right; padding: 10px 12px; border-bottom: 2px solid currentColor; font-weight: 400; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;">Giá từ</th>
+              <th style="text-align: left; padding: 10px 12px; border-bottom: 2px solid currentColor; font-weight: 400; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;">Đơn vị</th>
+            </tr>
+          </thead>
+          <tbody>
+            {s.pricing.map((row: any) => (
+              <tr>
+                <td style="padding: 10px 12px; border-bottom: 1px solid rgba(0,0,0,.08); color: var(--ink);">{row.item}</td>
+                <td style="padding: 10px 12px; border-bottom: 1px solid rgba(0,0,0,.08); text-align: right; color: var(--bark);"><strong>{row.price}</strong></td>
+                <td style="padding: 10px 12px; border-bottom: 1px solid rgba(0,0,0,.08); color: var(--earth);">{row.unit}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {s.pricingNote && (
+        <p style="margin-top: 18px; font-size: 15px; line-height: 1.7; color: var(--earth); max-width: 62ch;" set:html={s.pricingNote} />
+      )}
+    </section>
+  )}
+
   {/* Quy trình */}
   <section style="padding: 0 var(--pad-x) var(--pad-section); max-width: 1280px; margin: 0 auto;">
     <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--earth); text-transform: uppercase; border-top: 1px solid var(--ink); padding-top: 28px; margin-bottom: 40px;">

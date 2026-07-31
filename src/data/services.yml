@@ -110,3 +110,109 @@ services:
       - q: "Khu vực nhận thi công xây dựng?"
         a: "Chúng tôi nhận công trình tại Quy Nhơn, Gia Lai (Bình Định cũ) và các tỉnh lân cận. Liên hệ hotline 0933 774 708 để được khảo sát."
     relatedHeading: "Công trình tiêu biểu"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Giá trong `pricing` là GIÁ SÀN, gốc từ báo giá đã gửi khách trong WOTU APP
+  # (bảng quote_items) ngày 31/07/2026 — KHÔNG bịa. Mẫu còn mỏng (~2 công trình
+  # cho phần bếp) nên chỉ công bố mức "từ", không công bố trần giá.
+  #
+  # ⚠️ Tủ quần áo: anh Cris CHỐT sàn là 1.950.000đ/m² (31/07). Trong DB còn vài
+  # dòng 1.350.000đ/m² nhưng đó KHÔNG phải giá đang bán — đừng "sửa lại cho khớp
+  # min(DB)". Cánh kính = 1.950.000 + 1.250.000 phụ thu = 3.200.000đ/m².
+  # Muốn đổi giá: hỏi anh Cris, không tự lấy min() từ app.
+  # ─────────────────────────────────────────────────────────────────────────
+  - slug: tu-bep-quy-nhon
+    order: 4
+    eyebrow: "Dịch vụ /04"
+    navName: "Tủ bếp"
+    title: "Đóng tủ bếp theo kích thước"
+    titleEm: "kích thước"
+    metaTitle: "Đóng tủ bếp Quy Nhơn, giá từ 2.350.000đ/mét dài | WOTU"
+    metaDescription: "WOTU đóng tủ bếp tại Quy Nhơn theo kích thước thật, làm tại xưởng riêng ở Hoa Lư. Tủ bếp trên từ 2.350.000đ/mét dài, tủ dưới từ 2.600.000đ, mặt đá từ 2.150.000đ. Bảo hành 2 năm khung gỗ."
+    lede: "Không có căn bếp nào giống căn bếp nào. Tủ bếp đóng sẵn cắt cho vừa luôn để lại những khe hở mà bạn phải nhìn mỗi ngày trong suốt mười năm sau đó."
+    intro:
+      - "Bếp là nơi bị dùng nhiều nhất và bị làm ẩu nhiều nhất trong một căn nhà. WOTU đo đạc tại chỗ rồi đóng tủ theo đúng kích thước thật của bức tường, kể cả khi tường không vuông góc — điều gần như luôn xảy ra với nhà ở Quy Nhơn."
+      - "Toàn bộ phần gỗ làm tại xưởng riêng ở Hoa Lư: cắt CNC, gỗ sấy đạt độ ẩm 8–12% trước khi vào máy. Khí hậu biển Quy Nhơn khiến gỗ chưa sấy kỹ cong vênh chỉ sau một mùa mưa, nên đây là khâu chúng tôi không rút ngắn."
+    pricingTitle: "Giá tủ bếp tham khảo"
+    pricing:
+      - { item: "Tủ bếp trên", price: "từ 2.350.000đ", unit: "mét dài" }
+      - { item: "Tủ bếp dưới", price: "từ 2.600.000đ", unit: "mét dài" }
+      - { item: "Mặt đá bếp", price: "từ 2.150.000đ", unit: "mét dài" }
+      - { item: "Kính ốp tường bếp", price: "từ 800.000đ", unit: "mét dài" }
+      - { item: "Hệ đèn LED hắt sáng", price: "từ 200.000đ", unit: "mét dài" }
+    # ⚠️ TẠM: câu "bếp chữ L 4 mét thường 20–35 triệu" là ƯỚC TÍNH của Claude
+    # (4m × giá sàn tủ trên + tủ dưới ≈ 19,8tr, nới lên theo vật liệu), KHÔNG có
+    # trong DB và anh Cris chưa xác nhận (31/07). Có số thật thì thay vào.
+    pricingNote: "Đây là mức khởi điểm lấy từ báo giá thật đã gửi khách, không phải giá quảng cáo. Giá cuối phụ thuộc loại gỗ, ngũ kim (ray trượt, bản lề giảm chấn) và loại đá mặt bàn. Một căn bếp chữ L dài 4 mét thường rơi vào khoảng 20–35 triệu cho phần tủ. WOTU đo đạc và <strong>báo giá chi tiết trong 24 giờ</strong>, miễn phí."
+    includesTitle: "Bao gồm khi đóng tủ bếp"
+    includes:
+      - "Đo đạc tại nhà, xử lý tường lệch và góc chết"
+      - "Bản vẽ mặt đứng bếp để duyệt trước khi cắt gỗ"
+      - "Thùng tủ, cánh và hệ ngăn kéo đóng tại xưởng Hoa Lư"
+      - "Lắp ray trượt, bản lề giảm chấn, phụ kiện kéo"
+      - "Mặt đá, kính ốp tường và đèn LED (nếu chọn)"
+      - "Giao lắp miễn phí tại Quy Nhơn, Gia Lai"
+      - "Bảo hành 2 năm khung gỗ"
+    process:
+      - { t: "Đo tại nhà", d: "Đo tường thật, ghi nhận vị trí ống nước, ổ điện, cửa sổ." }
+      - { t: "Chốt bản vẽ & giá", d: "Mặt đứng bếp + báo giá chi tiết từng hạng mục trong 24 giờ." }
+      - { t: "Đóng tại xưởng", d: "Cắt CNC theo kích thước thật, gỗ đã sấy 8–12%." }
+      - { t: "Lắp & nghiệm thu", d: "Lắp tại nhà, căn chỉnh cánh, dọn sạch rồi bàn giao." }
+    faq:
+      - q: "Đóng tủ bếp ở Quy Nhơn giá bao nhiêu một mét dài?"
+        a: "Tủ bếp trên bắt đầu từ 2.350.000đ mỗi mét dài, tủ bếp dưới từ 2.600.000đ mỗi mét dài. Mặt đá tính riêng, từ 2.150.000đ mỗi mét dài. Một căn bếp chữ L dài khoảng 4 mét thường rơi vào 20–35 triệu cho phần tủ, tùy loại gỗ và ngũ kim."
+      - q: "Vì sao tủ bếp có loại 2,3 triệu, có loại hơn 6 triệu một mét?"
+        a: "Chênh lệch nằm ở ba thứ: loại gỗ (gỗ công nghiệp phủ melamine ở mức thấp, gỗ tự nhiên như sồi hoặc óc chó ở mức cao), ngũ kim (ray trượt và bản lề giảm chấn nhập khẩu đắt hơn hàng phổ thông đáng kể), và độ phức tạp của hệ tủ. WOTU báo giá tách riêng từng phần để bạn thấy rõ tiền đi vào đâu."
+      - q: "Tủ bếp gỗ có bị cong vênh ở Quy Nhơn không?"
+        a: "Có, nếu gỗ không được sấy đúng. Khí hậu biển độ ẩm cao khiến gỗ chưa sấy kỹ cong vênh và bung mối nối chỉ sau một mùa mưa. Gỗ tại xưởng WOTU được sấy đạt độ ẩm 8–12% trước khi gia công, và chúng tôi bảo hành khung gỗ 2 năm."
+      - q: "Đóng tủ bếp mất bao lâu?"
+        a: "Thường 2–3 tuần kể từ khi chốt bản vẽ: khoảng 10–14 ngày sản xuất tại xưởng và 1–2 ngày lắp đặt tại nhà. Nếu làm cùng lúc với hạng mục khác trong nhà, chúng tôi xếp lịch để không phải dọn nhà nhiều lần."
+      - q: "Có làm tủ bếp cho căn hộ chung cư không?"
+        a: "Có. Căn hộ chung cư thường vướng trần thấp và hộp kỹ thuật, nên phần đo đạc quan trọng hơn nhà phố. Chúng tôi đã làm bếp cho căn hộ ở FLC Sea Tower và TMS, đều là chung cư tại Quy Nhơn."
+    relatedHeading: "Những căn bếp chúng tôi đã làm"
+
+  - slug: xuong-noi-that-quy-nhon
+    order: 5
+    eyebrow: "Dịch vụ /05"
+    navName: "Xưởng"
+    title: "Xưởng nội thất tại Quy Nhơn"
+    titleEm: "tại Quy Nhơn"
+    metaTitle: "Xưởng nội thất Quy Nhơn, đóng đồ gỗ theo yêu cầu | WOTU"
+    metaDescription: "Xưởng nội thất WOTU tại Lô 17-18 Hoa Lư, Quy Nhơn: cắt CNC, gỗ sấy 8–12%, đóng tủ áo từ 1.950.000đ/m². Khách ghé xem vật liệu và sản phẩm thật, thứ 2 đến thứ 7."
+    lede: "Phần lớn đơn vị nội thất ở Quy Nhơn đặt gia công bên ngoài rồi gắn tên mình lên. Chúng tôi có xưởng riêng, và bạn được vào xem."
+    intro:
+      - "Xưởng WOTU đặt tại Lô 17-18 Hoa Lư, Quy Nhơn — cùng địa chỉ với văn phòng, không phải xưởng thuê ở tỉnh khác. Máy CNC cắt theo file bản vẽ nên mối nối khít và các chi tiết giống hệt nhau giữa các món cùng bộ."
+      - "Có xưởng riêng đổi được ba thứ cho khách: giá không phải cõng phần trung gian, sai sót sửa được ngay trong ngày thay vì chờ bên gia công, và bạn có thể ghé tận nơi sờ vào vật liệu trước khi chốt. Xưởng mở cửa thứ 2 đến thứ 7, 8h–17h30."
+    pricingTitle: "Giá đóng đồ gỗ tham khảo"
+    pricing:
+      - { item: "Tủ quần áo", price: "từ 1.950.000đ", unit: "mét vuông" }
+      - { item: "Tủ quần áo cánh kính", price: "từ 3.200.000đ", unit: "mét vuông" }
+      - { item: "Tủ bếp trên", price: "từ 2.350.000đ", unit: "mét dài" }
+      - { item: "Tủ bếp dưới", price: "từ 2.600.000đ", unit: "mét dài" }
+    pricingNote: "Mức khởi điểm lấy từ báo giá thật đã gửi khách. Giá tính theo diện tích phủ bì của hệ tủ, thay đổi theo loại gỗ và ngũ kim. Muốn biết chính xác cho nhà mình, gửi bản vẽ hoặc kích thước qua hotline <strong>0933 774 708</strong> — WOTU báo giá chi tiết trong 24 giờ."
+    includesTitle: "Xưởng làm được gì"
+    includes:
+      - "Cắt CNC theo file bản vẽ, sai số thấp"
+      - "Đóng tủ áo, tủ bếp, kệ TV, giường, bàn theo kích thước riêng"
+      - "Gỗ cao su và tần bì sấy đạt độ ẩm 8–12%"
+      - "Dòng cao cấp: óc chó, sồi theo yêu cầu"
+      - "Sơn hoàn thiện và xử lý bề mặt tại chỗ"
+      - "Giao và lắp miễn phí tại Quy Nhơn, Gia Lai; giao toàn quốc"
+      - "Bảo hành 2 năm khung gỗ"
+    process:
+      - { t: "Gửi kích thước", d: "Bản vẽ, ảnh mẫu hoặc chỉ cần số đo — chúng tôi đọc được hết." }
+      - { t: "Báo giá 24 giờ", d: "Bóc tách từng hạng mục, ghi rõ loại gỗ và ngũ kim." }
+      - { t: "Sản xuất tại xưởng", d: "Cắt CNC, ráp, sơn hoàn thiện tại Hoa Lư." }
+      - { t: "Giao & lắp", d: "Lắp tại nhà, căn chỉnh, dọn sạch rồi bàn giao." }
+    faq:
+      - q: "Xưởng nội thất WOTU ở đâu tại Quy Nhơn?"
+        a: "Xưởng đặt tại Lô 17-18 Hoa Lư, Quy Nhơn, Gia Lai — cùng địa chỉ với văn phòng. Bạn có thể ghé xem vật liệu và sản phẩm thật từ thứ 2 đến thứ 7, 8h00–17h30. Gọi trước hotline 0933 774 708 để có người dẫn xem."
+      - q: "Đóng đồ gỗ tại xưởng giá bao nhiêu?"
+        a: "Tủ quần áo bắt đầu từ 1.950.000đ mỗi mét vuông, tủ bếp từ 2.350.000đ mỗi mét dài. Giá phụ thuộc loại gỗ và ngũ kim đi kèm. Gửi kích thước qua hotline 0933 774 708, WOTU báo giá chi tiết trong 24 giờ, miễn phí."
+      - q: "Có nhận đóng đồ lẻ không, hay chỉ làm trọn gói?"
+        a: "Nhận cả hai. Bạn có thể chỉ đóng một tủ áo hoặc một hệ kệ TV, không bắt buộc làm trọn căn. Nhiều khách bắt đầu bằng một món rồi quay lại làm tiếp các phòng khác."
+      - q: "Tôi có mẫu trên mạng, xưởng làm theo được không?"
+        a: "Được. Gửi ảnh mẫu kèm kích thước phòng, chúng tôi dựng lại bản vẽ và tư vấn phần nào nên điều chỉnh cho hợp với không gian thật và khí hậu Quy Nhơn. Có những mẫu đẹp trên ảnh nhưng dùng vật liệu không chịu được độ ẩm biển."
+      - q: "Gỗ dùng ở xưởng là loại gì?"
+        a: "Chủ yếu là gỗ cao su và tần bì, sấy đạt độ ẩm 8–12% trước khi gia công. Dòng cao cấp có óc chó và sồi theo yêu cầu. Chúng tôi ghi rõ loại gỗ trong báo giá, không dùng tên chung chung như gỗ tự nhiên."
+    relatedHeading: "Sản phẩm từ xưởng WOTU"

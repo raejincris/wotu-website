@@ -29,6 +29,10 @@ const {
 
 const SITE_URL = 'https://www.wotu.vn';
 const ORG_NAME = 'WOTU';
+// Tên phải khớp TỪNG KÝ TỰ với Google Business Profile ("WOTU - Nội thất Quy Nhơn")
+// để Google nối được website ↔ Place — nền của Local SEO (NAP). Đổi ở đây thì phải
+// đổi đồng thời trên GBP, 2 fanpage, Zalo OA. Xem WOTU SEO/ke-hoach-seo-aeo-geo-wotu.md mục 1.3.
+const PLACE_NAME = 'WOTU - Nội thất Quy Nhơn';
 const ORG_LEGAL_NAME = 'Studio thiết kế & thi công nội thất WOTU';
 const PHONE_INTL = '+84' + site.hotline.replace(/\s|^0/g, '');
 
@@ -37,7 +41,8 @@ const localBusiness = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
   '@id': `${SITE_URL}/#studio`,
-  name: ORG_NAME,
+  name: PLACE_NAME,
+  alternateName: ORG_NAME,
   legalName: ORG_LEGAL_NAME,
   description: site.description,
   url: SITE_URL,

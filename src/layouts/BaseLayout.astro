@@ -92,6 +92,11 @@ const studioThemeCss = `html[data-theme]{--earth:${studioEarth};--accent:${studi
       image={ogImageURL}
       url={canonicalURL}
     />
+    <!-- Page-specific JSON-LD (Service, FAQPage…) từ page inject vào đây.
+         THIẾU slot này = mọi <Fragment slot="head"> của trang con bị nuốt IM LẶNG:
+         3 trang /studio/dich-vu/* mất schema Service + FAQPage từ khi tạo tới 31/07.
+         ShopLayout đã có slot tương ứng — 2 layout phải giữ ngang nhau. -->
+    <slot name="head" />
 
     <link rel="preconnect" href="https://images.unsplash.com" />
 
