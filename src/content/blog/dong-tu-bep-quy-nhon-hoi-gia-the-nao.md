@@ -13,7 +13,9 @@ Câu hỏi *"đóng tủ bếp bao nhiêu một mét?"* nghe có vẻ hợp lý,
 
 Bốn thứ quyết định phần lớn con số cuối cùng. **Thùng tủ**: loại ván gì, chống ẩm ra sao; ở khí hậu Quy Nhơn, khoang chậu rửa là nơi ván rẻ tiền lộ mặt sớm nhất. **Mặt bếp**: đá tự nhiên, đá nhân tạo hay gỗ, chênh nhau đáng kể. **Phụ kiện**: ray giảm chấn, bản lề, kệ góc xoay; đây là chỗ báo giá rẻ hay cắt trước tiên, và cũng là chỗ hỏng trước tiên. Và **hiện trạng bếp nhà bạn**: đường nước, đường điện, tường có vuông hay không.
 
-Vì thế WOTU không niêm yết giá tủ bếp theo mét, vì chúng tôi không muốn đưa một con số đẹp rồi cộng phụ phí sau. Thay vào đó, quy trình qua [WOTU Studio](/studio/): kiến trúc sư đến đo đạc tận nơi, dựng 3D cho bạn xem trước, và gửi **báo giá chi tiết từng hạng mục trong 24 giờ**, miễn phí, không ràng buộc. Bạn cầm bảng đó đi so sánh ở đâu cũng được; báo giá minh bạch không sợ bị so.
+Vì thế WOTU công bố **mức sàn** chứ không công bố một con số duy nhất theo mét: tủ bếp trên từ **2.350.000đ/mét dài**, tủ bếp dưới từ **2.600.000đ/mét dài**, mặt đá tính riêng từ **2.150.000đ/mét dài** — bảng đầy đủ ở trang [đóng tủ bếp Quy Nhơn](/studio/dich-vu/tu-bep-quy-nhon/). Đó là mức khởi điểm lấy từ báo giá thật đã gửi khách, để bạn có mốc mà so, chứ không phải con số đẹp rồi cộng phụ phí sau.
+
+Con số cuối thì phải đo mới có. Quy trình qua [WOTU Studio](/studio/): kiến trúc sư đến đo đạc tận nơi, dựng 3D cho bạn xem trước, và gửi **báo giá chi tiết từng hạng mục trong 24 giờ**, miễn phí, không ràng buộc. Bạn cầm bảng đó đi so sánh ở đâu cũng được; báo giá minh bạch không sợ bị so.
 
 Còn nếu muốn ước lượng khung ngân sách cho cả khu bếp – ăn trước khi gọi ai, giá niêm yết sẵn của WOTU là một mốc thật để bám: combo phòng ăn [Sum Vầy](/combo/sum-vay/) 6 chỗ **12,8 triệu**, bàn ăn gỗ sồi "Đoàn Viên" **4,5 triệu**, tủ chén "Sum" 3 cánh **5,4 triệu**. Đồ rời có giá công khai, còn phần đóng theo bếp nhà bạn thì đo xong mới có con số tử tế được.
 
