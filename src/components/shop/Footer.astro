@@ -39,6 +39,7 @@ const extraPages = navPages('shop');
           <li><a href="/cau-hoi-thuong-gap/">Câu hỏi thường gặp</a></li>
           <li><a href="/tuyen-dung/">Tuyển dụng</a></li>
           <li><a href="/bao-mat">Chính sách bảo mật</a></li>
+          <li><a href="/dieu-khoan/">Điều khoản &amp; Quy chế</a></li>
           <li><a href="/studio/">Studio thiết kế ↗</a></li>
           {extraPages.map((p) => <li><a href={`/${p.slug}/`}>{p.title}</a></li>)}
         </ul>
@@ -54,6 +55,25 @@ const extraPages = navPages('shop');
         </ul>
       </div>
     </div>
+    <div class="shop-foot-legal">
+      <div class="shop-foot-legal-text">
+        <strong>{site.legal.companyName}</strong>
+        <span>Mã số doanh nghiệp / MST: <b>{site.legal.taxCode}</b></span>
+        <span>Trụ sở: {site.legal.registeredAddress}</span>
+        <span>Người đại diện &amp; chịu trách nhiệm nội dung: {site.legal.representative}</span>
+      </div>
+      {site.legal.moitUrl && (
+        <a
+          class="shop-foot-moit"
+          href={site.legal.moitUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Website đã thông báo với Bộ Công Thương, xem hồ sơ trên online.gov.vn"
+        >
+          <img src="/bo-cong-thuong.png" alt="Đã thông báo Bộ Công Thương" width="200" height="76" loading="lazy" decoding="async" />
+        </a>
+      )}
+    </div>
     <div class="shop-foot-bottom">
       <span>© 2026 WOTU · Thiết kế &amp; thi công nội thất. <span class="shop-foot-version">v{SITE_VERSION}</span></span>
       <span>Studio + Xưởng tại Quy Nhơn, Gia Lai</span>
@@ -62,6 +82,41 @@ const extraPages = navPages('shop');
 </footer>
 
 <style>
+  /* Khối pháp nhân (NĐ 52/2013 Điều 29). Đặt trên dải copyright, cùng tông fine-print. */
+  .shop-foot-legal {
+    margin-top: 44px;
+    padding-top: 24px;
+    border-top: 1px solid color-mix(in oklab, var(--shop-bg) 12%, transparent);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .shop-foot-legal-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    line-height: 1.6;
+    /* Cùng bậc tương phản với .shop-foot-bottom (đã đạt 4.5:1 trên nền ink). */
+    color: color-mix(in oklab, var(--shop-bg) 55%, transparent);
+    max-width: 62ch;
+  }
+  .shop-foot-legal-text strong {
+    color: color-mix(in oklab, var(--shop-bg) 78%, transparent);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .shop-foot-legal-text b { font-weight: 600; }
+  .shop-foot-moit img { display: block; height: 40px; width: auto; }
+  /* .shop-foot-bottom mang sẵn margin-top:50px (khi nó đứng ngay sau grid).
+     Có khối pháp nhân chen giữa thì siết lại, tránh 2 hairline cách nhau quá xa. */
+  .shop-foot-legal + .shop-foot-bottom { margin-top: 20px; }
+  @media (max-width: 680px) {
+    .shop-foot-legal { gap: 18px; }
+  }
+
   .shop-foot-version {
     /* Không hạ opacity — kế thừa màu fine-print của foot-bottom (đạt 4.5:1 trên nền ink). */
     font-variant-numeric: tabular-nums;

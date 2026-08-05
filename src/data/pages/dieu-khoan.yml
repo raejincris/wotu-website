@@ -1,0 +1,81 @@
+title: "Điều khoản & Quy chế bán hàng"
+description: "Điều kiện giao dịch chung khi mua nội thất tại wotu.vn: thông tin đơn vị bán hàng, giá, quy trình đặt hàng, thanh toán, giao nhận, bảo hành đổi trả và giải quyết tranh chấp."
+template: shop
+blocks:
+  - id: hero
+    type: richText
+    eyebrow: "Pháp lý"
+    heading: "Điều khoản &amp; <em>Quy chế bán hàng</em>"
+    body: "<p>Trang này là điều kiện giao dịch chung áp dụng cho mọi đơn hàng đặt qua website <strong>wotu.vn</strong>. Khi anh chị gửi yêu cầu đặt hàng hoặc yêu cầu tư vấn trên website, chúng tôi hiểu rằng anh chị đã đọc và đồng ý với những điều dưới đây.</p><p>Cập nhật lần gần nhất: tháng 8/2026.</p>"
+    align: left
+
+  - id: don-vi
+    type: richText
+    eyebrow: "Mục 1"
+    heading: "Đơn vị bán hàng"
+    body: "<p>Website wotu.vn do <strong>CÔNG TY TNHH SẢN XUẤT VÀ THIẾT KẾ NỘI THẤT WOTU</strong> sở hữu và vận hành.</p><p><strong>Mã số doanh nghiệp / Mã số thuế:</strong> 4101612905<br/><strong>Trụ sở:</strong> Lô DC2-17 Khu QHDC dọc đường Hoa Lư nối dài, Phường Quy Nhơn, Tỉnh Gia Lai<br/><strong>Người đại diện theo pháp luật:</strong> Nguyễn Anh Quốc<br/><strong>Điện thoại:</strong> 0933 774 708<br/><strong>Email:</strong> hello@wotu.vn</p><p>Mọi thắc mắc, khiếu nại liên quan đến đơn hàng, anh chị liên hệ trực tiếp qua hotline hoặc email ở trên. Chúng tôi phản hồi trong giờ hành chính, thường trong vòng 24 giờ làm việc.</p>"
+    align: left
+
+  - id: hang-hoa
+    type: richText
+    eyebrow: "Mục 2"
+    heading: "Hàng hoá, dịch vụ và giá"
+    body: "<p>WOTU cung cấp đồ nội thất do xưởng tại Quy Nhơn sản xuất, các combo nội thất trọn gói, cùng dịch vụ thiết kế và thi công nội thất. Thông tin từng sản phẩm (kích thước, chất liệu, tình trạng hàng) được mô tả trên trang chi tiết tương ứng.</p><p><strong>Về giá:</strong> giá niêm yết trên website tính bằng Đồng Việt Nam. Với sản phẩm bán sẵn, giá hiển thị là giá của món đồ theo cấu hình tiêu chuẩn. Với hạng mục đóng theo kích thước thực tế (tủ bếp, tủ áo, hạng mục thi công), con số công bố là <strong>mức giá sàn</strong> mang tính tham khảo — báo giá cuối cùng chỉ có sau khi đo đạc tại công trình và được xác nhận bằng văn bản.</p><p>Chi phí vận chuyển ngoài khu vực miễn phí, chi phí phát sinh do thay đổi thiết kế hoặc vật liệu theo yêu cầu riêng sẽ được báo rõ trước khi thực hiện. Chúng tôi không tự ý thay đổi giá của đơn hàng đã xác nhận.</p>"
+    align: left
+
+  - id: quy-trinh-dat
+    type: richText
+    eyebrow: "Mục 3"
+    heading: "Quy trình đặt hàng &amp; xác nhận"
+    body: "<p>Website <strong>không có chức năng thanh toán trực tuyến</strong>. Giỏ hàng trên wotu.vn là công cụ ghi lại món đồ anh chị quan tâm và gửi yêu cầu cho chúng tôi. Đơn hàng chỉ hình thành sau khi hai bên xác nhận với nhau.</p><p><strong>Bước 1.</strong> Anh chị chọn sản phẩm, thêm vào giỏ, rồi gửi thông tin liên hệ (họ tên, số điện thoại, ghi chú) qua biểu mẫu.<br/><strong>Bước 2.</strong> Nhân viên WOTU gọi lại trong giờ hành chính để xác nhận món đồ, số lượng, địa chỉ giao, thời gian mong muốn và tổng chi phí.<br/><strong>Bước 3.</strong> Hai bên chốt báo giá. Với đơn hàng lớn hoặc hạng mục thi công, chúng tôi lập hợp đồng hoặc phiếu xác nhận đơn hàng ghi rõ hạng mục, giá, tiến độ và điều kiện bảo hành.<br/><strong>Bước 4.</strong> Anh chị đặt cọc theo thoả thuận, WOTU đưa đơn vào sản xuất hoặc chuẩn bị giao.<br/><strong>Bước 5.</strong> Giao, lắp đặt, nghiệm thu và thanh toán phần còn lại.</p><p>Anh chị có quyền huỷ yêu cầu <strong>miễn phí</strong> ở bất kỳ thời điểm nào trước Bước 4. Sau khi đơn đã vào sản xuất, việc huỷ hoặc thay đổi được xử lý theo thoả thuận ghi trong hợp đồng.</p>"
+    align: left
+
+  - id: thanh-toan
+    type: richText
+    eyebrow: "Mục 4"
+    heading: "Phương thức thanh toán"
+    body: "<p>WOTU nhận thanh toán bằng <strong>tiền mặt</strong> hoặc <strong>chuyển khoản ngân hàng</strong> vào tài khoản mang tên công ty. Thông thường đơn hàng được chia thành khoản đặt cọc khi chốt đơn và khoản còn lại khi nghiệm thu bàn giao; tỷ lệ cụ thể ghi rõ trong hợp đồng hoặc phiếu xác nhận đơn hàng của từng đơn.</p><p>Chúng tôi <strong>không thu tiền qua website</strong> và không yêu cầu anh chị cung cấp thông tin thẻ ngân hàng ở bất kỳ biểu mẫu nào trên wotu.vn. Nếu nhận được yêu cầu chuyển tiền vào tài khoản cá nhân nhân danh WOTU, anh chị vui lòng gọi hotline 0933 774 708 để kiểm chứng trước khi chuyển.</p><p>Mỗi lần thanh toán đều có chứng từ. Hoá đơn giá trị gia tăng được xuất theo yêu cầu.</p>"
+    align: left
+
+  - id: giao-nhan
+    type: richText
+    eyebrow: "Mục 5"
+    heading: "Giao nhận &amp; lắp đặt"
+    body: "<p>WOTU giao và lắp đặt <strong>miễn phí trong nội thành Quy Nhơn và bán kính 20km</strong>. Khu vực xa hơn được báo phí vận chuyển thực tế trước khi chốt đơn.</p><p>Thời gian giao phụ thuộc hạng mục: hàng có sẵn thường trong vài ngày, hàng đóng theo yêu cầu tính theo tiến độ sản xuất đã thống nhất trong hợp đồng. Chúng tôi liên hệ chốt lịch cụ thể và báo trước 24 giờ.</p><p>Chi tiết đầy đủ ở trang <a href=\"/giao-hang-lap-dat/\">Giao hàng &amp; Lắp đặt</a>.</p>"
+    align: left
+
+  - id: bao-hanh
+    type: richText
+    eyebrow: "Mục 6"
+    heading: "Bảo hành &amp; đổi trả"
+    body: "<p>Sản phẩm nội thất WOTU được <strong>bảo hành 2 năm cho phần khung gỗ và kết cấu</strong>. Phần vải bọc, đệm mút bảo hành 1 năm. Bảo hành áp dụng cho lỗi từ vật liệu và quá trình sản xuất, không áp dụng cho hao mòn tự nhiên, hư hỏng do sử dụng sai cách, tự ý tháo lắp hoặc do tác động bên ngoài.</p><p>Nếu món đồ giao đến bị lỗi, sai mẫu hoặc hư hại trong vận chuyển, anh chị báo cho chúng tôi <strong>ngay tại thời điểm nghiệm thu</strong> hoặc trong vòng 48 giờ kèm hình ảnh — WOTU chịu trách nhiệm sửa chữa hoặc đổi mới, không tính phí.</p><p>Điều kiện, thời hạn và quy trình chi tiết ở trang <a href=\"/bao-hanh-doi-tra/\">Bảo hành &amp; Đổi trả</a>.</p>"
+    align: left
+
+  - id: thong-tin-ca-nhan
+    type: richText
+    eyebrow: "Mục 7"
+    heading: "Bảo vệ thông tin cá nhân"
+    body: "<p>Chúng tôi chỉ thu thập thông tin cần thiết để liên hệ và thực hiện đơn hàng: họ tên, số điện thoại, email, địa chỉ giao hàng và nội dung ghi chú anh chị tự nhập.</p><p>Thông tin này được dùng để tư vấn, báo giá, giao hàng và chăm sóc sau bán hàng. WOTU <strong>không bán, không trao đổi thông tin khách hàng cho bên thứ ba</strong> vì mục đích thương mại. Anh chị có quyền yêu cầu xem, chỉnh sửa hoặc xoá thông tin của mình bất cứ lúc nào bằng cách gửi email tới hello@wotu.vn.</p><p>Chính sách đầy đủ ở trang <a href=\"/bao-mat\">Chính sách bảo mật</a>.</p>"
+    align: left
+
+  - id: trach-nhiem
+    type: richText
+    eyebrow: "Mục 8"
+    heading: "Quyền và nghĩa vụ hai bên"
+    body: "<p><strong>WOTU có trách nhiệm</strong> mô tả hàng hoá trung thực, giữ đúng giá đã xác nhận, sản xuất và giao đúng tiến độ thoả thuận, bảo hành theo đúng cam kết, và bảo mật thông tin khách hàng.</p><p><strong>Khách hàng có trách nhiệm</strong> cung cấp thông tin liên hệ và địa chỉ chính xác, kiểm tra hàng khi nghiệm thu, thanh toán đúng hạn theo thoả thuận, và sử dụng, bảo quản sản phẩm theo hướng dẫn để bảo hành còn hiệu lực.</p><p>Nội dung, hình ảnh, bản vẽ và bài viết trên wotu.vn thuộc quyền sở hữu của WOTU. Anh chị vui lòng không sao chép để dùng cho mục đích thương mại khi chưa có sự đồng ý bằng văn bản.</p>"
+    align: left
+
+  - id: tranh-chap
+    type: richText
+    eyebrow: "Mục 9"
+    heading: "Giải quyết tranh chấp"
+    body: "<p>Khi có vướng mắc, chúng tôi mong anh chị liên hệ trực tiếp trước — hotline <strong>0933 774 708</strong> hoặc email <strong>hello@wotu.vn</strong>. Phần lớn vấn đề được xử lý xong trong vài ngày bằng cách nói chuyện thẳng thắn.</p><p>Trường hợp hai bên không tự thoả thuận được, tranh chấp sẽ được giải quyết theo quy định pháp luật Việt Nam tại Toà án có thẩm quyền nơi công ty đặt trụ sở.</p><p>WOTU có quyền cập nhật quy chế này khi cần. Bản mới có hiệu lực kể từ khi đăng trên trang này; đơn hàng đã xác nhận trước đó vẫn áp dụng theo điều khoản tại thời điểm xác nhận.</p>"
+    align: left
+
+  - id: cta-dieu-khoan
+    type: bannerCta
+    heading: "Còn điều gì <em>chưa rõ</em>?"
+    sub: "Gọi 0933 774 708 hoặc để lại lời nhắn, chúng tôi giải thích cặn kẽ trước khi anh chị quyết định."
+    btnLabel: "Liên hệ WOTU"
+    btnHref: "/#contact"
+    tone: accent

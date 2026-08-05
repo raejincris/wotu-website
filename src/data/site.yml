@@ -7,6 +7,21 @@ address:
   mapsUrl: https://maps.app.goo.gl/eovTsyCiwiSP5YAA6
 hotline: 0933 774 708
 email: hello@wotu.vn
+# Thông tin pháp nhân — BẮT BUỘC công bố công khai theo Điều 29 NĐ 52/2013/NĐ-CP
+# (website TMĐT bán hàng phải nêu tên, địa chỉ trụ sở, mã số thuế/số ĐKKD của chủ sở hữu).
+# Cán bộ Bộ Công Thương mở site kiểm tra khối này khi duyệt hồ sơ trên online.gov.vn.
+# Ở VN mã số doanh nghiệp = mã số thuế → `taxCode` cũng chính là số ĐKKD.
+legal:
+  companyName: CÔNG TY TNHH SẢN XUẤT VÀ THIẾT KẾ NỘI THẤT WOTU
+  shortName: WOTULTD
+  taxCode: "4101612905"
+  # Địa chỉ theo giấy ĐKKD — KHÁC chuỗi hiển thị ở `address.line1` (bản rút gọn khớp
+  # Google Business Profile). Cả hai cùng một nơi; đừng "đồng bộ" cái này đè cái kia.
+  registeredAddress: Lô DC2-17 Khu QHDC dọc đường Hoa Lư nối dài, Phường Quy Nhơn, Tỉnh Gia Lai
+  representative: Nguyễn Anh Quốc
+  # Sau khi online.gov.vn duyệt: dán URL hồ sơ vào đây → footer tự hiện logo
+  # "Đã thông báo Bộ Công Thương". Để trống thì khối logo không render.
+  moitUrl: ""
 social:
   facebook: https://www.facebook.com/wotuani
   facebookWorkshop: https://www.facebook.com/wotudecor22

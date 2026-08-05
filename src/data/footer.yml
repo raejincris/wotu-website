@@ -37,6 +37,8 @@ columns:
         href: "https://www.facebook.com/wotudecor22"
       - label: "Chính sách bảo mật"
         href: "/bao-mat"
+      - label: "Điều khoản & Quy chế"
+        href: "/dieu-khoan/"
 
 nav:
   links:

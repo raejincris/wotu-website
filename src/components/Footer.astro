@@ -1,5 +1,6 @@
 ---
 import footer from '../data/footer.yml';
+import site from '../data/site.yml';
 import { SITE_VERSION } from '../lib/version';
 import { navPages } from '../lib/custom-pages';
 
@@ -39,6 +40,26 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
       </div>
     ))}
   </div>
+  <!-- Khối pháp nhân — bắt buộc theo Điều 29 NĐ 52/2013/NĐ-CP, hiện ở CẢ 2 phần
+       (Shop + Studio) vì cùng một tên miền đã thông báo với Bộ Công Thương. -->
+  <div class="footer-legal" style="padding-top: 24px; display: flex; justify-content: space-between; align-items: flex-start; gap: 28px; flex-wrap: wrap; font-family: var(--font-sans); font-size: 13px; line-height: 1.6; color: var(--taupe);">
+    <div style="display: flex; flex-direction: column; gap: 4px; max-width: 62ch;">
+      <strong style="color: var(--clay); font-weight: 600;">{site.legal.companyName}</strong>
+      <span>Mã số doanh nghiệp / MST: <b style="font-weight: 600;">{site.legal.taxCode}</b></span>
+      <span>Trụ sở: {site.legal.registeredAddress}</span>
+      <span>Người đại diện &amp; chịu trách nhiệm nội dung: {site.legal.representative}</span>
+    </div>
+    {site.legal.moitUrl && (
+      <a
+        href={site.legal.moitUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Website đã thông báo với Bộ Công Thương, xem hồ sơ trên online.gov.vn"
+      >
+        <img src="/bo-cong-thuong.png" alt="Đã thông báo Bộ Công Thương" width="200" height="76" loading="lazy" decoding="async" style="display: block; height: 40px; width: auto;" />
+      </a>
+    )}
+  </div>
   <div class="footer-bottom" style="padding-top: 24px; display: flex; justify-content: space-between; font-family: var(--font-sans); font-size: 13px; color: var(--taupe);">
     <div><span data-cms="copyright">{footer.copyright}</span> <span>· v{SITE_VERSION}</span></div>
     <div data-cms="signature">{footer.signature}</div>
@@ -49,6 +70,7 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
   @media (max-width: 768px) {
     .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 32px !important; }
     .footer-bottom { flex-direction: column; gap: 8px; }
+    .footer-legal { gap: 18px !important; }
   }
   /* Galaxy S5 / iPhone SE narrow — 4 cột stack hết thành 1 cột */
   @media (max-width: 480px) {

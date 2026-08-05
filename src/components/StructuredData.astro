@@ -33,7 +33,9 @@ const ORG_NAME = 'WOTU';
 // để Google nối được website ↔ Place — nền của Local SEO (NAP). Đổi ở đây thì phải
 // đổi đồng thời trên GBP, 2 fanpage, Zalo OA. Xem WOTU SEO/ke-hoach-seo-aeo-geo-wotu.md mục 1.3.
 const PLACE_NAME = 'WOTU - Nội thất Quy Nhơn';
-const ORG_LEGAL_NAME = 'Studio thiết kế & thi công nội thất WOTU';
+// Tên pháp nhân THẬT trên giấy ĐKKD (trước đây là chuỗi mô tả tự đặt, không khớp
+// hồ sơ nào). `taxID` giúp Google/AI đối chiếu doanh nghiệp với dữ liệu công khai.
+const ORG_LEGAL_NAME = site.legal.companyName;
 const PHONE_INTL = '+84' + site.hotline.replace(/\s|^0/g, '');
 
 // Always emit Organization + LocalBusiness on every page (root-level discovery).
@@ -44,6 +46,8 @@ const localBusiness = {
   name: PLACE_NAME,
   alternateName: ORG_NAME,
   legalName: ORG_LEGAL_NAME,
+  taxID: site.legal.taxCode,
+  vatID: site.legal.taxCode,
   description: site.description,
   url: SITE_URL,
   telephone: PHONE_INTL,
