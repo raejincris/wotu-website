@@ -36,6 +36,10 @@ const PLACE_NAME = 'WOTU - Nội thất Quy Nhơn';
 // Tên pháp nhân THẬT trên giấy ĐKKD (trước đây là chuỗi mô tả tự đặt, không khớp
 // hồ sơ nào). `taxID` giúp Google/AI đối chiếu doanh nghiệp với dữ liệu công khai.
 const ORG_LEGAL_NAME = site.legal.companyName;
+// foundingDate: đổi ngày cấp ĐKDN (dd/mm/yyyy) sang ISO. Trước đây chỉ có năm "2022"
+// từ site.meta.est — nay là ngày thật trên giấy tờ, khớp dữ liệu doanh nghiệp công khai.
+const [_d, _m, _y] = String(site.legal.issuedDate).split('/');
+const FOUNDING_ISO = _y && _m && _d ? `${_y}-${_m}-${_d}` : site.meta.est;
 const PHONE_INTL = '+84' + site.hotline.replace(/\s|^0/g, '');
 
 // Always emit Organization + LocalBusiness on every page (root-level discovery).
@@ -73,7 +77,7 @@ const localBusiness = {
     '@type': 'Organization',
     name: ORG_NAME,
   },
-  foundingDate: site.meta.est,
+  foundingDate: FOUNDING_ISO,
   areaServed: {
     '@type': 'Country',
     name: 'Vietnam',

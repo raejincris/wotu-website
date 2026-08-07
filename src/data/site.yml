@@ -15,6 +15,10 @@ legal:
   companyName: CÔNG TY TNHH SẢN XUẤT VÀ THIẾT KẾ NỘI THẤT WOTU
   shortName: WOTULTD
   taxCode: "4101612905"
+  # Cơ quan cấp + ngày cấp lần đầu, theo Giấy CN ĐKDN (đăng ký thay đổi lần 3: 16/09/2025
+  # — mốc công bố vẫn lấy ngày cấp LẦN ĐẦU, đúng thông lệ ghi trên footer doanh nghiệp).
+  issuedBy: Sở Tài chính tỉnh Gia Lai
+  issuedDate: 30/03/2022
   # Địa chỉ theo giấy ĐKKD — KHÁC chuỗi hiển thị ở `address.line1` (bản rút gọn khớp
   # Google Business Profile). Cả hai cùng một nơi; đừng "đồng bộ" cái này đè cái kia.
   registeredAddress: Lô DC2-17 Khu QHDC dọc đường Hoa Lư nối dài, Phường Quy Nhơn, Tỉnh Gia Lai

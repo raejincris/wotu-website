@@ -45,7 +45,7 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
   <div class="footer-legal" style="padding-top: 24px; display: flex; justify-content: space-between; align-items: flex-start; gap: 28px; flex-wrap: wrap; font-family: var(--font-sans); font-size: 13px; line-height: 1.6; color: var(--taupe);">
     <div style="display: flex; flex-direction: column; gap: 4px; max-width: 62ch;">
       <strong style="color: var(--clay); font-weight: 600;">{site.legal.companyName}</strong>
-      <span>Mã số doanh nghiệp / MST: <b style="font-weight: 600;">{site.legal.taxCode}</b></span>
+      <span>Giấy CN ĐKDN / Mã số thuế: <b style="font-weight: 600;">{site.legal.taxCode}</b> — do {site.legal.issuedBy} cấp ngày {site.legal.issuedDate}</span>
       <span>Trụ sở: {site.legal.registeredAddress}</span>
       <span>Người đại diện &amp; chịu trách nhiệm nội dung: {site.legal.representative}</span>
     </div>
