@@ -48,4 +48,4 @@ Chủ nhà chọn tông trắng đen bóng, một hướng khó vì bề mặt b
 
 Toàn bộ hạng mục gồm thiết kế, sản xuất tại xưởng Hoa Lư và thi công hoàn thiện, gói trong **1 tháng**. Chi phí khoảng **380 triệu** cho full nội thất cả căn nhà phố. Với mặt bằng nhà phố Quy Nhơn cùng quy mô, đây là mức đầu tư của người xác định làm một lần dùng lâu, không phải làm tạm rồi sửa.
 
-Nhà anh đang ở Quy Nhơn và cũng là nhà ống sâu hẹp? [WOTU Studio](/studio/) đo đạc, dựng 3D và báo giá chi tiết trong 24 giờ, miễn phí. Xem thêm các mức chi phí thật tại [trang báo giá](/bao-gia/) hoặc [Nội thất Quy Nhơn](/noi-that-quy-nhon/).
+Nhà anh đang ở Quy Nhơn và cũng là nhà ống sâu hẹp? [WOTU Studio](/studio/) đo đạc, dựng 3D và báo giá chi tiết trong 24 giờ, miễn phí. Xem thêm các mức chi phí thật tại [trang báo giá](/bao-gia/) hoặc [Nội thất Quy Nhơn](/noi-that-quy-nhon/). Chưa rõ một gói [nội thất trọn gói Quy Nhơn](/studio/blog/noi-that-tron-goi-quy-nhon-gom-nhung-gi/) gồm những hạng mục nào? Bài này liệt kê đủ bốn phần kèm ba mức chi phí thật.

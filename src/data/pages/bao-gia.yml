@@ -40,7 +40,7 @@ blocks:
     type: richText
     eyebrow: "Đọc báo giá thế nào"
     heading: "Báo giá WOTU <em>gồm những gì</em>"
-    body: "<p>Một tờ báo giá tử tế phải trả lời được ba câu: <strong>làm món gì, bằng vật liệu gì, giá từng món bao nhiêu</strong>. Báo giá WOTU liệt kê từng hạng mục với chủng loại ván/gỗ cụ thể (ván có hoá đơn 100%, gỗ cao su, tần bì sấy đạt độ ẩm 8–12%), kích thước và đơn giá riêng, không gộp một cục \"trọn gói\" rồi tính sau.</p><p>Những thứ đã nằm trong giá: <strong>giao và lắp đặt miễn phí</strong> tại Quy Nhơn, Gia Lai; <strong>bảo hành 2 năm khung gỗ</strong> ghi thành điều khoản hợp đồng. Thanh toán: cọc <strong>30%</strong> khi ký, phần còn lại khi nghiệm thu, nghĩa là WOTU chỉ nhận đủ tiền khi bạn đã hài lòng.</p><p>Và một điều chúng tôi giữ từ ngày đầu: nếu mong muốn của bạn vượt ngân sách thực tế, WOTU nói thẳng ngay từ buổi tư vấn. Thà mất một khách vì trung thực còn hơn giữ một khách bằng con số không có thật.</p>"
+    body: "<p>Một tờ báo giá tử tế phải trả lời được ba câu: <strong>làm món gì, bằng vật liệu gì, giá từng món bao nhiêu</strong>. Báo giá WOTU liệt kê từng hạng mục với chủng loại vật liệu cụ thể (hệ tủ đóng theo nhà dùng ván công nghiệp chống ẩm, ghi rõ lớp phủ là melamine, laminate hay acrylic, ván có hoá đơn 100%), kích thước và đơn giá riêng, không gộp một cục \"trọn gói\" rồi tính sau.</p><p>Những thứ đã nằm trong giá: <strong>giao và lắp đặt miễn phí</strong> tại Quy Nhơn, Gia Lai; <strong>bảo hành 2 năm khung gỗ</strong> ghi thành điều khoản hợp đồng. Thanh toán: cọc <strong>30%</strong> khi ký, phần còn lại khi nghiệm thu, nghĩa là WOTU chỉ nhận đủ tiền khi bạn đã hài lòng.</p><p>Và một điều chúng tôi giữ từ ngày đầu: nếu mong muốn của bạn vượt ngân sách thực tế, WOTU nói thẳng ngay từ buổi tư vấn. Thà mất một khách vì trung thực còn hơn giữ một khách bằng con số không có thật.</p>"
     align: left
 
   - id: faq
@@ -57,7 +57,7 @@ blocks:
       - question: "Giá trong báo giá có phát sinh khi thi công không?"
         answer: "<p>Báo giá chi tiết theo từng hạng mục và chốt trong hợp đồng. Phát sinh chỉ xảy ra khi <em>bạn</em> đổi yêu cầu giữa chừng, và mọi thay đổi đều được báo giá bổ sung bằng văn bản trước khi làm, không có chuyện nghiệm thu xong mới xuất hiện con số lạ.</p>"
       - question: "Làm nội thất trọn căn ở Quy Nhơn khoảng bao nhiêu tiền?"
-        answer: "<p>Mức tham khảo từ giá thật: căn studio 30m² đồ đóng sẵn là <strong>45 triệu</strong> (<a href='/combo/an-cu/'>combo An Cư</a>, trả góp 0%); căn 2 phòng ngủ ghép từ combo niêm yết khoảng <strong>65–70 triệu</strong>; căn 2 phòng ngủ thiết kế + đóng riêng toàn bộ như <a href='/studio/projects/can-ho-flc-quy-nhon/'>công trình FLC Sea Tower</a> khoảng <strong>285 triệu</strong>. Con số chính xác cho căn của bạn: sau buổi đo đạc miễn phí.</p>"
+        answer: "<p>Mức tham khảo từ giá thật: căn studio 30m² đồ đóng sẵn là <strong>45 triệu</strong> (<a href='/combo/an-cu/'>combo An Cư</a>, trả góp 0%); căn 2 phòng ngủ ghép từ combo niêm yết khoảng <strong>65–70 triệu</strong>; căn 2 phòng ngủ thiết kế + đóng riêng toàn bộ như <a href='/studio/projects/can-ho-flc-quy-nhon/'>công trình FLC Sea Tower</a> khoảng <strong>285 triệu</strong>. Con số chính xác cho căn của bạn: sau buổi đo đạc miễn phí. Muốn biết một gói trọn thật sự phải gồm những hạng mục nào trước khi so giá, đọc bài <a href='/studio/blog/noi-that-tron-goi-quy-nhon-gom-nhung-gi/'>nội thất trọn gói Quy Nhơn gồm những gì</a>.</p>"
 
   - id: cta
     type: bannerCta

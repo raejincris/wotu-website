@@ -15,7 +15,7 @@ Nội thất là khoản chi vài chục đến vài trăm triệu, làm xong d�
 
 ### 1. Ván và gỗ dùng loại gì, có hoá đơn không?
 
-Đây là câu tách xưởng thật khỏi bên gom hàng trôi nổi. Hỏi cụ thể: gỗ tự nhiên hay ván công nghiệp, loại nào, sấy đến độ ẩm bao nhiêu. Ở khí hậu biển Quy Nhơn, gỗ không sấy kỹ là cong vênh sau một mùa nồm. WOTU dùng chủ yếu gỗ cao su và tần bì tự nhiên, sấy đạt độ ẩm 8–12% trước khi gia công, dòng cao cấp có óc chó, sồi theo yêu cầu; ván công nghiệp nếu dùng đều có **hoá đơn 100%**. Đơn vị nào ngại nói tên loại ván, con số của họ rẻ vì một lý do.
+Đây là câu tách xưởng thật khỏi bên gom hàng trôi nổi. Hỏi cụ thể: ván loại gì, có phải ván chống ẩm không, phủ bề mặt bằng gì, và **cạnh ván có được dán kín đủ bốn cạnh không**. Câu cuối là câu ít người hỏi nhất mà lại quan trọng nhất ở khí hậu biển, vì hơi ẩm đi vào từ cạnh cắt chứ không phải từ mặt ván. Hệ tủ đóng theo nhà ở WOTU dùng ván công nghiệp chống ẩm, phủ melamine, laminate hoặc acrylic tuỳ vị trí, ván có **hoá đơn 100%**. Đơn vị nào ngại nói tên loại ván, con số của họ rẻ vì một lý do.
 
 ### 2. Bảo hành bao lâu, và ghi ở đâu?
 
@@ -27,7 +27,7 @@ Một xưởng thật luôn mời bạn tới xem. Được đứng trước t�
 
 ### 4. Báo giá có tách từng hạng mục không?
 
-Một con số "trọn gói 120 triệu" không cho bạn cách nào so sánh, cũng không biết chỗ nào bị cắt. Yêu cầu báo giá tách rõ: từng món, loại vật liệu, loại phụ kiện, thời gian bảo hành. WOTU đo đạc, dựng 3D và gửi **báo giá chi tiết từng hạng mục trong 24 giờ**, miễn phí, cầm đi so ở đâu cũng được. Báo giá minh bạch không sợ bị so; báo giá gộp một cục thường có lý do để giấu.
+Một con số "trọn gói 120 triệu" không cho bạn cách nào so sánh, cũng không biết chỗ nào bị cắt. Yêu cầu báo giá tách rõ: từng món, loại vật liệu, loại phụ kiện, thời gian bảo hành. WOTU đo đạc, dựng 3D và gửi **báo giá chi tiết từng hạng mục trong 24 giờ**, miễn phí, cầm đi so ở đâu cũng được. Báo giá minh bạch không sợ bị so; báo giá gộp một cục thường có lý do để giấu. Muốn biết một tờ báo giá [nội thất trọn gói Quy Nhơn](/studio/blog/noi-that-tron-goi-quy-nhon-gom-nhung-gi/) đầy đủ phải có bao nhiêu phần, chúng tôi liệt kê riêng trong bài đó.
 
 ### 5. Cọc bao nhiêu, thanh toán theo mốc nào?
 

@@ -11,7 +11,7 @@ photoAlt: "Phòng khách phong cách Indochine do WOTU thiết kế và thi côn
 
 Phần lớn khách của WOTU làm nội thất lần đầu trong đời. Không ai dạy việc này ở trường, nên người ta học bằng cách trả giá, theo cả hai nghĩa. Sáu điều dưới đây là những gì chúng tôi ước khách nào cũng biết trước buổi tư vấn đầu tiên, dù cuối cùng bạn chọn WOTU hay không.
 
-**Một: hỏi xem xưởng trước khi hỏi giá.** Đơn vị có xưởng thật sẽ mời bạn đến xem; đơn vị đi mua hàng về bán sẽ tìm cách nói lảng. Xem xưởng cho bạn biết gỗ được sấy hay không, mộng ghép ra sao, và ai thật sự làm đồ cho nhà mình. Xưởng WOTU ở Lô 17-18 Hoa Lư, Quy Nhơn, mở cửa thứ 2–7, cứ ghé.
+**Một: hỏi xem xưởng trước khi hỏi giá.** Đơn vị có xưởng thật sẽ mời bạn đến xem; đơn vị đi mua hàng về bán sẽ tìm cách nói lảng. Xem xưởng cho bạn biết ván dùng loại gì, cạnh có được dán kín không, và ai thật sự làm đồ cho nhà mình. Xưởng WOTU ở Lô 17-18 Hoa Lư, Quy Nhơn, mở cửa thứ 2–7, cứ ghé.
 
 **Hai: mọi con số phải nằm trong hợp đồng.** Giá từng hạng mục, loại ván (có hoá đơn hay không), thời gian bàn giao, mức cọc, và bảo hành bao lâu cho phần nào. Ở WOTU: cọc 30%, thanh toán phần còn lại khi nghiệm thu, bảo hành 2 năm khung gỗ ghi thành điều khoản. Lời hứa miệng không sửa được tủ bung cánh.
 

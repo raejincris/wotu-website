@@ -1,7 +1,7 @@
 ---
-title: "Nội thất trọn gói ở Quy Nhơn gồm những gì, và khi nào nên chọn?"
+title: "Nội thất trọn gói Quy Nhơn gồm những gì? 4 phần và 3 mức giá thật"
 date: 2026-07-28
-excerpt: "Hai chữ trọn gói được dùng rất khác nhau giữa các đơn vị. Đây là những hạng mục một gói trọn thật sự phải có, kèm ba mức chi phí thật."
+excerpt: "Trọn gói đúng nghĩa phải đủ 4 phần: thiết kế, sản xuất, thi công, bảo hành. Kèm 3 mức chi phí thật từ 80 đến 380 triệu của công trình WOTU đã bàn giao ở Quy Nhơn."
 category: "Chi phí"
 tags: ["trọn gói", "chi phí", "quy nhơn", "thi công", "thiết kế"]
 tone: deep
@@ -9,7 +9,7 @@ photo: "/uploads/blog/noi-that-tron-goi-quy-nhon-gom-nhung-gi.webp"
 photoAlt: "Nhà phố tại Quy Nhơn được WOTU làm nội thất trọn gói, hệ ốp tường và cầu thang ốp đá"
 ---
 
-Nội thất trọn gói đúng nghĩa ở Quy Nhơn gồm bốn phần: **thiết kế và bản vẽ 3D, sản xuất đồ gỗ, thi công lắp đặt tại công trình, và bàn giao kèm bảo hành bằng văn bản.** Đơn vị nào thiếu một trong bốn phần đó thì bạn vẫn sẽ phải tự đi tìm người làm nốt, và phần tự đi tìm ấy mới là chỗ phát sinh chi phí.
+**Nội thất trọn gói Quy Nhơn** đúng nghĩa gồm bốn phần: **thiết kế và bản vẽ 3D, sản xuất đồ gỗ, thi công lắp đặt tại công trình, và bàn giao kèm bảo hành bằng văn bản.** Đơn vị nào thiếu một trong bốn phần đó thì bạn vẫn sẽ phải tự đi tìm người làm nốt, và phần tự đi tìm ấy mới là chỗ phát sinh chi phí.
 
 Vấn đề của hai chữ "trọn gói" là mỗi nơi hiểu một kiểu. Có nơi trọn gói nghĩa là bán đủ món đồ cho cả căn nhà, còn khoan tường lắp đặt thì bạn tự lo. Có nơi trọn gói là thiết kế xong đưa bản vẽ, đồ thì đặt bên thứ ba. Cả hai đều không sai, nhưng khác hẳn với việc một đơn vị chịu trách nhiệm từ đầu tới cuối.
 
@@ -17,13 +17,13 @@ Vấn đề của hai chữ "trọn gói" là mỗi nơi hiểu một kiểu. C�
 
 **Thiết kế và 3D.** Kiến trúc sư đến đo hiện trạng, không đo qua ảnh. Dựng 3D để bạn thấy trước không gian rồi mới chốt. Đây là bước rẻ nhất để đổi ý, vì sửa trên màn hình mất một buổi còn sửa ngoài đời mất vài triệu.
 
-**Sản xuất tại xưởng.** Đồ gỗ đóng theo đúng kích thước căn nhà chứ không phải kích thước trung bình. Hỏi rõ gỗ gì, ván có hoá đơn không, sấy đến độ ẩm bao nhiêu. Ở Quy Nhơn gần biển, gỗ không sấy kỹ là cong vênh sau một mùa nồm.
+**Sản xuất tại xưởng.** Hệ tủ đóng theo đúng kích thước căn nhà chứ không phải kích thước trung bình. Hỏi rõ ván loại gì, có phải ván chống ẩm không, có hoá đơn không, và cạnh ván dán kín đủ bốn cạnh chưa. Ở Quy Nhơn gần biển, hơi ẩm đi vào hệ tủ từ cạnh cắt và lỗ khoan, không phải từ bề mặt.
 
 **Thi công tại công trình.** Phần này quyết định chất lượng cuối cùng nhiều hơn người ta tưởng. Đồ đẹp mà lắp lệch, tường không vuông mà không xử lý, thì kết quả vẫn hỏng. Đội thi công nên là người của chính đơn vị đó, không phải thợ thuê ngoài theo ngày.
 
 **Bàn giao và bảo hành.** Nghiệm thu cùng nhau, ký biên bản, và bảo hành ghi thành điều khoản chứ không nói miệng. WOTU bảo hành khung gỗ 2 năm, vải và đệm 1 năm, ghi trong hợp đồng.
 
-### Ba mức chi phí thật
+### Nội thất trọn gói Quy Nhơn giá bao nhiêu: ba mức chi phí thật
 
 Chi phí trọn gói phụ thuộc diện tích, vật liệu và số hạng mục, nên không ai báo giá chính xác qua điện thoại được. Nhưng ba công trình WOTU đã làm cho bạn ba mốc để ước lượng:
 
