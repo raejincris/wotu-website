@@ -27,6 +27,8 @@ const galleryDefaults = [
 ];
 const galleryThumbs = galleryDefaults.map((def, i) => ({ ...def, ...((d.gallery as any[])?.[i] || {}) }));
 const mainSrc = galleryThumbs.find((g) => g.photo)?.photo || '/uploads/products/cat-sofa.webp';
+// OG image = ảnh sản phẩm thật (share Zalo/Facebook ra đúng ảnh, không dùng /og.png chung).
+const ogImage = new URL(mainSrc, Astro.site).href;
 
 const SITE_URL = 'https://www.wotu.vn';
 const PAGE_URL = `${SITE_URL}/san-pham/sofa-may/`;
@@ -70,6 +72,7 @@ const breadcrumbSchema = {
 <ShopLayout
   title="Sofa văng Mây 3 chỗ · WOTU"
   description="Sofa văng Mây, 3 chỗ ngồi, gỗ sồi tự nhiên, 24 màu vải tuỳ chọn. Bảo hành 2 năm, giao và lắp tận nơi tại Quy Nhơn."
+  ogImage={ogImage}
   noSearchIndex
 >
   <Fragment slot="head">

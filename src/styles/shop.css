@@ -85,6 +85,14 @@ html:has(body.shop) { scroll-behavior: smooth; }
 body.shop a { color: inherit; text-decoration: none; }
 body.shop button { font-family: inherit; cursor: pointer; border: 0; background: none; }
 
+/* Bôi chọn + thanh cuộn theo brand — chi tiết nhỏ tăng nhận diện, 0 rủi ro layout. */
+body.shop ::selection { background: var(--shop-accent); color: #FFFFFF; }
+html:has(body.shop) { scrollbar-color: var(--shop-accent) var(--shop-bg-soft); scrollbar-width: thin; }
+body.shop::-webkit-scrollbar { width: 12px; height: 12px; }
+body.shop::-webkit-scrollbar-track { background: var(--shop-bg-soft); }
+body.shop::-webkit-scrollbar-thumb { background: var(--shop-accent); border-radius: 999px; border: 3px solid var(--shop-bg-soft); }
+body.shop::-webkit-scrollbar-thumb:hover { background: var(--shop-accent-deep); }
+
 .shop .container { max-width: var(--shop-maxw); margin: 0 auto; padding: 0 28px; }
 
 .shop .serif { font-family: var(--shop-serif); font-weight: 400; letter-spacing: -0.01em; }

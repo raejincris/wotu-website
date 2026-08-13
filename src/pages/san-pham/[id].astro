@@ -44,6 +44,8 @@ const isOutStock = stockNum === 0;
 const fullName = `${p.name} ${p.nameEm ?? ''}${p.nameTail ?? ''}`.trim();
 const hasPhoto = !!p.photo;
 const illo = p.photo || `/uploads/products/cat-${p.catKey}.webp`;
+// OG image = ảnh sản phẩm thật (share Zalo/Facebook ra đúng ảnh, không dùng /og.png chung).
+const ogImage = new URL(illo, Astro.site).href;
 const catName: Record<string, string> = { sofa: 'Sofa', ban: 'Bàn', ghe: 'Ghế', giuong: 'Giường', tu: 'Tủ', ke: 'Kệ', den: 'Đèn', tham: 'Thảm' };
 const catVi = catName[p.catKey] ?? 'Sản phẩm';
 const related = allP.filter((x: any) => x.catKey === p.catKey && x.id !== p.id).slice(0, 4);
@@ -95,7 +97,7 @@ const breadcrumbSchema = {
   ],
 };
 ---
-<ShopLayout title={`${fullName} · WOTU`} description={desc} noSearchIndex>
+<ShopLayout title={`${fullName} · WOTU`} description={desc} ogImage={ogImage} noSearchIndex>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(productSchema)} />
     <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)} />

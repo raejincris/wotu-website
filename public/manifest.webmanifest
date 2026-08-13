@@ -1,0 +1,14 @@
+{
+  "name": "WOTU - Nội thất Quy Nhơn",
+  "short_name": "WOTU",
+  "description": "Studio thiết kế & thi công nội thất, Quy Nhơn. Sofa, bàn ăn, giường, tủ gỗ tự nhiên và thiết kế trọn gói.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FBF7F0",
+  "theme_color": "#BD6B4C",
+  "lang": "vi",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

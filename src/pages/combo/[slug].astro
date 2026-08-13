@@ -64,6 +64,8 @@ const dFaq = (detail?.faq ?? []) as any[];
 const galleryShots = ((detail?.gallery ?? []) as any[]).filter((g) => g?.photo);
 const mainSrc = galleryShots[0]?.photo || illo;
 const hasGallery = galleryShots.length > 0;
+// OG image = ảnh combo thật (share Zalo/Facebook ra đúng ảnh, không dùng /og.png chung).
+const ogImage = new URL(mainSrc, Astro.site).href;
 
 const readNav: { id: string; label: string }[] = [];
 if (richItems.length) readNav.push({ id: 'items', label: 'Combo gồm' });
@@ -131,7 +133,7 @@ const breadcrumbSchema = {
   ],
 };
 ---
-<ShopLayout title={`${fullName}, Combo ${roomLabel[c.room] ?? 'nội thất'} · WOTU`} description={desc} ogType="product" noSearchIndex>
+<ShopLayout title={`${fullName}, Combo ${roomLabel[c.room] ?? 'nội thất'} · WOTU`} description={desc} ogImage={ogImage} ogType="product" noSearchIndex>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(productSchema)} />
     {faqSchema && <script type="application/ld+json" set:html={jsonLd(faqSchema)} />}
