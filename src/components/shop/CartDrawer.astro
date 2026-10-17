@@ -231,6 +231,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
     formatPrice,
   } from '../../lib/shop-store';
   import { viValidate } from '../../lib/form-vi';
+  import { sendLeadToApp } from '../../lib/app-lead';
 
   const drawer = document.getElementById('wotu-cart-drawer') as HTMLElement | null;
   const body = document.getElementById('cart-body');
@@ -378,6 +379,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
     }
     try {
       const fd = new FormData(form);
+      sendLeadToApp('gio_hang', fd);
       const res = await fetch(form.action, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       form.classList.add('submitted');

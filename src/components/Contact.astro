@@ -109,6 +109,7 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
 <script>
   import { viValidate } from '../lib/form-vi';
   import { copyLink, studioToast } from '../lib/share';
+  import { sendLeadToApp } from '../lib/app-lead';
 
   const form = document.getElementById('wotu-contact-form') as HTMLFormElement | null;
   const submitBtn = document.getElementById('wotu-contact-submit') as HTMLButtonElement | null;
@@ -147,6 +148,9 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
         feedback.textContent = '';
         return;
       }
+
+      // Bản phụ vào app quản lý (khách hàng + phễu) — chạy ngầm, không ảnh hưởng web3forms.
+      sendLeadToApp('lien_he', data);
 
       submitBtn.disabled = true;
       submitBtn.style.opacity = '0.5';

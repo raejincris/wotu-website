@@ -860,6 +860,7 @@ const whyIcons: Record<string, string> = {
 <script>
   import { addToCart, toggleFavorite, isFavorite, onChange, toast } from '../lib/shop-store';
   import { viValidate } from '../lib/form-vi';
+  import { sendLeadToApp } from '../lib/app-lead';
 
   // Lớp animation nâng cao (lib `motion` ~75KB) chỉ là enhancement → tải LƯỜI
   // khi idle, không chặn critical path. Gate reduce/?cms=1 NGAY ĐÂY để 2 nhóm
@@ -940,6 +941,8 @@ const whyIcons: Record<string, string> = {
   const form = document.querySelector<HTMLFormElement>('form[data-shop-contact]');
   if (form) viValidate(form);
   form?.addEventListener('submit', () => {
+    // Form native (web3forms) — keepalive giữ bản gửi sang app dù trang chuyển ngay.
+    sendLeadToApp('tu_van_combo', new FormData(form));
     const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
     if (btn) {
       setTimeout(() => {
