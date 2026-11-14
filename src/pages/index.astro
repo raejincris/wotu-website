@@ -22,7 +22,7 @@ const ctaForm = {
   phoneLabel: 'Số điện thoại', phonePlaceholder: '09xx xxx xxx',
   needLabel: 'Bạn đang cần',
   needs: ['Combo phòng khách', 'Combo phòng ngủ', 'Trọn căn hộ', 'Thiết kế & thi công riêng'],
-  submit: 'Gọi tôi trong 15 phút', note: 'Chỉ cần số điện thoại, các ô khác không bắt buộc.',
+  submit: 'Gọi tôi trong 15 phút', note: 'Thông tin chỉ dùng để WOTU gọi lại tư vấn cho bạn.',
   ...(sections.cta?.form ?? {}),
 };
 const blocks = ((shopHome as any).blocks ?? []) as any[];
@@ -372,8 +372,8 @@ const whyIcons: Record<string, string> = {
         <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; opacity: 0;" aria-hidden="true" />
         <div class="cta-row">
           <label class="cta-field">
-            <span>{ctaForm.nameLabel} <em>(tuỳ chọn)</em></span>
-            <input type="text" name="name" placeholder={ctaForm.namePlaceholder} autocomplete="name" maxlength="80" />
+            <span>{ctaForm.nameLabel} <b aria-hidden="true">*</b></span>
+            <input type="text" name="name" placeholder={ctaForm.namePlaceholder} autocomplete="name" required minlength="2" maxlength="80" data-error-required="Vui lòng cho biết tên để tiện xưng hô." />
           </label>
           <label class="cta-field">
             <span>{ctaForm.phoneLabel} <b aria-hidden="true">*</b></span>
@@ -381,10 +381,10 @@ const whyIcons: Record<string, string> = {
           </label>
         </div>
         <fieldset class="cta-needs">
-          <legend>{ctaForm.needLabel} <em>(tuỳ chọn)</em></legend>
+          <legend>{ctaForm.needLabel} <b aria-hidden="true">*</b></legend>
           <div class="cta-chips">
             {(ctaForm.needs as string[]).map((n) => (
-              <label class="cta-chip"><input type="radio" name="nhu_cau" value={n} /><span>{n}</span></label>
+              <label class="cta-chip"><input type="radio" name="nhu_cau" value={n} required data-error-required="Vui lòng chọn nhu cầu của bạn." /><span>{n}</span></label>
             ))}
           </div>
         </fieldset>
@@ -775,7 +775,7 @@ const whyIcons: Record<string, string> = {
   .cta p { color: var(--shop-bg); margin: 18px 0 0; max-width: 540px; line-height: 1.6; }
   .cta p a { color: var(--shop-bg); }
   .cta-turnstile:not(:empty) { margin-top: 12px; }
-  /* Thẻ form đặt tư vấn (14/11): Tên + SĐT, chip nhu cầu, nút rộng. Chỉ SĐT bắt buộc. */
+  /* Thẻ form đặt tư vấn (14/11): Tên + SĐT, chip nhu cầu, nút rộng. Cả 3 bắt buộc (14/11). */
   .cta-form {
     background: var(--shop-bg-card); color: var(--shop-ink);
     border-radius: 22px;
@@ -790,7 +790,7 @@ const whyIcons: Record<string, string> = {
     font-size: 12.5px; font-weight: 600; letter-spacing: .01em; color: var(--shop-ink);
   }
   .cta-field em, .cta-needs legend em { font-style: normal; font-weight: 400; color: var(--shop-ink-soft); }
-  .cta-field b { color: var(--shop-accent-deep); font-weight: 600; }
+  .cta-field b, .cta-needs legend b { color: var(--shop-accent-deep); font-weight: 600; }
   .cta-field input {
     width: 100%; min-width: 0; box-sizing: border-box;
     border: 1px solid color-mix(in oklab, var(--shop-ink) 16%, transparent); border-radius: 12px;

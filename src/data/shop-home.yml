@@ -89,7 +89,7 @@ sections:
     eyebrow: Đặt tư vấn miễn phí
     heading: Để chuyên gia WOTU<br/>chọn combo <em>cho tổ ấm</em> của bạn.
     desc: Để lại số điện thoại, chúng tôi gọi lại trong 15 phút, tư vấn 1:1 và gợi ý combo hợp căn nhà bạn, hoàn toàn miễn phí, không ràng buộc mua. Cần thiết kế & thi công riêng cho cả căn? Ghé thêm WOTU Studio.
-    # Form đặt tư vấn — chỉ SĐT bắt buộc; tên + nhu cầu giúp người gọi lại chuẩn bị trước.
+    # Form đặt tư vấn — cả 3 ô bắt buộc (anh Cris chốt 14/11: khách có nhu cầu thật không ngại điền).
     form:
       nameLabel: Tên của bạn
       namePlaceholder: Anh Minh, chị Lan…
@@ -102,7 +102,7 @@ sections:
         - Trọn căn hộ
         - Thiết kế & thi công riêng
       submit: Gọi tôi trong 15 phút
-      note: Chỉ cần số điện thoại, các ô khác không bắt buộc.
+      note: Thông tin chỉ dùng để WOTU gọi lại tư vấn cho bạn.
 layout:
   - id: combos
     "on": true

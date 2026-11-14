@@ -14,6 +14,7 @@ function messageFor(el: HTMLInputElement | HTMLTextAreaElement | HTMLSelectEleme
     const type = (el as HTMLInputElement).type;
     if (type === 'tel') return 'Vui lòng nhập số điện thoại.';
     if (type === 'email') return 'Vui lòng nhập địa chỉ email.';
+    if (type === 'radio') return 'Vui lòng chọn một mục.';
     return 'Vui lòng điền thông tin này.';
   }
   if (v.patternMismatch) {
@@ -41,5 +42,13 @@ export function viValidate(form: HTMLFormElement): void {
     el.addEventListener('invalid', () => el.setCustomValidity(messageFor(el)));
     // Gõ lại → clear message (nếu không, field kẹt invalid mãi dù đã sửa đúng).
     el.addEventListener('input', () => el.setCustomValidity(''));
+    // Radio: lỗi gắn vào radio đầu nhóm, nhưng khách bấm radio KHÁC → phải xoá cho cả nhóm,
+    // không thì radio đầu giữ customError → form kẹt invalid dù đã chọn.
+    if ((el as HTMLInputElement).type === 'radio') {
+      el.addEventListener('change', () => {
+        form.querySelectorAll<HTMLInputElement>(`input[type="radio"][name="${CSS.escape(el.name)}"]`)
+          .forEach((r) => r.setCustomValidity(''));
+      });
+    }
   });
 }
