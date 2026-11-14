@@ -38,7 +38,7 @@ forms:
   contactAccessKey: f5e8cdc8-94cb-4e5d-b892-4303b2bd6272
   contactSubject: "[WOTU website] Liên hệ mới từ khách hàng"
   # Cloudflare Turnstile — site key (công khai). Rỗng = tắt. Secret key đặt ở Railway (app): TURNSTILE_SECRET_KEY.
-  turnstileSiteKey: ""
+  turnstileSiteKey: "0x4AAAAAAGA35VB_KVOnAMcx"
 analytics:
   cfBeaconToken: 54a42c6c23c340f0a1b571408d637133
 # Nhãn UI cho phần đọc bài (blog + dự án), đưa ra YAML để editor sửa được.
