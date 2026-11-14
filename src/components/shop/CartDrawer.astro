@@ -5,6 +5,7 @@
  * có cổng thanh toán; concept WOTU là "đặt tư vấn → studio gọi xác nhận". */
 import site from '../../data/site.yml';
 const accessKey = site.forms?.contactAccessKey ?? '';
+const turnstileKey = site.forms?.turnstileSiteKey ?? '';
 ---
 <aside
   id="wotu-cart-drawer"
@@ -58,6 +59,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
           <span>Ghi chú (tuỳ chọn)</span>
           <textarea name="note" rows="2" placeholder="Phòng khách 25m², tông gỗ ấm..."></textarea>
         </label>
+        {turnstileKey && <div class="lead-turnstile" data-turnstile data-sitekey={turnstileKey}></div>}
         <button type="submit" class="shop-btn shop-btn-primary cart-submit">
           Gửi yêu cầu báo giá <span class="arr">→</span>
         </button>
@@ -232,6 +234,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
   } from '../../lib/shop-store';
   import { viValidate } from '../../lib/form-vi';
   import { sendLeadToApp } from '../../lib/app-lead';
+  import { attachTurnstile } from '../../lib/turnstile';
 
   const drawer = document.getElementById('wotu-cart-drawer') as HTMLElement | null;
   const body = document.getElementById('cart-body');
@@ -348,6 +351,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
   // ===== Submit form (Web3Forms with cart payload) =====
   const form = document.getElementById('cart-form') as HTMLFormElement | null;
   if (form) viValidate(form);
+  attachTurnstile(form);
   const payloadField = document.getElementById('cart-payload') as HTMLInputElement | null;
   let submitting = false;
 
@@ -379,7 +383,7 @@ const accessKey = site.forms?.contactAccessKey ?? '';
     }
     try {
       const fd = new FormData(form);
-      sendLeadToApp('gio_hang', fd);
+      void sendLeadToApp('gio_hang', fd, form);
       const res = await fetch(form.action, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       form.classList.add('submitted');

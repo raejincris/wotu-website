@@ -352,6 +352,7 @@ const whyIcons: Record<string, string> = {
       </div>
       <form
         class="cta-form"
+        id="cta-form"
         action="https://api.web3forms.com/submit"
         method="POST"
         data-shop-contact
@@ -363,6 +364,8 @@ const whyIcons: Record<string, string> = {
         <input type="tel" name="phone" placeholder="Số điện thoại của bạn" aria-label="Số điện thoại của bạn" autocomplete="tel" required pattern="[0-9 ]{9,12}" />
         <button type="submit" data-magnetic>Gọi tôi <span class="arr">→</span></button>
       </form>
+      {/* Ngoài viên form (pill) — chỉ hiện khi Cloudflare nghi ngờ; nằm trong luồng để không bị cắt. */}
+      {site.forms.turnstileSiteKey && <div class="lead-turnstile cta-turnstile" data-turnstile data-turnstile-for="cta-form" data-sitekey={site.forms.turnstileSiteKey}></div>}
     </div>
   </section>
 
@@ -744,6 +747,7 @@ const whyIcons: Record<string, string> = {
   .cta :global(h2 em) { font-style: italic; color: var(--shop-warm-soft); }
   .cta p { color: var(--shop-bg); margin: 18px 0 0; max-width: 540px; line-height: 1.6; }
   .cta p a { color: var(--shop-bg); }
+  .cta-turnstile:not(:empty) { margin-top: 12px; }
   .cta-form {
     background: var(--shop-bg-card); border-radius: 999px;
     padding: 8px 8px 8px 22px;
@@ -861,6 +865,7 @@ const whyIcons: Record<string, string> = {
   import { addToCart, toggleFavorite, isFavorite, onChange, toast } from '../lib/shop-store';
   import { viValidate } from '../lib/form-vi';
   import { sendLeadToApp } from '../lib/app-lead';
+  import { attachTurnstile } from '../lib/turnstile';
 
   // Lớp animation nâng cao (lib `motion` ~75KB) chỉ là enhancement → tải LƯỜI
   // khi idle, không chặn critical path. Gate reduce/?cms=1 NGAY ĐÂY để 2 nhóm
@@ -940,10 +945,19 @@ const whyIcons: Record<string, string> = {
   // ===== Contact form =====
   const form = document.querySelector<HTMLFormElement>('form[data-shop-contact]');
   if (form) viValidate(form);
-  form?.addEventListener('submit', () => {
-    // Form native (web3forms) — keepalive giữ bản gửi sang app dù trang chuyển ngay.
-    sendLeadToApp('tu_van_combo', new FormData(form));
+  attachTurnstile(form);
+  let ctaSending = false;
+  form?.addEventListener('submit', async (e) => {
+    // Form native (web3forms) chuyển trang ngay → chặn lại, chờ lấy token Turnstile + phát bản
+    // gửi sang app (keepalive, tối đa ~6s, thường đã có sẵn vì giải từ lúc khách focus ô SĐT),
+    // rồi mới submit native. `form.submit()` không bắn lại sự kiện submit.
+    e.preventDefault();
+    if (ctaSending) return;
+    ctaSending = true;
     const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (btn) { btn.disabled = true; btn.innerHTML = 'Đang gửi…'; }
+    await sendLeadToApp('tu_van_combo', new FormData(form), form);
+    HTMLFormElement.prototype.submit.call(form);
     if (btn) {
       setTimeout(() => {
         btn.innerHTML = 'Đã nhận ✓';

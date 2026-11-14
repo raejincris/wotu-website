@@ -16,6 +16,7 @@ const fields = c.fields as Field[];
 
 const accessKey = site.forms?.contactAccessKey ?? '';
 const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ website';
+const turnstileKey = site.forms?.turnstileSiteKey ?? '';
 ---
 <section id="contact" style="padding: var(--pad-section) var(--pad-x); background: var(--cocoa); color: var(--bone);">
   <div class="grid-2col" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--gap); align-items: start;">
@@ -100,6 +101,8 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
           {c.submitLabel}
         </button>
 
+        {turnstileKey && <div class="lead-turnstile" data-turnstile data-sitekey={turnstileKey}></div>}
+
         <div id="wotu-contact-feedback" role="status" aria-live="polite" style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--clay); min-height: 1em;"></div>
       </form>
     </Reveal>
@@ -110,6 +113,7 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
   import { viValidate } from '../lib/form-vi';
   import { copyLink, studioToast } from '../lib/share';
   import { sendLeadToApp } from '../lib/app-lead';
+  import { attachTurnstile } from '../lib/turnstile';
 
   const form = document.getElementById('wotu-contact-form') as HTMLFormElement | null;
   const submitBtn = document.getElementById('wotu-contact-submit') as HTMLButtonElement | null;
@@ -137,6 +141,7 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
   }
 
   if (form) viValidate(form);
+  attachTurnstile(form);
 
   if (form && submitBtn && feedback) {
     form.addEventListener('submit', async (event) => {
@@ -150,7 +155,7 @@ const subject = site.forms?.contactSubject ?? '[WOTU] Liên hệ mới từ webs
       }
 
       // Bản phụ vào app quản lý (khách hàng + phễu) — chạy ngầm, không ảnh hưởng web3forms.
-      sendLeadToApp('lien_he', data);
+      void sendLeadToApp('lien_he', data, form);
 
       submitBtn.disabled = true;
       submitBtn.style.opacity = '0.5';
