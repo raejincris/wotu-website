@@ -29,7 +29,8 @@ export async function sendLeadToApp(
     const hp = get('botcheck');
     // Bot dính bẫy thì khỏi tốn công giải Turnstile — app tự bỏ qua theo `hp`.
     const ts = hp ? '' : await takeTurnstileToken(form ?? null);
-    const message = [get('message'), get('note'), get('cart')].filter(Boolean).join('\n\n');
+    const need = get('nhu_cau');
+    const message = [need && `Nhu cầu: ${need}`, get('message'), get('note'), get('cart')].filter(Boolean).join('\n\n');
     const body = JSON.stringify({
       kind,
       name: get('name'),

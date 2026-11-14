@@ -16,6 +16,15 @@ const phone = site.hotline;
 const email = site.email;
 
 const { hero, sections, combos, bestsellers, inspo, reviews, reviewsSummary } = shopHome as any;
+// Form đặt tư vấn — fallback nếu YAML thiếu khối `form` (Admin cũ / bản nháp cũ).
+const ctaForm = {
+  nameLabel: 'Tên của bạn', namePlaceholder: 'Anh Minh, chị Lan…',
+  phoneLabel: 'Số điện thoại', phonePlaceholder: '09xx xxx xxx',
+  needLabel: 'Bạn đang cần',
+  needs: ['Combo phòng khách', 'Combo phòng ngủ', 'Trọn căn hộ', 'Thiết kế & thi công riêng'],
+  submit: 'Gọi tôi trong 15 phút', note: 'Chỉ cần số điện thoại, các ô khác không bắt buộc.',
+  ...(sections.cta?.form ?? {}),
+};
 const blocks = ((shopHome as any).blocks ?? []) as any[];
 
 // Dải marquee "cam kết" (mới) — đặt trước Reviews. Editable qua YAML, có default.
@@ -361,8 +370,26 @@ const whyIcons: Record<string, string> = {
         <input type="hidden" name="subject" value="[WOTU shop] Đặt tư vấn combo" />
         <input type="hidden" name="from_name" value="WOTU Shop website" />
         <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; opacity: 0;" aria-hidden="true" />
-        <input type="tel" name="phone" placeholder="Số điện thoại của bạn" aria-label="Số điện thoại của bạn" autocomplete="tel" required pattern="[0-9 ]{9,12}" />
-        <button type="submit" data-magnetic>Gọi tôi <span class="arr">→</span></button>
+        <div class="cta-row">
+          <label class="cta-field">
+            <span>{ctaForm.nameLabel} <em>(tuỳ chọn)</em></span>
+            <input type="text" name="name" placeholder={ctaForm.namePlaceholder} autocomplete="name" maxlength="80" />
+          </label>
+          <label class="cta-field">
+            <span>{ctaForm.phoneLabel} <b aria-hidden="true">*</b></span>
+            <input type="tel" name="phone" placeholder={ctaForm.phonePlaceholder} autocomplete="tel" inputmode="tel" required pattern="[0-9 +.]{9,15}" />
+          </label>
+        </div>
+        <fieldset class="cta-needs">
+          <legend>{ctaForm.needLabel} <em>(tuỳ chọn)</em></legend>
+          <div class="cta-chips">
+            {(ctaForm.needs as string[]).map((n) => (
+              <label class="cta-chip"><input type="radio" name="nhu_cau" value={n} /><span>{n}</span></label>
+            ))}
+          </div>
+        </fieldset>
+        <button type="submit" class="cta-submit">{ctaForm.submit} <span class="arr">→</span></button>
+        <p class="cta-note">{ctaForm.note}</p>
       </form>
       {/* Ngoài viên form (pill) — chỉ hiện khi Cloudflare nghi ngờ; nằm trong luồng để không bị cắt. */}
       {site.forms.turnstileSiteKey && <div class="lead-turnstile cta-turnstile" data-turnstile data-turnstile-for="cta-form" data-sitekey={site.forms.turnstileSiteKey}></div>}
@@ -748,27 +775,68 @@ const whyIcons: Record<string, string> = {
   .cta p { color: var(--shop-bg); margin: 18px 0 0; max-width: 540px; line-height: 1.6; }
   .cta p a { color: var(--shop-bg); }
   .cta-turnstile:not(:empty) { margin-top: 12px; }
+  /* Thẻ form đặt tư vấn (14/11): Tên + SĐT, chip nhu cầu, nút rộng. Chỉ SĐT bắt buộc. */
   .cta-form {
-    background: var(--shop-bg-card); border-radius: 999px;
-    padding: 8px 8px 8px 22px;
-    display: flex; align-items: center; gap: 8px;
-    box-shadow: 0 20px 40px -20px rgba(0,0,0,.3);
+    background: var(--shop-bg-card); color: var(--shop-ink);
+    border-radius: 22px;
+    padding: 22px;
+    display: flex; flex-direction: column; gap: 16px;
+    box-shadow: 0 24px 48px -24px rgba(0,0,0,.35);
+    min-width: 0;
   }
-  .cta-form input {
-    flex: 1; border: 0; outline: 0; background: transparent;
-    font: inherit; padding: 10px 0; color: var(--shop-ink); font-size: 15px;
+  .cta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cta-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .cta-field > span, .cta-needs legend {
+    font-size: 12.5px; font-weight: 600; letter-spacing: .01em; color: var(--shop-ink);
   }
-  .cta-form input::placeholder { color: var(--shop-ink-soft); }
-  .cta-form button {
+  .cta-field em, .cta-needs legend em { font-style: normal; font-weight: 400; color: var(--shop-ink-soft); }
+  .cta-field b { color: var(--shop-accent-deep); font-weight: 600; }
+  .cta-field input {
+    width: 100%; min-width: 0; box-sizing: border-box;
+    border: 1px solid color-mix(in oklab, var(--shop-ink) 16%, transparent); border-radius: 12px;
+    background: var(--shop-bg); outline: 0;
+    font: inherit; font-size: 15px; color: var(--shop-ink);
+    padding: 12px 14px; min-height: 46px;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .cta-field input::placeholder { color: var(--shop-ink-soft); opacity: .8; }
+  .shop .cta-field input:focus-visible {
+    border-color: var(--shop-accent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--shop-accent) 18%, transparent);
+    outline: 0;
+  }
+  .cta-needs { border: 0; margin: 0; padding: 0; min-width: 0; }
+  .cta-needs legend { padding: 0; margin-bottom: 8px; }
+  .cta-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cta-chip { position: relative; cursor: pointer; }
+  .cta-chip input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+  .cta-chip span {
+    display: inline-flex; align-items: center; min-height: 38px;
+    padding: 8px 14px; border-radius: 999px;
+    border: 1px solid color-mix(in oklab, var(--shop-ink) 16%, transparent);
+    font-size: 13.5px; color: var(--shop-ink); background: var(--shop-bg);
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .cta-chip:hover span { border-color: var(--shop-ink); }
+  .cta-chip input:checked + span { background: var(--shop-ink); border-color: var(--shop-ink); color: var(--shop-bg); }
+  .cta-chip input:focus-visible + span { outline: 2px solid var(--shop-accent); outline-offset: 2px; }
+  .cta-submit {
     background: var(--shop-ink); color: var(--shop-bg); border-radius: 999px;
-    padding: 12px 22px; font-weight: 600; font-size: 14px;
+    padding: 14px 22px; min-height: 50px; font-weight: 600; font-size: 15px;
     transition: background .2s ease;
     border: 0; cursor: pointer; font-family: inherit;
-    display: inline-flex; align-items: center; gap: 8px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   }
-  .cta-form button:hover { background: var(--shop-accent); }
-  .cta-form button .arr { transition: transform .2s ease; }
-  .cta-form button:hover .arr { transform: translateX(4px); }
+  .cta-submit:hover { background: var(--shop-accent-deep); }
+  .cta-submit:disabled { opacity: .7; cursor: wait; }
+  .cta-submit .arr { transition: transform .2s ease; }
+  .cta-submit:hover .arr { transform: translateX(4px); }
+  /* .cta .cta-note: phải thắng `.cta p` (chữ kem + margin 18px) của khối CTA. */
+  .cta .cta-note { margin: -6px 0 0; max-width: none; font-size: 12px; line-height: 1.4; color: var(--shop-ink-soft); text-align: center; }
+  @media (max-width: 480px) {
+    .cta-row { grid-template-columns: 1fr; }
+    .cta-form { padding: 18px; }
+  }
 
   /* ===== ANIMATION NÂNG CAO ===== */
   /* Ambient glow mềm sau hero (CSS thuần, drift chậm) */
@@ -961,8 +1029,7 @@ const whyIcons: Record<string, string> = {
     if (btn) {
       setTimeout(() => {
         btn.innerHTML = 'Đã nhận ✓';
-        const input = form.querySelector<HTMLInputElement>('input[type="tel"]');
-        if (input) input.value = '';
+        form.reset();
       }, 100);
     }
   });
